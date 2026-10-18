@@ -9,10 +9,13 @@ import { writeControl, loadGenerated, runningSince } from "./ondemand.js";
 const INTERVALS = [1, 3, 7, 16, 35, 90];          // days until the next review, by box
 const today = () => new Date().toISOString().slice(0, 10);
 const addDays = (n) => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
-let curriculum = null, written = null;
+let base = null, curriculum = null, written = null;
 
-async function loadAll() {
-  curriculum ??= await getJSON("learn/curriculum.json");
+async function loadAll(sync) {
+  base ??= await getJSON("learn/curriculum.json");
+  // Lessons added to units later ("+ Add more advanced lessons"), appended to the end of their unit.
+  const extras = (await loadGenerated(sync, "data/learn/extras.json"))?.units ?? {};
+  curriculum = { ...base, tracks: base.tracks.map((t) => ({ ...t, units: t.units.map((u) => ({ ...u, lessons: [...u.lessons, ...(extras[u.id] ?? []).map((l) => ({ ...l, extra: true }))] })) })) };
   // Published index + lessons this device saw written on demand (before the index catches up).
   written = { ...(await getJSON("data/learn/index.json").catch(() => ({ lessons: {} }))).lessons, ...store.get("readyLessons", {}) };
 }
@@ -24,7 +27,7 @@ const dueCards = () => Object.entries(srs()).filter(([, c]) => c.due <= today())
 
 export async function showLearn(ctx, arg, sub) {
   const { view, sync } = ctx;
-  try { await loadAll(); } catch {
+  try { await loadAll(sync); } catch {
     view.replaceChildren(...kids(masthead("Learn", "", sync.getStatus()), h("p", { class: "empty" }, "Couldn't load the course. Check your connection.")));
     return;
   }
@@ -61,7 +64,8 @@ function overview({ view, sync }) {
     sync.getToken() ? null : h("p", { class: "warn" }, "Connect GitHub in ", h("a", { href: "#/settings" }, "Settings"), " so the daily run knows how far you are and writes the next lessons.")));
 }
 
-function trackPage({ view, sync }, trackId) {
+function trackPage(ctx, trackId) {
+  const { view, sync } = ctx;
   const t = curriculum.tracks.find((x) => x.id === trackId);
   if (!t) return overview({ view, sync });
   const done = doneSet(sync, t.id);
@@ -69,11 +73,22 @@ function trackPage({ view, sync }, trackId) {
   for (const u of t.units) {
     view.append(...kids(h("div", { class: "section-title" }, u.title),
       ...u.lessons.map((l) => written[l.id]
-        ? h("a", { class: "item", href: `#/learn/lesson/${l.id}` }, h("div", { class: "t" }, done.has(l.id) ? "✓ " : "", l.title), h("div", { class: "m" }, l.focus))
-        : h("a", { class: "item locked", href: `#/learn/lesson/${l.id}` }, h("div", { class: "t" }, l.title),
+        ? h("a", { class: "item", href: `#/learn/lesson/${l.id}` }, h("div", { class: "t" }, done.has(l.id) ? "✓ " : "", l.title, l.extra ? h("span", { class: "added" }, "added") : null), h("div", { class: "m" }, l.focus))
+        : h("a", { class: "item locked", href: `#/learn/lesson/${l.id}` }, h("div", { class: "t" }, l.title, l.extra ? h("span", { class: "added" }, "added") : null),
           h("div", { class: "m" }, runningSince(`lesson:${l.id}`) ? "Being written…" : "Not written yet · tap to write it now"))),
+      moreControl(ctx, t, u),
       u.resources?.length ? h("div", { class: "resources" }, "Read more: ", u.resources.map((r, i) => [i ? " · " : "", h("a", { href: r.url, target: "_blank", rel: "noopener noreferrer" }, r.title)])) : null));
   }
+}
+
+/** "+ Add 3 more advanced lessons" for a unit (GitHub Actions writes the outlines, ~1–2 minutes). */
+function moreControl(ctx, track, unit) {
+  const before = unit.lessons.filter((l) => l.extra).length;
+  return h("div", { class: "more-lessons" }, writeControl(ctx.sync, {
+    kind: "extend", id: unit.id, path: "data/learn/extras.json", label: "+ Add 3 more advanced lessons",
+    done: (f) => (f?.units?.[unit.id]?.length ?? 0) > before,
+    onReady: () => showLearn(ctx, "track", track.id),
+  }));
 }
 
 /** Tiny safe renderer: paragraphs, "- " bullets, **bold**, `code`. Builds DOM nodes, never HTML strings. */

@@ -124,3 +124,7 @@ body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 
 .ai-box { margin-bottom: 8px; }
 .ai-box .summary { margin-bottom: 12px; }
 .item.locked { text-decoration: none; color: inherit; }
+.item .added { font: 600 10.5px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 1px 7px; margin-left: 8px; vertical-align: 3px; }
+.more-lessons { padding: 12px 0 4px; }
+.more-lessons .btn { font-size: 14px; padding: 8px 14px; }
+.more-lessons .btn.primary { background: var(--card); color: var(--ink); border-color: var(--rule); }

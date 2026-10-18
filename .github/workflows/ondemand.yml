@@ -1,6 +1,8 @@
-# Writes a lesson or a Watching summary when you tap "Write it now" / "Summarize" in the app.
+# Writes a lesson, a Watching summary, or 3 more advanced lessons for a unit, when you tap
+# "Write it now" / "AI summary" / "+ Add more advanced lessons" in the app.
 # The app sends a repository_dispatch (with your GitHub token, from ⚙ Settings); the OpenCode key
-# stays in this repo's secrets. Each request adds only its own file, so runs never conflict.
+# stays in this repo's secrets. Lessons and summaries add only their own file, so they never
+# conflict; "extend" runs edit data/learn/extras.json, so they run one at a time.
 name: On demand
 
 on:
@@ -15,6 +17,9 @@ jobs:
   write:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency:
+      group: ${{ github.event.client_payload.kind == 'extend' && 'ondemand-extend' || format('ondemand-{0}', github.run_id) }}
+      cancel-in-progress: false
     env:
       KIND: ${{ github.event.client_payload.kind }}
       ID: ${{ github.event.client_payload.id }}
@@ -32,9 +37,12 @@ jobs:
         run: |
           case "$KIND" in
             lesson)
-              # Only ids from the syllabus (bio-001 … ml-089).
-              echo "$ID" | grep -Eq '^(bio|ml)-[0-9]{3}$' || { echo "bad lesson id"; exit 1; }
+              # Syllabus ids (bio-001 … ml-089) or added ones (bio-u05-x01).
+              echo "$ID" | grep -Eq '^(bio|ml)-([0-9]{3}|u[0-9]{2}-x[0-9]{2})$' || { echo "bad lesson id"; exit 1; }
               node scripts/learn.mjs --only "$ID" ;;
+            extend)
+              echo "$ID" | grep -Eq '^(bio|ml)-u[0-9]{2}$' || { echo "bad unit id"; exit 1; }
+              node scripts/learn.mjs --extend "$ID" ;;
             summary)
               node scripts/ondemand.mjs summary "$ID" ;;
             *) echo "unknown request: $KIND"; exit 1 ;;

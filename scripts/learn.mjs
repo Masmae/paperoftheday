@@ -2,6 +2,7 @@
 // your progress (data/me.json → learn.<track>.done), into data/learn/<lesson-id>.json.
 //
 //   node scripts/learn.mjs [--dry-run] [--only bio-001]
+//   node scripts/learn.mjs --extend bio-u05      add 3 more advanced lessons (outlines) to a unit
 //
 // Uses a cheap model from the OpenCode Go plan (OPENCODE_API_KEY). Each lesson ≈ 6–9K tokens.
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
@@ -11,6 +12,7 @@ const OUT = new URL("data/learn/", ROOT);
 const args = process.argv.slice(2);
 const DRY = args.includes("--dry-run");
 const ONLY = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
+const EXTEND = args.includes("--extend") ? args[args.indexOf("--extend") + 1] : null;
 const AHEAD = 3;                 // lessons ready beyond your furthest finished one
 const MAX_PER_RUN = 4;           // per track, so a long break doesn't burn tokens in one go
 const OPENCODE_URL = "https://opencode.ai/inference/go/openai/v1/chat/completions";
@@ -23,6 +25,11 @@ const VARIANTS = [
 ];
 
 const curriculum = JSON.parse(readFileSync(new URL("learn/curriculum.json", ROOT), "utf8"));
+// Lessons added later to a unit ("+ Add more advanced lessons" in the app): data/learn/extras.json
+// = { units: { "<unit id>": [{ id, title, focus, added }] } }, appended to the end of their unit.
+const extrasUrl = new URL("data/learn/extras.json", ROOT);
+const extras = existsSync(extrasUrl) ? JSON.parse(readFileSync(extrasUrl, "utf8")) : { units: {} };
+for (const t of curriculum.tracks) for (const u of t.units) u.lessons.push(...(extras.units[u.id] ?? []).map((l) => ({ ...l, extra: true })));
 const me = (() => { try { return JSON.parse(readFileSync(new URL("data/me.json", ROOT), "utf8")); } catch { return {}; } })();
 mkdirSync(OUT, { recursive: true });
 const indexUrl = new URL("index.json", OUT);
@@ -30,10 +37,10 @@ const indexUrl = new URL("index.json", OUT);
 // only adds its one file) are picked up and the two workflows never edit the same file.
 const index = { lessons: {} };
 for (const f of readdirSync(OUT)) {
-  const m = f.match(/^((?:bio|ml)-\d{3})\.json$/);
+  const m = f.match(/^((?:bio|ml)-(?:\d{3}|u\d{2}-x\d{2}))\.json$/);
   if (m) { try { index.lessons[m[1]] = JSON.parse(readFileSync(new URL(f, OUT), "utf8")).created ?? ""; } catch { /* skip a broken file */ } }
 }
-if (!ONLY) writeFileSync(indexUrl, JSON.stringify(index, null, 1));
+if (!ONLY && !EXTEND) writeFileSync(indexUrl, JSON.stringify(index, null, 1));
 
 const LEARNER = `The learner has a computer science degree and has passed advanced CS and machine-learning courses (linear algebra, probability, optimization, classic ML, deep learning). They have worked for a few years in bioinformatics, applying AI to transcriptomics and multiomics, so they know biology concepts loosely but never studied biology systematically.`;
 const STYLE = {
@@ -114,27 +121,31 @@ async function complete(model, content, key, extra = {}) {
 // What failed earlier in this run, so later lessons don't pay for the same failure again.
 const skip = new Set();      // "model" or "model|variant"
 
-async function write(track, unit, lesson, prev, next) {
+/**
+ * Ask the models (cheapest first, thinking off when the API allows it) until one returns JSON that
+ * passes `ok`. Returns { out, model, info } or null.
+ */
+async function ask(tag, content, ok) {
   const key = process.env.OPENCODE_API_KEY;
   if (!key) throw new Error("OPENCODE_API_KEY not set");
   for (const model of MODELS) {
     if (skip.has(model)) continue;
     for (const variant of VARIANTS) {
       if (skip.has(`${model}|${variant.label}`)) continue;
-      const tag = `${lesson.id} ${model} (${variant.label})`;
+      const label = `${tag} ${model} (${variant.label})`;
       try {
         const t0 = Date.now();
-        const { text, thinking, finish, usage } = await complete(model, prompt(track, unit, lesson, prev, next), key, variant.extra);
+        const { text, thinking, finish, usage } = await complete(model, content, key, variant.extra);
         const info = `finish: ${finish}, ${text.length} chars written, ${thinking} chars of thinking, ${usage?.total_tokens ?? "?"} tokens, ${Math.round((Date.now() - t0) / 1000)}s`;
         if (!text.includes("{")) throw new Error(`no answer (${info})`);
         let out;
         try { out = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1)); }
         catch { throw new Error(`answer wasn't complete JSON (${info})`); }
-        if (!valid(out)) throw new Error(`incomplete lesson (${info})`);
-        console.log(`${tag}: ${lesson.title} — ${info}`);
-        return { id: lesson.id, track: track.id, unit: unit.id, title: lesson.title, model, created: new Date().toISOString().slice(0, 10), ...out };
+        if (!ok(out)) throw new Error(`incomplete answer (${info})`);
+        console.log(`${label} — ${info}`);
+        return { out, model, info };
       } catch (e) {
-        console.warn(`${tag}: ${e.message}${e.cause ? ` (${e.cause.code ?? e.cause.message})` : ""}`);
+        console.warn(`${label}: ${e.message}${e.cause ? ` (${e.cause.code ?? e.cause.message})` : ""}`);
         // A 400 usually means the API didn't accept the thinking fields: try the plain request.
         // Anything else (ran out of room, bad JSON) won't be fixed by the plain request either, so try the next model.
         if (variant.label === "thinking off" && /^400\b/.test(e.message)) { skip.add(`${model}|${variant.label}`); continue; }
@@ -144,6 +155,42 @@ async function write(track, unit, lesson, prev, next) {
     }
   }
   return null;
+}
+
+async function write(track, unit, lesson, prev, next) {
+  const r = await ask(lesson.id, prompt(track, unit, lesson, prev, next), valid);
+  if (!r) return null;
+  console.log(`  ${lesson.title}`);
+  return { id: lesson.id, track: track.id, unit: unit.id, title: lesson.title, model: r.model, created: new Date().toISOString().slice(0, 10), ...r.out };
+}
+
+// ---- "+ Add more advanced lessons": outlines for 3 new lessons at the end of a unit ----
+if (EXTEND) {
+  const track = curriculum.tracks.find((t) => t.units.some((u) => u.id === EXTEND));
+  const unit = track?.units.find((u) => u.id === EXTEND);
+  if (!unit) { console.error(`no such unit: ${EXTEND}`); process.exit(1); }
+  const content = `${LEARNER}
+
+You are extending the course "${track.title}", unit "${unit.title}". It already has these lessons, in order:
+${unit.lessons.map((l, i) => `${i + 1}. ${l.title}: ${l.focus}`).join("\n")}
+
+Propose exactly 3 NEW lessons for the end of this unit that go deeper and are more advanced than everything above: research-level details, mechanisms, quantitative aspects, current methods and open questions${track.id === "bio" ? ", and how they show up in transcriptomics/multiomics data" : ", and applications to biology (single-cell, spatial, proteins, genomics)"}. No overlap with existing lessons. Order them from less to more advanced; each should take 10-15 minutes to read.
+
+Reply with JSON only, no other text:
+{"lessons": [{"title": "<short title>", "focus": "<1-2 sentences telling a lesson writer exactly what to cover>"}, ... 3 items]}`;
+  const r = DRY ? null : await ask(`extend ${unit.id}`, content, (o) => Array.isArray(o.lessons) && o.lessons.length >= 1 && o.lessons.every((l) => l.title && l.focus));
+  if (!r) { if (!DRY) console.error("couldn't extend"); process.exit(DRY ? 0 : 1); }
+  const list = extras.units[unit.id] ?? [];
+  const today = new Date().toISOString().slice(0, 10);
+  for (const l of r.out.lessons.slice(0, 3)) {
+    const n = list.length + 1;
+    list.push({ id: `${unit.id}-x${String(n).padStart(2, "0")}`, title: String(l.title).slice(0, 120), focus: String(l.focus).slice(0, 600), added: today });
+  }
+  extras.units[unit.id] = list;
+  extras.at = Date.now();
+  writeFileSync(extrasUrl, JSON.stringify(extras, null, 1));
+  console.log(`added to ${unit.title}: ${list.slice(-3).map((l) => l.title).join(" | ")}`);
+  process.exit(0);
 }
 
 for (const track of curriculum.tracks) {

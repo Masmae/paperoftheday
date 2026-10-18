@@ -53,6 +53,10 @@ Both keep your data in **`data/me.json`**: watch rules, and which lessons you've
 - **Wait:** usually about 2 minutes.
 - **Results are kept,** so each one costs tokens only once and shows on every device.
 - **Summaries come only from free full text.** Paywalled papers get "No free full text" and use no tokens.
+- **More lessons:** each unit in a track's lesson list has **+ Add 3 more advanced lessons**.
+  - The model sees every lesson already in that unit and writes outlines for 3 that go deeper. They're saved in `data/learn/extras.json` and appear at the end of the unit, marked "added".
+  - Each one is then written like any other lesson: on demand, or by the daily run when you reach it.
+  - These runs are queued one at a time.
 
 ## Run it locally
 
