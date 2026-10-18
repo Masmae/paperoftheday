@@ -9,7 +9,10 @@
 //    candidates and picks the most interesting one, writing a short "why it
 //    matters". Otherwise the best score wins.
 // 4. Writes data/<date>.json and updates data/index.json. Never repeats a paper.
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 const args = process.argv.slice(2);
 const argVal = (n) => { const i = args.indexOf(n); return i < 0 ? null : args[i + 1]; };
@@ -292,27 +295,64 @@ Pick the paper with the best total (ties: prefer novelty and generality). Answer
 const stripXml = (x) => x.replace(/<(script|style|ref-list|back|nav|header|footer)[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]+>/g, " ")
   .replace(/&nbsp;|&#160;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/\s+/g, " ").trim();
 
-/** Open full text when available: bioRxiv JATS, arXiv HTML, or Europe PMC open access. */
+const MIN_TEXT = 5000;                                   // shorter = only metadata or an error page
+const enough = (t) => (t && t.length >= MIN_TEXT ? t : null);
+
+/** Body text of a JATS XML file, or null (missing body, error page, metadata only). */
+async function jatsText(url) {
+  try {
+    const xml = await getText(url);
+    if (!/<article[\s>]/.test(xml)) return null;          // an HTML "not found" page
+    const body = xml.match(/<body[\s\S]*<\/body>/i)?.[0];
+    return body ? enough(stripXml(body)) : null;
+  } catch { return null; }
+}
+
+/** Text of a PDF via pdftotext (poppler), or null. */
+async function pdfText(url) {
+  let dir;
+  try {
+    const res = await fetch(url, { headers: { "User-Agent": "paperoftheday (github.com/Masmae/paperoftheday)" } });
+    if (!res.ok || !/pdf/i.test(res.headers.get("content-type") ?? "")) return null;
+    dir = mkdtempSync(join(tmpdir(), "potd-"));
+    const file = join(dir, "paper.pdf");
+    writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+    const text = execFileSync("pdftotext", ["-q", "-enc", "UTF-8", file, "-"], { maxBuffer: 128 * 1024 * 1024 }).toString();
+    return enough(text.replace(/\s+/g, " ").trim());
+  } catch (e) { console.warn(`pdf: ${e.message}`); return null; }
+  finally { if (dir) rmSync(dir, { recursive: true, force: true }); }
+}
+
+/** Open full text when available: bioRxiv/medRxiv (XML, else PDF), arXiv (HTML, else PDF), or Europe PMC open access. */
 async function fullText(p) {
   try {
-    let jats = p.jatsxml;
-    if (!jats && p.doi?.startsWith("10.1101/")) {
-      // Saved records don't keep the XML link; look it up by DOI (bioRxiv, then medRxiv).
-      for (const server of ["biorxiv", "medrxiv"]) {
-        const d = JSON.parse(await getText(`https://api.biorxiv.org/details/${server}/${p.doi}`)).collection?.at(-1);
-        if (d?.jatsxml) { jats = d.jatsxml; break; }
+    // bioRxiv/medRxiv DOIs use 10.1101 (older) or 10.64898 (since late 2025).
+    if (p.jatsxml || (p.doi && (/^10\.(1101|64898)\//.test(p.doi) || /^(bio|med)rxiv$/i.test(p.venue ?? "")))) {
+      if (p.jatsxml) { const t = await jatsText(p.jatsxml); if (t) return { text: t, source: "bioRxiv full text" }; }
+      for (const server of p.doi ? ["biorxiv", "medrxiv"] : []) {
+        const versions = await getText(`https://api.biorxiv.org/details/${server}/${p.doi}`).then((x) => JSON.parse(x).collection ?? []).catch(() => []);
+        if (!versions.length) continue;
+        const name = server === "medrxiv" ? "medRxiv" : "bioRxiv";
+        const latest = versions.at(-1);
+        // The newest XML sometimes lacks the body (or isn't processed yet): fall back to its PDF, then older versions' XML.
+        let t = await jatsText(latest.jatsxml);
+        if (t) return { text: t, source: `${name} full text` };
+        t = await pdfText(`https://www.${server}.org/content/${p.doi}v${latest.version}.full.pdf`);
+        if (t) return { text: t, source: `${name} full text (PDF)` };
+        for (const v of versions.slice(0, -1).reverse()) {
+          t = await jatsText(v.jatsxml);
+          if (t) return { text: t, source: `${name} full text (v${v.version})` };
+        }
+        break;
       }
-    }
-    if (jats) {
-      const xml = await getText(jats);
-      const body = xml.match(/<body[\s\S]*<\/body>/i)?.[0] ?? xml;
-      return { text: stripXml(body), source: "bioRxiv full text" };
     }
     const arxivId = p.url?.match(/arxiv\.org\/abs\/([^?#]+)/)?.[1];
     if (arxivId) {
-      const html = await getText(`https://arxiv.org/html/${arxivId}`);
-      const main = html.match(/<article[\s\S]*<\/article>/i)?.[0] ?? html;
-      return { text: stripXml(main), source: "arXiv full text" };
+      const html = await getText(`https://arxiv.org/html/${arxivId}`).catch(() => "");
+      const t = enough(stripXml(html.match(/<article[\s\S]*<\/article>/i)?.[0] ?? html));
+      if (t) return { text: t, source: "arXiv full text" };
+      const pdf = await pdfText(`https://arxiv.org/pdf/${arxivId}`);
+      if (pdf) return { text: pdf, source: "arXiv full text (PDF)" };
     }
     if (p.doi) {
       const s = JSON.parse(await getText(`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:%22${encodeURIComponent(p.doi)}%22&format=json&resultType=lite`));
@@ -363,7 +403,7 @@ Reply with JSON only, no other text:
       const out = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
       if (!out.tldr || !Array.isArray(out.findings)) throw new Error("incomplete summary");
       console.log(`summary: ${model} from ${source} (${data.usage?.total_tokens ?? "?"} tokens)`);
-      return { ...out, source, model };
+      return { ...out, source, model, chars: ft.text.length };
     } catch (e) { console.warn(`summary ${model}: ${e.message}`); }
   }
   return null;
@@ -384,7 +424,8 @@ if (BACKFILL) {
     const rec = JSON.parse(readFileSync(url, "utf8"));
     let changed = false;
     for (const a of [rec.paper, ...(rec.also ?? [])]) {
-      if (a.summary && a.summary.source !== "abstract only") continue;
+      // Redo summaries made from the abstract, or from bioRxiv XML before the full-text checks existed (no `chars`).
+      if (a.summary && a.summary.source !== "abstract only" && !(a.summary.source.startsWith("bioRxiv") && !a.summary.chars)) continue;
       const had = !!a.summary;
       a.summary = await summarize(a).catch((e) => { console.warn(`summary failed: ${e.message}`); return null; });
       if (a.summary || had) { changed = true; console.log(`${d.date}: ${a.summary ? "summarized" : "removed abstract summary"} — ${a.title}`); }

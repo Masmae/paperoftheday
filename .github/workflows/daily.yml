@@ -28,6 +28,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Install pdftotext (reads PDFs when there is no XML full text)
+        run: command -v pdftotext || (sudo apt-get update -q && sudo apt-get install -y -q poppler-utils)
       - name: ${{ inputs.backfill && 'Backfill AI summaries' || 'Pick today''s paper' }}
         env:
           # Optional: an OPENCODE_API_KEY repository secret lets a model from the
