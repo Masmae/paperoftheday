@@ -1,0 +1,125 @@
+{
+ "date": "2026-10-15",
+ "pickedBy": "score",
+ "paper": {
+  "title": "MassNet: billion-scale AI-ready mass spectral corpus empowering scalable deep learning in proteomics.",
+  "authors": [
+   "A",
+   "Zhang",
+   "Zhang",
+   "Wei",
+   "Zhang",
+   "Deng",
+   "Liu",
+   "Nie",
+   "Yu",
+   "Chen",
+   "Dong",
+   "Gao"
+  ],
+  "authorCount": 14,
+  "venue": "Nat Methods",
+  "preprint": false,
+  "date": "2026-10-15",
+  "doi": "10.1038/s41592-026-03247-y",
+  "url": "https://doi.org/10.1038/s41592-026-03247-y",
+  "abstract": "Here we present MassNet, inspired by large-scale data corpora of text and images; MassNet is an artificial intelligence (AI)-ready data corpus for mass spectrometry (MS)-based proteomics. The corpus contains 1.5&#x2009;billion tandem MS spectra from high-quality data-dependent acquisition (DDA) MS data across 35 species. Approximately 1.7&#x2009;million peptide precursors are from human samples. We further present an AI-ready DDA data format called Mass Spectrometry DDA Tensor (MSDT) for compact and standardized storage, curation and reuse of data from multiple sources, which can be optionally converted to a Lightning Memory-Mapped Database for accelerated input/output in deep learning. On the basis of MassNet, we develop XuanjiNovo, a nonautoregressive transformer model that leverages a curriculum learning strategy for de novo peptide sequencing. XuanjiNovo achieves 38.35-143.57% improvement over state-of-the-art methods on human Astral data. MassNet also supports additional downstream tasks, including retention time prediction and PSM rescoring. MassNet represents a foundational MS-based proteomics data resource, marking a critical milestone for AI proteomics research.",
+  "reasons": [
+   "transformer",
+   "deep learning",
+   "AI",
+   "proteomics"
+  ],
+  "score": 15,
+  "tldr": null,
+  "why": null
+ },
+ "also": [
+  {
+   "title": "scTransMIL bridges patient-level disease states and single-cell transcriptomics for cancer screening and heterogeneity inference.",
+   "authors": [
+    "Tang",
+    "Wang",
+    "Yang",
+    "Song",
+    "Li",
+    "Zhou",
+    "Song",
+    "Chen",
+    "Zhu",
+    "You",
+    "Chen",
+    "Yao"
+   ],
+   "authorCount": 12,
+   "venue": "Nat Commun",
+   "preprint": false,
+   "date": "2026-10-15",
+   "doi": "10.1038/s41467-026-77538-5",
+   "url": "https://doi.org/10.1038/s41467-026-77538-5",
+   "abstract": "Single-cell sequencing offers profound insights into tumor complexity. However, reliably linking individual cellular profiles to overall sample-level phenotypes remains computationally challenging, particularly when cell-specific annotations are absent. This disconnect limits the technology's utility in studying underlying tumor mechanisms. Here we show how scTransMIL, an artificial intelligence framework, bridges this gap. By conceptualizing a biological sample as a collection of individual cells, scTransMIL employs a transformer-based multi-instance learning approach to directly connect single-cell transcriptomic profiles with overarching sample-level labels. We demonstrate that scTransMIL accurately predicts sample-level cancer phenotypes, including the tissue-of-origin for metastatic tumors. At cellular resolution, it robustly identifies tumor-associated cell populations and maps biological progression trajectories using only minimal sample-level annotations. Furthermore, the model's attention mechanisms facilitate full-transcriptome biomarker discovery. By systematically integrating molecular and cellular scales with broader phenotypic states, our approach provides a computational tool to dissect tumor heterogeneity and advance fundamental cancer biology.",
+   "reasons": [
+    "transformer",
+    "AI",
+    "single-cell",
+    "transcriptomics"
+   ],
+   "score": 15
+  },
+  {
+   "title": "NoiTox: A Machine Learning Strategy for Peptide Toxicity Prediction Reveals Label Noise in Benchmark Datasets",
+   "authors": [
+    "Almeida, G. O.",
+    "Albuquerque, M. C.",
+    "Silva, B. M.",
+    "Silva, O. A. B.",
+    "Ferreira, R. S.",
+    "Meira, W.",
+    "Pires, D. V.",
+    "Prata, W. M.",
+    "Silveira, S. A."
+   ],
+   "authorCount": 9,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-15",
+   "doi": "10.64898/2026.10.08.757741",
+   "url": "https://doi.org/10.64898/2026.10.08.757741",
+   "abstract": "Motivation: Peptide toxicity remains a major bottleneck in drug development, as small sequence variations can drastically alter cytotoxic profiles. Experimental assessment is costly and time-consuming, motivating computational predictors. Existing approaches often rely on single black-box architectures, limiting interpretability and obscuring the contribution of individual sequence features. Furthermore, benchmark datasets frequently define the negative class through annotation filters rather than direct experimental evidence, introducing structural label noise that can compromises training and evaluation. Results: We present NoiTox, a multi-model strategy for peptide toxicity prediction integrating three complementary architectures, evaluated as four model variants: NoiToxML (Bo/full), an Extremely Randomized Trees classifier with Boruta-selected or complete physicochemical, compositional, and atomic descriptors; NoiToxDP, a deep learning model leveraging ESM-2 protein language model embeddings; and NoiToxGP, a graph neural network that combines ESM-2 residue embeddings, a fully connected residue graph with attention, and the Boruta descriptors as global features. Averaged over five random seeds, the models approached the state-of-the-art predictor ToxiPep on CD-HIT-controlled test sets, and on an independent dataset the interpretable NoiToxML variants and a probability-averaging consensus of the four models exceeded it, showing that physicochemical descriptors are highly informative for toxicity prediction. Cross-referencing negative-labeled sequences against curated databases of hemolytic, cytotoxic, and neurotoxic peptides flagged a small set annotated as toxic elsewhere, consistent with label noise by omission. However, removing the sequences that all models contradicted did not improve, and for some models reduced, ranking performance, indicating that such sequences carry useful information and are better treated as candidates for curation than discarded automatically. Availability and implementation: https://github.com/goalmeida05/NoiTox.",
+   "reasons": [
+    "language model",
+    "deep learning",
+    "graph neural network",
+    "AI",
+    "proteins"
+   ],
+   "score": 15
+  },
+  {
+   "title": "Poisoning the corpora of protein design systems during pre-training and retrieval",
+   "authors": [
+    "Charalampos Koilakos",
+    "Kimon-Antonios Provatas",
+    "Michail Patsakis",
+    "Candace SY Chan",
+    "Georgios A. Pavlopoulos",
+    "Ilias Georgakopoulos-Soares"
+   ],
+   "authorCount": 6,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-10-15",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2610.21200v1",
+   "abstract": "Protein foundation models increasingly support the generation of novel biological sequences, yet their reliance on large public datasets creates opportunities for adversarial manipulation of the material they learn from and retrieve. We investigate two data-only poisoning attacks against protein design systems, targeting the pre-training corpus of autoregressive protein language models and the retrieval corpus of a text-guided protein generator. For the first, we pre-trained ProtGPT2 and ProGen2 variants of 300 million parameters, introducing poisoned protein sequences containing one of two triggers followed by one of three payloads. Across all poisoned runs, both architectures acquired highly reliable trigger-dependent generation under uniform and ramped poisoning schedules. Under ramped exposure, the earliest majority activation occurred after only 200 contaminated examples, while for the uniform schedule earliest activation occurred around 5000 poisoned samples. For the second attack, we inserted records into a retrieval corpus system without modifying its weights or decoding procedure. A single query-aware record captured a top-16 retrieval position for 58\\% of templated requests and 97\\% of free-text requests. Conditional on successful poisoned retrieval, 62\\% of requests produced altered sequences, while 19-21% acquired the inserted domain by profile-HMM homology. A universal query-unaware attack using 1,500 records also achieved substantial retrieval capture and domain transfer. Together, these findings demonstrate that adversarial protein sequence contributions can establish persistent, sequence-specific behaviour during pre-training or redirect protein generation at inference, while leaving ordinary model behaviour largely preserved. Our work establishes the integrity and biological provenance of protein sequence data as critical safeguards for generative protein design systems.",
+   "reasons": [
+    "foundation model",
+    "language model",
+    "generative model",
+    "proteins"
+   ],
+   "score": 15
+  }
+ ],
+ "candidates": 88
+}

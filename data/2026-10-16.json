@@ -1,0 +1,127 @@
+{
+ "date": "2026-10-16",
+ "pickedBy": "score",
+ "paper": {
+  "title": "CucurbitAgent: An AI agent for exploring cucurbit multi-omics resources",
+  "authors": [
+   "Zhang, R.",
+   "Zhang, J.",
+   "Zhang, Y.",
+   "Zhang, X.",
+   "Yang, J.",
+   "Xia, C.",
+   "Zhang, J.",
+   "Zhao, H.",
+   "Wen, C."
+  ],
+  "authorCount": 9,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-16",
+  "doi": "10.64898/2026.10.09.758138",
+  "url": "https://doi.org/10.64898/2026.10.09.758138",
+  "abstract": "Functional genomics in crops increasingly depends on integrating information from an extensive literature and heterogeneous multi-omics datasets. Large language models (LLMs) offer a powerful approach to synthesizing these resources and revealing hidden connections across datasets; however, they frequently hallucinate, producing plausible but unsupported claims, when responding to gene-specific queries. Here, we present CucurbitAgent, an AI research agent for functional genomics in the Cucurbitaceae, a major family of horticultural crops. CucurbitAgent integrates multi-omics resources from nine cultivated cucurbit species and more than 18,000 publications, encompassing approximately 256,000 genes, tissue-resolved expression profiles, over 16 million natural genetic variants, and roughly 242,000 predicted protein structures with more than 14 million predicted binding-site residue annotations. Responses link retrieved evidence to source records, including gene entries, expression measurements, structural predictions, and literature passages. On a curated benchmark of 50 tasks assessed by domain experts under blinded conditions, CucurbitAgent achieved an overall pairwise win rate of 96.0% against nine general-purpose LLMs, based on weighted scores for factual accuracy, completeness, relevance, and traceability. The platform is freely available at https://cucurbitagent.com and supports queries in 37 languages collectively spoken by an estimated 70% or more of the world's population. CucurbitAgent not only unifies evidence retrieval and interpretation but also reveals latent associations across datasets, helping researchers formulate testable hypotheses and substantially accelerating candidate-gene research. Its framework is readily transferable to other crops and, more broadly, provides a blueprint for building specialized agents in any domain.",
+  "reasons": [
+   "language model",
+   "AI",
+   "AI agents",
+   "multiomics",
+   "proteins",
+   "genomics"
+  ],
+  "score": 16,
+  "tldr": null,
+  "why": null
+ },
+ "also": [
+  {
+   "title": "Tissue Reconstruction with Generative AI",
+   "authors": [
+    "Yu, T.",
+    "Ekbote, C.",
+    "Morozov, N.",
+    "Herrera, A.",
+    "Fan, J.",
+    "Dominguez Mantes, A.",
+    "Novello, S.",
+    "Lashuel, H.",
+    "Frossard, P.",
+    "d'Ascoli, S.",
+    "La Manno, G.",
+    "Brbic, M."
+   ],
+   "authorCount": 12,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-16",
+   "doi": "10.1101/2025.02.13.638045",
+   "url": "https://doi.org/10.1101/2025.02.13.638045",
+   "abstract": "The spatial arrangement of cells is fundamental to their function, but single-cell RNA sequencing dissociates cells from their native spatial context. We present LUNA, a generative AI model that reconstructs tissue architecture from dissociated gene expression profiles by learning spatial priors from spatially resolved transcriptomics datasets. We validate LUNA by reconstructing the MERFISH mouse brain atlas comprising over 1.2 million cells, inferring the spatial locations of dissociated cells in a mouse central nervous system single-cell RNA-sequencing atlas, and enriching the Slide-tags data by imputing the locations of nuclei lost during profiling. LUNA generalizes to previously unseen cell types in the MERFISH mouse brain atlas and to pathological samples, identifying regions of disease-associated alterations in a mouse model of Parkinson's disease. Our results establish generative tissue reconstruction as an approach for overcoming current technological limitations in spatial biology and advancing our understanding of tissue organization and function.",
+   "reasons": [
+    "generative model",
+    "AI",
+    "single-cell",
+    "transcriptomics",
+    "RNA-seq"
+   ],
+   "score": 15
+  },
+  {
+   "title": "Conditional diffusion for single-cell Hi-C data imputation and enhancement with scHiC-Diff.",
+   "authors": [
+    "Liu",
+    "Fang",
+    "Du",
+    "Tang",
+    "Li"
+   ],
+   "authorCount": 5,
+   "venue": "Genome Res",
+   "preprint": false,
+   "date": "2026-10-16",
+   "doi": "10.1101/gr.281897.126",
+   "url": "https://doi.org/10.1101/gr.281897.126",
+   "abstract": "Single-cell high-throughput chromosome conformation capture (scHi-C) enables the analysis of cell-to-cell variability in three-dimensional (3D) genome organization, but its utility is severely limited by pervasive technical dropouts, leading to extremely sparse contact maps. Accurately identifying dropout events and imputing the corresponding missing chromatin contacts remains a challenging problem, as technical dropouts are confounded with genuine absences of chromatin interactions. Existing imputation and enhancement methods often rely on smoothing strategies or restrictive parametric likelihood assumptions, which may obscure fine-scale chromatin structures and cell-specific features. Here, we present scHiC-Diff, a conditional diffusion-based framework for scHi-C data imputation and enhancement. scHiC-Diff employs a forward process that progressively perturbs contact maps and a reverse denoising process that reconstructs chromatin interactions from noisy observations. To better capture long-range dependencies in complex 3D genome structures, scHi-C contact matrices are treated as masked images and modeled using a Diffusion Transformer (DiT). Across two complementary simulated datasets and three real scHi-C datasets, scHiC-Diff improves the recovery of chromatin interaction patterns and enhances downstream analyses compared with existing methods. Application to a developmental scHi-C dataset further demonstrates improved reconstruction of chromatin organization and enhanced chromatin loop detection.",
+   "reasons": [
+    "transformer",
+    "single-cell",
+    "perturbation",
+    "epigenomics",
+    "genomics"
+   ],
+   "score": 14
+  },
+  {
+   "title": "Multi-omics atlas of chronic exercise.",
+   "authors": [
+    "Maier",
+    "Hariharan",
+    "Ramasamy",
+    "Glina",
+    "van Rosmalen",
+    "Pathak",
+    "Deota",
+    "Patel",
+    "Lin",
+    "Lam",
+    "Le",
+    "Powale"
+   ],
+   "authorCount": 32,
+   "venue": "Cell",
+   "preprint": false,
+   "date": "2026-10-16",
+   "doi": "10.1016/j.cell.2026.09.044",
+   "url": "https://doi.org/10.1016/j.cell.2026.09.044",
+   "abstract": "Exercise reduces all-cause mortality, yet its molecular effects across organs, sexes, and circadian phases remain incompletely understood. We subjected mice to 8 weeks of voluntary wheel running and collected 22 tissues and plasma during active and inactive phases for bulk RNA sequencing, metabolomics, proteomics, and single-nucleus RNA and methylation sequencing. Exercise induced canonical fiber-type switching and widespread, tissue-specific remodeling, with the largest transcriptomic changes in skeletal muscle. Except for the hypothalamus, kidney, and lung, most tissues changed more during the active phase. Females showed broader transcriptional responses, with distinct downregulation. Pairing single-nucleus methylomes with transcriptomes resolved the cell types driving exercise-induced epigenetic remodeling-changes undetectable by bulk studies. These included coordinated gene-body demethylation and transcription that tracked with fiber-type switching in specific myonuclei. Cell-type-resolved methylation, including partially methylated domains characterized in muscle, revealed a strong, sex-biased epigenetic response to training. Machine learning identified conserved exercise signatures across mammalian species.",
+   "reasons": [
+    "AI",
+    "transcriptomics",
+    "multiomics",
+    "proteomics"
+   ],
+   "score": 14
+  }
+ ],
+ "candidates": 84
+}

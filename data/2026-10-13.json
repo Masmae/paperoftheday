@@ -1,0 +1,124 @@
+{
+ "date": "2026-10-13",
+ "pickedBy": "score",
+ "paper": {
+  "title": "BioMod: Biological Module Tokenization for Single-Cell Foundation Modeling",
+  "authors": [
+   "Meng, L.",
+   "Zhu, J.",
+   "Han, B.",
+   "Zang, Y.",
+   "Li, W.",
+   "Zong, K.",
+   "Zhong, J.",
+   "Yang, Y.",
+   "Liu, J.",
+   "Jia, J.",
+   "Sun, R.",
+   "Yu, G."
+  ],
+  "authorCount": 16,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-13",
+  "doi": "10.64898/2026.10.12.758490",
+  "url": "https://doi.org/10.64898/2026.10.12.758490",
+  "abstract": "Single-cell foundation models typically represent cells as flat sequences of individual genes, requiring higher-order biological organization to be inferred implicitly from sparse expression profiles. Similar to the evolution from character-level to semantic tokenization in natural language processing,we hypothesize that cellular states can be more efficiently represented using biologically meaningful intermediate units. Here we present BioMod, a 50-million-parameter single-cell foundation model that introduces biological modules as representation units between genes and cells. BioMod constructs an overlapping vocabulary of 660 biological modules derived from curated pathways and data-driven gene programs, replacing thousands of gene-level inputs with compact module representations. Pretrained on approximately 73 million human cells using high-ratio module masking with an asymmetric decoder, BioMod achieves state-of-the-art performance across cell-type annotation, zero-shot batch integration, perturbation-response prediction and drug-response forecasting while maintaining a compact architecture that enables efficient inference on a single GPU. Module-level analyses further demonstrate that BioMod captures biologically meaningful cellular programs and preserves pathway-level organization.",
+  "reasons": [
+   "foundation model",
+   "zero-shot",
+   "single-cell",
+   "perturbation"
+  ],
+  "score": 15,
+  "tldr": null,
+  "why": null
+ },
+ "also": [
+  {
+   "title": "Latent causal diffusions for single-cell perturbation modeling.",
+   "authors": [
+    "Lorch",
+    "Zhang",
+    "Bunne",
+    "Krause",
+    "Sch&#xf6;lkopf",
+    "Uhler"
+   ],
+   "authorCount": 6,
+   "venue": "Proc Natl Acad Sci U S A",
+   "preprint": false,
+   "date": "2026-10-13",
+   "doi": "10.1073/pnas.2602630123",
+   "url": "https://doi.org/10.1073/pnas.2602630123",
+   "abstract": "Perturbation screens hold the potential to systematically map regulatory processes at single-cell resolution, yet modeling and predicting transcriptome-wide responses to perturbations remains a major computational challenge. Existing methods often underperform simple baselines, fail to disentangle measurement noise from biological signal, and provide limited insight into the causal structure governing cellular responses. Here, we present the latent causal diffusion (LCD), a generative model that frames single-cell gene expression as a stationary diffusion process observed under measurement noise. LCD outperforms established approaches in predicting the distributional shifts of unseen perturbation combinations in single-cell RNA-sequencing screens while simultaneously learning a mechanistic dynamical system of gene regulation. To interpret these learned dynamics, we develop an approach we call causal linearization via perturbation responses (CLIPR), which yields an approximation of the direct causal effects between all genes modeled by the diffusion. CLIPR provably identifies causal effects under a linear drift assumption and recovers causal structure in both simulated systems and a genome-wide perturbation screen, where it clusters genes into coherent functional modules and resolves causal relationships that standard differential expression analysis cannot. The LCD-CLIPR framework bridges generative modeling with causal inference to predict unseen perturbation effects and map the underlying regulatory mechanisms of the transcriptome.",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "transcriptomics",
+    "perturbation",
+    "RNA-seq",
+    "genomics"
+   ],
+   "score": 14
+  },
+  {
+   "title": "HINN prioritizes multi-omics biomarkers associated with cognitive decline.",
+   "authors": [
+    "Vashishath",
+    "Beaver",
+    "Saeed",
+    "Bozdag"
+   ],
+   "authorCount": 4,
+   "venue": "Bioinformatics",
+   "preprint": false,
+   "date": "2026-10-13",
+   "doi": "10.1093/bioinformatics/btag741",
+   "url": "https://doi.org/10.1093/bioinformatics/btag741",
+   "abstract": "Integrating multi-omics data for disease prediction remains challenging due to the complexity of cross-layer biological interactions and the limited use of prior biological knowledge in many machine learning models. We present the Hierarchical Input Neural Network (HINN), a deep learning framework that incorporates biologically informed connections across genomic, epigenetic, and transcriptomic layers to model regulatory relationships in a structured and interpretable manner. HINN was applied to blood-derived multi-omics data to predict cognitive assessment scores, including MMSE, MoCA, ADAS11, and RAVLT.Immediate. A biologically guided feature construction pipeline was used to integrate GWAS-derived SNPs, promoter-region DNA methylation, and gene expression data through Gene Ontology Biological Process (GO-BP) and KEGG pathway mappings. The model was evaluated using a rigorous training strategy that separates feature selection from testing and incorporates cross-validation as well as repeated runs to ensure robustness. Across all cognitive outcomes, HINN achieved the lowest mean normalized MSE among the evaluated models, with statistically significant improvements over most baseline methods. Ablation analyses showed that the contributions of individual omics modalities and biologically informed connectivity varied across cognitive outcomes, with the clearest benefits of structured connectivity observed for ADAS11 and MMSE. Feature attribution analysis identified a multi-omics cascade involving SNP (rs116557230), CpG site (cg24041822), and a SOCS4 gene expression probe, which showed consistent associations with multiple cognitive outcomes. These findings highlight the ability of HINN to uncover biologically meaningful cross-omics relationships relevant to cognitive decline. Together, this work demonstrates that integrating deep learning with biological knowledge enables biomarker discovery for complex diseases. All code, sample data, and instructions are publicly available via GitHub (https://github.com/bozdaglab/HINN) and archived on Zenodo (https://doi.org/10.5281/zenodo.19197057) to ensure reproducibility and long-term accessibility. Supplementary data are available at Bioinformatics online.",
+   "reasons": [
+    "deep learning",
+    "AI",
+    "transcriptomics",
+    "multiomics",
+    "genomics"
+   ],
+   "score": 14
+  },
+  {
+   "title": "SPARCS enables scalable recovery of complex image-based phenotypes for genetic screening.",
+   "authors": [
+    "Schmacke",
+    "M&#xe4;dler",
+    "Wallmann",
+    "Metousis",
+    "Varlamova",
+    "Steigerwald",
+    "Christ",
+    "B&#xe9;routi",
+    "Harz",
+    "Leonhardt",
+    "Theis",
+    "Mann"
+   ],
+   "authorCount": 13,
+   "venue": "Cell",
+   "preprint": false,
+   "date": "2026-10-13",
+   "doi": "10.1016/j.cell.2026.09.021",
+   "url": "https://doi.org/10.1016/j.cell.2026.09.021",
+   "abstract": "Forward genetic screening links genotype to phenotype by introducing random genetic perturbations and identifying phenotype-altering mutations. Although genome-scale screens are routine for simple phenotypes in cultured cells, extending them to complex image-based phenotypes remains challenging. Here, we present spatially resolved CRISPR screening (SPARCS), a microscopy-based platform for forward genetic screening on single-cell images. SPARCS physically isolates mutants in situ by automated laser microdissection, enabling image-based screening at unprecedented scale with multimodal hit phenotyping. We demonstrate SPARCS in genome-wide CRISPR knockout screens of autophagosome formation and activation of the immune sensor STING across 70 million cells. Via machine learning-based image analysis, SPARCS recovered most macroautophagy genes and identified GPHR as a pH-dependent regulator of STING. Mass spectrometry-based proteomics of isolated hit cells revealed endoplasmic reticulum (ER)/Golgi disruption and nominated additional STING regulators via in silico perturbation modeling. These results establish SPARCS as a scalable platform for genome-wide genetic screening of complex cellular phenotypes with a proteome-level readout.",
+   "reasons": [
+    "AI",
+    "single-cell",
+    "perturbation",
+    "proteomics",
+    "CRISPR",
+    "genomics"
+   ],
+   "score": 14
+  }
+ ],
+ "candidates": 88
+}

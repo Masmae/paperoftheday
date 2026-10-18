@@ -1,0 +1,81 @@
+{
+ "days": [
+  {
+   "date": "2026-10-18",
+   "title": "Panoramic modelling of single-cell transcriptomes at scale with CellNet",
+   "venue": "arXiv",
+   "key": "https://arxiv.org/abs/2610.21943v1",
+   "also": [
+    "https://arxiv.org/abs/2610.19738v1",
+    "10.64898/2026.03.06.710001",
+    "https://arxiv.org/abs/2610.21218v1"
+   ]
+  },
+  {
+   "date": "2026-10-17",
+   "title": "Joint Variable Selection for Omic Biomarkers in Time-to-Event Data",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.04.30.721585",
+   "also": [
+    "10.64898/2026.10.06.757206",
+    "10.64898/2026.10.07.757371",
+    "10.64898/2026.10.14.759213"
+   ]
+  },
+  {
+   "date": "2026-10-16",
+   "title": "CucurbitAgent: An AI agent for exploring cucurbit multi-omics resources",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.09.758138",
+   "also": [
+    "10.1101/2025.02.13.638045",
+    "10.1101/gr.281897.126",
+    "10.1016/j.cell.2026.09.044"
+   ]
+  },
+  {
+   "date": "2026-10-15",
+   "title": "MassNet: billion-scale AI-ready mass spectral corpus empowering scalable deep learning in proteomics.",
+   "venue": "Nat Methods",
+   "key": "10.1038/s41592-026-03247-y",
+   "also": [
+    "10.1038/s41467-026-77538-5",
+    "10.64898/2026.10.08.757741",
+    "https://arxiv.org/abs/2610.21200v1"
+   ]
+  },
+  {
+   "date": "2026-10-14",
+   "title": "Functional alignment of protein language models via reinforcement learning.",
+   "venue": "Nat Commun",
+   "key": "10.1038/s41467-026-77557-2",
+   "also": [
+    "10.64898/2026.10.11.756618",
+    "10.64898/2026.10.07.757352",
+    "10.64898/2026.10.10.758204"
+   ]
+  },
+  {
+   "date": "2026-10-13",
+   "title": "BioMod: Biological Module Tokenization for Single-Cell Foundation Modeling",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.12.758490",
+   "also": [
+    "10.1073/pnas.2602630123",
+    "10.1093/bioinformatics/btag741",
+    "10.1016/j.cell.2026.09.021"
+   ]
+  },
+  {
+   "date": "2026-10-12",
+   "title": "DECONVersation: Single Cell Foundation Model-Derived Embeddings for Robust Cell Type Deconvolution of Bulk RNA-seq",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.02.756356",
+   "also": [
+    "10.64898/2025.12.23.696267",
+    "10.64898/2026.10.04.756542",
+    "10.1038/s41467-026-78143-2"
+   ]
+  }
+ ]
+}

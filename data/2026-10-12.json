@@ -1,0 +1,117 @@
+{
+ "date": "2026-10-12",
+ "pickedBy": "score",
+ "paper": {
+  "title": "DECONVersation: Single Cell Foundation Model-Derived Embeddings for Robust Cell Type Deconvolution of Bulk RNA-seq",
+  "authors": [
+   "Oku, A.",
+   "Geiger, H.",
+   "Robine, N.",
+   "Fu, R."
+  ],
+  "authorCount": 4,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-09",
+  "doi": "10.64898/2026.10.02.756356",
+  "url": "https://doi.org/10.64898/2026.10.02.756356",
+  "abstract": "AI and deep learning have transformed single-cell transcriptomics, empowering unsupervised annotation, trajectory inference, and cross-dataset integration at scale. Here, we propose bulk RNA-seq deconvolution as a novel task for single-cell foundation models. Deconvolution estimates cell type proportions from bulk RNA-seq using single-cell reference data, with applications spanning tumor microenvironment profiling to the detection of disease-associated shifts in tissue composition. However, existing methods remain vulnerable to batch effects, subject-level variation, and marker gene selection sensitivity. We introduce DECONVersation, which leverages embeddings from pretrained and fine-tuned single-cell foundation models, coupled with a non-negative least squares solver, to estimate cell type proportions. Foundation model embeddings are robust to batch effects and implicitly encode complex gene relationships, sidestepping explicit marker gene selection. Benchmarked against MuSiC, DWLS, and BayesPrism, DECONVersation achieved comparable or superior performance across diverse tissues. Performance further improved with tissue-specific fine-tuning.",
+  "reasons": [
+   "foundation model",
+   "deep learning",
+   "AI",
+   "single-cell",
+   "transcriptomics",
+   "RNA-seq"
+  ],
+  "score": 19,
+  "tldr": null,
+  "why": null
+ },
+ "also": [
+  {
+   "title": "Coordinated Enhancement of Molecular and Spatial Fidelity for Biological Inference in Spatial Transcriptomics",
+   "authors": [
+    "Wang, X.",
+    "Que, N.",
+    "Liu, H.",
+    "Tao, C.",
+    "Jiang, Y.",
+    "Jiang, Y.",
+    "Zhu, P.",
+    "Xu, J.",
+    "Yan, H.",
+    "Ye, B.",
+    "Price, S.",
+    "Xi, J."
+   ],
+   "authorCount": 14,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-12",
+   "doi": "10.64898/2025.12.23.696267",
+   "url": "https://doi.org/10.64898/2025.12.23.696267",
+   "abstract": "Understanding tissue organization requires accurate molecular quantification and faithful spatial localization. Spatial omics, particularly spatial transcriptomics (ST), face measurement trade-offs that limit simultaneous achievement of molecular and spatial fidelity across spatial resolution, detection sensitivity, molecular-tissue alignment and cell-level fidelity. Existing computational methods typically target individual aspects and optimize them in isolation, despite their interdependence. Here we present FOCUS, a multimodal generative foundation model for coordinated ST enhancement. FOCUS integrates native ST with histology images, cell masks, scRNA-seq references and spatial co-expression priors through task-specific modules, with cross-task coordination enabling joint correction of co-occurring limitations. FOCUS improved the performance of individual enhancement tasks and provided additional gains with coordinated mitigation of coupled limitations. Across immunology, tissue development and oncology, FOCUS recovered biologically consistent patterns obscured in native ST or isolated enhancement, enabling clearer inference of neutrophil-tumor interactions, spatial osteocyte differentiation and primary-metastatic HNSCC programs. Together, FOCUS establishes coordinated enhancement of molecular and spatial fidelity as a strategy for downstream biological inference from ST.",
+   "reasons": [
+    "foundation model",
+    "generative model",
+    "transcriptomics",
+    "spatial omics",
+    "RNA-seq"
+   ],
+   "score": 18
+  },
+  {
+   "title": "AI-Driven Design of Next-Generation Immunoinformatics Multi-Epitope Subunit Vaccine Targeting the Most Virulent Mpox Proteome: A Structural and Kinetic Validation Framework",
+   "authors": [
+    "Emon, M.",
+    "Siddiqque, N. H.",
+    "Haque, M. E."
+   ],
+   "authorCount": 3,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-11",
+   "doi": "10.64898/2026.10.04.756542",
+   "url": "https://doi.org/10.64898/2026.10.04.756542",
+   "abstract": "The resurgence of the Mpox virus (MPXV) highlights the urgent need for scalable, mutation-resistant countermeasures. Slow development timelines hinder traditional empirical vaccine discovery, while conventional vaccinology often yields high false-positive rates because it relies on static, linear sequence-based screening. These classical informatics filters consistently fail to predict physical structural stability or the dynamic presentation of immune cells under physiological conditions, creating a distinct translational gap between computational design and in vitro efficacy. To address these limitations, here we engineered an advanced, AI-augmented vaccine discovery pipeline targeting the most virulent components of the MPXV proteome. We systematically screened eight critical viral targets essential for replication, membrane morphogenesis, and host-cell entry to map highly conserved T-cell and B-cell epitopes. Moving beyond standard heuristic filtering, we implemented a high-fidelity deep learning validation layer: ESM-2 protein language models (pLMs) were deployed to calculate pseudo-perplexity scores across chimeric linker junctions (EAAAK, GPGPG) to guarantee structural naturalness, MHCflurry ensemble models successfully verified active intracellular antigen presentation, and structure-informed graph neural networks (GNNs) simulated the physical node-attention dynamics of the immune synapse. Finally, recurrent neural networks (RNNs)-driven mRNA kinetic modeling optimized translation initiation rates and minimum free energy profiles during in silico cloning. This multi-layered pipeline successfully yielded three structurally refined, multi-epitope vaccine constructs optimized for maximum global population coverage. ESM-2 structural validation confirmed exceptionally low perplexity scores at structural junctions, indicating that the engineered chimaeras have native-like stability and a minimized risk of proteolysis. GNN-based immune synapse modeling demonstrated highly stable binding kinetics and robust binding free energies between the target epitopes and human HLA alleles. Furthermore, RNN kinetic optimizations established that the cDNA sequences are optimized for high-yield expression in heterologous expression hosts without risk of ribosomal stalling or translational bottlenecks. This study establishes a deep learning-augmented framework that bridges the gap between theoretical sequence optimization and biopharmaceutical scalability. By validating the structural naturalness, real-world immunogenicity, and manufacturing kinetics of our vaccine chimeras, this framework presents a robust, proactive paradigm for rapid vaccine architecture against emerging orthopoxvirus threats.",
+   "reasons": [
+    "language model",
+    "deep learning",
+    "graph neural network",
+    "AI",
+    "proteomics",
+    "proteins"
+   ],
+   "score": 17
+  },
+  {
+   "title": "ProFormer: generalizable classification of single-cell and plasma proteomes using deep learning.",
+   "authors": [
+    "Krull",
+    "K&#xfc;hn",
+    "H&#xf6;hn",
+    "Ali",
+    "Otterbein",
+    "Brinker",
+    "Krijgsveld"
+   ],
+   "authorCount": 7,
+   "venue": "Nat Commun",
+   "preprint": false,
+   "date": "2026-10-12",
+   "doi": "10.1038/s41467-026-78143-2",
+   "url": "https://doi.org/10.1038/s41467-026-78143-2",
+   "abstract": "Proteins are the main drivers of cell function and disease, making proteomics a powerful technique for biomarker discovery and defining cell identity. While current technologies can profile thousands of proteins and reach single-cell sensitivity, limited throughput restricts applications such as robust classification of large biological or clinical cohorts. To close this gap, we present a deep-learning (DL) approach for the direct analysis of mass spectrometric (MS) data, assigning proteomic profiles to sample identity. Specifically, we introduce the ProFormer, a transformer pipeline that classifies samples by tabular MS1-level features derived from peptide ions, eliminating the need for time-consuming data interpretation. The ProFormer outperforms traditional machine-learning and image-based convolutional neural networks (CNNs), demonstrating enhanced classification and generalization over 14 evaluated architectures. We further provide detailed insights into how the ProFormer dynamically aggregates MS1 data, while preserving signal contribution and enabling explainable AI at single-peptide resolution. Applied to diverse LC-MS data sets, the ProFormer accurately classified single-cell proteomes by cell type, cycle stage or differentiation trajectory, as well as patient disease status from plasma proteomes. Thereby, the ProFormer provides a versatile and rapid framework for the classification of proteomic data, with important implications for patient stratification, early detection and single-cell analysis.",
+   "reasons": [
+    "transformer",
+    "deep learning",
+    "AI",
+    "single-cell",
+    "proteomics"
+   ],
+   "score": 16
+  }
+ ],
+ "candidates": 95
+}
