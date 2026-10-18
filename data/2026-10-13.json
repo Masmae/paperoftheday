@@ -90,7 +90,23 @@
    "score": 26.27344113431281,
    "classic": true,
    "citations": 137,
-   "year": 2024
+   "year": 2024,
+   "summary": {
+    "tldr": "SCimilarity is a metric-learning foundation model that embeds single-cell RNA-seq profiles into a shared 128-dimensional space, enabling fast similarity search for cell states across a 23.4-million-cell atlas of 412 studies.",
+    "background": "Over 100 million cells have been profiled by sc/snRNA-seq, but there is no principled way to query these atlases for cells similar to a profile of interest, because datasets use inconsistent annotations and lack a common similarity metric. Unsupervised embeddings (PCA, autoencoders, scVI) preserve input information but don't learn a universal notion of cell similarity that generalizes to new datasets.",
+    "approach": "SCimilarity combines a supervised triplet loss with an unsupervised MSE reconstruction loss (weighted beta=0.001, margin 0.05) in an encoder-decoder network (28,231 genes in, 128-dim unit-normalized embedding out). Triplets (50M, semi-hard mined) use Cell Ontology annotations, requiring anchor and positive cells to come from different studies and excluding ambiguous ancestor-descendant label pairs. It was trained on 7.9M cells from 56 studies (10x Chromium only) and applied to a searchable reference of 23.4M cells from 412 studies, 5,142 samples, with no fine-tuning needed on new data.",
+    "findings": [
+     "Query scores correlate with gene-signature scores better than prior foundation models (Spearman rho=0.77 vs 0.54 for scFoundation and 0.59 for scGPT); for a myofibroblast query, rho=0.36 vs -0.19 and -0.17.",
+     "Search is fast: scoring a query against 2.5M monocytes/macrophages takes 2 seconds and retrieving the top 10,000 of 23.4M cells takes 0.05 s, versus 2h46m for gene-signature scoring.",
+     "Single-model annotation of all 23.4M cells (74 types) matched author labels at 86.5% on kidney, comparable to dataset-trained scANVI (85.2%), CellTypist (90.4%), TOSICA (87.2%); on a CITE-seq immune test it outperformed them (75.3% vs 52.2%, 59.1%, 44.4%).",
+     "Querying fibrosis-associated macrophages (FMs, SPP1+/TREM2+) across 2.5M myeloid cells found FM-like cells concentrated in fibrotic lung (6.6% average in ILD, 0.4% healthy lung), plus PDAC tumors and liver metastasis; Integrated Gradients recovered known FM signatures (AUC>0.8 for 7 studies) while M1/M2 controls scored low.",
+     "The top in vitro hit was PBMCs grown 5 days in a 3D hydrogel HSC-expansion system; a replication experiment confirmed 41.5% of myeloid cells became FM-like by day 8."
+    ],
+    "why": "For someone building multiomics foundation models, this shows supervised metric learning on curated ontology labels outperforms large pretrained transformers (scGPT, scFoundation) specifically on retrieval and fine-grained state matching, at practical search speeds via hnswlib. The in vitro model discovery is a concrete demonstration that atlas-scale search can generate experimentally validated hypotheses.",
+    "limitations": "Training used only 10x Chromium data from adult tissues and excluded tumors, cell lines, and iPSC-derived cells, with reported weakness on fetal samples, granulocytes, HSPCs, and precursor states; the annotatable label set is bounded by Cell Ontology coverage, and query quality depends on the coherence of the user-supplied input profile.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   },
   {
    "title": "Decoding the sequence determinants of locus-specific DNA methylation across human tissues.",
@@ -121,7 +137,22 @@
     "RNA-seq",
     "genomics"
    ],
-   "score": 24
+   "score": 24,
+   "summary": {
+    "tldr": "Melody is a 1D U-Net that predicts base-resolution DNA methylation across 39 human tissues from 10-kb sequence windows, beating prior methods, and a variant (Melody-G) conditions it on scRNA-seq foundation-model embeddings to predict methylation in unseen cell types.",
+    "background": "How much of tissue-specific CpG methylation is encoded in DNA sequence alone is unresolved; prior methylation predictors used short windows (~41 bp), covered few cell types, and were never benchmarked on meQTLs. Accurate, generalizable prediction would help interpret noncoding variants and methylation-based biomarkers.",
+    "approach": "They trained three variants on methylation maps for 39 normal human cell types (GRCh38, 10-kb windows): Melody-ST (one model per cell type) and Melody-MT (39 shared output tracks), each a fully convolutional encoder-decoder with auxiliary 100-bp heads for regional methylation and CpG density and a loss upweighting low-methylation CpGs. Melody-G fuses averaged cell embeddings from scRNA-seq foundation models (scGPT, scFoundation, CellFM) via FiLM modulation to generalize to unseen cell types, with two-stage training (G1 genome-wide, G2 fine-tuned on cell-type-specific regions). Training used Selene on one A100 (~72 hours).",
+    "findings": [
+     "Melody-MT reached mean Spearman correlations of 0.723 (sampling test set) and 0.645 (test chromosomes chr8/9) versus 0.590 and 0.584 for the best baselines (INTERACT, CpGenie, iDNA-ABT), a ~17% relative gain, with AUC 0.921 and AP 0.975.",
+     "On newly curated meQTL benchmarks (Stefansson, GTEx, EPIGEN; n=13 datasets), Melody-MT beat Melody-ST and all baselines, reaching Pearson r = 0.62 (MDS) and 0.42 (GTEx Whole Blood); the 41-bp-window iDNA-ABT was near-random, and accuracy drops as variant-CpG distance grows.",
+     "In silico perturbation of 282 TF motifs recovered known biology: CTCF insertion causes local hypomethylation with an oscillatory pattern consistent with nucleosome phasing, while SPI and IRF2 effects are strongest in blood lineages.",
+     "Melody-G generalized to 5 held-out cell types (e.g., aorta endothelium, cortical neurons) with AUC 0.663 (G1) and 0.697 (G2) versus 0.633 for a mean-track baseline (+4.7% and +10.1%); FiLM was the best fusion method, and scGPT performed best overall, though scFoundation+FiLM won on a more stringent transcriptomically distinct split."
+    ],
+    "why": "For multiomics readers, this is a concrete case of sequence-plus-transcriptome integration: scRNA-seq foundation-model embeddings measurably transfer cell identity into a methylome model, so scRNA-seq can substitute for missing methylation assays in unprofiled cell types. The paper also contributes the first standardized meQTL effect-prediction benchmarks.",
+    "limitations": "Sequence alone cannot capture chromatin accessibility, TF occupancy, or replication timing, and the interpretability analyses are model-based associations rather than causal evidence. Unseen-cell-type generalization is modest and depends on embedding quality and transcriptomic distance between train and test cell types.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   },
   {
    "title": "GeneCompass: deciphering universal gene regulatory mechanisms with a knowledge-informed cross-species foundation model",
@@ -157,7 +188,23 @@
    "score": 26.3167249841905,
    "classic": true,
    "citations": 144,
-   "year": 2024
+   "year": 2024,
+   "summary": {
+    "tldr": "GeneCompass is a ~100M-parameter 12-layer transformer pre-trained on 101.77M human and mouse single-cell transcriptomes with four types of prior biological knowledge injected into the input embeddings, beating Geneformer/scGPT on several single-species tasks and enabling cross-species annotation and cell-fate regulator discovery.",
+    "background": "Existing single-cell foundation models (scGPT, Geneformer, scFoundation, UCE) are trained mostly on tens of millions of human cells, typically using only relative expression ranks or binned values, and ignore curated biological knowledge. Gene regulation is conserved across vertebrates, so cross-species data should help, but integrating multi-species corpora and prior knowledge (GRNs, promoters, gene families, co-expression) into self-supervised pre-training had not been demonstrated at scale.",
+    "approach": "They built scCompass-126M: >120M cells collected from public repositories, 101,768,420 retained after QC (53.6M human, 48.2M mouse), with homologous genes mapped to shared human Ensembl IDs (17,465 of 36,092 genes). Each cell is encoded as its top-2048 ranked genes, but unlike Geneformer they concatenate absolute expression values and a species token, plus 768-dim embeddings of four knowledge types: PECA2 GRNs (gene2vec), promoter sequences (DNABert), HGNC gene families, and co-expression pairs (PCC > 0.8). Pre-training masks 15% of genes and jointly reconstructs gene IDs (cross-entropy) and expression values (MSE); 3 epochs took 9 days on 4x8 A800 GPUs.",
+    "findings": [
+     "Cell-type annotation macro-f1 improved over Geneformer by 3-8% on human datasets (hMS, hLung, hLiver) and 10-19% on mouse datasets (mBrain, mLung, mPancreas), and by 21-28%/16-25% over TOSICA; adding mouse data to the pre-training corpus improved human-task performance, consistent with a scaling effect.",
+     "For cross-species annotation, swapping GeneCompass embeddings into CAME gave a 7.5% improvement on a complex retina dataset (>12 cell types) and gains in 4 of 7 mouse-to-human dataset pairs.",
+     "Plugging the gene embeddings into GEARS cut MSE on top-20 DEGs by 15.4% (Norman perturb-seq data), raised Spearman correlation from 79.8% to 82.0%, and reduced wrongly-directed top-20 DEGs by 13.7% (336 to 290).",
+     "Dosage-sensitivity prediction reached AUC 0.95 (above Geneformer at equal data), and GRN inference via DeepSEM achieved the best AUPRC versus scGPT, Geneformer, and vanilla DeepSEM.",
+     "In silico perturbations recapitulated known biology (GATA4/TBX5 target effects, OSKM overexpression shifting fibroblasts toward iPSC state), and the model's top five predicted gonadal-fate TFs (GATA4, NR5A1, WT1, TCF21, NR2F1) were validated: overexpressing GATA4 or NR5A1 alone induced gonadal gene programs in human ESCs."
+    ],
+    "why": "For a multiomics model builder, the transferable findings are threefold: dual encoding of absolute expression plus rankings outperforms ranking-only inputs, embedding structured prior knowledge (promoters, GRNs, families, co-expression) into inputs measurably helps, and cross-species pre-training data improves single-species downstream tasks, supporting conserved-regulation scaling effects.",
+    "limitations": "Only two closely related species are included (homology-based token sharing may not extend to distant organisms), the model is transcriptome-only, and gains over Geneformer on several tasks are modest. Ablations used a smaller 6-layer variant, and some evaluation ground truths (e.g., ChIP-seq-based GRN inference) carry known noise.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   }
  ],
  "candidates": 352

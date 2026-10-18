@@ -88,7 +88,23 @@
    "score": 22.221179420598496,
    "classic": true,
    "citations": 129,
-   "year": 2025
+   "year": 2025,
+   "summary": {
+    "tldr": "GET is an interpretable transformer foundation model trained on scATAC-seq chromatin accessibility from 213 human fetal and adult cell types that predicts gene expression at experimental-level accuracy in unseen cell types and yields cell-type-specific regulatory element and TF interaction catalogs.",
+    "background": "Computational models of transcription (Expecto, Basenji2, Enformer) must be fine-tuned on the cell type of interest, so they generalize poorly to unseen cell types and conditions. The core difficulty is learning how regulatory sequences and TFs drive transcription from largely unpaired, cell-type-specific chromatin and expression data.",
+    "approach": "GET uses a two-stage design: self-supervised masked pretraining on pseudobulk scATAC-seq (peak-by-TF-motif matrices, 200 peaks ≈ 2–4 Mbp regions, 282 motif clusters) across 213 cell types (1.3M single nuclei), then fine-tuning on the 153 cell types with paired RNA-seq to predict expression, using an Enformer-like architecture (embedding layer + 12 attention layers; ~8h fine-tuning on 8 A100s; LoRA option). Interpretation of the fine-tuned model yields motif/region contribution scores, causal TF–TF interaction discovery (LiNGAM), and an AlphaFold2-based structural interaction catalog (1,718 TF pairs).",
+    "findings": [
+     "Predicting expression in leave-out fetal astrocytes, GET reached Pearson r = 0.94 (R2 = 0.88), comparable to experimental replicate concordance, versus r = 0.51 for gene activity scores and r = 0.83 for the most similar training cell type.",
+     "Zero-shot on K562 lentiMPRA (226,243 sequences), GET predictions correlated r = 0.55 (with accessibility) vs Enformer's r = 0.44 with much worse dynamic range (slope 0.14 vs 0.63), and screened all elements in the compute Enformer needed for 2,000.",
+     "On fetal erythroblast HbF loci and K562 CRISPRi benchmarks, GET outperformed Enformer, HyenaDNA, DeepSEA and ABC especially for distal (>100 kb, up to >1 Mbp) enhancer–promoter inference.",
+     "Top-ranked causal TF–TF predictions matched STRING physical interactions at 25.2% precision (vs 5.6% random), comparable to mass-spectrometry atlases.",
+     "A case study found a lymphocyte-specific PAX5–nuclear receptor (NR2C2) interaction mediated by the PAX5 octapeptide IDR, validated by proximity labeling, and showed the leukemia-risk G183S germline mutation strengthens this interaction with a G183S-specific transcriptional signature in B-ALL patients."
+    ],
+    "why": "For multiomics researchers, GET shows that ATAC accessibility plus sequence alone (no transcriptome in pretraining) can support zero-shot expression prediction and regulatory inference across assays, platforms and unseen cell types, including tumors. The released GET Catalog and its motif-contribution interpretation framework offer transferable machinery for variant-to-regulation mapping and TF co-regulation discovery that complements single-cell transcriptome foundation models like scGPT/Geneformer.",
+    "limitations": "GET uses region-level (not nucleotide-level) inputs, cannot distinguish TF homologs with near-identical motifs, and is trained only on pseudobulk normal cell states without 3D chromatin, TF expression, or perturbation/disease data in pretraining. Variant impact prediction and kinetic/temporal regulation remain open areas.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   },
   {
    "title": "Sequence modeling and design from molecular to genome scale with Evo",
@@ -124,7 +140,8 @@
    "score": 28.526855987125874,
    "classic": true,
    "citations": 580,
-   "year": 2024
+   "year": 2024,
+   "summary": null
   },
   {
    "title": "Spatial transcriptomic clocks reveal cell proximity effects in brain ageing",
@@ -158,7 +175,24 @@
    "score": 25.90848501887865,
    "classic": true,
    "citations": 90,
-   "year": 2024
+   "year": 2024,
+   "summary": {
+    "tldr": "The authors built a 4.2-million-cell MERFISH spatial transcriptomics atlas of the ageing mouse brain across the lifespan, and using 'spatial ageing clocks' and graph neural networks they show that rare cell types exert strong neighbourhood effects: T cells make nearby cells transcriptomically older (likely via IFNγ), while neural stem cells make them younger (possibly via exosomes), with exercise modifying both effects.",
+    "background": "Brain ageing involves coordinated changes across many cell types, but how aged or rejuvenated cells influence their neighbours spatially is unknown. Existing spatial transcriptomics studies had either single-cell spatial resolution or temporal coverage, not both, and lacked computational tools to quantify cell-cell spatial interactions during ageing.",
+    "approach": "They generated a MERFISH atlas (300-gene panel, Vizgen MERSCOPE) of 4.2M cells from male mouse brains: 2.3M cells across 20 lifespan ages (3.4-34.5 months) in coronal sections plus sagittal sections, and added intervention datasets (~900k cells for voluntary exercise; >1M cells for partial OSKM reprogramming). They trained cell-type-specific 'spatial ageing clocks' using a SpatialSmooth procedure (iterative smoothing of expression over a same-type spatial graph) and a GNN to predict neighbourhood ageing from cell-type composition and connectivity. Cross-dataset imputation via TISSUE expanded the 300-gene panel to ~12,000 genes for mediator discovery.",
+    "findings": [
+     "Ageing changed cell proportions: T cells strongly increased (r=0.72) and NSCs strongly decreased (r=-0.93); microglia had the most age-changed genes, and white matter (CC/ACO) was the largest ageing hotspot.",
+     "Spatial ageing clocks reached R>0.7 in 14 of 18 cell types (clock sizes 62-292 genes) and generalized to external datasets, female mice, sagittal sections, and scRNA-seq/snRNA-seq.",
+     "Interventions: exercise rejuvenated vasculature cells (endothelial -4.9 months, VSMCs -4.7 months, pericytes -3.4 months), while partial reprogramming rejuvenated NSCs (-2.7 months) and neuroblasts (-2.8 months) but aged some glial cells.",
+     "Proximity analysis across 214 cell-cell pairs showed T cells have the strongest pro-ageing effect (especially on oligodendrocytes/pericytes) and NSCs the strongest pro-rejuvenating effect, confirmed by in silico GNN gain/loss-of-function perturbations and robust to spatial permutation, gene spillover, and inflammation-state controls.",
+     "Mediators: IFNγ signalling mediates the T cell effect (STAT1 immunofluorescence elevated near T cells, e.g. p=0.0078 in cortex), while exosome/fatty-acid-oxidation markers (CD9, CPT1A) are enriched in and near NSCs, respectively.",
+     "Application to disease models (LPS inflammation, Alzheimer's TauPS2APP, EAE and localized demyelination) showed accelerated transcriptomic ageing in most cell types, with microglia prominent."
+    ],
+    "why": "Spatial ageing clocks and GNN-based proximity analysis provide a scalable computational framework for measuring tissue ageing, intervention efficacy, and cell-type-specific spatial interactions at single-cell resolution—a template directly relevant to spatial transcriptomics and cell-state models in other tissues. For an AI-omics reader, SpatialSmooth (spatial-graph smoothing for ageing clocks) and in silico cell-type perturbation via GNNs on spatial neighbourhoods are the transferable methodological contributions.",
+    "limitations": "The 300-gene panel limits resolution and required computational imputation (TISSUE) to identify mediators, which are correlative rather than causally validated. Only male mice, a single tissue (mouse brain), and small intervention cohorts (n=4 per group) constrain generalization.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   }
  ],
  "candidates": 343

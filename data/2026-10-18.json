@@ -35,22 +35,7 @@
   "score": 17,
   "tldr": "LUNA learns spatial priors from spatially resolved transcriptomics and uses them to reconstruct tissue architecture from dissociated single-cell expression profiles, generalizing to unseen cell types and pathological samples.",
   "why": "This is a striking new AI capability: it uses generative models to recover spatial tissue organization from dissociated single-cell transcriptomes. The validation across large MERFISH atlases, mouse CNS scRNA-seq, and Slide-tags suggests it could turn existing expression datasets into pseudo-spatial resources and reveal disease-associated tissue architecture. It is directly relevant to transcriptomics and spatial multiomics, with a surprising and practically useful impact.",
-  "summary": {
-   "tldr": "LUNA is a generative AI model that assigns spatial coordinates to dissociated single-cell RNA-seq profiles by learning spatial priors from spatially resolved transcriptomics data.",
-   "background": "scRNA-seq destroys the spatial arrangement of cells, yet that arrangement strongly determines tissue function, so dissociated atlases lose a key axis of information. Recovering positions from expression alone is hard because individual gene profiles only weakly encode location, and the mapping depends on tissue context and having an appropriate spatial reference.",
-   "approach": "The authors built LUNA, a generative model that learns the relationship between gene expression profiles and spatial position from spatially resolved transcriptomics datasets, then uses that prior to reconstruct tissue architecture from dissociated profiles. They evaluated it in three settings: reconstructing the MERFISH mouse brain atlas, inferring coordinates for dissociated cells in a mouse central nervous system scRNA-seq atlas, and imputing the locations of nuclei lost during Slide-tags profiling. They also tested out-of-distribution behavior on unseen cell types and on pathological tissue from a Parkinson's disease mouse model.",
-   "findings": [
-    "LUNA reconstructed the MERFISH mouse brain atlas, spanning more than 1.2 million cells.",
-    "It inferred spatial locations for dissociated cells across a mouse CNS scRNA-seq atlas, adding spatial context to a purely dissociated dataset.",
-    "It recovered the positions of nuclei dropped during Slide-tags profiling, i.e., imputed missing cells in an existing spatial assay.",
-    "The model generalized to cell types it had not seen during training within the MERFISH mouse brain atlas.",
-    "On a mouse model of Parkinson's disease, it identified regions of disease-associated alterations, suggesting some robustness to pathological tissue."
-   ],
-   "why": "Spatial annotation normally requires running a spatial assay; LUNA instead transfers spatial information from existing references onto dissociated data, so legacy and large-scale scRNA-seq atlases could be spatialized without new experiments. For a researcher in AI for transcriptomics and multiomics, it is a concrete example of a generative model solving a coordinate-inference task and a potential component for adding a spatial modality to multiomic pipelines.",
-   "limitations": "The abstract reports no accuracy metrics, so reconstruction fidelity must be checked in the full paper, and validation is concentrated on mouse brain/CNS tissue. Since locations are inferred rather than measured, quality depends on how well the spatial reference matches the query tissue, and transfer to other organs, species, and human pathology remains open.",
-   "source": "abstract only",
-   "model": "glm-5.3-flash"
-  }
+  "summary": null
  },
  "also": [
   {
@@ -78,7 +63,23 @@
     "transcriptomics",
     "scale"
    ],
-   "score": 16
+   "score": 16,
+   "summary": {
+    "tldr": "CellNet is an image-based single-cell foundation model that represents whole transcriptomes (coding and non-coding genes) as DNA-anchored expression images, pretrained on 231M cells across 40 species, and improves rare-cell/state recognition plus cross-gene, cross-species, and spatial expression prediction over gene-token models like scGPT, UCE, and TranscriptFormer.",
+    "background": "Single-cell foundation models typically use gene-token vocabularies built from predefined or protein-derived gene identities, which handle non-coding RNAs poorly and make broader gene coverage computationally expensive (e.g., UCE samples only 1,024 genes per cell). Meanwhile, total-RNA assays (VASA-seq, TotalX) now measure many non-coding transcripts that these models cannot exploit.",
+    "approach": "CellNet assigns each gene an identity from Evo 2 DNA sequence embeddings (1,920-dim pooled, PCA to 256-dim), then lays all genes of a species at fixed pixel positions on a 384×384 canvas via t-SNE plus balanced k-d-tree assignment. Per-cell expression images with measurement masks are cut into 16×16 patches (up to 576 tokens) and encoded with a DINOv3 backbone. Training combines JEPA-style multiview latent consistency (2 global + 6 masked local views, Gaussian regularization, species-balanced prototypes) with a gene-conditioned cross-attention decoder that predicts expression via a compound Poisson-exponential (Tweedie, power 1.5) likelihood. Pretraining used 231,190,557 cells from 26,467 datasets, 40 species, 1,015,163 gene identities, on 8× A800 GPUs for ~2 weeks (vs. 24 A100s × 40 days for UCE and ~1,000 H100s for TranscriptFormer).",
+    "findings": [
+     "Cell-type classification on 549,018 Tabula Sapiens v2 cells (18 tissues, donor-held-out) reached Macro-F1 0.621 vs. 0.589 for TranscriptFormer; integration AvgBIO was 0.684 vs. 0.680 for UCE, with batch mixing 0.886.",
+     "Rare-cell classification was best among seven pipelines in kidney (Macro-F1 0.646) and lung (0.762) versus TranscriptFormer's 0.638/0.737; condition states also improved (CD4 T-cell polarization 0.936 vs. 0.911; WI-38 senescence 0.919 vs. 0.891).",
+     "Withheld coding-gene prediction on TotalX data (genes detected in ≥20% of cells) gave gene-wise PCCs of 0.365 (PBMC) and 0.241 (developing brain) vs. 0.198/0.094 for scPRINT-2; all-non-coding-withheld prediction reached conditional PCCs of 0.716 and 0.577, covering 18,502 PBMC and 26,113 brain ncRNA targets.",
+     "Cross-species prediction on six spermatogenesis-atlas species achieved measured-positive PCCs of 0.672–0.767 (scPRINT-2: 0.093–0.179), including targets never seen in expression pretraining (bonobo 0.696, mouse 0.718, chicken 0.671); on a Xenium mouse-brain section (20 withheld genes, 12,000 cells), mean PCC was 0.478 frozen and 0.665 after adapting with same-section references.",
+     "Gene representations recovered a known ncRNA module (15 of top 20 neighbors were known members vs. 4 for RNA correlation; AP 0.612 vs. 0.314), and SERTAD4-AS1—detected in only 13 of 3,423 cells—retrieved a neural stem-cell programme (AP 0.122 vs. 0.034)."
+    ],
+    "why": "For someone building transcriptomic/multiomic foundation models, the key idea is replacing per-gene tokens with a fixed, sequence-anchored image layout, which makes near-full-transcriptome coverage (including non-coding RNAs) tractable without scaling token count. It also shows DNA-derived gene embeddings (Evo 2) can serve as a transferable identity space, enabling zero-shot prediction for genes absent from expression pretraining.",
+    "limitations": "Prediction accuracy degrades for sparsely detected non-coding transcripts, inferred gene associations need independent validation, and cross-species label transfer remains task-dependent (UCE and TranscriptFormer win several animal settings). Comparisons use frozen representations with different readout heads (LDA for CellNet, logistic regression for others), so some gains may partly reflect evaluation choices.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash"
+   }
   },
   {
    "title": "Coordinated Enhancement of Molecular and Spatial Fidelity for Biological Inference in Spatial Transcriptomics",
@@ -111,7 +112,8 @@
     "RNA-seq",
     "scale"
    ],
-   "score": 20
+   "score": 20,
+   "summary": null
   },
   {
    "title": "Latent causal diffusions for single-cell perturbation modeling.",
@@ -138,7 +140,23 @@
     "RNA-seq",
     "genomics"
    ],
-   "score": 16
+   "score": 16,
+   "summary": {
+    "tldr": "LCD is a stationary-diffusion generative model for Perturb-seq data that predicts single-cell distributions of unseen two-gene perturbations and, via its CLIPR linearization, yields gene-gene causal effect matrices, outperforming CPA, GEARS, SALT, and PEPER.",
+    "background": "Perturbation screens assay thousands of single knockdowns, but the combinatorial space is exponential, so predicting transcriptome-wide responses of unseen multi-gene combinations is the key computational challenge. Existing deep models often fail to beat additive heuristics, ignore measurement noise, and are opaque.",
+    "approach": "LCD models expression of d genes as a stationary SDE (neural drift f, Brownian noise) observed through a zero-inflated Poisson likelihood, separating biological from measurement noise. Inference is two-stage: empirical Bayes infers latent state densities, then score matching fits a drift sharing a hidden state across genes; perturbations are learned embedding shifts (added for combinations) that move the diffusion to a new equilibrium. CLIPR linearizes the learned drift: from initial responses (drift at a control state) and limit responses (fixed points, essentially differential expression) it computes A-hat = -V L+ (Tikhonov-regularized), provably recovering the causal matrix for linear drifts given enough independent perturbations.",
+    "findings": [
+     "On the Norman et al. and Wessels et al. benchmarks (ten folds over all double perturbations), LCD achieved the lowest MMD on top-20 DE genes, beating all baselines in over 80 percent of test perturbations; only PEPER was comparable on Norman et al., which has 98 single-gene perturbations versus 5 in Wessels et al.",
+     "Gains over the additive SALT baseline were largest for neomorphic genetic interactions, while SALT matched LCD for redundant or epistatic ones.",
+     "In simulated linear systems of 100-1,000 genes, LCD-CLIPR reached median AUROCs of 0.74-0.84 (power-law structure) and 0.93-0.98 (Erdos-Renyi) when given d perturbations.",
+     "On the genome-wide K562 Perturb-seq screen (Replogle et al.; 1,000 genes modeled), CLIPR clusters were enriched for GO terms and pathways (Fisher exact, P<0.01, BH-corrected), and the top-50 predicted causal effects matched downstream DE at 0.66 accuracy (95% CI 0.52-0.78) versus a roughly 0.138 baseline DE rate, a 4.78x lift.",
+     "For genes never perturbed during training (five held-out folds), the top-25 predicted edges still showed significant DE 2.71x more often than baseline."
+    ],
+    "why": "It couples a predictive generative model with a causal identifiability result, explicitly separating direct causal effects from differential expression, a conceptual advance for perturbation modeling. For an ML-for-transcriptomics researcher it is a strong benchmark against CPA, GEARS, SALT, and PEPER, with interpretable outputs and stated extensibility to drug screens and other modalities like chromatin accessibility.",
+    "limitations": "LCD assumes single-time-point steady-state data and, like CPA, relies on learned perturbation embeddings, so it cannot predict unseen single perturbations. CLIPR is only a linear approximation whose L2 shrinkage yields dense effect matrices (small entries are not evidence of no regulation), and simple additive baselines stay competitive for additive or epistatic interactions.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   }
  ],
  "candidates": 330

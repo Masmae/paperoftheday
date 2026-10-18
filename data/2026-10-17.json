@@ -85,7 +85,8 @@
    "score": 20.060399396406165,
    "classic": true,
    "citations": 339,
-   "year": 2025
+   "year": 2025,
+   "summary": null
   },
   {
    "title": "A visual–omics foundation model to bridge histopathology with spatial transcriptomics",
@@ -121,7 +122,23 @@
    "score": 23.128915978453836,
    "classic": true,
    "citations": 116,
-   "year": 2025
+   "year": 2025,
+   "summary": {
+    "tldr": "OmiCLIP is a CLIP-style dual-encoder foundation model aligning H&E histology patches with spatial transcriptomics 'gene sentences', trained on 2.2M paired Visium patches, powering the Loki platform with five multimodal tissue-analysis tools benchmarked against 22 SOTA methods.",
+    "background": "Computational models have largely developed separately for images (pathology vision-language models like CONCH/PLIP) and for omics, so no unified model integrates histology with molecular data. Building one is hard because image and gene-expression modalities must be mapped to a shared space, and infrastructure to jointly analyze sequencing data and whole-slide images was lacking.",
+    "approach": "The authors curated ST-bank: 2,185,571 H&E patch–transcriptome pairs from 1,007 samples across 32 organs (113 studies) of 10x Visium data, encoding each patch's transcriptome as a 'sentence' of its top-50 expressed gene symbols (Ensembl IDs converted, housekeeping genes removed, rank-based to mitigate batch effects). They fine-tuned CoCa—a ViT image encoder plus causal-masking text encoder producing 768-dim embeddings—with contrastive loss for 20 epochs on one A100. On this backbone they built Loki with five modules: Align (CPD registration on embeddings), Annotate (bulk RNA-seq or marker genes as text), Decompose (Tangram optimization on OmiCLIP embeddings), Retrieve, and PredEx (similarity-weighted sum of reference ST expression).",
+    "findings": [
+     "Alignment: on ovarian carcinosarcoma, Loki reached median PCC 0.88 (ST-to-ST) and 0.86 (image-to-ST) versus PASTE 0.26, GPSA 0.43, CAST 0.71; on 8 adjacent small-intestine sections median PCC was 0.62–0.83 (ST-to-ST); Visium–Xenium slide alignment error was 0.08 mm.",
+     "Annotation: zero-shot marker-gene F1 was 0.59–0.96 across CRC7K, WSSS4LUAD, LC25000 and PatchCamelyon versus 0.03–0.34 for OpenAI CLIP; averaging Loki and PLIP similarities performed best overall (93% tumor recall on CRC7K).",
+     "Decomposition: Loki scored 1.32 (ST mode) and 1.11 (image mode) on an impact metric versus −1.82 to 0.87 for ten baselines including Tangram, Cell2location and CytoSPACE; substituting scGPT, scFoundation or GeneFormer embeddings ranked 6th–9th, and Xenium ground truth on an in-house TNBC sample validated the maps.",
+     "Retrieval: median image-to-transcriptomics similarity was 0.7–0.9, with Recall@5% of 0.117–0.186, roughly 2.3–3.2× higher than CLIP and PLIP.",
+     "PredEx: best MSE in 28/39 and best PCC in 16/39 normal-heart samples versus Hist2ST, HisToGene, BLEEP and mclSTExp, while avoiding their 300 GB+, hours-long training requirements."
+    ],
+    "why": "This is the first demonstration that public Visium data alone suffice to pretrain an image–omics contrastive model, and that marker genes can act as labels in place of natural language. For multiomics researchers it offers a shared 768-dim embedding space where new modalities—scRNA-seq, bulk RNA-seq, marker lists, even proteomics—can in principle be projected and combined with pathology images without retraining.",
+    "limitations": "With 2.2M pairs, the training set is far smaller than billion-scale vision-language corpora, and rare conditions are underrepresented (fine-tuning is recommended for alignment and decomposition). OmiCLIP is contrastive, not generative: PredEx retrieves or similarity-weights reference expression rather than predicting transcriptomes de novo.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   },
   {
    "title": "Predicting transcriptional outcomes of novel multigene perturbations with GEARS",
@@ -147,7 +164,23 @@
    "score": 20.08315848789316,
    "classic": true,
    "citations": 348,
-   "year": 2023
+   "year": 2023,
+   "summary": {
+    "tldr": "GEARS is a graph neural network model that predicts post-perturbation gene expression for single-gene and two-gene CRISPR perturbations, including combinations involving genes never perturbed in the training data.",
+    "background": "Perturb-seq screens measure transcriptional responses to genetic perturbation, but possible multigene combinations grow combinatorially so most can never be measured. Existing computational predictors either require each gene in a combination to have been individually perturbed before, or assume additive effects and therefore cannot capture non-additive interactions like synergy.",
+    "approach": "GEARS gives each gene two learned embeddings: a gene embedding refined via a gene coexpression graph, and a perturbation embedding refined via a Gene Ontology pathway-similarity graph, processed with graph neural networks. Perturbation embeddings for the genes in a set are summed and applied to each gene embedding, then a cross-gene layer and gene-specific decoders output post-perturbation expression. Training uses an 'autofocus' loss that upweights differentially expressed genes plus a direction-aware loss, and the model outputs an uncertainty score. Because unmeasured genes are still connected through the GO graph, GEARS can extrapolate to never-perturbed genes and non-additive combination effects.",
+    "findings": [
+     "On single-gene Perturb-seq data (1,543 perturbations in RPE-1 and 1,092 in K562, each with over 170,000 cells), GEARS improved MSE on the top-20 differentially expressed genes by 30-50% over baselines (CPA, a CellOracle-style network-propagation model, and a no-perturbation baseline) and more than doubled Pearson correlation across all genes.",
+     "On the Norman et al. dataset (131 two-gene perturbations), GEARS improved prediction by over 30% across all generalization settings, with the largest gain (53%) when both genes in a combination were unseen during training.",
+     "For genetic interaction prediction, GEARS improved precision@10 by more than 40% for four of five subtypes (over 90% for redundancy and epistasis), ranked the ten strongest interactions about twice as accurately, and reached R^2 of roughly 0.4 for synergy/neomorphism/redundancy interaction scores versus about 0.0 for CPA.",
+     "Trained on 102 genes from Norman et al. (102 single plus 128 double perturbations), GEARS predicted all 5,151 pairwise combinations, recovered known phenotypic clusters, and predicted a new erythroid-marker-high cluster resembling proerythroblasts from the Tabula Sapiens atlas.",
+     "Against an independent cell fitness screen covering 92 gene pairs, predicted scores were higher for synergistic growth effects (P < 0.0013, n = 123) and lower for buffering effects (P < 4e-5, n = 69); directly predicting fitness gave R^2 of 0.64-0.93."
+    ],
+    "why": "For perturbation modeling, GEARS is a widely cited (348 citations) reference point showing that injecting prior knowledge (coexpression, GO) into a GNN enables extrapolation to unmeasured perturbations rather than only interpolation. It is a practical tool for prioritizing combinatorial CRISPR experiments and a standard baseline to benchmark newer perturbation prediction and foundation models against.",
+    "limitations": "GEARS must be trained on the same cell type or condition it is applied to, requires combinatorial training data to predict multigene effects well, and performs poorly for genes that are poorly connected in the knowledge graph (partially mitigated by its uncertainty output). Several predictions, including the new erythroid phenotype, remain experimentally unvalidated.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   }
  ],
  "candidates": 369

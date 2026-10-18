@@ -83,7 +83,8 @@
     "genomics",
     "scale"
    ],
-   "score": 18
+   "score": 18,
+   "summary": null
   },
   {
    "title": "GeneICL: A Tabular Foundation Model for Bulk Transcriptomics",
@@ -107,7 +108,23 @@
     "transcriptomics",
     "scale"
    ],
-   "score": 17
+   "score": 17,
+   "summary": {
+    "tldr": "GeneICL is a 4.2M-parameter tabular in-context-learning foundation model for bulk RNA-seq that, via a semi-synthetic pretraining prior built from ~548k real expression profiles, achieves the best overall rank across 80 clinical prediction tasks while running in seconds on a laptop CPU.",
+    "background": "Predicting clinical outcomes from bulk gene expression is a severe n<<p problem: ~20,000 strongly correlated genes per sample versus tens to hundreds of labeled patients. Self-supervised transcriptomic foundation models (scGPT, scFoundation, BulkFormer, BulkRNABert) have repeatedly failed to beat simple supervised baselines on such tasks, while existing tabular foundation models use in-context learning but are pretrained on generic synthetic tables that ignore transcriptomic structure.",
+    "approach": "The authors build GeneICL, a TabICLv2-derived in-context learner that operates in support-set-fitted PC space (keeping PCs explaining 90% of variance) and replaces the stack of ICL layers with a single weight-tied transformer block applied recurrently (8 steps). Its pretraining prior is semi-synthetic: a VAE trained on 547,829 human ARCHS4 RNA-seq profiles (20,021 genes) generates the covariates, while randomly sampled MLP functions of the PCs supply unlimited classification and regression labels. Right-censored survival is handled training-free by regressing Cox partial-likelihood (null-model martingale) residuals, so one frozen model does classification, regression, and survival with no gradient updates at inference.",
+    "findings": [
+     "On a new benchmark of 80 tasks (27 classification, 25 regression, 28 survival; median cohort sizes 144, 491, and 202.5), tabular foundation models consistently outperform self-supervised transcriptomic models, which trail even tuned baselines like elastic-net.",
+     "Ensembled GeneICL achieves the best average rank (4.64) across the 52 classification/regression tasks, e.g., AUROC 0.742, balanced accuracy 0.592, R2 0.274, ahead of TabFM (1.65B params), TabICLv2 (28M), TabPFN-3 (55.7M), and tuned elastic-net (rank 5.41).",
+     "With 4.24M parameters it uses up to 387x fewer than the strongest competitor (TabFM, 1.65B) and completes a cross-validation fold in 7.5 s with under 5 GB memory on a consumer laptop CPU.",
+     "For survival, the Cox-residual adaptation attains the highest aggregate C-index and best D-calibration across 28 SurvBoard cohorts (TCGA, ICGC, TARGET, METABRIC), within 0.001 of the best integrated Brier score, beating SurvPFN and other censoring adaptations.",
+     "Ablations show the prior matters more than architecture: swapping in the generic TabICLv2 prior drops regression R2 from 0.271 to 0.238 (real ARCHS4 profiles: 0.248), while untied 8-block versions (19.25M params) and full attention add cost without improving any metric."
+    ],
+    "why": "For anyone building AI for transcriptomics and multiomics, this is direct evidence that the pretraining objective and covariate prior — not model scale — are what currently limit clinical prediction from expression data, echoing prior reports that transcriptomic FMs underperform linear baselines. It also contributes a reusable 80-task translational benchmark and a tiny, CPU-deployable, per-cohort in-context model that sidesteps fine-tuning entirely.",
+    "limitations": "Results are limited to bulk RNA-seq (no single-cell or other omics), and each task is evaluated within a single cohort, leaving robustness to batch and platform shifts untested. Margins over tuned elastic-net are modest, and the authors leave open whether this reflects a ceiling of tens-to-hundreds of samples or of current priors.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash"
+   }
   },
   {
    "title": "GenoME: a MoE-based generative model for individualized, multimodal prediction and perturbation of genomic profiles.",
@@ -132,7 +149,23 @@
     "genomics",
     "generalizes"
    ],
-   "score": 16
+   "score": 16,
+   "summary": {
+    "tldr": "GenoME is a Mixture-of-Experts (MoE) generative model that takes 1 Mb of DNA sequence plus a cell-type ATAC-seq track and jointly predicts RNA-seq (1-bp), splice junctions, CTCF and six histone ChIP-seq tracks (128-bp), and Hi-C contact maps, generalizing to unseen cell types without retraining.",
+    "background": "Sequence-only foundation models like Enformer, Borzoi, and AlphaGenome can only output tissue-averaged profiles because they cannot be conditioned on a specific cellular state. Existing cell-type-conditioned models (Enformer-Celltyping, EPCOT, GET, C.Origami) are single-modality, so unifying expression, epigenomics, and 3D conformation in one conditioned model remained unsolved.",
+    "approach": "GenoME encodes 1-Mb one-hot sequence plus ATAC signal with 1D-CNNs, then five Swin-Transformer-Mamba blocks with MoE feedforward layers (1 shared + 5 specialist experts, top-2 routing); U-Net-style decoders produce 1-bp RNA-seq and 128-bp ChIP tracks, and a 2D-CNN produces 512x512 Hi-C maps, with decoder MoE heads (1 shared + 8 experts) also gated by a context vector built from accessibility around 1216 PanglaoDB marker genes. It was trained on ENCODE data (89 ATAC groups: 63 tissues, 9 primary cells, 17 cell lines), with 2 RNA-seq, 7 ChIP-seq, and 1 Hi-C track per sample, on 8 A100 80GB GPUs (~80 h per task, batch 8-16, 100 epochs), holding out chr10/chr15. Three variants were trained: GenoME-basic (8 tissues), GenoME-ft (pretrained on 73 groups then finetuned), and GenoME-HCT116 (15 wild-type and genetically perturbed samples).",
+    "findings": [
+     "On held-out chromosomes, GenoME matched or beat AlphaGenome on RNA-seq and H3K27ac prediction and outperformed Orca and C.Origami on Hi-C distance-stratified and insulation correlations; only HiCGen won on contacts beyond 0.7 Mb.",
+     "With no fine-tuning, de novo predictions for unseen liver and esophagus donors beat Enformer-Celltyping and EPCOT2, and Hi-C prediction for the unseen HCT116 line beat C.Origami and HiCGen.",
+     "In silico perturbations reproduced auxin-degradation experiments (CTCF, RAD21, CDK7, POLR2A), including H3K27me3 spreading over hundreds of kb after CTCF loss and transcriptional upregulation from the unseen CDK7 degradation.",
+     "A 'Grad-ABC' score (integrated gradients x predicted ABC) gave the best auPRC over ABC, ISM, and DeepLIFT for classifying 38 functional enhancers among 173 CRISPRi-FlowFISH E-P pairs in HCT116, transferring to K562.",
+     "For FAM3C, predicted perturbation effects correlated with measured CRISPRi expression changes (Pearson r = 0.53); a GET comparator reached 0.78 Pearson on fetal astrocytes."
+    ],
+    "why": "For multiomics model builders, GenoME demonstrates that conditioning a generative architecture on a cheap, widely available modality (ATAC-seq) plus MoE routing enables one model to cover expression, epigenomics, splicing, and conformation across arbitrary cell types. Its perturbation framework and Grad-ABC scoring provide a practical benchmark path against CRISPRi gold standards for enhancer-gene prioritization.",
+    "limitations": "Performance depends on high-quality deeply sequenced ATAC-seq (>=50M reads) and ENCODE-style tissue coverage, so very divergent cell states may degrade; also, HiCGen retains an edge for long-range contacts beyond the 1-Mb input window, and most headline correlations appear only in figures and supplements.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   }
  ],
  "candidates": 376

@@ -30,22 +30,7 @@
   "score": 24,
   "tldr": "They trained a generative vision-language model on 1.45M histology-expression pairs to jointly annotate tissue from morphology, genes, and spatial context, outperforming existing methods with zero-shot transfer across cohorts and platforms and interrogable, editable predictions.",
   "why": "VINTER is a genuinely new capability for spatial multiomics: a generative vision-language model that reads histology, measured gene expression, and tissue neighborhood as one sequence, and whose molecular evidence can be interrogated and edited with the image fixed. It beats spatial-domain methods and a spatial foundation model, transfers across cohorts and to Visium HD/Xenium without retraining, and delivers real biology (TLS maturation programs, hidden immune heterogeneity in breast cancer). It is exactly the kind of reusable, AI-native advance that could change how spatial annotation is done.",
-  "summary": {
-   "tldr": "VINTER is a generative vision-language model, trained on 1.45 million histology-caption pairs, that reads histology, measured gene expression, and spatial neighborhood together as one sequence to assign tissue-class probabilities, and lets you edit the gene/neighborhood text to interrogate what drives its predictions.",
-   "background": "Spatial transcriptomics annotation is usually done either by clustering model embeddings whose meaning is assigned after the fact, or by models that read histology images without using measured expression. Combining morphology, genes, and spatial context in one decision is hard because the modalities are structurally different and most pipelines treat them separately.",
-   "approach": "The authors built VINTER, a generative vision-language model aligned on 1.45M histology-caption pairs, which serializes the image, measured gene expression, and the spatial neighborhood into a single input sequence. Because genes enter as text, the molecular evidence can be edited while the image is held fixed, enabling counterfactual probes of what the model relies on. Instead of a single label, it outputs a probability for every tissue class. It was evaluated on lung and kidney cancer, triple-negative breast cancer, and colorectal cancer across platforms.",
-   "findings": [
-    "Reading all three sources together, VINTER annotated tissue more accurately than spatial-domain methods and a spatial foundation model, and transferred across cohorts without any target labels (the abstract gives no exact accuracy numbers).",
-    "Editing only the neighborhood input isolated the follicular B-cell and plasma-cell programs behind the model's reading of tertiary lymphoid structure (TLS) maturation in lung and kidney cancer.",
-    "Its class probabilities exposed what single labels hide in triple-negative breast cancer: immune heterogeneity within stroma and cancer regions sitting beneath benign labels.",
-    "Without retraining, the same model transferred to Visium HD and single-cell Xenium data and resolved follicular architecture within colorectal cancer TLS.",
-    "Editing inputs with the image fixed works because expression is textual, making the model's molecular evidence directly inspectable and modifiable."
-   ],
-   "why": "For someone building multiomic models, this shows a concrete alternative to embedding-then-annotate pipelines: serialize measured expression as text alongside histology so the molecular input itself becomes editable and interpretable. It also demonstrates one model covering H&E-based spatial transcriptomics, Visium HD, and Xenium without retraining, which is relevant to cross-platform generalization.",
-   "limitations": "It is a bioRxiv preprint, and the abstract reports no quantitative benchmarks, so the accuracy claims cannot be verified from it. Edit-based interrogation is interpretive rather than causal, and whether caption-based alignment scales to genome-wide expression and holds up in clinical settings remains open.",
-   "source": "abstract only",
-   "model": "glm-5.3-flash"
-  }
+  "summary": null
  },
  "also": [
   {
@@ -79,7 +64,8 @@
     "generalizes",
     "validated"
    ],
-   "score": 19
+   "score": 19,
+   "summary": null
   },
   {
    "title": "SPARCS enables scalable recovery of complex image-based phenotypes for genetic screening.",
@@ -112,7 +98,8 @@
     "CRISPR",
     "genomics"
    ],
-   "score": 16
+   "score": 16,
+   "summary": null
   },
   {
    "title": "Functional alignment of protein language models via reinforcement learning.",
@@ -139,7 +126,23 @@
     "proteins",
     "generalizes"
    ],
-   "score": 18
+   "score": 18,
+   "summary": {
+    "tldr": "The paper introduces RLXF (Reinforcement Learning from eXperimental Feedback), an RLHF-style method that aligns pretrained protein language models with experimentally measured function, yielding CreiLOV fluorescent proteins brighter than any reported variant.",
+    "background": "Protein language models like ESM-2 generate statistically natural sequences but have no explicit notion of function, so sampling them rarely improves properties beyond what evolution already found. The difficulty is steering these models toward non-natural objectives using sparse, noisy experimental data without destroying the evolutionary knowledge from pretraining.",
+    "approach": "They train supervised reward models on deep mutational scanning (DMS) data (ensembles of 100 MLPs on one-hot sequences, or ridge regression with TranceptEVE evolutionary features) and use them to align ESM-2 models (8M, 35M, 150M, 650M parameters) in two stages: supervised fine-tuning on high-reward sequences found via simulated annealing, then proximal policy optimization (PPO) with reward = predicted function + Hamming diversity term − KL penalty, updating only the LM head and last layers. They benchmark on six families (Pab1, Bgl3, Ube4b, avGFP, GB1, CreiLOV), also align a VAE trained on ~243,000 CreiLOV homologs from UniRef90, and experimentally validate 60 CreiLOV designs expressed in E. coli.",
+    "findings": [
+     "RLXF raised win rates over base ESM-2 650M across all five benchmark families, with most gains from the SFT phase and only modest additional gains from PPO; no single model size consistently won.",
+     "With reward models trained on as few as 10-100 variants, alignment still improved win rate, and gains tracked the family's evolutionary density (N_eff in UniRef100) because a well-calibrated pretrained prior is needed.",
+     "For CreiLOV, the aligned ESM-2 hit a 100% win rate; experimentally, 6/10 aligned 5-mutants out-fluoresced CreiLOV while >80% of pre-trained model designs fell in the lowest fluorescence category, and the best 10-mutant was 1.2-fold brighter than CreiLOV-T7S, the previous record (p=0.02), about 1.7-fold over CreiLOV.",
+     "The top design combined 4 consistent mutations with ones ranked low in DMS data (F8I was 1376th, R77K absent), while naively stacking the top 5-10 single mutations was non-functional, showing learned epistasis.",
+     "Alignment also amplified artifacts: the model favored Pab1 Q94C, a known DMS false positive, illustrating that you get what you optimize for."
+    ],
+    "why": "For someone working on transcriptomics/multiomics, this is a concrete, transferable recipe for aligning pretrained sequence models to measured phenotypes: a simple reward model, SFT + KL-regularized PPO, parameter-efficient tuning, roughly 3 days on one GPU. It also shows what determines success in low-data regimes: assay quality, prior calibration, and family diversity.",
+    "limitations": "Only CreiLOV was experimentally validated; the other five families were evaluated by predicted reward. PPO often plateaued after SFT (possibly under-tuned hyperparameters), and the method degrades for proteins with weak or unstable evolutionary priors like avGFP and GB1.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash"
+   }
   }
  ],
  "candidates": 367
