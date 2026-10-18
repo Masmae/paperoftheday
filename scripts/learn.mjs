@@ -14,7 +14,13 @@ const ONLY = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 const AHEAD = 3;                 // lessons ready beyond your furthest finished one
 const MAX_PER_RUN = 4;           // per track, so a long break doesn't burn tokens in one go
 const OPENCODE_URL = "https://opencode.ai/inference/go/openai/v1/chat/completions";
-const MODELS = ["glm-5.3-flash", "qwen3.8-flash"];
+const MODELS = ["glm-5.3-flash", "qwen3.8-flash", "kimi-k3"];   // first that writes a complete lesson wins
+// Thinking models can spend the whole budget "thinking" (drafting the lesson in their head) and
+// never answer, so ask for thinking off first; if the API rejects those fields, send a plain request.
+const VARIANTS = [
+  { label: "thinking off", extra: { thinking: { type: "disabled" }, enable_thinking: false, reasoning_effort: "none" } },
+  { label: "plain", extra: {} },
+];
 
 const curriculum = JSON.parse(readFileSync(new URL("learn/curriculum.json", ROOT), "utf8"));
 const me = (() => { try { return JSON.parse(readFileSync(new URL("data/me.json", ROOT), "utf8")); } catch { return {}; } })();
@@ -63,7 +69,7 @@ function valid(o) {
  * One streamed chat completion. Streaming keeps the connection busy, so long answers don't hit
  * Node's 5-minute wait-for-headers timeout; hidden "thinking" tokens are skipped.
  */
-async function complete(model, content, key) {
+async function complete(model, content, key, extra = {}) {
   const res = await fetch(OPENCODE_URL, {
     method: "POST",
     headers: {
@@ -71,11 +77,11 @@ async function complete(model, content, key) {
       "User-Agent": "paperoftheday/1.0 (+https://github.com/Masmae/paperoftheday)",
       "x-opencode-session": "paperoftheday-learn",
     },
-    body: JSON.stringify({ model, max_tokens: 16000, stream: true, stream_options: { include_usage: true }, messages: [{ role: "user", content }] }),
+    body: JSON.stringify({ model, max_tokens: 16000, stream: true, stream_options: { include_usage: true }, ...extra, messages: [{ role: "user", content }] }),
     signal: AbortSignal.timeout(10 * 60 * 1000),
   });
   if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(`${res.status} ${e.error?.message ?? ""}`); }
-  let text = "", finish = null, usage = null, buf = "";
+  let text = "", thinking = 0, finish = null, usage = null, buf = "";
   const decoder = new TextDecoder();
   for await (const chunk of res.body) {
     buf += decoder.decode(chunk, { stream: true });
@@ -87,30 +93,48 @@ async function complete(model, content, key) {
       if (data === "[DONE]") continue;
       try {
         const j = JSON.parse(data);
-        text += j.choices?.[0]?.delta?.content ?? "";
+        const d = j.choices?.[0]?.delta ?? {};
+        text += d.content ?? "";
+        thinking += (d.reasoning_content ?? d.reasoning ?? "").length;
         finish = j.choices?.[0]?.finish_reason ?? finish;
         usage = j.usage ?? usage;
       } catch { /* partial or keep-alive line */ }
     }
   }
-  return { text, finish, usage };
+  return { text, thinking, finish, usage };
 }
+
+// What failed earlier in this run, so later lessons don't pay for the same failure again.
+const skip = new Set();      // "model" or "model|variant"
 
 async function write(track, unit, lesson, prev, next) {
   const key = process.env.OPENCODE_API_KEY;
   if (!key) throw new Error("OPENCODE_API_KEY not set");
   for (const model of MODELS) {
-    try {
-      const t0 = Date.now();
-      const { text, finish, usage } = await complete(model, prompt(track, unit, lesson, prev, next), key);
-      if (!text.includes("{")) throw new Error(`no answer (finish: ${finish})`);
-      let out;
-      try { out = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1)); }
-      catch { throw new Error(`answer wasn't complete JSON (finish: ${finish}, ${text.length} chars)`); }
-      if (!valid(out)) throw new Error("incomplete lesson");
-      console.log(`${lesson.id} ${model} (${usage?.total_tokens ?? "?"} tokens, ${Math.round((Date.now() - t0) / 1000)}s): ${lesson.title}`);
-      return { id: lesson.id, track: track.id, unit: unit.id, title: lesson.title, model, created: new Date().toISOString().slice(0, 10), ...out };
-    } catch (e) { console.warn(`${lesson.id} ${model}: ${e.message}${e.cause ? ` (${e.cause.code ?? e.cause.message})` : ""}`); }
+    if (skip.has(model)) continue;
+    for (const variant of VARIANTS) {
+      if (skip.has(`${model}|${variant.label}`)) continue;
+      const tag = `${lesson.id} ${model} (${variant.label})`;
+      try {
+        const t0 = Date.now();
+        const { text, thinking, finish, usage } = await complete(model, prompt(track, unit, lesson, prev, next), key, variant.extra);
+        const info = `finish: ${finish}, ${text.length} chars written, ${thinking} chars of thinking, ${usage?.total_tokens ?? "?"} tokens, ${Math.round((Date.now() - t0) / 1000)}s`;
+        if (!text.includes("{")) throw new Error(`no answer (${info})`);
+        let out;
+        try { out = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1)); }
+        catch { throw new Error(`answer wasn't complete JSON (${info})`); }
+        if (!valid(out)) throw new Error(`incomplete lesson (${info})`);
+        console.log(`${tag}: ${lesson.title} — ${info}`);
+        return { id: lesson.id, track: track.id, unit: unit.id, title: lesson.title, model, created: new Date().toISOString().slice(0, 10), ...out };
+      } catch (e) {
+        console.warn(`${tag}: ${e.message}${e.cause ? ` (${e.cause.code ?? e.cause.message})` : ""}`);
+        // A 400 usually means the API didn't accept the thinking fields: try the plain request.
+        // Anything else (ran out of room, bad JSON) won't be fixed by the plain request either, so try the next model.
+        if (variant.label === "thinking off" && /^400\b/.test(e.message)) { skip.add(`${model}|${variant.label}`); continue; }
+        if (/no answer|wasn't complete/.test(e.message)) skip.add(model);     // runs out of room: skip it for the rest of this run
+        break;
+      }
+    }
   }
   return null;
 }
