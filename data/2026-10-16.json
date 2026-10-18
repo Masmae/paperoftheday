@@ -35,20 +35,22 @@
   "tldr": "They built an automated protein-engineering system that fine-tunes protein language models in a lab-in-the-loop workflow and show in-vitro validation of simultaneous multi-property optimization across seven protein modalities, achieving 4-7x speed-up over rational design.",
   "why": "CRADLE-1 is a landmark-level biotech advance: an automated, end-to-end AI framework for protein lead optimization validated in the wet lab across many modalities (antibodies, enzymes, CRISPR, vaccines), claiming 4-7x fewer experimental rounds than rational design. It hits the same nerve as AlphaFold for this user — general AI with clear, demonstrated biological application — and its finding that sequence-function data can largely supersede structural data is provocative and reusable. Runner-up method papers (vampW, GeneICL) are strong but more incremental.",
   "summary": {
-   "tldr": "CRADLE-1 is an automated, lab-in-the-loop protein engineering framework from Cradle Bio that fine-tunes foundation protein language models to improve multiple properties of existing protein leads, reporting 4-7x fewer wet-lab rounds than rational design across seven protein modalities.",
-   "background": "Lead optimization—improving an existing candidate's binding, specificity, activity, and stability—is the longest and most expensive step in pre-clinical drug discovery, typically taking 12-36 months and $5M-$15M per candidate. It is hard because several properties must improve simultaneously, wet-lab testing is slow and costly, and rational or structure-based design often fails to predict how these properties are coupled.",
-   "approach": "The authors (all Cradle Bio employees) built CRADLE-1, a multi-model workflow that starts from pre-trained foundation protein language models, fine-tunes them unsupervised on 'evolutionary neighborhoods' (related sequence families around the lead) and in a supervised manner on lab-in-the-loop assay data, then uses these models to propose variant libraries each design-build-test cycle. The platform also supports hit identification and de novo binder design, but this paper focuses on lead optimization of existing proteins: VHHs, scFvs, IgGs, peptides, enzymes, CRISPR systems, and vaccines, each with in-vitro validation.",
+   "tldr": "CRADLE-1 is an automated ML system for protein lead optimization that uses fine-tuned protein language models in a lab-in-the-loop workflow, reportedly achieving target product profiles with 4-7x fewer wet-lab rounds than rational design across many protein modalities.",
+   "background": "Lead optimization—iteratively refining a candidate protein to simultaneously improve multiple properties like binding, stability, and expression—is the longest (12-36 months) and most expensive ($5M-15M per candidate) step in drug discovery. It is traditionally done via heuristic, human-guided design-build-test-learn cycles using structure prediction and variant-effect tools, which plateau quickly.",
+   "approach": "CRADLE-1 (from Cradle Bio) fine-tunes pretrained protein language models (ESM-style, trained on UniRef) in two ways: unsupervised 'evotuning' on evolutionary neighborhoods of the template (MSAs, e.g., via ColabFold databases), and supervised fine-tuning on lab data using a regression 'predictor' head plus group DPO ('g-DPO') on preference pairs to build a 'logiter' generator. Variant generation uses a 'double beam' search guided by the logiter, then diversity-aware ranking by the predictor; each wet-lab round is a single 96-well plate (~96 candidates), with results consumed via API/UI with no mechanistic knowledge required.",
    "findings": [
-    "Across all seven modalities, CRADLE-1 required 4-7x fewer wet-lab rounds than rational design to reach its multi-property objectives.",
-    "Programs typically optimized several properties at once, including single and polyspecific binding improved down to picomolar, plus activity and thermostability.",
-    "The full design-build-test loop can run end-to-end in an automated fashion.",
-    "Wet-lab assay data could be consumed in 'black box' fashion, without modeling the underlying biochemistry.",
-    "Structural information was largely unnecessary; sequence-function pairs alone sufficed."
+    "Across ~10 case studies (scFv, VHH, IgG, peptides, enzymes, CRISPR, vaccine), CRADLE-1 needed only 1-3 rounds vs. rational design, claimed as 4-7x faster by wet-lab round count, with an estimated 90-95% campaign success rate vs. ~85% for traditional lead optimization.",
+    "EGFR scFv (framework-only mutations, CDRs fixed): 12/12 variants bound, best 339 pM vs. 6.64 nM template, winning the Adaptyv competition (400 entries; runner-up 5.18 nM).",
+    "SARS-CoV-2 VHH optimized for 4 properties: WT K_D improved 2.01 nM to 186 pM, Omicron 34.6 nM to 11.4 nM, Tm 58.5C to 70.9C, 1.88x expression gains in 3 rounds.",
+    "P450 enzymatic activity: partner's rational design (1201 candidates, 8 rounds, 17.9x) was beaten in 3 rounds of 96 candidates reaching 40.6x fold improvement.",
+    "CRISPR dual optimization raised on-target editing from 40% to 75% while cutting worst-site off-target from 0.4% to 0.1%; haloalkane dehalogenase Tm rose +20.0C (45.1 to 65.1C) with 2.06x expression and 1.29x activity.",
+    "Head-to-head baselines (ProteusAI/ESM-2-650M, CDR3/alanine scanning) showed CRADLE-1 as the only method with directed Pareto-frontier movement; e.g., a >8C Tm advantage over best baselines for an anti-Her2 scFv."
    ],
-   "why": "For someone building ML on biological sequences, this is a concrete industrial example of lab-in-the-loop fine-tuning of PLMs on sequence-function data, with assay results feeding back into foundation models each round. It also speaks to a broader question relevant to multiomics: when do sequence-only, black-box models outperform structure-based, mechanism-aware approaches?",
-   "limitations": "This is an industry preprint (all authors are Cradle Bio employees, not yet peer-reviewed) with no public datasets, sequences, or per-program metrics beyond the headline claims, so results cannot be independently verified. The '4-7x faster' comparison counts wet-lab rounds rather than cost or success rate, and key details such as the exact base models, fine-tuning setup, and how 'evolutionary neighborhoods' are constructed are underspecified.",
-   "source": "bioRxiv full text",
-   "model": "glm-5.3-flash"
+   "why": "For someone working on AI for multiomics, the key transferable ideas are (i) a few-shot, lab-in-the-loop pipeline that consumes sequence-function data as black-box fitness signals with tiny datasets (~96 samples/round), and (ii) the authors' explicit speculation that the same setup could optimize transcription factors or regulatory proteins using transcriptomic readouts as the fitness signal. The g-DPO preference-optimization-on-assay-data trick and the batch-effect-robustness/multi-property-Spearman model-selection machinery may be reusable in transcriptomic design tasks.",
+   "limitations": "The paper is a company preprint (不清楚 exact foundation model identity, allarchitecture details partially redacted), relies on wet-lab assays being faithful proxies for hard-to-measure properties (e.g., immunogenicity), and cannot optimize unmeasurable properties; baselines are limited to specific rounds/contexts and results are vendor-selected case studies, with internal data only partly open-sourced.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 108221
   }
  },
  "also": [
@@ -84,7 +86,24 @@
     "scale"
    ],
    "score": 18,
-   "summary": null
+   "summary": {
+    "tldr": "vampW is a fully parametric Bayesian variable selection method (Vector Approximate Message Passing with a Weibull survival model) for jointly associating multiomics biomarkers with time-to-disease-onset, and it reduces false discoveries and improves onset-time prediction versus Cox-based methods and DeepSurv.",
+    "background": "Linking EHR time-to-diagnosis to multiomics features (e.g., plasma proteins) is usually done by one-at-a-time Cox proportional hazards testing or penalized/joint Cox models. Marginal testing ignores correlations among omics features (inflating false discoveries), and semiparametric Cox models use only event-time ordering, give no absolute onset-time predictions, and handle association and prediction as separate tasks.",
+    "approach": "They built vampW, a VAMP-based fully parametric method fitting a Weibull survival model with an adaptive spike-and-slab prior, using novel Weibull channel denoisers and explicit handling of right-censored observations, with EM-based adaptive estimation of prior and Weibull parameters. It jointly fits all features, yields posterior inclusion probabilities (PIP > 0.95 threshold) for variable selection, and produces continuous survival curves for onset-time prediction. It runs in ~4 CPU hours and 64 GB RAM per trait, far cheaper than LASSO CoxPH with stability selection (~60.8 CPU hours, 160 GB).",
+    "findings": [
+     "Semi-synthetic simulations (2,924 proteins, 53,018 UK Biobank PPP individuals, 24 scenarios × 50 replicates) show marginal CoxPH yields >80% false positives even with Bonferroni correction, while vampW has calibrated FDR and higher true positive rate than LASSO-CoxPH with stability selection in all settings.",
+     "On real UK Biobank data (24 disease outcomes), vampW finds 219 protein–disease associations without exponential age correction and 1,308 with it; only 37/219 overlap with the top-219 marginal CoxPH hits, showing largely novel discoveries.",
+     "Replication: 48/71 matched discoveries replicate in a 36,000-person Icelandic SomaScan cohort (using different technology), and 4/13 tested associations replicate in Generation Scotland mass-spectrometry proteomics (18,826 participants).",
+     "Out-of-sample prediction across 14 outcomes: vampW reduces RMSE of onset-time prediction by ~31% vs CoxPH, ~30% vs LASSO/Elastic Net CoxPH, and ~26% vs DeepSurv; C-index is comparable to LASSO-CoxPH and slightly better than DeepSurv on average.",
+     "Known biomarkers are recovered (KLK3/PSA–prostate cancer, APOE–Alzheimer's, REN–hypertension, GDF15–T2D), plus putative novel ones (e.g., SOST–endometriosis, COL9A1–T2D), and risk scores transfer to African (n=1,253) and South Asian (n=966) ancestry subgroups.",
+     "On standard survival benchmarks (METABRIC, SUPPORT, SAC3, GBSG) vampW beats all deep learning methods tested and 6/13 methods on GBSG in data-scarce regimes."
+    ],
+    "why": "For researchers doing omics biomarker discovery from biobank-scale data with EHR-linked onset times, vampW offers a single framework that handles correlated high-dimensional features, censored outcomes, and interpretable variable selection plus prediction. The strong dependence of results on age-correction choices (219 vs 1,308 discoveries) is a concrete, actionable lesson for anyone running protein/EHR association studies.",
+    "limitations": "The Weibull assumption is a limitation—deviations are worst for asthma and IBD, where association power drops—and confounders like medication are not yet adjusted, nor are competing risks fully modeled. The method is currently computationally inefficient for millions of genomic markers, and incident-only analyses lose ~12–13% C-index performance due to reduced sample size.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 69333
+   }
   },
   {
    "title": "GeneICL: A Tabular Foundation Model for Bulk Transcriptomics",

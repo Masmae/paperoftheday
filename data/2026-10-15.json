@@ -29,20 +29,21 @@
   "tldr": "They built a Borzoi-based framework that treats super-enhancer discovery as cell-type-resolved object detection from sequence alone, decoded enhancer grammar by ablation, verified a predicted beta-globin SE element with CRISPRi, and identified a gain-of-enhancer variant affecting CHRM2 expression and cardiac traits.",
   "why": "Borzoi-SE adds a genuinely new capability to genome language models: finding super-enhancers and their regulatory grammar directly from DNA sequence across 90 cell types, without needing H3K27ac ChIP-seq. The experimental CRISPRi validation, the de novo glucocorticoid-motif variant at CHRM2 linked to heart rate, and the population-genetic support make it unusually rigorous for a sequence-model paper. For a transcriptomics/multiomics researcher this connects sequence, enhancer biology, and cell-identity gene expression in one framework.",
   "summary": {
-   "tldr": "Borzoi-SE is a deep learning framework that recasts super-enhancer (SE) discovery as cell-type-resolved genomic object detection directly from DNA sequence, and, trained without variant labels, also predicts variants that create or destroy SEs.",
-   "background": "Super-enhancers are large clusters of enhancers driving cell-identity genes, but canonical discovery requires H3K27ac ChIP-seq plus ROSE peak-stitching, so it only works in already-profiled cell types. Prior sequence-based classifiers (DeepSE, SENet, MuSE, DcSE) use ≤3 kb fragments, are cell-type agnostic, and cannot define SE boundaries, resolve lineage specificity, or predict de novo SE nucleation.",
-   "approach": "The authors add two heads to a pretrained Borzoi backbone: a dilated Cluster head (~64.7 kb receptive field) modeling long-range enhancer clustering, and an SE head with Squeeze-and-Excitation attention for lineage-specific activity. Input is 524-kb sequence at 256-bp resolution (1,600 bins) with 90 human cell/tissue output channels, trained on ROSE/H3K27ac annotations under five-fold cross-chromosome splits. Interpretability uses Gradient×Input/DeepLIFT with TF-MoDISco; function is probed via in silico ablation and saturation mutagenesis, with CRISPRi validation in K562 cells.",
+   "tldr": "Borzoi-SE repurposes the Borzoi genomic transformer to predict cell-type-specific super-enhancers directly from 524-kb DNA sequence as hierarchical object detection across 90 human lineages, decode SE regulatory grammar via attribution, and identify pathogenic gain-of-super-enhancer non-coding variants without any chromatin profiling.",
+   "background": "Super-enhancers (SEs) drive cell-identity gene expression but are conventionally identified by ROSE-style stitching of experimental H3K27ac/MED1 ChIP-seq peaks, so discovery is limited to profiled cell states and the underlying sequence grammar remains unknown. Prior sequence-based models (DeepSE, SENet, MuSE, DcSE) classify short ≤3 kb fragments as cell-type-agnostic binary labels, missing long-range domain syntax, boundaries, and lineage specificity.",
+   "approach": "They built Borzoi-SE on the pretrained Borzoi backbone, feeding 524-kb inputs (256-bp bin resolution, ~410-kb central window) through a dilated Cluster head (~64.7-kb receptive field modeling constituent-enhancer clustering) plus an SE head with Squeeze-and-Excitation attention, outputting a 90-cell-type × 1600-bin probability matrix. Training used ROSE-derived H3K27ac SE labels with five-fold cross-chromosome splits (no chromatin-leakage betwteen train/test). Interpretability uses Gradient×Input/DeepLIFT with TF-MoDISco, plus in silico ablation and genome-wide in silico mutagenesis for variant prioritization.",
    "findings": [
-    "Against retrained baselines, Borzoi-SE reaches PR-AUC 0.698 vs 0.468–0.516 on binary classification, and on chromosome-scale de novo detection reaches PR-AUC 0.643/F1 0.498 vs ~0.34/~0.15, with ~10x fewer false positives in gene deserts (0.028 vs 0.265–0.349 FP/Mb at 80% recall) and better boundaries (median IoU 0.668).",
-    "Per-lineage PR-AUC is 0.544–0.703 vs 0.131–0.369 for baselines (K562, HepG2, GM12878, WTC11); across all 90 types, median per-tissue PR-AUC is 0.535, ROC-AUC 0.902, and predicted scores track ROSE ranks (median Spearman ρ 0.866).",
-    "Attribution recovers master TFs (GATA1::TAL1/NFE2 in K562, OCT4/SOX2/NANOG, PU.1, HNF4) and shows shared SEs switch motif usage by lineage; in silico ablation ranked β-globin HS2 as the LCR hub, confirmed by CRISPRi (HS2 knockdown collapses LCR accessibility by 35–85% and downregulates HBG1/2).",
-    "Without variant labels, it reproduces the 12-bp MYB-motif insertion activating TAL1 in T-ALL (Δ up to 0.232 in KOPT-K1, 0.201 in K562), restricted to hematopoietic channels.",
-    "Genome-wide screening found rs1424569 T>C at CHRM2, which creates a de novo glucocorticoid receptor motif next to a MEF2 site and nucleates a cardiac SE; orthogonal evidence includes 96% GR ChIP reads on the mutant allele, allele-skewed ATAC/snRNA-seq, CHRM2 eQTL (P=8.6e-41), and heart-rate/PR-interval GWAS links (UK Biobank P=5.24e-17); a second candidate, rs9937638 at WDR59, creates a GATA4 motif."
+    "Against retrained baselines on 5 chromosome splits, Borzoi-SE raised cluster-level PR-AUC from 0.468–0.516 to 0.698 (F1 0.614 vs 0.471–0.497) and whole-chromosome region-level PR-AUC to 0.643/F1 0.498 vs baseline ~0.34/~0.15, suppressing gene-desert false positives ~10-fold (0.028 FP/Mb) with median boundary IoU 0.668.",
+    "Across all 90 cell types it achieved per-lineage region PR-AUC 0.28–0.73 (median 0.535) and ROC-AUC 0.75–0.95 (median 0.902), with summed predicted probabilities correlating with empirical ROSE ranks (median |ρ| = 0.866); zero-shot human channels transfer to matched mouse tissues.",
+    "Attribution recovers master TFs per lineage (OCT4/SOX2/NANOG in stem cells, GATA1::TAL1/KLF1/NFE2 in K562, PU.1/CEBP in monocytes) and shows shared SEs switch motif usage across lineages.",
+    "In silico ablation of the β-globin LCR ranked HS2 as the dominant hub, experimentally confirmed by CRISPRi: sgHS2 collapsing accessibility across the whole LCR (down 35–85%) and downregulating HBG1/2, while other constituents had only focal effects.",
+    "Trained without variant labels, it flagged the TAL1 T-ALL MYB-motif insertion (Δ up to 0.232 in T-ALL/K562 channels only), and genome-wide screening found the CHRM2 rs1424569 T>C variant creating a de novo glucocorticoid receptor motif adjacent to MEF2, nucleating a cardiac super-enhancer — validated by allele-specific ATAC/snRNA-seq skew toward the mutant allele, GR ChIP-seq (96% of reads on the C allele after dexamethasone), H3K27ac gain in iPSC-CMs, haQTL/eQTL evidence, and GWAS links to resting heart rate (P = 5.2×10⁻¹⁷, sole causal by SuSiE) and PR interval (P = 5×10⁻⁸); a second GoF variant (WDR59 rs9937638, creating a GATA4 motif) was similarly confirmed."
    ],
-   "why": "For anyone building sequence-to-expression or multiomics foundation models, this shows a Borzoi-style backbone can be repurposed from continuous track regression to labeled genomic object detection with cell-type-resolved outputs, beating dedicated classifiers on both fragment discrimination and genome-wide screening. It also offers an annotation-free route to prioritize non-coding GWAS/QTL variants that gain or lose enhancer function, complementing eQTL/haQTL fine-mapping pipelines.",
-   "limitations": "Ground truth is ROSE-stitched H3K27ac, so the model inherits those empirical thresholds, and recall is moderate (~0.40), concentrated on weak, threshold-proximal SEs. Most variant claims rest on QTL/GWAS concordance and a handful of validated loci rather than systematic perturbation.",
+   "why": "For someone building sequence-to-function transcriptomics/multiomics models, this shows how foundation-model track prediction can be lifted into discrete, cell-type-resolved object detection with interpretable grammar and ab initio non-coding variant prioritization. It also offers a template for validating in silico predictions with matched population-scale multiomics (haQTL, eQTL, allele-specific assays) rather than only holding out test sets.",
+   "limitations": "Ground truth is still ROSE/H3K27ac annotations, so recall is capped at borderline elements (recall ~0.40 overall, declining to 0.23 for weakest SE decile) and the model learns to reproduce an empirical algorithm rather than an unbiased biological definition. Validation of key variant findings relies on small read depths (e.g., 25 GR ChIP reads) and iPSC-CM lines; whether de novo SE nucleation predictions hold prospectively in unprofiled states remains untested.",
    "source": "bioRxiv full text",
-   "model": "glm-5.3-flash"
+   "model": "glm-5.3-flash",
+   "chars": 98838
   }
  },
  "also": [
@@ -77,7 +78,8 @@
     "scale",
     "validated"
    ],
-   "score": 15
+   "score": 15,
+   "summary": null
   },
   {
    "title": "BioMod: Biological Module Tokenization for Single-Cell Foundation Modeling",
@@ -110,7 +112,25 @@
     "scale",
     "generalizes"
    ],
-   "score": 19
+   "score": 19,
+   "summary": {
+    "tldr": "BioMod is a ~50M-parameter single-cell foundation model that replaces gene-level tokens with 660 overlapping biological module tokens, achieving competitive or state-of-the-art performance on annotation, integration, perturbation, and drug-response benchmarks with much faster inference.",
+    "background": "Most single-cell foundation models (scGPT, Geneformer, scFoundation, etc.) represent cells as flat sequences of thousands of individual genes, so higher-order biological organization must be inferred from sparse expression profiles. Using biologically meaningful intermediate units (pathways, co-expression programs) could shorten sequences and inject prior structure, but it was unclear whether such tokens retain enough information to serve as the base representation of a self-supervised, multi-task foundation model.",
+    "approach": "BioMod builds a fixed vocabulary of 660 overlapping modules from four sources: 50 MSigDB Hallmark sets, 491 Reactome pathways, 73 Hotspot modules, and 46 hdWGCNA co-expression modules (covering 12,895 of 27,874 genes). Per cell, gene expression scales Gene2Vec embeddings, and a learned attention pooler produces one token per module (cell-specific, not a fixed enrichment score). A linear-complexity TSSA encoder processes 660 tokens (only 165 visible during pretraining with MAE-style 75% module masking), while an asymmetric decoder reconstructs gene-level expression within masked modules. The model was pretrained on ~73M human cells (72,993,441 cells, 13,527 samples, 25 tissue categories) curated from scBaseCount, trained on 64 H100 GPUs.",
+    "findings": [
+     "Cell-type annotation across seven datasets: highest macro-F1 among compared models on the four datasets with tabulated baselines (e.g., Zheng68K 0.839 accuracy / 0.752 macro-F1 vs. Geneformer 0.834/0.733; Liver F1 0.918 vs. scGPT 0.831).",
+     "Perturbation prediction on Norman (236 perturbations): highest Pearson correlation in 3 of 4 settings (e.g., Seen 2/2 r = 0.953), though MSE rankings varied and scLong won one setting (r = 0.893 vs. 0.871).",
+     "Drug response: highest Pearson r on CCLE-GDSC single-drug prediction (0.931 vs. 0.878 for scLong, 0.841 for scGPT) and highest AUROC for drug-combination synergy (0.681 vs. 0.652 scLong, 0.604 DeepDDS).",
+     "Zero-shot batch integration with frozen embeddings scored 0.665 (hPNC), 0.662 (BMMC), and 0.781-0.851 (lung atlas with/without malignant cells), beating Cell2Sentence in three of four conditions.",
+     "Inference efficiency: batch-1 latency of 2.70 ms (scGPT 3.69, Geneformer 4.68, scLong 126.41) and throughput ~1,730 cells/s at large batch sizes, ~10.8x Cell2Sentence; Geneformer and scLong ran out of memory at batch size 256 while BioMod did not.",
+     "Shuffled-module control (same module counts, sizes, architecture, training) degraded zero-shot integration in all four settings (mean overall ~0.740 to ~0.655), macro-F1 on all seven annotation datasets (mean 0.812 to 0.726), and both drug-response tasks, while perturbation effects were mixed; ablations showed Reactome modules contributed most on Zheng68K, and top-ranked module masking dropped accuracy from 0.839 to 0.413."
+    ],
+    "why": "It shows that pathway/program-level tokenization can be the primary representation unit of a self-supervised foundation model, not just an auxiliary prior, enabling compact (~50M params vs. up to 1B for scLong) and fast models that still handle perturbation and drug-response tasks with gene-level outputs. For multiomics researchers, the module vocabulary doubles as an interpretable layer: classifier decisions trace to named gene programs (69.5% of 59 canonical markers had a containing module in the top 5% of importance ranks), making it a practical backbone for mechanistically readable transcriptomic representations.",
+    "limitations": "Cross-model comparisons confound tokenization with differences in pretraining data, architecture, and scale, and there is no budget-matched module-vs-gene-token comparison; perturbation gains from biological grouping were mixed, controlled text-semantic alignment was weak (partial r = 0.024, P = 0.124), modules cover only ~46% of input genes, and results are preprint (bioRxiv) with efficiency timings not fully matched across models.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 75046
+   }
   },
   {
    "title": "EventHorizon: A Foundation Model for Clinical Flow Cytometry",
@@ -138,7 +158,24 @@
     "perturbation",
     "scale"
    ],
-   "score": 18
+   "score": 18,
+   "summary": {
+    "tldr": "EventHorizon is a self-supervised foundation model for clinical flow cytometry that produces panel-agnostic specimen-level embeddings transferable across diagnoses, sites, and time.",
+    "background": "Flow cytometry diagnosis of hematologic malignancies depends on manual expert gating and interpretation, and existing ML approaches require large labeled datasets and fixed panels, limiting scalability and cross-lab generalization. Technical variability across panels, tubes, and instruments makes learning reusable representations difficult.",
+    "approach": "They built EventHorizon, a 6.5M-parameter hierarchical transformer with a two-stage design: marker self-attention within each cell (enabling flexible/variable panels via a shared vocabulary of 59 markers), then cell self-attention across all tubes for a specimen-level embedding. It was pre-trained with DINO-style self-distillation (DinoFlow framework) plus flow-specific augmentations on 100,937 ARUP Labs specimens (>50 billion cells), label-free. Downstream tasks use frozen embeddings with lightweight probes (logistic regression, MLP, kNN).",
+    "findings": [
+     "Frozen embeddings + logistic regression detected AML genetic abnormalities from immunophenotype alone: t(15;17) AUROC 0.991, t(8;21) 0.981, inv(16) 0.967, and an unexpected DDX41-mutation signal at 0.970 (n=50), exceeding NPM1 (0.887).",
+     "On a temporally held-out 2026 cohort (10,901 cases), an MLP probe achieved macro AUROC 0.970 across 28 diagnoses; ranking transferred across labs but thresholds did not—recalibration with just 4 AML + 27 normal cases restored FlowCAP-II F1 from 0.66 to 0.90.",
+     "Zero-shot transfer worked across sites: CLL-vs-normal on a 5-site German B-NHL cohort (n=36,542) AUROC 0.988, FlowCAP-II AML (n=359) AUROC 0.973, and 2026 B-ALL MRD AUROC 0.920 at ≥1% burden but degraded below 0.1% (0.773 at ≥0.1%).",
+     "Latent-space graph analysis showed embeddings organize by diagnosis (modularity 0.39 vs 0.06 permutation baseline) far more than by tube-panel composition (0.22), and were robust to simulated scale/shift/spillover perturbations up to 3σ.",
+     "B-ALL burden regression worked only where training distribution overlapped (R²=0.605 above 1% burden); a 37-color spectral panel showed only partial zero-shot transfer (46% top-1 accuracy)."
+    ],
+    "why": "It demonstrates that self-supervised, panel-agnostic representations can encode diagnostic and even genotype-relevant biology (DDX41) without any labels at pre-training—relevant conceptually to anyone building foundation models for high-dimensional single-cell omics with heterogeneous feature sets. The threshold-recalibration result is a practical template for deploying embeddings across labs with minimal local labels.",
+    "limitations": "Pretraining and most evaluation are from a single lab (ARUP) and one instrument platform (Beckman Navios); sensitivity collapses below 0.1% disease burden at the 2^17 event budget, so it is not an MRD-grade assay, and reported DDX41 findings (n=50) need external validation. Labels were LLM-extracted from reports and all evaluations were retrospective.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 33900
+   }
   }
  ],
  "candidates": 372

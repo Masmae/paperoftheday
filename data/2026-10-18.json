@@ -35,7 +35,23 @@
   "score": 17,
   "tldr": "LUNA learns spatial priors from spatially resolved transcriptomics and uses them to reconstruct tissue architecture from dissociated single-cell expression profiles, generalizing to unseen cell types and pathological samples.",
   "why": "This is a striking new AI capability: it uses generative models to recover spatial tissue organization from dissociated single-cell transcriptomes. The validation across large MERFISH atlases, mouse CNS scRNA-seq, and Slide-tags suggests it could turn existing expression datasets into pseudo-spatial resources and reveal disease-associated tissue architecture. It is directly relevant to transcriptomics and spatial multiomics, with a surprising and practically useful impact.",
-  "summary": null
+  "summary": {
+   "tldr": "LUNA is a diffusion-based generative model that predicts 2D spatial coordinates for single cells from their gene expression alone, by learning spatial priors from spatial transcriptomics data.",
+   "background": "scRNA-seq captures transcriptomes but destroys spatial context, while spatial platforms like MERFISH are limited in gene count, throughput, or coverage. Existing computational mapping methods (Tangram, CytoSPACE, novoSpaRc, CeLEry, etc.) require picking a specific reference slice and often assume spatially proximate cells have similar expression, limiting generalization.",
+   "approach": "LUNA (EPFL; Brbić lab) uses a denoising diffusion model with multi-head self-attention over cells, conditioned on gene expression, with a rotation/translation-invariant loss. It is trained on spatially resolved slices to learn spatial priors across the whole tissue, then generates coordinates from random noise for dissociated cells at inference. Inference has linear time/memory complexity with cell count (e.g., 40,000 cells in ~4 minutes, ~6 GB GPU memory), and it does not require a pre-selected reference slice.",
+   "findings": [
+    "On the Allen Brain Cell MERFISH atlas, trained on 2.85M cells from one mouse, LUNA accurately reconstructed 1.23M cells from an unseen mouse, with Pearson correlation of 0.95 between Moran's I spatial autocorrelation computed on predicted vs. ground-truth locations across 1,122 genes.",
+    "In zero-shot tests where a full cell class was excluded from training (e.g., NP-CT-L6b Glut, vascular cells), LUNA still placed those cells correctly, including preserving spatial patterns of genes like Tshz2 and Syt6.",
+    "On the mouse primary motor cortex MERFISH benchmark, LUNA reached an average Spearman's rank correlation of 0.448, outperforming the best baseline (scSpace) by 63% and CeLEry by 37.5% when baselines got the best reference slice as a prior.",
+    "Applying the ABC-trained model to the dissociated mouse CNS scRNA-seq atlas (1.08M cells), LUNA's predictions agreed with expert-validated locations derived via STARmap PLUS, and it revealed spatially variable genes absent from the spatial training panel.",
+    "On Slide-tags data, LUNA assigned locations to unmapped nuclei in mouse embryonic (E14) and human metastatic melanoma samples, enriching the melanoma dataset so SpatialDE found 396 additional spatially variable genes (an 83% increase), and in a Parkinson's α-synuclein PFF mouse model (Xenium data, fine-tuned on wild-type) it flagged regions that overlapped immunostained α-synuclein aggregates."
+   ],
+   "why": "For transcriptomics/multiomics researchers, LUNA means dissociated scRNA-seq atlases can be given spatial coordinates without running spatial assays, and sparse spatial datasets (Slide-tags losses, partially profiled slices) can be completed computationally learned spatial priors. Its gene-masking analysis also links specific genes to spatial structure in an interpretable way.",
+   "limitations": "LUNA is 2D-only, requires a shared gene panel between training and query data, and zero-shot transfer to unseen cell types degrades when train/test slice distributions differ substantially, sometimes requiring fine-tuning. Validation on non-brain tissues and other organisms is still untested.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 123656
+  }
  },
  "also": [
   {
@@ -113,7 +129,23 @@
     "scale"
    ],
    "score": 20,
-   "summary": null
+   "summary": {
+    "tldr": "FOCUS is a multimodal generative (conditional diffusion) foundation model that jointly improves spatial transcriptomics resolution, sensitivity, H&E alignment, and cell-level fidelity, showing that coordinated enhancement recovers biological signals that single-task methods miss.",
+    "background": "ST measurements involve coupled trade-offs: smaller capture spots give resolution but lose per-spot transcript sensitivity, while larger spots blur anatomy and mix signals across cells. Existing computational fixes (super-resolution, imputation, alignment, deconvolution) address these in isolation, but correcting one aspect independently can yield profiles inconsistent with the others.",
+    "approach": "FOCUS is trained on 6,788 paired ST-H&E samples (>1.7M patches, 10 ST platforms, 34 tissues, >5.8M scRNA-seq reference cells) with spatial co-expression priors. It uses pretrained H&E (1.3B patches) and ST (30M spots) encoders plus task-specific modules (sensitivity via optimal transport to scRNA-seq, morphology-guided alignment, complexity-aware cell-fidelity), coordinated through task-activation scores (>0.5 threshold) and cross-attention with FiLM modulation during reverse diffusion.",
+    "findings": [
+     "Super-resolution beat iStar, TESLA, Diff-ST and U-Net variants, reducing RMSE by ≥0.05 and raising SSIM by ≥0.18 across VisiumHD/Xenium datasets.",
+     "Sensitivity recovery beat Tangram, scDOT, COME etc., with larger gains at lower depth (86% UMI increase at 8.68×10^7 reads vs 35% at higher depth on CytAssist mouse brain).",
+     "Joint enhancement outperformed isolated enhancement: alignment LWHM 8.5 vs 39.2 (ELD); in Stereo-seq ovarian cancer, per-cell UMI 3,200 vs 2,300 (scDOT) and 82% of complex regions with high H&E-ST similarity vs 53% (PatchNCE).",
+     "Biological applications: recovered Xenium-missed neutrophil markers (MPO SSIM 0.58 vs 0.05 native) enabling neutrophil-tumor niches in papillary craniopharyngioma and four cancers with TCGA prognostic significance (neutrophil-high OV P=0.014, BRCA P=0.002, COAD P=0.010); and reconstructed a marrow-to-cortical-bone LepR+ MSC→osteocyte trajectory missed by sensitivity-only enhancement.",
+     "On unseen Open-ST HNSCC data, FOCUS sharpened primary-vs-metastatic spatial contrast in tumor-state mixing (0.18 vs 0.46, versus 0.22/0.29 native)."
+    ],
+    "why": "For anyone building multiomics-integrated ST models, this provides evidence that joint, conditionally-gated enhancement tasks beat per-task pipelines and that pretrained unimodal encoders (histology + ST) can be combined via diffusion for spatial imputation. The biological showcases (neutrophil niches, osteogenesis, metastasis) are direct use cases where transcript-detection limits matter.",
+    "limitations": "FOCUS reconstructs signals not actually measured, so recovered expression validated only against sparse higher-resolution or orthogonal references could be hallucinated; performance depends on modality availability and fine-tuning is needed for unseen platforms/tissues, with no 3D or multi-omics extension yet.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 39429
+   }
   },
   {
    "title": "Latent causal diffusions for single-cell perturbation modeling.",

@@ -30,7 +30,23 @@
   "score": 24,
   "tldr": "They trained a generative vision-language model on 1.45M histology-expression pairs to jointly annotate tissue from morphology, genes, and spatial context, outperforming existing methods with zero-shot transfer across cohorts and platforms and interrogable, editable predictions.",
   "why": "VINTER is a genuinely new capability for spatial multiomics: a generative vision-language model that reads histology, measured gene expression, and tissue neighborhood as one sequence, and whose molecular evidence can be interrogated and edited with the image fixed. It beats spatial-domain methods and a spatial foundation model, transfers across cohorts and to Visium HD/Xenium without retraining, and delivers real biology (TLS maturation programs, hidden immune heterogeneity in breast cancer). It is exactly the kind of reusable, AI-native advance that could change how spatial annotation is done.",
-  "summary": null
+  "summary": {
+   "tldr": "VINTER is a generative vision-language model (UNI image encoder + LLaVA-1.5 Vicuna-7B) that annotates spatial transcriptomics spots from H&E images, ranked gene lists of the spot and its six neighbours, returning full class probabilities, and it works across cohorts and platforms without retraining.",
+   "background": "Spatial transcriptomics annotation methods usually produce embeddings or clusters whose meaning is assigned post hoc, or read histology without measured gene expression, so tissue decisions rarely combine morphology, genes and spatial neighbourhood in one interpretable step. Making a decision from all three sources while also being able to interrogate the evidence behind it is hard because inputs must stay readable and editable (e.g., swap a neighbourhood) without breaking the model.",
+   "approach": "Each spot is a H&E patch encoded by UNI (196 tokens via 2-layer projector) plus text prompts containing 20 ranked target-spot genes and 10 neighbourhood genes (z-scored Wilcoxon markers + curated markers); class-specific output tokens give per-class probabilities. Alignment pretraining used 1.45M HEST histology-caption pairs (captions by Qwen3-VL) over 546 spatial transcriptomic samples, followed by LoRA fine-tuning on DLPFC+HER2ST and task-specific models for TLS (lung/kidney), trained on 16 GH200 GPUs. Because genes enter as text, evidence can be perturbed by deleting, demoting or inserting genes or swapping neighbourhood lists with the image fixed.",
+   "findings": [
+    "On the 12 DLPFC sections (30,714 held-out spots), raw VINTER reached macro-F1 0.719 / accuracy 0.773 (0.753/0.808 smoothed), beating the best comparator STAIG (0.690/0.745); joint model beat gene-only (75.5%) and image-only (65.7%) variants.",
+    "Zero-shot transfer from HER2+ breast to 92 triple-negative breast cancer patients gave patient-mean macro-F1 0.438; LoRA adaptation with 157 labels raised it to 0.484.",
+    "Neighbourhood editing on TLS staging in lung/kidney cancer yielded antagonistic programmes: a follicular B-cell programme (NIBAN3, CD37, SPIB, BANK1...) raised the maturity score and a plasma-cell secretory programme (IGHG1, JCHAIN, XBP1, CD138...) lowered it, validated in 15/15 leave-one-section-out tests; tissue mapping showed FB concentrated in TLS cores and PC at the periphery (ring1-minus-core PC difference +0.83 in mature vs -0.06 in early TLS).",
+    "In TNBC, p(immune) within uniformly labelled stroma distinguished high- vs low-TIL stroma at within-patient AUC 0.87, hot stroma was enriched for IFN-γ/antigen-processing genes the model never received, and ranking spots by secondary cancer probability recovered ~48% of pathologist-missed cancer at a 10% review budget (vs 25% random).",
+    "Without retraining, the TLS model applied to colorectal cancer Visium HD 8-µm bins and Xenium cells detected TLS (B-cell AUC 0.99 and 0.93; cross-platform Cohen's κ = 0.81), resolving follicles and IgG+ plasma cells at TLS margins vs IgA+ plasma cells in mucosa."
+   ],
+   "why": "It shows a single text-based multimodal interface can outperform dedicated spatial-domain methods, encode class probabilities as biologically meaningful readouts, and carry spot-level trained models to higher-resolution platforms (Visium HD, Xenium) with no annotations. For multiomics researchers, gene-list-as-text inputs make model decisions directly perturbable, turning annotation into hypothesis generation (e.g., TLS neighbourhood programmes).",
+   "limitations": "Downstream analyses rely on published annotations from selected cohorts (TLS stages in particular), input edits are in silico perturbations needing protein-level validation, and neighbourhoods are aggregated gene lists, so the model cannot represent individual neighbours' arrangement; some effects vary substantially between sections.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 102961
+  }
  },
  "also": [
   {
