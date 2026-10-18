@@ -1,6 +1,6 @@
 // Things written on demand by GitHub Actions: start a job, remember it's running (so leaving the
 // page and coming back still shows "Writing…"), and poll the repo until the file appears.
-import { h, store, getJSON } from "./dom.js";
+import { h, store, getJSON, kids } from "./dom.js";
 
 const MAX_WAIT = 12 * 60 * 1000;          // give up waiting after this
 const POLL_MS = 8000;
@@ -37,11 +37,11 @@ export function writeControl(sync, { kind, id, path, label, done = (x) => !!x, o
       box.replaceChildren(h("p", { class: "note" }, "To write it now, connect GitHub in ", h("a", { href: "#/settings" }, "Settings"), "."));
       return;
     }
-    box.replaceChildren(h("button", { class: "btn primary", onclick: async (e) => {
+    box.replaceChildren(...kids(h("button", { class: "btn primary", onclick: async (e) => {
       e.target.disabled = true;
       try { await sync.requestWrite(kind, id); setPending(key, Date.now()); poll(); }
       catch (err) { showButton(`Couldn't start: ${err.message}.`); }
-    } }, label), note ? h("p", { class: "note" }, note) : null);
+    } }, label), note ? h("p", { class: "note" }, note) : null));
   };
   async function poll() {
     const since = runningSince(key);

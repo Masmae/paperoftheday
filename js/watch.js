@@ -55,11 +55,11 @@ function item(it, fresh, sync) {
   const showAI = (file) => {
     if (file?.status === "ok") return aiBox.replaceChildren(summaryEl(file.summary));
     if (file?.status === "nofulltext") return aiBox.replaceChildren(h("p", { class: "note" }, "No free full text for this paper, so there's no AI summary."));
-    aiBox.replaceChildren(writeControl(sync, {
+    aiBox.replaceChildren(...kids(writeControl(sync, {
       kind: "summary", id: it.key, path: summaryPath(it.key), label: "AI summary from the full text",
       done: (f, since) => f && (f.status !== "failed" || (f.at ?? 0) > since),     // an old failure doesn't count
       onReady: showAI,
-    }), file?.status === "failed" ? h("p", { class: "note" }, "The last try didn't work. You can try again.") : null);
+    }), file?.status === "failed" ? h("p", { class: "note" }, "The last try didn't work. You can try again.") : null));
   };
   const detail = h("div", { class: "detail", hidden: true },
     aiBox,
