@@ -59,28 +59,58 @@ function valid(o) {
     && o.quiz.every((q) => q.q && Array.isArray(q.options) && q.options.length >= 3 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer < q.options.length);
 }
 
+/**
+ * One streamed chat completion. Streaming keeps the connection busy, so long answers don't hit
+ * Node's 5-minute wait-for-headers timeout; hidden "thinking" tokens are skipped.
+ */
+async function complete(model, content, key) {
+  const res = await fetch(OPENCODE_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`, "Content-Type": "application/json",
+      "User-Agent": "paperoftheday/1.0 (+https://github.com/Masmae/paperoftheday)",
+      "x-opencode-session": "paperoftheday-learn",
+    },
+    body: JSON.stringify({ model, max_tokens: 16000, stream: true, stream_options: { include_usage: true }, messages: [{ role: "user", content }] }),
+    signal: AbortSignal.timeout(10 * 60 * 1000),
+  });
+  if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(`${res.status} ${e.error?.message ?? ""}`); }
+  let text = "", finish = null, usage = null, buf = "";
+  const decoder = new TextDecoder();
+  for await (const chunk of res.body) {
+    buf += decoder.decode(chunk, { stream: true });
+    let nl;
+    while ((nl = buf.indexOf("\n")) >= 0) {
+      const line = buf.slice(0, nl).trim(); buf = buf.slice(nl + 1);
+      if (!line.startsWith("data:")) continue;
+      const data = line.slice(5).trim();
+      if (data === "[DONE]") continue;
+      try {
+        const j = JSON.parse(data);
+        text += j.choices?.[0]?.delta?.content ?? "";
+        finish = j.choices?.[0]?.finish_reason ?? finish;
+        usage = j.usage ?? usage;
+      } catch { /* partial or keep-alive line */ }
+    }
+  }
+  return { text, finish, usage };
+}
+
 async function write(track, unit, lesson, prev, next) {
   const key = process.env.OPENCODE_API_KEY;
   if (!key) throw new Error("OPENCODE_API_KEY not set");
   for (const model of MODELS) {
     try {
-      const res = await fetch(OPENCODE_URL, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${key}`, "Content-Type": "application/json",
-          "User-Agent": "paperoftheday/1.0 (+https://github.com/Masmae/paperoftheday)",
-          "x-opencode-session": "paperoftheday-learn",
-        },
-        body: JSON.stringify({ model, max_tokens: 6000, messages: [{ role: "user", content: prompt(track, unit, lesson, prev, next) }] }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) { console.warn(`${lesson.id} ${model}: ${res.status} ${data.error?.message ?? ""}`); continue; }
-      const text = data.choices?.[0]?.message?.content ?? "";
-      const out = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+      const t0 = Date.now();
+      const { text, finish, usage } = await complete(model, prompt(track, unit, lesson, prev, next), key);
+      if (!text.includes("{")) throw new Error(`no answer (finish: ${finish})`);
+      let out;
+      try { out = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1)); }
+      catch { throw new Error(`answer wasn't complete JSON (finish: ${finish}, ${text.length} chars)`); }
       if (!valid(out)) throw new Error("incomplete lesson");
-      console.log(`${lesson.id} ${model} (${data.usage?.total_tokens ?? "?"} tokens): ${lesson.title}`);
+      console.log(`${lesson.id} ${model} (${usage?.total_tokens ?? "?"} tokens, ${Math.round((Date.now() - t0) / 1000)}s): ${lesson.title}`);
       return { id: lesson.id, track: track.id, unit: unit.id, title: lesson.title, model, created: new Date().toISOString().slice(0, 10), ...out };
-    } catch (e) { console.warn(`${lesson.id} ${model}: ${e.message}`); }
+    } catch (e) { console.warn(`${lesson.id} ${model}: ${e.message}${e.cause ? ` (${e.cause.code ?? e.cause.message})` : ""}`); }
   }
   return null;
 }

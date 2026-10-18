@@ -43,6 +43,7 @@ jobs:
       - name: Learn (write the next lessons)
         if: ${{ !inputs.backfill && !cancelled() }}
         continue-on-error: true
+        timeout-minutes: 25
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
         run: node scripts/learn.mjs
