@@ -1,125 +1,145 @@
 {
  "date": "2026-10-15",
- "pickedBy": "score",
+ "pickedBy": "glm-5.3-flash",
  "paper": {
-  "title": "MassNet: billion-scale AI-ready mass spectral corpus empowering scalable deep learning in proteomics.",
+  "title": "Decoding super-enhancer regulatory grammar and pathogenic gain-of-function variants directly from DNA sequence",
   "authors": [
-   "A",
-   "Zhang",
-   "Zhang",
-   "Wei",
-   "Zhang",
-   "Deng",
-   "Liu",
-   "Nie",
-   "Yu",
-   "Chen",
-   "Dong",
-   "Gao"
+   "Liang, Y.",
+   "Xu, X.",
+   "Mao, Y.",
+   "Zheng, Z.",
+   "Liu, N."
   ],
-  "authorCount": 14,
-  "venue": "Nat Methods",
-  "preprint": false,
-  "date": "2026-10-15",
-  "doi": "10.1038/s41592-026-03247-y",
-  "url": "https://doi.org/10.1038/s41592-026-03247-y",
-  "abstract": "Here we present MassNet, inspired by large-scale data corpora of text and images; MassNet is an artificial intelligence (AI)-ready data corpus for mass spectrometry (MS)-based proteomics. The corpus contains 1.5&#x2009;billion tandem MS spectra from high-quality data-dependent acquisition (DDA) MS data across 35 species. Approximately 1.7&#x2009;million peptide precursors are from human samples. We further present an AI-ready DDA data format called Mass Spectrometry DDA Tensor (MSDT) for compact and standardized storage, curation and reuse of data from multiple sources, which can be optionally converted to a Lightning Memory-Mapped Database for accelerated input/output in deep learning. On the basis of MassNet, we develop XuanjiNovo, a nonautoregressive transformer model that leverages a curriculum learning strategy for de novo peptide sequencing. XuanjiNovo achieves 38.35-143.57% improvement over state-of-the-art methods on human Astral data. MassNet also supports additional downstream tasks, including retention time prediction and PSM rescoring. MassNet represents a foundational MS-based proteomics data resource, marking a critical milestone for AI proteomics research.",
+  "authorCount": 5,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-14",
+  "doi": "10.64898/2026.10.11.756618",
+  "url": "https://doi.org/10.64898/2026.10.11.756618",
+  "abstract": "Super-enhancers (SEs) drive cell-identity gene expression, yet their identification relies on epigenomic profiling (e.g., H3K27ac ChIP-seq), precluding discovery in unprofiled cellular states and leaving their underlying sequence grammar unknown. Here, we present Borzoi-SE, a deep learning framework built upon the genomic transformer Borzoi that formulates SE discovery as hierarchical, cell-type-resolved genomic object detection directly from long-range sequence across 90 human lineages. Base-resolution attribution recovers lineage-defining master transcription factors across cell types. Within SEs shared across lineages, it reveals lineage-dependent motif usage, suggesting that the same regulatory regions can support distinct cell-type-specific programs. Using in silico ablation, Borzoi-SE decoded the functional hierarchy of the {beta}-globin super-enhancer, prioritizing hypersensitive site 2 (HS2) as the dominant constituent, which we experimentally verified via CRISPR interference. Trained without variant-effect labels, Borzoi-SE identified gain-of-super-enhancer variants in different tissues. At the CHRM2 locus, a single-nucleotide variant created a de novo glucocorticoid receptor (GR) motif that recruited activated GR and potentiated adjacent MEF2 regulatory syntax, nucleating a cardiac super-enhancer. Orthogonal multi-omics and population-genetic evidence linked this variant to increased CHRM2 expression and variation in resting heart rate and PR-interval duration. Borzoi-SE establishes a general framework for decoding SE regulatory grammar and prioritizing causal non-coding variants directly from sequence.",
   "reasons": [
    "transformer",
    "deep learning",
-   "AI",
-   "proteomics"
+   "multiomics",
+   "epigenomics",
+   "CRISPR",
+   "genomics"
   ],
   "score": 15,
-  "tldr": null,
-  "why": null
+  "tldr": "They built a Borzoi-based framework that treats super-enhancer discovery as cell-type-resolved object detection from sequence alone, decoded enhancer grammar by ablation, verified a predicted beta-globin SE element with CRISPRi, and identified a gain-of-enhancer variant affecting CHRM2 expression and cardiac traits.",
+  "why": "Borzoi-SE adds a genuinely new capability to genome language models: finding super-enhancers and their regulatory grammar directly from DNA sequence across 90 cell types, without needing H3K27ac ChIP-seq. The experimental CRISPRi validation, the de novo glucocorticoid-motif variant at CHRM2 linked to heart rate, and the population-genetic support make it unusually rigorous for a sequence-model paper. For a transcriptomics/multiomics researcher this connects sequence, enhancer biology, and cell-identity gene expression in one framework.",
+  "summary": {
+   "tldr": "Borzoi-SE is a deep learning framework that recasts super-enhancer (SE) discovery as cell-type-resolved genomic object detection directly from DNA sequence, and, trained without variant labels, also predicts variants that create or destroy SEs.",
+   "background": "Super-enhancers are large clusters of enhancers driving cell-identity genes, but canonical discovery requires H3K27ac ChIP-seq plus ROSE peak-stitching, so it only works in already-profiled cell types. Prior sequence-based classifiers (DeepSE, SENet, MuSE, DcSE) use ≤3 kb fragments, are cell-type agnostic, and cannot define SE boundaries, resolve lineage specificity, or predict de novo SE nucleation.",
+   "approach": "The authors add two heads to a pretrained Borzoi backbone: a dilated Cluster head (~64.7 kb receptive field) modeling long-range enhancer clustering, and an SE head with Squeeze-and-Excitation attention for lineage-specific activity. Input is 524-kb sequence at 256-bp resolution (1,600 bins) with 90 human cell/tissue output channels, trained on ROSE/H3K27ac annotations under five-fold cross-chromosome splits. Interpretability uses Gradient×Input/DeepLIFT with TF-MoDISco; function is probed via in silico ablation and saturation mutagenesis, with CRISPRi validation in K562 cells.",
+   "findings": [
+    "Against retrained baselines, Borzoi-SE reaches PR-AUC 0.698 vs 0.468–0.516 on binary classification, and on chromosome-scale de novo detection reaches PR-AUC 0.643/F1 0.498 vs ~0.34/~0.15, with ~10x fewer false positives in gene deserts (0.028 vs 0.265–0.349 FP/Mb at 80% recall) and better boundaries (median IoU 0.668).",
+    "Per-lineage PR-AUC is 0.544–0.703 vs 0.131–0.369 for baselines (K562, HepG2, GM12878, WTC11); across all 90 types, median per-tissue PR-AUC is 0.535, ROC-AUC 0.902, and predicted scores track ROSE ranks (median Spearman ρ 0.866).",
+    "Attribution recovers master TFs (GATA1::TAL1/NFE2 in K562, OCT4/SOX2/NANOG, PU.1, HNF4) and shows shared SEs switch motif usage by lineage; in silico ablation ranked β-globin HS2 as the LCR hub, confirmed by CRISPRi (HS2 knockdown collapses LCR accessibility by 35–85% and downregulates HBG1/2).",
+    "Without variant labels, it reproduces the 12-bp MYB-motif insertion activating TAL1 in T-ALL (Δ up to 0.232 in KOPT-K1, 0.201 in K562), restricted to hematopoietic channels.",
+    "Genome-wide screening found rs1424569 T>C at CHRM2, which creates a de novo glucocorticoid receptor motif next to a MEF2 site and nucleates a cardiac SE; orthogonal evidence includes 96% GR ChIP reads on the mutant allele, allele-skewed ATAC/snRNA-seq, CHRM2 eQTL (P=8.6e-41), and heart-rate/PR-interval GWAS links (UK Biobank P=5.24e-17); a second candidate, rs9937638 at WDR59, creates a GATA4 motif."
+   ],
+   "why": "For anyone building sequence-to-expression or multiomics foundation models, this shows a Borzoi-style backbone can be repurposed from continuous track regression to labeled genomic object detection with cell-type-resolved outputs, beating dedicated classifiers on both fragment discrimination and genome-wide screening. It also offers an annotation-free route to prioritize non-coding GWAS/QTL variants that gain or lose enhancer function, complementing eQTL/haQTL fine-mapping pipelines.",
+   "limitations": "Ground truth is ROSE-stitched H3K27ac, so the model inherits those empirical thresholds, and recall is moderate (~0.40), concentrated on weak, threshold-proximal SEs. Most variant claims rest on QTL/GWAS concordance and a handful of validated loci rather than systematic perturbation.",
+   "source": "bioRxiv full text",
+   "model": "glm-5.3-flash"
+  }
  },
  "also": [
   {
-   "title": "scTransMIL bridges patient-level disease states and single-cell transcriptomics for cancer screening and heterogeneity inference.",
+   "title": "MassNet: billion-scale AI-ready mass spectral corpus empowering scalable deep learning in proteomics.",
    "authors": [
-    "Tang",
-    "Wang",
-    "Yang",
-    "Song",
-    "Li",
-    "Zhou",
-    "Song",
+    "A",
+    "Zhang",
+    "Zhang",
+    "Wei",
+    "Zhang",
+    "Deng",
+    "Liu",
+    "Nie",
+    "Yu",
     "Chen",
-    "Zhu",
-    "You",
-    "Chen",
-    "Yao"
+    "Dong",
+    "Gao"
    ],
-   "authorCount": 12,
-   "venue": "Nat Commun",
+   "authorCount": 14,
+   "venue": "Nat Methods",
    "preprint": false,
    "date": "2026-10-15",
-   "doi": "10.1038/s41467-026-77538-5",
-   "url": "https://doi.org/10.1038/s41467-026-77538-5",
-   "abstract": "Single-cell sequencing offers profound insights into tumor complexity. However, reliably linking individual cellular profiles to overall sample-level phenotypes remains computationally challenging, particularly when cell-specific annotations are absent. This disconnect limits the technology's utility in studying underlying tumor mechanisms. Here we show how scTransMIL, an artificial intelligence framework, bridges this gap. By conceptualizing a biological sample as a collection of individual cells, scTransMIL employs a transformer-based multi-instance learning approach to directly connect single-cell transcriptomic profiles with overarching sample-level labels. We demonstrate that scTransMIL accurately predicts sample-level cancer phenotypes, including the tissue-of-origin for metastatic tumors. At cellular resolution, it robustly identifies tumor-associated cell populations and maps biological progression trajectories using only minimal sample-level annotations. Furthermore, the model's attention mechanisms facilitate full-transcriptome biomarker discovery. By systematically integrating molecular and cellular scales with broader phenotypic states, our approach provides a computational tool to dissect tumor heterogeneity and advance fundamental cancer biology.",
+   "doi": "10.1038/s41592-026-03247-y",
+   "url": "https://doi.org/10.1038/s41592-026-03247-y",
+   "abstract": "Here we present MassNet, inspired by large-scale data corpora of text and images; MassNet is an artificial intelligence (AI)-ready data corpus for mass spectrometry (MS)-based proteomics. The corpus contains 1.5&#x2009;billion tandem MS spectra from high-quality data-dependent acquisition (DDA) MS data across 35 species. Approximately 1.7&#x2009;million peptide precursors are from human samples. We further present an AI-ready DDA data format called Mass Spectrometry DDA Tensor (MSDT) for compact and standardized storage, curation and reuse of data from multiple sources, which can be optionally converted to a Lightning Memory-Mapped Database for accelerated input/output in deep learning. On the basis of MassNet, we develop XuanjiNovo, a nonautoregressive transformer model that leverages a curriculum learning strategy for de novo peptide sequencing. XuanjiNovo achieves 38.35-143.57% improvement over state-of-the-art methods on human Astral data. MassNet also supports additional downstream tasks, including retention time prediction and PSM rescoring. MassNet represents a foundational MS-based proteomics data resource, marking a critical milestone for AI proteomics research.",
    "reasons": [
     "transformer",
+    "deep learning",
     "AI",
-    "single-cell",
-    "transcriptomics"
+    "proteomics",
+    "scale",
+    "validated"
    ],
    "score": 15
   },
   {
-   "title": "NoiTox: A Machine Learning Strategy for Peptide Toxicity Prediction Reveals Label Noise in Benchmark Datasets",
+   "title": "BioMod: Biological Module Tokenization for Single-Cell Foundation Modeling",
    "authors": [
-    "Almeida, G. O.",
-    "Albuquerque, M. C.",
-    "Silva, B. M.",
-    "Silva, O. A. B.",
-    "Ferreira, R. S.",
-    "Meira, W.",
-    "Pires, D. V.",
-    "Prata, W. M.",
-    "Silveira, S. A."
+    "Meng, L.",
+    "Zhu, J.",
+    "Han, B.",
+    "Zang, Y.",
+    "Li, W.",
+    "Zong, K.",
+    "Zhong, J.",
+    "Yang, Y.",
+    "Liu, J.",
+    "Jia, J.",
+    "Sun, R.",
+    "Yu, G."
    ],
-   "authorCount": 9,
+   "authorCount": 16,
    "venue": "bioRxiv",
    "preprint": true,
-   "date": "2026-10-15",
-   "doi": "10.64898/2026.10.08.757741",
-   "url": "https://doi.org/10.64898/2026.10.08.757741",
-   "abstract": "Motivation: Peptide toxicity remains a major bottleneck in drug development, as small sequence variations can drastically alter cytotoxic profiles. Experimental assessment is costly and time-consuming, motivating computational predictors. Existing approaches often rely on single black-box architectures, limiting interpretability and obscuring the contribution of individual sequence features. Furthermore, benchmark datasets frequently define the negative class through annotation filters rather than direct experimental evidence, introducing structural label noise that can compromises training and evaluation. Results: We present NoiTox, a multi-model strategy for peptide toxicity prediction integrating three complementary architectures, evaluated as four model variants: NoiToxML (Bo/full), an Extremely Randomized Trees classifier with Boruta-selected or complete physicochemical, compositional, and atomic descriptors; NoiToxDP, a deep learning model leveraging ESM-2 protein language model embeddings; and NoiToxGP, a graph neural network that combines ESM-2 residue embeddings, a fully connected residue graph with attention, and the Boruta descriptors as global features. Averaged over five random seeds, the models approached the state-of-the-art predictor ToxiPep on CD-HIT-controlled test sets, and on an independent dataset the interpretable NoiToxML variants and a probability-averaging consensus of the four models exceeded it, showing that physicochemical descriptors are highly informative for toxicity prediction. Cross-referencing negative-labeled sequences against curated databases of hemolytic, cytotoxic, and neurotoxic peptides flagged a small set annotated as toxic elsewhere, consistent with label noise by omission. However, removing the sequences that all models contradicted did not improve, and for some models reduced, ranking performance, indicating that such sequences carry useful information and are better treated as candidates for curation than discarded automatically. Availability and implementation: https://github.com/goalmeida05/NoiTox.",
-   "reasons": [
-    "language model",
-    "deep learning",
-    "graph neural network",
-    "AI",
-    "proteins"
-   ],
-   "score": 15
-  },
-  {
-   "title": "Poisoning the corpora of protein design systems during pre-training and retrieval",
-   "authors": [
-    "Charalampos Koilakos",
-    "Kimon-Antonios Provatas",
-    "Michail Patsakis",
-    "Candace SY Chan",
-    "Georgios A. Pavlopoulos",
-    "Ilias Georgakopoulos-Soares"
-   ],
-   "authorCount": 6,
-   "venue": "arXiv",
-   "preprint": true,
-   "date": "2026-10-15",
-   "doi": null,
-   "url": "https://arxiv.org/abs/2610.21200v1",
-   "abstract": "Protein foundation models increasingly support the generation of novel biological sequences, yet their reliance on large public datasets creates opportunities for adversarial manipulation of the material they learn from and retrieve. We investigate two data-only poisoning attacks against protein design systems, targeting the pre-training corpus of autoregressive protein language models and the retrieval corpus of a text-guided protein generator. For the first, we pre-trained ProtGPT2 and ProGen2 variants of 300 million parameters, introducing poisoned protein sequences containing one of two triggers followed by one of three payloads. Across all poisoned runs, both architectures acquired highly reliable trigger-dependent generation under uniform and ramped poisoning schedules. Under ramped exposure, the earliest majority activation occurred after only 200 contaminated examples, while for the uniform schedule earliest activation occurred around 5000 poisoned samples. For the second attack, we inserted records into a retrieval corpus system without modifying its weights or decoding procedure. A single query-aware record captured a top-16 retrieval position for 58\\% of templated requests and 97\\% of free-text requests. Conditional on successful poisoned retrieval, 62\\% of requests produced altered sequences, while 19-21% acquired the inserted domain by profile-HMM homology. A universal query-unaware attack using 1,500 records also achieved substantial retrieval capture and domain transfer. Together, these findings demonstrate that adversarial protein sequence contributions can establish persistent, sequence-specific behaviour during pre-training or redirect protein generation at inference, while leaving ordinary model behaviour largely preserved. Our work establishes the integrity and biological provenance of protein sequence data as critical safeguards for generative protein design systems.",
+   "date": "2026-10-13",
+   "doi": "10.64898/2026.10.12.758490",
+   "url": "https://doi.org/10.64898/2026.10.12.758490",
+   "abstract": "Single-cell foundation models typically represent cells as flat sequences of individual genes, requiring higher-order biological organization to be inferred implicitly from sparse expression profiles. Similar to the evolution from character-level to semantic tokenization in natural language processing,we hypothesize that cellular states can be more efficiently represented using biologically meaningful intermediate units. Here we present BioMod, a 50-million-parameter single-cell foundation model that introduces biological modules as representation units between genes and cells. BioMod constructs an overlapping vocabulary of 660 biological modules derived from curated pathways and data-driven gene programs, replacing thousands of gene-level inputs with compact module representations. Pretrained on approximately 73 million human cells using high-ratio module masking with an asymmetric decoder, BioMod achieves state-of-the-art performance across cell-type annotation, zero-shot batch integration, perturbation-response prediction and drug-response forecasting while maintaining a compact architecture that enables efficient inference on a single GPU. Module-level analyses further demonstrate that BioMod captures biologically meaningful cellular programs and preserves pathway-level organization.",
    "reasons": [
     "foundation model",
-    "language model",
-    "generative model",
-    "proteins"
+    "zero-shot",
+    "single-cell",
+    "perturbation",
+    "scale",
+    "generalizes"
    ],
-   "score": 15
+   "score": 19
+  },
+  {
+   "title": "EventHorizon: A Foundation Model for Clinical Flow Cytometry",
+   "authors": [
+    "Medina Grespan, M.",
+    "Morrison, M.",
+    "O'Fallon, B.",
+    "Jacobsen, J. R.",
+    "Shean, R. C.",
+    "Spies, N. C.",
+    "Ng, D."
+   ],
+   "authorCount": 7,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-10",
+   "doi": "10.64898/2026.06.18.733197",
+   "url": "https://doi.org/10.64898/2026.06.18.733197",
+   "abstract": "Clinical flow cytometry is central to diagnosing hematologic malignancies, but its reliance on manual expert interpretation and fixed panel designs limits scalability and adaptability. To address this, we developed EventHorizon, a self-supervised foundation model that combines a hierarchical, marker-aware transformer with self-distillation pre-training. EventHorizon integrates heterogeneous, multi-tube panels into a unified, specimen-level embedding. Pre-trained without labels on 100,937 routine clinical specimens, comprising over 50 billion cells, the model yields frozen embeddings that enable lightweight classifiers to accurately identify recurrent genetic abnormalities in acute myeloid leukemia (AML), including t(15;17) (AUROC 0.991) and an unexpected signal for DDX41 mutations (AUROC 0.970). EventHorizon maintained strong performance on a temporally separated 2026 cohort (macro AUROC 0.970 across 28 diagnoses) and demonstrated zero-shot transferability across a five-site B-cell lymphoma cohort (CLL vs. normal AUROC 0.988), the FlowCAP-II AML challenge (AUROC 0.973), and B-ALL measurable residual disease detection (AUROC 0.920 at [&ge;]1% disease burden). Although class ranking transferred reliably across sites, decision thresholds shifted; however, these were rapidly recalibrated using as few as four labeled AML cases. Sensitivity decreased at disease burdens below 0.1%, yet embeddings remained robust to simulated assay perturbations. Overall, EventHorizon offers a reusable, panel-agnostic representation for diagnostic flow cytometry.",
+   "reasons": [
+    "foundation model",
+    "transformer",
+    "representation learning",
+    "zero-shot",
+    "perturbation",
+    "scale"
+   ],
+   "score": 18
   }
  ],
- "candidates": 88
+ "candidates": 372
 }

@@ -2,80 +2,83 @@
  "days": [
   {
    "date": "2026-10-18",
-   "title": "Panoramic modelling of single-cell transcriptomes at scale with CellNet",
-   "venue": "arXiv",
-   "key": "https://arxiv.org/abs/2610.21943v1",
+   "title": "Tissue Reconstruction with Generative AI",
+   "venue": "bioRxiv",
+   "key": "10.1101/2025.02.13.638045",
    "also": [
-    "https://arxiv.org/abs/2610.19738v1",
-    "10.64898/2026.03.06.710001",
-    "https://arxiv.org/abs/2610.21218v1"
+    "https://arxiv.org/abs/2610.21943v1",
+    "10.64898/2025.12.23.696267",
+    "10.1073/pnas.2602630123"
    ]
   },
   {
    "date": "2026-10-17",
-   "title": "Joint Variable Selection for Omic Biomarkers in Time-to-Event Data",
-   "venue": "bioRxiv",
-   "key": "10.64898/2026.04.30.721585",
+   "title": "Highly accurate protein structure prediction with AlphaFold",
+   "venue": "Nature",
+   "key": "10.1038/s41586-021-03819-2",
    "also": [
-    "10.64898/2026.10.06.757206",
-    "10.64898/2026.10.07.757371",
-    "10.64898/2026.10.14.759213"
-   ]
+    "10.1126/science.adv9817",
+    "10.1038/s41592-025-02707-1",
+    "10.1038/s41587-023-01905-6"
+   ],
+   "classic": true
   },
   {
    "date": "2026-10-16",
-   "title": "CucurbitAgent: An AI agent for exploring cucurbit multi-omics resources",
+   "title": "What comes after de novo? Automated lead optimization of proteins with CRADLE-1",
    "venue": "bioRxiv",
-   "key": "10.64898/2026.10.09.758138",
+   "key": "10.64898/2026.03.06.710001",
    "also": [
-    "10.1101/2025.02.13.638045",
-    "10.1101/gr.281897.126",
-    "10.1016/j.cell.2026.09.044"
+    "10.64898/2026.04.30.721585",
+    "https://arxiv.org/abs/2610.08694v1",
+    "10.1093/nar/gkag902"
    ]
   },
   {
    "date": "2026-10-15",
-   "title": "MassNet: billion-scale AI-ready mass spectral corpus empowering scalable deep learning in proteomics.",
-   "venue": "Nat Methods",
-   "key": "10.1038/s41592-026-03247-y",
+   "title": "Decoding super-enhancer regulatory grammar and pathogenic gain-of-function variants directly from DNA sequence",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.11.756618",
    "also": [
-    "10.1038/s41467-026-77538-5",
-    "10.64898/2026.10.08.757741",
-    "https://arxiv.org/abs/2610.21200v1"
+    "10.1038/s41592-026-03247-y",
+    "10.64898/2026.10.12.758490",
+    "10.64898/2026.06.18.733197"
    ]
   },
   {
    "date": "2026-10-14",
-   "title": "Functional alignment of protein language models via reinforcement learning.",
-   "venue": "Nat Commun",
-   "key": "10.1038/s41467-026-77557-2",
+   "title": "VINTER: a generative vision-language model for annotating and interrogating spatial tissues",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.01.752251",
    "also": [
-    "10.64898/2026.10.11.756618",
-    "10.64898/2026.10.07.757352",
-    "10.64898/2026.10.10.758204"
+    "10.64898/2026.06.01.729028",
+    "10.1016/j.cell.2026.09.021",
+    "10.1038/s41467-026-77557-2"
    ]
   },
   {
    "date": "2026-10-13",
-   "title": "BioMod: Biological Module Tokenization for Single-Cell Foundation Modeling",
-   "venue": "bioRxiv",
-   "key": "10.64898/2026.10.12.758490",
+   "title": "Nicheformer: a foundation model for single-cell and spatial omics",
+   "venue": "Nature Methods",
+   "key": "10.1038/s41592-025-02814-z",
    "also": [
-    "10.1073/pnas.2602630123",
-    "10.1093/bioinformatics/btag741",
-    "10.1016/j.cell.2026.09.021"
-   ]
+    "10.1038/s41586-024-08411-y",
+    "10.1038/s41467-026-76744-5",
+    "10.1038/s41422-024-01034-y"
+   ],
+   "classic": true
   },
   {
    "date": "2026-10-12",
-   "title": "DECONVersation: Single Cell Foundation Model-Derived Embeddings for Robust Cell Type Deconvolution of Bulk RNA-seq",
-   "venue": "bioRxiv",
-   "key": "10.64898/2026.10.02.756356",
+   "title": "Genome modelling and design across all domains of life with Evo 2",
+   "venue": "Nature",
+   "key": "10.1038/s41586-026-10176-5",
    "also": [
-    "10.64898/2025.12.23.696267",
-    "10.64898/2026.10.04.756542",
-    "10.1038/s41467-026-78143-2"
-   ]
+    "10.1038/s41586-024-08391-z",
+    "10.1126/science.ado9336",
+    "10.1038/s41586-024-08334-8"
+   ],
+   "classic": true
   }
  ]
 }

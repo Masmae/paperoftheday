@@ -1,106 +1,146 @@
 {
  "date": "2026-10-14",
- "pickedBy": "score",
+ "pickedBy": "glm-5.3-flash",
  "paper": {
-  "title": "Functional alignment of protein language models via reinforcement learning.",
+  "title": "VINTER: a generative vision-language model for annotating and interrogating spatial tissues",
   "authors": [
-   "Blalock",
-   "Seshadri",
-   "Nakamura",
-   "Babbar",
-   "Fahlberg",
-   "Kulkarni",
-   "Romero"
+   "Wu, J.",
+   "Xu, W.",
+   "Zhuang, Y.",
+   "Zhang, Y.",
+   "Loza Lopez, M. d. J.",
+   "yang, y.",
+   "Nakai, K."
   ],
   "authorCount": 7,
-  "venue": "Nat Commun",
-  "preprint": false,
-  "date": "2026-10-14",
-  "doi": "10.1038/s41467-026-77557-2",
-  "url": "https://doi.org/10.1038/s41467-026-77557-2",
-  "abstract": "Protein language models (pLMs) enable generative design of novel protein sequences but remain fundamentally misaligned with protein engineering goals, as they lack explicit understanding of function and often fail to improve properties beyond those found in nature. We introduce Reinforcement Learning from eXperimental Feedback (RLXF), a general framework that aligns protein language models with experimentally measured functional objectives, drawing inspiration from the methods used to align large language models like ChatGPT. Applied across five diverse protein families, RLXF improves generation of high-functioning variants beyond pre-trained baselines. We demonstrate this with CreiLOV, an oxygen-independent fluorescent protein, where RLXF-aligned models generate sequences with significantly enhanced fluorescence, including the most fluorescent CreiLOV variants reported to date. Our results indicate that RLXF-aligned models effectively integrate the evolutionary knowledge encoded in pre-trained pLMs with experimental observations, improving the success rate of generated sequences and enabling the discovery of synergistic mutation combinations that are difficult to identify through zero-shot or evolutionary approaches. RLXF provides a scalable and accessible approach to steer generative models toward desired biochemical properties, enabling function-driven protein design beyond the limits of natural evolution.",
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-08",
+  "doi": "10.64898/2026.10.01.752251",
+  "url": "https://doi.org/10.64898/2026.10.01.752251",
+  "abstract": "Spatial transcriptomics links gene expression to tissue structure, yet current models learn embeddings whose meaning is assigned afterwards or read histology without measured expression. Tissue decisions are therefore rarely made from morphology, genes and neighbourhood together, or examined through them. Here we introduce VINTER, a generative vision-language model aligned on 1.45 million histology-caption pairs that reads histology, measured gene expression and spatial neighbourhood as one sequence. It returns the probability of every tissue class, and because genes enter as text, its molecular evidence can be edited with the image held fixed. Reading all three sources together, VINTER annotated tissue more accurately than spatial-domain methods and a spatial foundation model, and transferred across cohorts without target labels. Editing only the neighbourhood resolved the follicular B-cell and plasma-cell programmes behind its reading of tertiary lymphoid structure (TLS) maturation in lung and kidney cancer. Its class probabilities exposed what single labels conceal in triple-negative breast cancer: immune heterogeneity within stroma and cancer hidden beneath benign labels. Without retraining, the same model transferred to Visium HD and single-cell Xenium data and resolved follicular architecture within colorectal cancer TLS. VINTER thus turns spatial annotation into an interrogable reading of tissue across platforms and resolutions.",
   "reasons": [
+   "foundation model",
    "language model",
    "generative model",
-   "zero-shot",
-   "proteins"
+   "single-cell",
+   "transcriptomics",
+   "spatial omics"
   ],
-  "score": 16,
-  "tldr": null,
-  "why": null
+  "score": 24,
+  "tldr": "They trained a generative vision-language model on 1.45M histology-expression pairs to jointly annotate tissue from morphology, genes, and spatial context, outperforming existing methods with zero-shot transfer across cohorts and platforms and interrogable, editable predictions.",
+  "why": "VINTER is a genuinely new capability for spatial multiomics: a generative vision-language model that reads histology, measured gene expression, and tissue neighborhood as one sequence, and whose molecular evidence can be interrogated and edited with the image fixed. It beats spatial-domain methods and a spatial foundation model, transfers across cohorts and to Visium HD/Xenium without retraining, and delivers real biology (TLS maturation programs, hidden immune heterogeneity in breast cancer). It is exactly the kind of reusable, AI-native advance that could change how spatial annotation is done.",
+  "summary": {
+   "tldr": "VINTER is a generative vision-language model, trained on 1.45 million histology-caption pairs, that reads histology, measured gene expression, and spatial neighborhood together as one sequence to assign tissue-class probabilities, and lets you edit the gene/neighborhood text to interrogate what drives its predictions.",
+   "background": "Spatial transcriptomics annotation is usually done either by clustering model embeddings whose meaning is assigned after the fact, or by models that read histology images without using measured expression. Combining morphology, genes, and spatial context in one decision is hard because the modalities are structurally different and most pipelines treat them separately.",
+   "approach": "The authors built VINTER, a generative vision-language model aligned on 1.45M histology-caption pairs, which serializes the image, measured gene expression, and the spatial neighborhood into a single input sequence. Because genes enter as text, the molecular evidence can be edited while the image is held fixed, enabling counterfactual probes of what the model relies on. Instead of a single label, it outputs a probability for every tissue class. It was evaluated on lung and kidney cancer, triple-negative breast cancer, and colorectal cancer across platforms.",
+   "findings": [
+    "Reading all three sources together, VINTER annotated tissue more accurately than spatial-domain methods and a spatial foundation model, and transferred across cohorts without any target labels (the abstract gives no exact accuracy numbers).",
+    "Editing only the neighborhood input isolated the follicular B-cell and plasma-cell programs behind the model's reading of tertiary lymphoid structure (TLS) maturation in lung and kidney cancer.",
+    "Its class probabilities exposed what single labels hide in triple-negative breast cancer: immune heterogeneity within stroma and cancer regions sitting beneath benign labels.",
+    "Without retraining, the same model transferred to Visium HD and single-cell Xenium data and resolved follicular architecture within colorectal cancer TLS.",
+    "Editing inputs with the image fixed works because expression is textual, making the model's molecular evidence directly inspectable and modifiable."
+   ],
+   "why": "For someone building multiomic models, this shows a concrete alternative to embedding-then-annotate pipelines: serialize measured expression as text alongside histology so the molecular input itself becomes editable and interpretable. It also demonstrates one model covering H&E-based spatial transcriptomics, Visium HD, and Xenium without retraining, which is relevant to cross-platform generalization.",
+   "limitations": "It is a bioRxiv preprint, and the abstract reports no quantitative benchmarks, so the accuracy claims cannot be verified from it. Edit-based interrogation is interpretive rather than causal, and whether caption-based alignment scales to genome-wide expression and holds up in clinical settings remains open.",
+   "source": "abstract only",
+   "model": "glm-5.3-flash"
+  }
  },
  "also": [
   {
-   "title": "Decoding super-enhancer regulatory grammar and pathogenic gain-of-function variants directly from DNA sequence",
+   "title": "A multimodal foundation model to integrate histology with spatial molecular programs",
    "authors": [
-    "Liang, Y.",
-    "Xu, X.",
-    "Mao, Y.",
-    "Zheng, Z.",
-    "Liu, N."
+    "Zhang, Z.",
+    "Qin, B.",
+    "Zhao, Y.",
+    "Qi, Z.",
+    "Xu, H.",
+    "Wang, Y.",
+    "Zheng, W.",
+    "Dai, J.",
+    "Chen, A.",
+    "Wang, N.",
+    "Nie, L.",
+    "Zhang, P."
    ],
-   "authorCount": 5,
+   "authorCount": 28,
    "venue": "bioRxiv",
    "preprint": true,
-   "date": "2026-10-14",
-   "doi": "10.64898/2026.10.11.756618",
-   "url": "https://doi.org/10.64898/2026.10.11.756618",
-   "abstract": "Super-enhancers (SEs) drive cell-identity gene expression, yet their identification relies on epigenomic profiling (e.g., H3K27ac ChIP-seq), precluding discovery in unprofiled cellular states and leaving their underlying sequence grammar unknown. Here, we present Borzoi-SE, a deep learning framework built upon the genomic transformer Borzoi that formulates SE discovery as hierarchical, cell-type-resolved genomic object detection directly from long-range sequence across 90 human lineages. Base-resolution attribution recovers lineage-defining master transcription factors across cell types. Within SEs shared across lineages, it reveals lineage-dependent motif usage, suggesting that the same regulatory regions can support distinct cell-type-specific programs. Using in silico ablation, Borzoi-SE decoded the functional hierarchy of the {beta}-globin super-enhancer, prioritizing hypersensitive site 2 (HS2) as the dominant constituent, which we experimentally verified via CRISPR interference. Trained without variant-effect labels, Borzoi-SE identified gain-of-super-enhancer variants in different tissues. At the CHRM2 locus, a single-nucleotide variant created a de novo glucocorticoid receptor (GR) motif that recruited activated GR and potentiated adjacent MEF2 regulatory syntax, nucleating a cardiac super-enhancer. Orthogonal multi-omics and population-genetic evidence linked this variant to increased CHRM2 expression and variation in resting heart rate and PR-interval duration. Borzoi-SE establishes a general framework for decoding SE regulatory grammar and prioritizing causal non-coding variants directly from sequence.",
+   "date": "2026-10-13",
+   "doi": "10.64898/2026.06.01.729028",
+   "url": "https://doi.org/10.64898/2026.06.01.729028",
+   "abstract": "Histology and spatial transcriptomics provide complementary views of cancer morphology and molecular organization, yet their spatial correspondence has not been learned at scale. We developed SQUALL, a multimodal foundation model pretrained on histMol, comprising 1.93 billion spatially aligned histology-transcriptomics spots/bins from 3,446 sections across 33 tissues and 12 platforms. By learning spatial morphology-molecular correspondences, SQUALL enables virtual spatial transcriptomics, tumor microenvironment characterization, and molecularly informed histology representations for clinical prediction. SQUALL generalized virtual spatial gene expression profiling across cohorts, cancers, and platforms. Its representations resolve tumor microenvironments including progression-associated tumor trajectories in breast cancer and recurrence-associated immune-excluded regions in ovarian tumor, together with underlying transcriptional programs. Applied to whole-slide histology, SQUALL enabled outcome and treatment-response prediction while revealing interpretable features associated with risk. Together, these results establish large-scale spatially aligned histology-transcriptomics pretraining as a general framework for connecting tissue morphology, molecular programs, microenvironmental organization, and clinical phenotypes.",
    "reasons": [
-    "transformer",
-    "deep learning",
-    "multiomics",
-    "epigenomics",
+    "foundation model",
+    "transcriptomics",
+    "spatial omics",
+    "scale",
+    "generalizes",
+    "validated"
+   ],
+   "score": 19
+  },
+  {
+   "title": "SPARCS enables scalable recovery of complex image-based phenotypes for genetic screening.",
+   "authors": [
+    "Schmacke",
+    "M&#xe4;dler",
+    "Wallmann",
+    "Metousis",
+    "Varlamova",
+    "Steigerwald",
+    "Christ",
+    "B&#xe9;routi",
+    "Harz",
+    "Leonhardt",
+    "Theis",
+    "Mann"
+   ],
+   "authorCount": 13,
+   "venue": "Cell",
+   "preprint": false,
+   "date": "2026-10-12",
+   "doi": "10.1016/j.cell.2026.09.021",
+   "url": "https://doi.org/10.1016/j.cell.2026.09.021",
+   "abstract": "Forward genetic screening links genotype to phenotype by introducing random genetic perturbations and identifying phenotype-altering mutations. Although genome-scale screens are routine for simple phenotypes in cultured cells, extending them to complex image-based phenotypes remains challenging. Here, we present spatially resolved CRISPR screening (SPARCS), a microscopy-based platform for forward genetic screening on single-cell images. SPARCS physically isolates mutants in situ by automated laser microdissection, enabling image-based screening at unprecedented scale with multimodal hit phenotyping. We demonstrate SPARCS in genome-wide CRISPR knockout screens of autophagosome formation and activation of the immune sensor STING across 70 million cells. Via machine learning-based image analysis, SPARCS recovered most macroautophagy genes and identified GPHR as a pH-dependent regulator of STING. Mass spectrometry-based proteomics of isolated hit cells revealed endoplasmic reticulum (ER)/Golgi disruption and nominated additional STING regulators via in silico perturbation modeling. These results establish SPARCS as a scalable platform for genome-wide genetic screening of complex cellular phenotypes with a proteome-level readout.",
+   "reasons": [
+    "AI",
+    "single-cell",
+    "perturbation",
+    "proteomics",
     "CRISPR",
     "genomics"
    ],
-   "score": 15
+   "score": 16
   },
   {
-   "title": "From Closed-Set Annotation to In-Context Discovery: Biologically Grounded LLMs for Cellular Profiling",
+   "title": "Functional alignment of protein language models via reinforcement learning.",
    "authors": [
-    "Gelard, M.",
-    "Benkirane, H.",
-    "Pierrot, T.",
-    "Cournede, P.-H.",
-    "P. de Almeida, B."
+    "Blalock",
+    "Seshadri",
+    "Nakamura",
+    "Babbar",
+    "Fahlberg",
+    "Kulkarni",
+    "Romero"
    ],
-   "authorCount": 5,
-   "venue": "bioRxiv",
-   "preprint": true,
+   "authorCount": 7,
+   "venue": "Nat Commun",
+   "preprint": false,
    "date": "2026-10-14",
-   "doi": "10.64898/2026.10.07.757352",
-   "url": "https://doi.org/10.64898/2026.10.07.757352",
-   "abstract": "Tumour heterogeneity reflects both cellular identity (lineage) and state (active transcriptional programs), yet computational methods generally analyse these axes separately. We introduce CellScribe, a generative framework that conditions a pretrained language model on frozen single cell foundation model embeddings through AdaLN adapters, enabling one shared model to generate an ontology- grounded cell type or a quantified meta-program profile. Supervised multitask fine- tuning produces fine grained typing across hundreds of cell types and outperforms generative and retrieval baselines on meta-program identification under study-holdout evaluation. We further train the model with reinforcement learning, scoring its generations against cell ontology distance and meta-program agreement, so that they align with biological knowledge rather than token agreement. To identify new cell types not present in the supervised training data, we post-train the model to read several labelled example cells in a single context, each conditioning its own text span, and infer the type of a query cell through in-context learning. CellScribe thus unifies cell identity and state in one generative interface, grounds both in biological structure, and identifies cell types outside the supervised vocabulary.",
+   "doi": "10.1038/s41467-026-77557-2",
+   "url": "https://doi.org/10.1038/s41467-026-77557-2",
+   "abstract": "Protein language models (pLMs) enable generative design of novel protein sequences but remain fundamentally misaligned with protein engineering goals, as they lack explicit understanding of function and often fail to improve properties beyond those found in nature. We introduce Reinforcement Learning from eXperimental Feedback (RLXF), a general framework that aligns protein language models with experimentally measured functional objectives, drawing inspiration from the methods used to align large language models like ChatGPT. Applied across five diverse protein families, RLXF improves generation of high-functioning variants beyond pre-trained baselines. We demonstrate this with CreiLOV, an oxygen-independent fluorescent protein, where RLXF-aligned models generate sequences with significantly enhanced fluorescence, including the most fluorescent CreiLOV variants reported to date. Our results indicate that RLXF-aligned models effectively integrate the evolutionary knowledge encoded in pre-trained pLMs with experimental observations, improving the success rate of generated sequences and enabling the discovery of synergistic mutation combinations that are difficult to identify through zero-shot or evolutionary approaches. RLXF provides a scalable and accessible approach to steer generative models toward desired biochemical properties, enabling function-driven protein design beyond the limits of natural evolution.",
    "reasons": [
-    "foundation model",
     "language model",
     "generative model",
     "zero-shot",
-    "single-cell"
+    "proteins",
+    "generalizes"
    ],
-   "score": 15
-  },
-  {
-   "title": "Representing biological concepts as directions in foundation model embeddings",
-   "authors": [
-    "Shamail, A.",
-    "McWhite, C. D."
-   ],
-   "authorCount": 2,
-   "venue": "bioRxiv",
-   "preprint": true,
-   "date": "2026-10-12",
-   "doi": "10.64898/2026.10.10.758204",
-   "url": "https://doi.org/10.64898/2026.10.10.758204",
-   "abstract": "Biological foundation models encode rich information about protein structure, function, and cellular state in high-dimensional embeddings, but accessing specific biological properties typically relies on additional, task-specific prediction models. Here, we show that diverse biological properties can be mapped to interpretable, reusable directions in embedding space. In the Concept Activation Vector (CAV) approach, examples representing a concept are distinguished from a background set using a linear model, and the resulting weight vector defines the CAV for that concept. In protein embeddings, CAVs recover Gene Ontology and Enzyme Commission annotations, localize Pfam domains, reveal novel structural relationships, and capture DNA-binding and protein-interaction interface specificity. In single-cell embeddings, CAVs isolate cancer-associated expression transitions, and gene variation along these axes substantially agrees with conventional differential-expression analysis despite being a distinct computational approach. Together, these results establish concept directions as a common representation, enabling diverse biological features to be compared, localized, and manipulated.",
-   "reasons": [
-    "foundation model",
-    "single-cell",
-    "proteins"
-   ],
-   "score": 14
+   "score": 18
   }
  ],
- "candidates": 97
+ "candidates": 367
 }

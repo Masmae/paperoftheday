@@ -1,110 +1,145 @@
 {
  "date": "2026-10-18",
- "pickedBy": "score",
+ "pickedBy": "qwen3.8-flash",
  "paper": {
-  "title": "Panoramic modelling of single-cell transcriptomes at scale with CellNet",
+  "title": "Tissue Reconstruction with Generative AI",
   "authors": [
-   "Xiaoqing Lian",
-   "Pei Liu",
-   "Jiahui Tan",
-   "Luoda Tan",
-   "Chaoyi Li",
-   "Quan Zou",
-   "Chen Lin",
-   "Xiangxiang Zeng"
+   "Yu, T.",
+   "Ekbote, C.",
+   "Morozov, N.",
+   "Herrera, A.",
+   "Fan, J.",
+   "Dominguez Mantes, A.",
+   "Novello, S.",
+   "Lashuel, H.",
+   "Frossard, P.",
+   "d'Ascoli, S.",
+   "La Manno, G.",
+   "Brbic, M."
   ],
-  "authorCount": 8,
-  "venue": "arXiv",
+  "authorCount": 12,
+  "venue": "bioRxiv",
   "preprint": true,
-  "date": "2026-10-15",
-  "doi": null,
-  "url": "https://arxiv.org/abs/2610.21943v1",
-  "abstract": "Comprehensively characterizing cellular diversity is critical for understanding tissue development, identifying disease-associated populations and investigating gene programmes linked to specialized functions. Advances in single-cell profiling reveal additional cell-specific transcripts and molecular associations, yet many foundation models represent only a restricted portion of this increasingly rich molecular information. Here we present CellNet, which enables panoramic modelling of single-cell transcriptomes by integrating DNA-derived gene identities and measured RNA expression in a shared image representation. Pretrained on 231 million cell profiles spanning 40 species, CellNet improves rare-population and condition-associated state recognition in evaluated cohorts while retaining competitive general cell representations. It predicts withheld coding-gene expression and selected non-coding targets in total-RNA data, and recovers lineage-specific expression patterns in spatial measurements. Prediction also extends across species, including to targets without expression-pretraining exposure. Its gene representations retrieve known non-coding modules and developmental or neural programmes, including from sparsely detected RNA queries. Together, these results establish CellNet as a scalable framework for interpreting cellular diversity through increasingly comprehensive transcriptomic measurements.",
+  "date": "2026-10-16",
+  "doi": "10.1101/2025.02.13.638045",
+  "url": "https://doi.org/10.1101/2025.02.13.638045",
+  "abstract": "The spatial arrangement of cells is fundamental to their function, but single-cell RNA sequencing dissociates cells from their native spatial context. We present LUNA, a generative AI model that reconstructs tissue architecture from dissociated gene expression profiles by learning spatial priors from spatially resolved transcriptomics datasets. We validate LUNA by reconstructing the MERFISH mouse brain atlas comprising over 1.2 million cells, inferring the spatial locations of dissociated cells in a mouse central nervous system single-cell RNA-sequencing atlas, and enriching the Slide-tags data by imputing the locations of nuclei lost during profiling. LUNA generalizes to previously unseen cell types in the MERFISH mouse brain atlas and to pathological samples, identifying regions of disease-associated alterations in a mouse model of Parkinson's disease. Our results establish generative tissue reconstruction as an approach for overcoming current technological limitations in spatial biology and advancing our understanding of tissue organization and function.",
   "reasons": [
-   "foundation model",
+   "generative model",
+   "AI",
    "single-cell",
-   "transcriptomics"
+   "transcriptomics",
+   "RNA-seq",
+   "generalizes"
   ],
-  "score": 14,
-  "tldr": null,
-  "why": null
+  "score": 17,
+  "tldr": "LUNA learns spatial priors from spatially resolved transcriptomics and uses them to reconstruct tissue architecture from dissociated single-cell expression profiles, generalizing to unseen cell types and pathological samples.",
+  "why": "This is a striking new AI capability: it uses generative models to recover spatial tissue organization from dissociated single-cell transcriptomes. The validation across large MERFISH atlases, mouse CNS scRNA-seq, and Slide-tags suggests it could turn existing expression datasets into pseudo-spatial resources and reveal disease-associated tissue architecture. It is directly relevant to transcriptomics and spatial multiomics, with a surprising and practically useful impact.",
+  "summary": {
+   "tldr": "LUNA is a generative AI model that assigns spatial coordinates to dissociated single-cell RNA-seq profiles by learning spatial priors from spatially resolved transcriptomics data.",
+   "background": "scRNA-seq destroys the spatial arrangement of cells, yet that arrangement strongly determines tissue function, so dissociated atlases lose a key axis of information. Recovering positions from expression alone is hard because individual gene profiles only weakly encode location, and the mapping depends on tissue context and having an appropriate spatial reference.",
+   "approach": "The authors built LUNA, a generative model that learns the relationship between gene expression profiles and spatial position from spatially resolved transcriptomics datasets, then uses that prior to reconstruct tissue architecture from dissociated profiles. They evaluated it in three settings: reconstructing the MERFISH mouse brain atlas, inferring coordinates for dissociated cells in a mouse central nervous system scRNA-seq atlas, and imputing the locations of nuclei lost during Slide-tags profiling. They also tested out-of-distribution behavior on unseen cell types and on pathological tissue from a Parkinson's disease mouse model.",
+   "findings": [
+    "LUNA reconstructed the MERFISH mouse brain atlas, spanning more than 1.2 million cells.",
+    "It inferred spatial locations for dissociated cells across a mouse CNS scRNA-seq atlas, adding spatial context to a purely dissociated dataset.",
+    "It recovered the positions of nuclei dropped during Slide-tags profiling, i.e., imputed missing cells in an existing spatial assay.",
+    "The model generalized to cell types it had not seen during training within the MERFISH mouse brain atlas.",
+    "On a mouse model of Parkinson's disease, it identified regions of disease-associated alterations, suggesting some robustness to pathological tissue."
+   ],
+   "why": "Spatial annotation normally requires running a spatial assay; LUNA instead transfers spatial information from existing references onto dissociated data, so legacy and large-scale scRNA-seq atlases could be spatialized without new experiments. For a researcher in AI for transcriptomics and multiomics, it is a concrete example of a generative model solving a coordinate-inference task and a potential component for adding a spatial modality to multiomic pipelines.",
+   "limitations": "The abstract reports no accuracy metrics, so reconstruction fidelity must be checked in the full paper, and validation is concentrated on mouse brain/CNS tissue. Since locations are inferred rather than measured, quality depends on how well the spatial reference matches the query tissue, and transfer to other organs, species, and human pathology remains open.",
+   "source": "abstract only",
+   "model": "glm-5.3-flash"
+  }
  },
  "also": [
   {
-   "title": "ProtModernBERT: Compute-Efficient Protein Language Modeling",
+   "title": "Panoramic modelling of single-cell transcriptomes at scale with CellNet",
    "authors": [
-    "Alberto Martínez",
-    "Natalia Flechas Manrique",
-    "Llorenç Espinosa-Portalés",
-    "Luc Andrea"
+    "Xiaoqing Lian",
+    "Pei Liu",
+    "Jiahui Tan",
+    "Luoda Tan",
+    "Chaoyi Li",
+    "Quan Zou",
+    "Chen Lin",
+    "Xiangxiang Zeng"
    ],
-   "authorCount": 4,
-   "venue": "arXiv",
-   "preprint": true,
-   "date": "2026-10-14",
-   "doi": null,
-   "url": "https://arxiv.org/abs/2610.19738v1",
-   "abstract": "Large protein language models provide a powerful framework for learning sequence-function relationships and guiding experimental design. However, architectural improvements are underexplored, especially in low-compute regimes of relevance for resource-constrained research laboratories. We show that the training cost for encoder-only transformer architectures can be reduced by leveraging modern architectural refinements, offering an encouraging performance / compute-efficiency trade-off. We introduce ProtModernBERT, a modernized BERT-style model pre-trained on amino acid sequences, and compare it with ProtBert, Amplify, and ESM2 across a set of supervised structural tasks -encompassing secondary structure prediction, disorder prediction, and subcellular localization- and ProteinGym's zero-shot functional benchmark. We find that ProtModernBERT matches or closely tracks the performance of Amplify-120M and ProtBert with up to 80-90\\% reduction in pre-training FLOPs, and narrows the gap to ESM2 when controlling for pre-training. Our analysis using a cluster-based validation protocol for hyperparameter selection and randomly initialized models disentangles the contributions of architecture and data, showing that modern components provide stronger inductive biases that are more consequential than parameter count in low-compute regimes.",
-   "reasons": [
-    "language model",
-    "transformer",
-    "zero-shot",
-    "proteins"
-   ],
-   "score": 14
-  },
-  {
-   "title": "What comes after de novo? Automated lead optimization of proteins with CRADLE-1",
-   "authors": [
-    "Bixby, E.",
-    "Brunner, G.",
-    "Danciu, D.",
-    "Dela Rosa, R.",
-    "Deutschmann, N.",
-    "Ferragu, C.",
-    "Geiger, F.",
-    "Holberg, C.",
-    "Kidger, P.",
-    "Lindoulsi, A.",
-    "Lutz, N.",
-    "McColgan, T."
-   ],
-   "authorCount": 23,
-   "venue": "bioRxiv",
-   "preprint": true,
-   "date": "2026-10-16",
-   "doi": "10.64898/2026.03.06.710001",
-   "url": "https://doi.org/10.64898/2026.03.06.710001",
-   "abstract": "Lead optimization remains the longest and most expensive step in pre-clinical drug discovery, typically consuming 12-36 months whilst costing $5M-$15M per candidate. We introduce 'CRADLE-1', an automated framework for protein engineering. While CRADLE-1 supports the full process of drug discovery and industrial protein engineering pipelines, including hit identification and de novo binder design, this work focuses on its application to multi-property lead optimization across protein modalities (VHHs, scFvs, IgGs, peptides, enzymes, CRISPR systems, vaccines). We show it is 4-7x faster than rational design, as measured by the number of wet lab rounds required. We provide in-vitro validation across all of the above modalities, typically optimizing multiple properties simultaneously (single and polyspecific binding down to picomolar, activity, thermostability, ...). Technically, CRADLE-1 starts with pre-trained foundation protein language models (PLMs), which are fine-tuned in unsupervised fashion on evolutionary neighborhoods, in supervised fashion using lab-in-the-loop data, and then deployed in a multi-model workflow. Of additional interest, we find that (a) the end-to-end system may be run in automated fashion; (b) wet lab data may be consumed in 'black box' fashion without knowledge of the underlying biochemical mechanisms; (c) structural data may largely be superseded by sequence-function pairs.",
-   "reasons": [
-    "language model",
-    "proteins",
-    "CRISPR",
-    "drug discovery"
-   ],
-   "score": 13
-  },
-  {
-   "title": "AutoOnboarder: Autonomously Onboarding LLM Agents",
-   "authors": [
-    "Tanay Arora",
-    "Cong Liu"
-   ],
-   "authorCount": 2,
+   "authorCount": 8,
    "venue": "arXiv",
    "preprint": true,
    "date": "2026-10-15",
    "doi": null,
-   "url": "https://arxiv.org/abs/2610.21218v1",
-   "abstract": "Agentic large language models have been documented to lose reasoning capability when placed inside a harness, the software that mediates their observations and actions. To reconcile these losses, we introduce AutoOnboarder, an autonomous system that adapts an agent to a task the way a trainer onboards a new employee. It places the agent under the supervision of an intelligent ``Onboarder'' coding agent, which iteratively tailors its foundation model, prompt, and harness source code to simultaneously improve performance and decrease cost. Like a real onboarding process, the Onboarder is only given tens of examples, and all evaluation data is isolated on a separate virtual machine to prevent leakage. We report the lessons learned from building and testing AutoOnboarder on genomic-sequencing prior authorization form submission. Autonomously onboarded agents are able to match or exceed the performance of a Gemini 3.5 Flash baseline at up to 29$\\times$ lower costs. However, these agents remain imperfect, and the Onboarding process varies greatly in terms of final performance. We conclude that future Onboarding systems require a robust environment for the Onboarder, including a structured thought interface, (controlled) internet access, and a wide model search space.",
+   "url": "https://arxiv.org/abs/2610.21943v1",
+   "abstract": "Comprehensively characterizing cellular diversity is critical for understanding tissue development, identifying disease-associated populations and investigating gene programmes linked to specialized functions. Advances in single-cell profiling reveal additional cell-specific transcripts and molecular associations, yet many foundation models represent only a restricted portion of this increasingly rich molecular information. Here we present CellNet, which enables panoramic modelling of single-cell transcriptomes by integrating DNA-derived gene identities and measured RNA expression in a shared image representation. Pretrained on 231 million cell profiles spanning 40 species, CellNet improves rare-population and condition-associated state recognition in evaluated cohorts while retaining competitive general cell representations. It predicts withheld coding-gene expression and selected non-coding targets in total-RNA data, and recovers lineage-specific expression patterns in spatial measurements. Prediction also extends across species, including to targets without expression-pretraining exposure. Its gene representations retrieve known non-coding modules and developmental or neural programmes, including from sparsely detected RNA queries. Together, these results establish CellNet as a scalable framework for interpreting cellular diversity through increasingly comprehensive transcriptomic measurements.",
    "reasons": [
     "foundation model",
-    "language model",
-    "AI agents",
+    "single-cell",
+    "transcriptomics",
+    "scale"
+   ],
+   "score": 16
+  },
+  {
+   "title": "Coordinated Enhancement of Molecular and Spatial Fidelity for Biological Inference in Spatial Transcriptomics",
+   "authors": [
+    "Wang, X.",
+    "Que, N.",
+    "Liu, H.",
+    "Tao, C.",
+    "Jiang, Y.",
+    "Jiang, Y.",
+    "Zhu, P.",
+    "Xu, J.",
+    "Yan, H.",
+    "Ye, B.",
+    "Price, S.",
+    "Xi, J."
+   ],
+   "authorCount": 14,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-12",
+   "doi": "10.64898/2025.12.23.696267",
+   "url": "https://doi.org/10.64898/2025.12.23.696267",
+   "abstract": "Understanding tissue organization requires accurate molecular quantification and faithful spatial localization. Spatial omics, particularly spatial transcriptomics (ST), face measurement trade-offs that limit simultaneous achievement of molecular and spatial fidelity across spatial resolution, detection sensitivity, molecular-tissue alignment and cell-level fidelity. Existing computational methods typically target individual aspects and optimize them in isolation, despite their interdependence. Here we present FOCUS, a multimodal generative foundation model for coordinated ST enhancement. FOCUS integrates native ST with histology images, cell masks, scRNA-seq references and spatial co-expression priors through task-specific modules, with cross-task coordination enabling joint correction of co-occurring limitations. FOCUS improved the performance of individual enhancement tasks and provided additional gains with coordinated mitigation of coupled limitations. Across immunology, tissue development and oncology, FOCUS recovered biologically consistent patterns obscured in native ST or isolated enhancement, enabling clearer inference of neutrophil-tumor interactions, spatial osteocyte differentiation and primary-metastatic HNSCC programs. Together, FOCUS establishes coordinated enhancement of molecular and spatial fidelity as a strategy for downstream biological inference from ST.",
+   "reasons": [
+    "foundation model",
+    "generative model",
+    "transcriptomics",
+    "spatial omics",
+    "RNA-seq",
+    "scale"
+   ],
+   "score": 20
+  },
+  {
+   "title": "Latent causal diffusions for single-cell perturbation modeling.",
+   "authors": [
+    "Lorch",
+    "Zhang",
+    "Bunne",
+    "Krause",
+    "Sch&#xf6;lkopf",
+    "Uhler"
+   ],
+   "authorCount": 6,
+   "venue": "Proc Natl Acad Sci U S A",
+   "preprint": false,
+   "date": "2026-10-12",
+   "doi": "10.1073/pnas.2602630123",
+   "url": "https://doi.org/10.1073/pnas.2602630123",
+   "abstract": "Perturbation screens hold the potential to systematically map regulatory processes at single-cell resolution, yet modeling and predicting transcriptome-wide responses to perturbations remains a major computational challenge. Existing methods often underperform simple baselines, fail to disentangle measurement noise from biological signal, and provide limited insight into the causal structure governing cellular responses. Here, we present the latent causal diffusion (LCD), a generative model that frames single-cell gene expression as a stationary diffusion process observed under measurement noise. LCD outperforms established approaches in predicting the distributional shifts of unseen perturbation combinations in single-cell RNA-sequencing screens while simultaneously learning a mechanistic dynamical system of gene regulation. To interpret these learned dynamics, we develop an approach we call causal linearization via perturbation responses (CLIPR), which yields an approximation of the direct causal effects between all genes modeled by the diffusion. CLIPR provably identifies causal effects under a linear drift assumption and recovers causal structure in both simulated systems and a genome-wide perturbation screen, where it clusters genes into coherent functional modules and resolves causal relationships that standard differential expression analysis cannot. The LCD-CLIPR framework bridges generative modeling with causal inference to predict unseen perturbation effects and map the underlying regulatory mechanisms of the transcriptome.",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "transcriptomics",
+    "perturbation",
+    "RNA-seq",
     "genomics"
    ],
-   "score": 13
+   "score": 16
   }
  ],
- "candidates": 35
+ "candidates": 330
 }

@@ -1,117 +1,165 @@
 {
  "date": "2026-10-12",
- "pickedBy": "score",
+ "pickedBy": "glm-5.3-flash",
  "paper": {
-  "title": "DECONVersation: Single Cell Foundation Model-Derived Embeddings for Robust Cell Type Deconvolution of Bulk RNA-seq",
+  "title": "Genome modelling and design across all domains of life with Evo 2",
   "authors": [
-   "Oku, A.",
-   "Geiger, H.",
-   "Robine, N.",
-   "Fu, R."
+   "Garyk Brixi",
+   "Matthew G. Durrant",
+   "Jerome Ku",
+   "Mohsen Naghipourfar",
+   "Michael Poli",
+   "Gwanggyu Sun",
+   "Greg Brockman",
+   "Daniel Chang",
+   "Alison Fanton",
+   "Gabriel A. Gonzalez",
+   "Samuel H. King",
+   "David B. Li"
   ],
-  "authorCount": 4,
-  "venue": "bioRxiv",
-  "preprint": true,
-  "date": "2026-10-09",
-  "doi": "10.64898/2026.10.02.756356",
-  "url": "https://doi.org/10.64898/2026.10.02.756356",
-  "abstract": "AI and deep learning have transformed single-cell transcriptomics, empowering unsupervised annotation, trajectory inference, and cross-dataset integration at scale. Here, we propose bulk RNA-seq deconvolution as a novel task for single-cell foundation models. Deconvolution estimates cell type proportions from bulk RNA-seq using single-cell reference data, with applications spanning tumor microenvironment profiling to the detection of disease-associated shifts in tissue composition. However, existing methods remain vulnerable to batch effects, subject-level variation, and marker gene selection sensitivity. We introduce DECONVersation, which leverages embeddings from pretrained and fine-tuned single-cell foundation models, coupled with a non-negative least squares solver, to estimate cell type proportions. Foundation model embeddings are robust to batch effects and implicitly encode complex gene relationships, sidestepping explicit marker gene selection. Benchmarked against MuSiC, DWLS, and BayesPrism, DECONVersation achieved comparable or superior performance across diverse tissues. Performance further improved with tissue-specific fine-tuning.",
+  "authorCount": 62,
+  "venue": "Nature",
+  "preprint": false,
+  "date": "2026-03-04",
+  "doi": "10.1038/s41586-026-10176-5",
+  "url": "https://doi.org/10.1038/s41586-026-10176-5",
+  "abstract": "All of life encodes information with DNA. Although tools for genome sequencing, synthesis and editing have transformed biological research, we still lack sufficient understanding of the immense complexity encoded by genomes to predict the effects of many classes of genomic changes or to intelligently compose new biological systems. Artificial intelligence models that learn information from genomic sequences across diverse organisms have increasingly advanced prediction and design capabilities1,2. Here we introduce Evo 2, a biological foundation model trained on 9 trillion DNA base pairs from a highly curated genomic atlas spanning all domains of life to have a 1 million token context window with single-nucleotide resolution. Evo 2 learns to accurately predict the functional impacts of genetic variation—from noncoding pathogenic mutations to clinically significant BRCA1 variants—without task-specific fine-tuning. Mechanistic interpretability analyses reveal that Evo 2 learns representations associated with biological features, including exon–intron boundaries, transcription factor binding sites, protein structural elements and prophage genomic regions. The generative abilities of Evo 2 produce mitochondrial, prokaryotic and eukaryotic sequences at genome scale with greater naturalness and coherence than previous methods. Evo 2 also generates experimentally validated chromatin accessibility patterns when guided by predictive models3,4 and inference-time search. We have made Evo 2 fully open, including model parameters, training code5, inference code and the OpenGenome2 dataset, to accelerate the exploration and design of biological complexity. Evo 2 is an artificial intelligence-based biological foundation model trained on 9 trillion DNA base pairs spanning all domains of life that predicts functional properties from genomic sequences and provides a rich generative model for researchers in biology.",
   "reasons": [
    "foundation model",
-   "deep learning",
+   "generative model",
    "AI",
-   "single-cell",
-   "transcriptomics",
-   "RNA-seq"
+   "epigenomics",
+   "genomics",
+   "scale"
   ],
-  "score": 19,
-  "tldr": null,
-  "why": null
+  "score": 27.3693828616352,
+  "classic": true,
+  "citations": 153,
+  "year": 2026,
+  "tldr": "Built a DNA foundation model across all domains of life that predicts the functional impact of mutations without fine-tuning, reveals interpretable biological features, and generates coherent genome-scale sequences including experimentally validated chromatin accessibility patterns.",
+  "why": "Evo 2 is a genome-scale foundation model trained on 9 trillion bases spanning all domains of life, with a 1Mbp context, zero-shot prediction of variant effects (including BRCA1), mechanistic interpretability, genome-scale generation with experimental validation, and full openness of model, code, and data. It defines a new capability class for DNA modeling and design that the whole field can immediately reuse. It edges out its predecessor Evo and other strong candidates on scale, generality, and openness.",
+  "summary": {
+   "tldr": "Evo 2 is an open 7B/40B-parameter DNA foundation model (StripedHyena 2 architecture) trained on 9.3 trillion tokens across all domains of life with 1-Mb context and single-nucleotide resolution, enabling zero-shot variant-effect prediction, interpretable genomic features, and genome-scale generation including experimentally validated chromatin accessibility design.",
+   "background": "Genomic language models have so far been mostly prokaryote-only or short-context, handling eukaryotic gene regulation, long-range interactions, and indels poorly. A generalist model is hard to build because it requires curated data spanning all of life, architectures efficient at million-base contexts, and evaluation without task-specific labels.",
+   "approach": "The authors trained Evo 2 7B (2.4T tokens) and 40B (9.3T tokens) on OpenGenome2 (~8.8T nucleotides from bacteria, archaea, eukarya, phage; eukaryotic-infecting virus sequences excluded), using two-phase training (8,192-token pretraining, then midtraining to 1M context) with the StripedHyena 2 multi-hybrid convolution architecture (~3x throughput vs Transformers at 1M context, 40B scale). They evaluated zero-shot likelihoods for mutation effects, trained a Batch-TopK sparse autoencoder on layer-26 representations (1B tokens) for interpretability, generated genomes autoregressively, and used beam search guided by an Enformer/Borzoi ensemble to design DNA with specified chromatin accessibility.",
+   "findings": [
+    "Zero-shot on ClinVar, Evo 2 was best of all methods tested on coding and noncoding non-SNVs (indels/duplications), which AlphaMissense and GPN-MSA cannot score, though it trailed ESM-1b/GPN-MSA on coding SNVs.",
+    "A ridge classifier on Evo 2 40B embeddings classified BRCA1 loss-of-function variants at AUROC 0.95 / AUPRC 0.88 (n=789 test set); zero-shot it beat all models on BRCA1 noncoding SNVs.",
+    "SAE features align with prophages, exon-intron boundaries, TF binding motifs (recalling 70% of HOCOMOCO promoter motifs vs 35% for HOMER), and protein secondary structure, and transfer to woolly mammoth sequence.",
+    "Generation: 580-kb M. genitalium genomes where ~70% of predicted genes have Pfam hits (vs 18% for Evo 1), plus human mitochondrial genomes with correct CDS/tRNA/rRNA counts and ~330-kb yeast chromosome sequences with intronic genes.",
+    "Designed 1-4 kb chromatin accessibility patterns validated by ATAC-seq in human cells: 33/36 designs (92%) reached AUROC > 0.8 within-sequence, while cell-type-specific designs were harder (4/24 with >2-fold differential accessibility)."
+   ],
+   "why": "For transcriptomics and multiomics, Evo 2 provides single-nucleotide-resolution embeddings spanning promoter-to-distal regulatory distances, useful for interpreting regulatory variants, annotating non-model species, and as inputs to lightweight supervised heads for splicing, expression, or chromatin phenotypes. Its coupling of a general sequence generator with sequence-to-function oracles (Enformer/Borzoi) via inference-time search is a reusable template for designing regulatory DNA with controllable epigenomic outcomes.",
+   "limitations": "Generated genomes are not shown to be functional (essential genes are missing, nothing replication-tested), and prediction still trails supervised models on distal regulatory variants (DART-eval caQTL AUROC 0.58 vs 0.77 for ChromBPNet) and on protein deep mutational scanning. Human gene essentiality prediction is modest (AUROC 0.66), and the model was trained without any human variation or functional genomics data.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash"
+  }
  },
  "also": [
   {
-   "title": "Coordinated Enhancement of Molecular and Spatial Fidelity for Biological Inference in Spatial Transcriptomics",
+   "title": "A foundation model of transcription across human cell types",
    "authors": [
-    "Wang, X.",
-    "Que, N.",
-    "Liu, H.",
-    "Tao, C.",
-    "Jiang, Y.",
-    "Jiang, Y.",
-    "Zhu, P.",
-    "Xu, J.",
-    "Yan, H.",
-    "Ye, B.",
-    "Price, S.",
-    "Xi, J."
+    "Xi Fu",
+    "Shentong Mo",
+    "Alejandro Buendia",
+    "Anouchka P. Laurent",
+    "Anqi Shao",
+    "María del Mar Álvarez‐Torres",
+    "Tianji Yu",
+    "Jimin Tan",
+    "Jiayu Su",
+    "Romella Sagatelian",
+    "Adolfo A. Ferrando",
+    "Alberto Ciccia"
    ],
-   "authorCount": 14,
-   "venue": "bioRxiv",
-   "preprint": true,
-   "date": "2026-10-12",
-   "doi": "10.64898/2025.12.23.696267",
-   "url": "https://doi.org/10.64898/2025.12.23.696267",
-   "abstract": "Understanding tissue organization requires accurate molecular quantification and faithful spatial localization. Spatial omics, particularly spatial transcriptomics (ST), face measurement trade-offs that limit simultaneous achievement of molecular and spatial fidelity across spatial resolution, detection sensitivity, molecular-tissue alignment and cell-level fidelity. Existing computational methods typically target individual aspects and optimize them in isolation, despite their interdependence. Here we present FOCUS, a multimodal generative foundation model for coordinated ST enhancement. FOCUS integrates native ST with histology images, cell masks, scRNA-seq references and spatial co-expression priors through task-specific modules, with cross-task coordination enabling joint correction of co-occurring limitations. FOCUS improved the performance of individual enhancement tasks and provided additional gains with coordinated mitigation of coupled limitations. Across immunology, tissue development and oncology, FOCUS recovered biologically consistent patterns obscured in native ST or isolated enhancement, enabling clearer inference of neutrophil-tumor interactions, spatial osteocyte differentiation and primary-metastatic HNSCC programs. Together, FOCUS establishes coordinated enhancement of molecular and spatial fidelity as a strategy for downstream biological inference from ST.",
+   "authorCount": 17,
+   "venue": "Nature",
+   "preprint": false,
+   "date": "2025-01-08",
+   "doi": "10.1038/s41586-024-08391-z",
+   "url": "https://doi.org/10.1038/s41586-024-08391-z",
+   "abstract": "Transcriptional regulation, involving the complex interplay between regulatory sequences and proteins, directs all biological processes. Computational models of transcription lack generalizability to accurately extrapolate in unseen cell types and conditions. Here, we introduce GET, an interpretable foundation model designed to uncover regulatory grammars across 213 human fetal and adult cell types. Relying exclusively on chromatin accessibility data and sequence information, GET achieves experimental-level accuracy in predicting gene expression even in previously unseen cell types. GET showcases remarkable adaptability across new sequencing platforms and assays, enabling regulatory inference across a broad range of cell types and conditions, and uncovering universal and cell type specific transcription factor interaction networks. We evaluated its performance on prediction of regulatory activity, inference of regulatory elements and regulators, and identification of physical interactions between transcription factors. Specifically, we show GET outperforms current models in predicting lentivirus-based massive parallel reporter assay readout with reduced input data. In fetal erythroblasts, we identify distal (>1Mbp) regulatory regions that were missed by previous models. In B cells, we identified a lymphocyte-specific transcription factor-transcription factor interaction that explains the functional significance of a leukemia-risk predisposing germline mutation. In sum, we provide a generalizable and accurate model for transcription together with catalogs of gene regulation and transcription factor interactions, all with cell type specificity.",
    "reasons": [
     "foundation model",
-    "generative model",
-    "transcriptomics",
-    "spatial omics",
-    "RNA-seq"
+    "epigenomics",
+    "scale",
+    "generalizes"
    ],
-   "score": 18
+   "score": 22.221179420598496,
+   "classic": true,
+   "citations": 129,
+   "year": 2025
   },
   {
-   "title": "AI-Driven Design of Next-Generation Immunoinformatics Multi-Epitope Subunit Vaccine Targeting the Most Virulent Mpox Proteome: A Structural and Kinetic Validation Framework",
+   "title": "Sequence modeling and design from molecular to genome scale with Evo",
    "authors": [
-    "Emon, M.",
-    "Siddiqque, N. H.",
-    "Haque, M. E."
+    "Eric Nguyen",
+    "Michael Poli",
+    "Matthew G. Durrant",
+    "Brian Kang",
+    "Dhruva Katrekar",
+    "David B. Li",
+    "Liam J. Bartie",
+    "Armin W. Thomas",
+    "Samuel H. King",
+    "Garyk Brixi",
+    "Jeremy Sullivan",
+    "Madelena Y. Ng"
    ],
-   "authorCount": 3,
-   "venue": "bioRxiv",
-   "preprint": true,
-   "date": "2026-10-11",
-   "doi": "10.64898/2026.10.04.756542",
-   "url": "https://doi.org/10.64898/2026.10.04.756542",
-   "abstract": "The resurgence of the Mpox virus (MPXV) highlights the urgent need for scalable, mutation-resistant countermeasures. Slow development timelines hinder traditional empirical vaccine discovery, while conventional vaccinology often yields high false-positive rates because it relies on static, linear sequence-based screening. These classical informatics filters consistently fail to predict physical structural stability or the dynamic presentation of immune cells under physiological conditions, creating a distinct translational gap between computational design and in vitro efficacy. To address these limitations, here we engineered an advanced, AI-augmented vaccine discovery pipeline targeting the most virulent components of the MPXV proteome. We systematically screened eight critical viral targets essential for replication, membrane morphogenesis, and host-cell entry to map highly conserved T-cell and B-cell epitopes. Moving beyond standard heuristic filtering, we implemented a high-fidelity deep learning validation layer: ESM-2 protein language models (pLMs) were deployed to calculate pseudo-perplexity scores across chimeric linker junctions (EAAAK, GPGPG) to guarantee structural naturalness, MHCflurry ensemble models successfully verified active intracellular antigen presentation, and structure-informed graph neural networks (GNNs) simulated the physical node-attention dynamics of the immune synapse. Finally, recurrent neural networks (RNNs)-driven mRNA kinetic modeling optimized translation initiation rates and minimum free energy profiles during in silico cloning. This multi-layered pipeline successfully yielded three structurally refined, multi-epitope vaccine constructs optimized for maximum global population coverage. ESM-2 structural validation confirmed exceptionally low perplexity scores at structural junctions, indicating that the engineered chimaeras have native-like stability and a minimized risk of proteolysis. GNN-based immune synapse modeling demonstrated highly stable binding kinetics and robust binding free energies between the target epitopes and human HLA alleles. Furthermore, RNN kinetic optimizations established that the cDNA sequences are optimized for high-yield expression in heterologous expression hosts without risk of ribosomal stalling or translational bottlenecks. This study establishes a deep learning-augmented framework that bridges the gap between theoretical sequence optimization and biopharmaceutical scalability. By validating the structural naturalness, real-world immunogenicity, and manufacturing kinetics of our vaccine chimeras, this framework presents a robust, proactive paradigm for rapid vaccine architecture against emerging orthopoxvirus threats.",
-   "reasons": [
-    "language model",
-    "deep learning",
-    "graph neural network",
-    "AI",
-    "proteomics",
-    "proteins"
-   ],
-   "score": 17
-  },
-  {
-   "title": "ProFormer: generalizable classification of single-cell and plasma proteomes using deep learning.",
-   "authors": [
-    "Krull",
-    "K&#xfc;hn",
-    "H&#xf6;hn",
-    "Ali",
-    "Otterbein",
-    "Brinker",
-    "Krijgsveld"
-   ],
-   "authorCount": 7,
-   "venue": "Nat Commun",
+   "authorCount": 20,
+   "venue": "Science",
    "preprint": false,
-   "date": "2026-10-12",
-   "doi": "10.1038/s41467-026-78143-2",
-   "url": "https://doi.org/10.1038/s41467-026-78143-2",
-   "abstract": "Proteins are the main drivers of cell function and disease, making proteomics a powerful technique for biomarker discovery and defining cell identity. While current technologies can profile thousands of proteins and reach single-cell sensitivity, limited throughput restricts applications such as robust classification of large biological or clinical cohorts. To close this gap, we present a deep-learning (DL) approach for the direct analysis of mass spectrometric (MS) data, assigning proteomic profiles to sample identity. Specifically, we introduce the ProFormer, a transformer pipeline that classifies samples by tabular MS1-level features derived from peptide ions, eliminating the need for time-consuming data interpretation. The ProFormer outperforms traditional machine-learning and image-based convolutional neural networks (CNNs), demonstrating enhanced classification and generalization over 14 evaluated architectures. We further provide detailed insights into how the ProFormer dynamically aggregates MS1 data, while preserving signal contribution and enabling explainable AI at single-peptide resolution. Applied to diverse LC-MS data sets, the ProFormer accurately classified single-cell proteomes by cell type, cycle stage or differentiation trajectory, as well as patient disease status from plasma proteomes. Thereby, the ProFormer provides a versatile and rapid framework for the classification of proteomic data, with important implications for patient stratification, early detection and single-cell analysis.",
+   "date": "2024-11-14",
+   "doi": "10.1126/science.ado9336",
+   "url": "https://doi.org/10.1126/science.ado9336",
+   "abstract": "The genome is a sequence that completely encodes the DNA, RNA, and proteins that orchestrate the function of a whole organism. Advances in machine learning combined with massive datasets of whole genomes could enable a biological foundation model that accelerates the mechanistic understanding and generative design of complex molecular interactions. We report Evo, a genomic foundation model that enables prediction and generation tasks from the molecular to genome scale. Using an architecture based on advances in deep signal processing, we scale Evo to 7 billion parameters with a context length of 131 kilobases (kb) at single-nucleotide, byte resolution. Trained on whole prokaryotic genomes, Evo can generalize across the three fundamental modalities of the central dogma of molecular biology to perform zero-shot function prediction that is competitive with, or outperforms, leading domain-specific language models. Evo also excels at multi-element generation tasks, which we demonstrate by generating synthetic CRISPR-Cas molecular complexes and entire transposable systems for the first time. Using information learned over whole genomes, Evo can also predict gene essentiality at nucleotide resolution and can generate coding-rich sequences up to 650 kb in length, orders of magnitude longer than previous methods. Advances in multi-modal and multi-scale learning with Evo provides a promising path toward improving our understanding and control of biology across multiple levels of complexity.",
    "reasons": [
-    "transformer",
+    "foundation model",
+    "language model",
+    "generative model",
+    "AI",
+    "zero-shot",
+    "CRISPR"
+   ],
+   "score": 28.526855987125874,
+   "classic": true,
+   "citations": 580,
+   "year": 2024
+  },
+  {
+   "title": "Spatial transcriptomic clocks reveal cell proximity effects in brain ageing",
+   "authors": [
+    "Eric Sun",
+    "Olivia Y. Zhou",
+    "Max Hauptschein",
+    "Nimrod Rappoport",
+    "Lucy Xu",
+    "Paloma Navarro Negredo",
+    "Ling A. Liu",
+    "Thomas A. Rando",
+    "James Zou",
+    "Anne Brunet"
+   ],
+   "authorCount": 10,
+   "venue": "Nature",
+   "preprint": false,
+   "date": "2024-12-18",
+   "doi": "10.1038/s41586-024-08334-8",
+   "url": "https://doi.org/10.1038/s41586-024-08334-8",
+   "abstract": "Old age is associated with a decline in cognitive function and an increase in neurodegenerative disease risk1. Brain ageing is complex and is accompanied by many cellular changes2. Furthermore, the influence that aged cells have on neighbouring cells and how this contributes to tissue decline is unknown. More generally, the tools to systematically address this question in ageing tissues have not yet been developed. Here we generate a spatially resolved single-cell transcriptomics brain atlas of 4.2 million cells from 20 distinct ages across the adult lifespan and across two rejuvenating interventions—exercise and partial reprogramming. We build spatial ageing clocks, machine learning models trained on this spatial transcriptomics atlas, to identify spatial and cell-type-specific transcriptomic fingerprints of ageing, rejuvenation and disease, including for rare cell types. Using spatial ageing clocks and deep learning, we find that T cells, which increasingly infiltrate the brain with age, have a marked pro-ageing proximity effect on neighbouring cells. Surprisingly, neural stem cells have a strong pro-rejuvenating proximity effect on neighbouring cells. We also identify potential mediators of the pro-ageing effect of T cells and the pro-rejuvenating effect of neural stem cells on their neighbours. These results suggest that rare cell types can have a potent influence on their neighbours and could be targeted to counter tissue ageing. Spatial ageing clocks represent a useful tool for studying cell–cell interactions in spatial contexts and should allow scalable assessment of the efficacy of interventions for ageing and disease. A spatially resolved single-cell transcriptomics map of the mouse brain at different ages reveals signatures of ageing, rejuvenation and disease, including ageing effects associated with T cells and rejuvenation associated with neural stem cells.",
+   "reasons": [
     "deep learning",
+    "generative model",
     "AI",
     "single-cell",
-    "proteomics"
+    "transcriptomics",
+    "spatial omics"
    ],
-   "score": 16
+   "score": 25.90848501887865,
+   "classic": true,
+   "citations": 90,
+   "year": 2024
   }
  ],
- "candidates": 95
+ "candidates": 343
 }

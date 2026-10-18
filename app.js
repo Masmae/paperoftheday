@@ -62,23 +62,42 @@ function paperView(rec) {
     saveBtn.className = "btn" + (isSaved() ? " on" : ""); saveBtn.textContent = isSaved() ? "★ Saved" : "☆ Save";
   } }, isSaved() ? "★ Saved" : "☆ Save");
   const abstract = h("p", { class: "abstract clamp" }, p.abstract);
-  const listenBtn = speech ? h("button", { class: "btn", "aria-label": "Listen to this paper", onclick: () => {
-    if (speaking) { stopSpeaking(); listenBtn.textContent = "▶ Listen"; return; }
-    listenBtn.textContent = "■ Stop";
-    speak([p.title + ".", p.why ? "Why it matters. " + p.why : null, p.tldr, "Abstract. " + p.abstract], () => { listenBtn.textContent = "▶ Listen"; });
-  } }, "▶ Listen") : null;
+  const sm = p.summary;
+  const summaryText = sm ? [p.title + ".", sm.tldr, "Background. " + sm.background, "What they did. " + sm.approach,
+    "Key findings. " + sm.findings.join(" "), "Why it matters. " + sm.why, "Limitations. " + sm.limitations] : null;
+  const abstractText = [p.title + ".", "Abstract. " + p.abstract];
+  const listenRow = h("div", { class: "listen" });
+  const drawListen = () => {
+    if (!speech) return listenRow.replaceChildren();
+    if (speaking) return listenRow.replaceChildren(h("button", { class: "btn on", onclick: () => { stopSpeaking(); drawListen(); } }, "■ Stop"));
+    const play = (parts) => { speak(parts, drawListen); drawListen(); };
+    listenRow.replaceChildren(h("span", { class: "label" }, "▶ Listen:"),
+      sm ? h("button", { class: "btn", onclick: () => play(summaryText) }, "AI summary") : null,
+      h("button", { class: "btn", onclick: () => play(abstractText) }, "Abstract"));
+  };
+  drawListen();
   const more = h("button", { class: "link", onclick: () => { abstract.classList.remove("clamp"); more.remove(); } }, "Read full abstract");
   return [
-    h("div", { class: "kicker" }, h("span", {}, p.venue), p.preprint ? h("span", { class: "pre" }, "Preprint") : null, h("span", { class: "pre" }, p.date)),
+    h("div", { class: "kicker" }, p.classic ? h("span", { class: "classic" }, "Classic") : null, h("span", {}, p.venue),
+      p.preprint ? h("span", { class: "pre" }, "Preprint") : null,
+      h("span", { class: "pre" }, p.classic ? `${p.year} · ${p.citations.toLocaleString()} citations` : p.date)),
     h("h2", { class: "title" }, p.title),
     h("div", { class: "authors" }, authorLine(p)),
-    p.why ? h("div", { class: "why" }, h("b", {}, "Why it matters"), h("p", {}, p.why)) : null,
-    p.tldr ? h("p", { class: "tldr" }, p.tldr) : null,
+    sm ? h("section", { class: "summary" },
+      h("div", { class: "summary-head" }, h("b", {}, "AI summary"), h("span", { class: "src" }, sm.source === "abstract only" ? "from the abstract" : `from the ${sm.source}`)),
+      h("p", { class: "tldr" }, sm.tldr),
+      h("h4", {}, "Background"), h("p", {}, sm.background),
+      h("h4", {}, "What they did"), h("p", {}, sm.approach),
+      h("h4", {}, "Key findings"), h("ul", {}, sm.findings.map((f) => h("li", {}, f))),
+      h("h4", {}, "Why it matters"), h("p", {}, sm.why),
+      h("h4", {}, "Limitations"), h("p", {}, sm.limitations))
+    : [p.why ? h("div", { class: "why" }, h("b", {}, "Why it matters"), h("p", {}, p.why)) : null, p.tldr ? h("p", { class: "tldr" }, p.tldr) : null],
+    listenRow,
+    h("div", { class: "section-title" }, "Abstract"),
     abstract, p.abstract.length > 700 ? more : null,
     p.reasons?.length ? h("div", { class: "chips" }, p.reasons.map((r) => h("span", { class: "chip" }, r))) : null,
     h("div", { class: "actions" },
       h("a", { class: "btn primary", href: p.url, target: "_blank", rel: "noopener noreferrer" }, "Read the paper ↗"),
-      listenBtn,
       saveBtn,
       navigator.share ? h("button", { class: "btn", onclick: () => navigator.share({ title: p.title, url: p.url }).catch(() => {}) }, "Share") : null),
     rec.also?.length ? [h("div", { class: "section-title" }, "Also worth a look"),

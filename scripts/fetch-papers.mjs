@@ -61,7 +61,7 @@ async function fromBiorxiv() {
           title: clean(p.title), abstract: clean(p.abstract),
           authors: clean(p.authors).split(";").map((a) => a.trim()).filter(Boolean),
           venue: server === "biorxiv" ? "bioRxiv" : "medRxiv", category: p.category, date: p.date,
-          doi: p.doi, url: `https://doi.org/${p.doi}`, preprint: true,
+          doi: p.doi, url: `https://doi.org/${p.doi}`, preprint: true, jatsxml: p.jatsxml || null,
         });
       }
       if (items.length < 30) break;
@@ -137,6 +137,46 @@ async function fromPubmed() {
   return out;
 }
 
+// Classics: highly cited AI x omics papers from recent years (OpenAlex, free, no key).
+// They compete with new papers so a landmark can still be the Paper of the Day.
+const CLASSIC_QUERIES = [
+  '"single-cell" AND ("foundation model" OR transformer OR "deep learning" OR "neural network")',
+  '"spatial transcriptomics" AND ("deep learning" OR "graph neural" OR transformer OR "foundation model")',
+  '(multiomics OR "multi-omics" OR "multi-omic") AND ("deep learning" OR "foundation model" OR "variational autoencoder")',
+  '("protein structure" OR "protein design" OR "protein language model") AND ("deep learning" OR transformer OR diffusion)',
+  '("gene expression" OR "gene regulatory" OR genomics) AND (transformer OR "foundation model" OR "language model")',
+  '"single-cell" AND perturbation AND ("deep learning" OR generative OR "foundation model")',
+];
+
+async function fromOpenAlex() {
+  const out = [];
+  for (const q of CLASSIC_QUERIES) {
+    const url = "https://api.openalex.org/works?" + new URLSearchParams({
+      filter: `title_and_abstract.search:${q},from_publication_date:2016-01-01,to_publication_date:${day(-60)},cited_by_count:>80,has_abstract:true,type:article`,
+      sort: "cited_by_count:desc", "per-page": "40",
+    });
+    let data;
+    try { data = JSON.parse(await getText(url)); } catch (e) { console.warn(`OpenAlex: ${e.message}`); continue; }
+    for (const w of data.results ?? []) {
+      const inv = w.abstract_inverted_index ?? {};
+      const words = [];
+      for (const [word, positions] of Object.entries(inv)) for (const i of positions) words[i] = word;
+      const abstract = clean(words.join(" "));
+      if (!abstract) continue;
+      const doi = w.doi ? w.doi.replace("https://doi.org/", "") : null;
+      out.push({
+        title: clean(w.title), abstract,
+        authors: (w.authorships ?? []).map((a) => a.author?.display_name).filter(Boolean),
+        venue: w.primary_location?.source?.display_name ?? "Journal", category: null, date: w.publication_date,
+        doi, url: doi ? `https://doi.org/${doi}` : w.id, preprint: false,
+        classic: true, citations: w.cited_by_count, year: w.publication_year,
+      });
+    }
+    await sleep(300);
+  }
+  return out;
+}
+
 // ---------------------------------------------------------------- scoring
 
 // [pattern, weight, label shown on the paper]
@@ -189,6 +229,7 @@ function score(p) {
   s += Math.min(VENUE_BONUS[p.venue] ?? 0, Math.max(0, sum(ai)));   // a big journal helps only if there's AI in it
   for (const [re, w] of DOWNWEIGHT) if (re.test(p.title)) s += w;
   if (p.abstract.length < 400) s -= 3;
+  if (p.classic) s += Math.min(6, 2 * Math.log10(Math.max(1, p.citations)));   // landmark bonus
   const quality = QUALITY.filter(([re]) => re.test(text));
   s += quality.reduce((t, [, w]) => t + w, 0);
   const reasons = [...ai, ...bio, ...quality].map(([, , label]) => label).filter(Boolean);
@@ -245,6 +286,77 @@ Pick the paper with the best total (ties: prefer novelty and generality). Answer
   return null;
 }
 
+// ---------------------------------------------------------------- full text + AI summary
+
+const stripXml = (x) => x.replace(/<(script|style|ref-list|back|nav|header|footer)[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]+>/g, " ")
+  .replace(/&nbsp;|&#160;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/\s+/g, " ").trim();
+
+/** Open full text when available: bioRxiv JATS, arXiv HTML, or Europe PMC open access. */
+async function fullText(p) {
+  try {
+    if (p.jatsxml) {
+      const xml = await getText(p.jatsxml);
+      const body = xml.match(/<body[\s\S]*<\/body>/i)?.[0] ?? xml;
+      return { text: stripXml(body), source: "bioRxiv full text" };
+    }
+    const arxivId = p.url?.match(/arxiv\.org\/abs\/([^?#]+)/)?.[1];
+    if (arxivId) {
+      const html = await getText(`https://arxiv.org/html/${arxivId}`);
+      const main = html.match(/<article[\s\S]*<\/article>/i)?.[0] ?? html;
+      return { text: stripXml(main), source: "arXiv full text" };
+    }
+    if (p.doi) {
+      const s = JSON.parse(await getText(`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI:%22${encodeURIComponent(p.doi)}%22&format=json&resultType=lite`));
+      const hit = s.resultList?.result?.[0];
+      if (hit?.pmcid && hit.isOpenAccess === "Y") {
+        const xml = await getText(`https://www.ebi.ac.uk/europepmc/webservices/rest/${hit.pmcid}/fullTextXML`);
+        const body = xml.match(/<body[\s\S]*<\/body>/i)?.[0] ?? xml;
+        return { text: stripXml(body), source: "open-access full text" };
+      }
+    }
+  } catch (e) { console.warn(`full text: ${e.message}`); }
+  return null;
+}
+
+/** Structured AI summary of the picked paper (full text when available, else the abstract). */
+async function summarize(p) {
+  const key = process.env.OPENCODE_API_KEY;
+  if (!key) return null;
+  const ft = await fullText(p);
+  const body = ft && ft.text.length > 2000 ? ft.text.slice(0, 60000) : null;
+  const source = body ? ft.source : "abstract only";
+  const prompt = `Summarize this paper for a researcher who works on AI for transcriptomics and multiomics, so they can understand it without reading it. Be concrete: name the model/method, data, scale, and the main numbers. Plain language, no hype. About 300-400 words in total.
+
+Title: ${p.title}
+Venue: ${p.venue}${p.classic ? ` (${p.year}, ${p.citations} citations)` : ""}
+Abstract: ${p.abstract}
+${body ? `\nFull text (may be truncated):\n${body}` : ""}
+
+Reply with JSON only, no other text:
+{"tldr": "<one sentence>", "background": "<2 sentences: the problem and why it is hard>", "approach": "<2-4 sentences: what they built or did>", "findings": ["<3-5 key results, each one sentence, with numbers where given>"], "why": "<2 sentences: why it matters for the field / for this reader>", "limitations": "<1-2 sentences: caveats or open questions>"}`;
+  for (const model of CURATOR_MODELS) {
+    try {
+      const res = await fetch(OPENCODE_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${key}`, "Content-Type": "application/json",
+          "User-Agent": "paperoftheday/1.0 (+https://github.com/Masmae/paperoftheday)",
+          "x-opencode-session": "paperoftheday-daily-curator",
+        },
+        body: JSON.stringify({ model, max_tokens: 4000, messages: [{ role: "user", content: prompt }] }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { console.warn(`summary ${model}: ${res.status} ${data.error?.message ?? ""}`); continue; }
+      const text = data.choices?.[0]?.message?.content ?? "";
+      const out = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+      if (!out.tldr || !Array.isArray(out.findings)) throw new Error("incomplete summary");
+      console.log(`summary: ${model} from ${source} (${data.usage?.total_tokens ?? "?"} tokens)`);
+      return { ...out, source, model };
+    } catch (e) { console.warn(`summary ${model}: ${e.message}`); }
+  }
+  return null;
+}
+
 // ---------------------------------------------------------------- main
 
 const indexUrl = new URL("index.json", DATA);
@@ -252,15 +364,15 @@ const index = existsSync(indexUrl) ? JSON.parse(readFileSync(indexUrl, "utf8")) 
 const seen = new Set(index.days.flatMap((d) => [d.key, ...(d.also ?? [])]));
 const keyOf = (p) => (p.doi ?? p.url).toLowerCase();
 
-const [bx, ax, pm] = await Promise.all([fromBiorxiv(), fromArxiv(), fromPubmed()]);
-console.log(`fetched: bioRxiv/medRxiv ${bx.length}, arXiv ${ax.length}, PubMed ${pm.length}`);
+const [bx, ax, pm, oa] = await Promise.all([fromBiorxiv(), fromArxiv(), fromPubmed(), fromOpenAlex()]);
+console.log(`fetched: bioRxiv/medRxiv ${bx.length}, arXiv ${ax.length}, PubMed ${pm.length}, classics ${oa.length}`);
 
 // Rolling pool: the best unpicked papers seen over the last 3 weeks, so the pick
 // doesn't have to come from today's batch.
 const poolUrl = new URL("pool.json", DATA);
 const pool = existsSync(poolUrl) ? JSON.parse(readFileSync(poolUrl, "utf8")).papers ?? [] : [];
 const byKey = new Map(pool.map((p) => [keyOf(p), p]));
-for (const p of [...pm, ...bx, ...ax]) {
+for (const p of [...pm, ...bx, ...ax, ...oa]) {
   if (!p.title || !p.abstract || byKey.has(keyOf(p))) continue;
   byKey.set(keyOf(p), { ...p, firstSeen: DATE });
 }
@@ -270,11 +382,13 @@ const ageDays = (p) => Math.max(0, (Date.parse(DATE) - Date.parse(p.firstSeen ??
 const recent = index.days.filter((d) => d.date < DATE).slice(0, 3)
   .map((d) => { try { return JSON.parse(readFileSync(new URL(`${d.date}.json`, DATA), "utf8")).paper.reasons ?? []; } catch { return []; } });
 const tooSimilar = (p) => recent.filter((r) => p.reasons.filter((x) => r.includes(x)).length >= 3).length;
+// At most one classic every few days, so new work gets its turn.
+const recentClassic = index.days.filter((d) => d.date < DATE).slice(0, 3).some((d) => d.classic);
 
 const ranked = [...byKey.values()]
   .filter((p) => !seen.has(keyOf(p)) && ageDays(p) <= 21)
   .map((p) => { const sc = score(p); return { ...p, ...sc }; })
-  .map((p) => ({ ...p, rank: p.score - 0.15 * ageDays(p) - 2 * tooSimilar(p) }))
+  .map((p) => ({ ...p, rank: p.score - (p.classic ? 0 : 0.15 * ageDays(p)) - 2 * tooSimilar(p) - (p.classic && recentClassic ? 8 : 0) }))
   .filter((p) => p.score > 8)
   .sort((a, b) => b.rank - a.rank);
 if (!ranked.length) { console.error("no suitable papers found"); process.exit(1); }
@@ -285,11 +399,12 @@ const curated = await curate(shortlist).catch((e) => { console.warn(`curator fai
 const pick = curated ? shortlist[curated.pick] : shortlist[0];
 const also = (curated ? curated.runner_ups.map((i) => shortlist[i]).filter(Boolean) : shortlist.slice(1, 4)).filter((p) => p !== pick).slice(0, 3);
 
-const slim = (p) => ({ title: p.title, authors: p.authors.slice(0, 12), authorCount: p.authors.length, venue: p.venue, preprint: p.preprint, date: p.date, doi: p.doi, url: p.url, abstract: p.abstract, reasons: p.reasons, score: p.score });
+const slim = (p) => ({ title: p.title, authors: p.authors.slice(0, 12), authorCount: p.authors.length, venue: p.venue, preprint: p.preprint, date: p.date, doi: p.doi, url: p.url, abstract: p.abstract, reasons: p.reasons, score: p.score, ...(p.classic ? { classic: true, citations: p.citations, year: p.year } : {}) });
+const summary = await summarize(pick).catch((e) => { console.warn(`summary failed: ${e.message}`); return null; });
 const record = {
   date: DATE,
   pickedBy: curated ? curated.model : "score",
-  paper: { ...slim(pick), tldr: curated?.tldr ?? null, why: curated?.why ?? null },
+  paper: { ...slim(pick), tldr: curated?.tldr ?? summary?.tldr ?? null, why: curated?.why ?? summary?.why ?? null, summary },
   also: also.map(slim),
   candidates: ranked.length,
 };
@@ -303,7 +418,7 @@ const used = new Set([pick, ...also].map(keyOf));
 const keep = ranked.filter((p) => !used.has(keyOf(p))).slice(0, 250)
   .map(({ rank, score: _s, reasons: _r, ...p }) => ({ ...p, abstract: p.abstract.slice(0, 3000) }));
 writeFileSync(poolUrl, JSON.stringify({ updated: DATE, papers: keep }));
-index.days = [{ date: DATE, title: pick.title, venue: pick.venue, key: keyOf(pick), also: also.map(keyOf) }, ...index.days.filter((d) => d.date !== DATE)]
+index.days = [{ date: DATE, title: pick.title, venue: pick.venue, key: keyOf(pick), also: also.map(keyOf), ...(pick.classic ? { classic: true } : {}) }, ...index.days.filter((d) => d.date !== DATE)]
   .sort((a, b) => b.date.localeCompare(a.date));
 writeFileSync(indexUrl, JSON.stringify(index, null, 1));
 console.log("saved.");
