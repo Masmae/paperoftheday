@@ -23,12 +23,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install --no-audit --no-fund
       - name: Pick today's paper
         env:
-          # Optional: add an ANTHROPIC_API_KEY repository secret to let Claude
-          # choose the most interesting paper and write "why it matters".
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Optional: an OPENCODE_API_KEY repository secret lets a model from the
+          # OpenCode Go plan choose the most interesting paper and write "why it matters".
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
         run: node scripts/fetch-papers.mjs
       - name: Commit
         run: |

@@ -10,7 +10,9 @@ One genuinely interesting paper every morning: AI for transcriptomics and multio
 - **Collect:** it gathers recent papers from **bioRxiv/medRxiv** (preprints), **arXiv** (ML and quantitative biology) and **PubMed** (top journals). All are free public APIs, and no keys are needed.
 - **Score:** papers need an AI angle together with omics or biotech; landmark biotech counts even without AI. A top journal helps only if the paper has real AI content.
 - **Pick:** the best-scoring paper wins.
-- **Optional, the Claude curator:** add an `ANTHROPIC_API_KEY` repository secret (Settings → Secrets and variables → Actions). Claude then reads the top 25 candidates, picks the most interesting one and writes a short "why it matters". It uses `claude-opus-5-5`, roughly $0.05–0.10 a day.
+- **Optional, the AI curator:** add an `OPENCODE_API_KEY` repository secret (Settings → Secrets and variables → Actions). A model from the OpenCode Go plan then reads the top 25 candidates, picks the most interesting one and writes a short "why it matters".
+  - **Models:** GLM-5.3, with Kimi K3 as backup. Both work with a region-restricted workspace.
+  - **Usage:** about 12K tokens, one request a day.
 - **Publish:** it writes `data/<date>.json` and `data/index.json`, commits them, and redeploys Pages. Papers are never repeated.
 
 ## Run it locally

@@ -5,9 +5,9 @@
 // 1. Collects recent papers from bioRxiv (preprints), arXiv (ML + quantitative
 //    biology) and PubMed (top journals) — free public APIs, no keys.
 // 2. Scores them for "AI x transcriptomics / multiomics / biotech" relevance.
-// 3. If ANTHROPIC_API_KEY is set, Claude reads the top candidates and picks the
-//    most interesting one, writing a short "why it matters". Otherwise the best
-//    score wins.
+// 3. If OPENCODE_API_KEY is set, a model from the OpenCode Go plan reads the top
+//    candidates and picks the most interesting one, writing a short "why it
+//    matters". Otherwise the best score wins.
 // 4. Writes data/<date>.json and updates data/index.json. Never repeats a paper.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 
@@ -173,40 +173,45 @@ function score(p) {
   return { score: s, reasons: [...new Set(reasons)].slice(0, 6) };
 }
 
-// ---------------------------------------------------------------- Claude curator (optional)
+// ---------------------------------------------------------------- AI curator (optional)
+//
+// With an OPENCODE_API_KEY secret, a model from the OpenCode Go plan reads the
+// shortlist, picks the most interesting paper and writes "why it matters".
+// One small request a day, identified with its own user agent and a stable
+// session id as OpenCode asks. Without a key, the best score wins.
+const OPENCODE_URL = "https://opencode.ai/inference/go/openai/v1/chat/completions";
+// Go-plan models that work with a region-restricted workspace (DeepSeek needs "Global").
+const CURATOR_MODELS = ["glm-5.3", "kimi-k3"];   // first that answers wins
 
 async function curate(candidates) {
-  if (!process.env.ANTHROPIC_API_KEY) return null;
-  const { default: Anthropic } = await import("@anthropic-ai/sdk");
-  const client = new Anthropic();
+  const key = process.env.OPENCODE_API_KEY;
+  if (!key) return null;
   const list = candidates.map((p, i) => `[${i}] ${p.title}\nVenue: ${p.venue}${p.preprint ? " (preprint)" : ""}\nAbstract: ${p.abstract.slice(0, 2200)}`).join("\n\n");
-  const schema = {
-    type: "object",
-    properties: {
-      pick: { type: "integer", description: "Index of the most interesting paper" },
-      why: { type: "string", description: "2-3 sentences: why this matters, in plain language" },
-      tldr: { type: "string", description: "One-sentence summary of what they did and found" },
-      runner_ups: { type: "array", items: { type: "integer" }, description: "Indices of the next 3 most interesting papers" },
-    },
-    required: ["pick", "why", "tldr", "runner_ups"],
-    additionalProperties: false,
-  };
-  const response = await client.beta.messages.create({
-    model: "claude-opus-5-5",
-    max_tokens: 16000,
-    betas: ["server-side-fallback-2026-07-01"],
-    fallbacks: "default",
-    output_config: { effort: "medium", format: { type: "json_schema", schema } },
-    system: "You curate a daily 'Paper of the Day' for a researcher who applies AI to transcriptomics and multiomics. They also love general AI advances with clear biological applications and landmark biotech work (think AlphaFold-level). Choose the single paper they would find most genuinely exciting: new capability, surprising result, or a method they might use. Prefer substance over hype; skip incremental benchmarks, reviews and narrow clinical studies unless remarkable.",
-    messages: [{ role: "user", content: `Today's candidates:\n\n${list}` }],
-  });
-  if (response.stop_reason === "refusal") { console.warn("curator declined; using scores"); return null; }
-  const text = response.content.filter((b) => b.type === "text").map((b) => b.text).join("");
-  try {
-    const out = JSON.parse(text);
-    if (!Number.isInteger(out.pick) || !candidates[out.pick]) return null;
-    return out;
-  } catch { console.warn("curator returned invalid JSON; using scores"); return null; }
+  const system = "You curate a daily 'Paper of the Day' for a researcher who applies AI to transcriptomics and multiomics. They also love general AI advances with clear biological applications and landmark biotech work (think AlphaFold-level). Choose the single paper they would find most genuinely exciting: new capability, surprising result, or a method they might use. Prefer substance over hype; skip incremental benchmarks, reviews and narrow clinical studies unless remarkable. Answer with JSON only.";
+  const user = `Today's candidates:\n\n${list}\n\nReply with JSON only, no other text:\n{"pick": <index>, "why": "<2-3 plain-language sentences on why it matters>", "tldr": "<one sentence: what they did and found>", "runner_ups": [<3 indices>]}`;
+  for (const model of CURATOR_MODELS) {
+    try {
+      const res = await fetch(OPENCODE_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${key}`,
+          "Content-Type": "application/json",
+          "User-Agent": "paperoftheday/1.0 (+https://github.com/Masmae/paperoftheday)",
+          "x-opencode-session": "paperoftheday-daily-curator",
+        },
+        body: JSON.stringify({ model, max_tokens: 4000, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { console.warn(`curator ${model}: ${res.status} ${data.error?.message ?? ""}`); continue; }
+      const text = data.choices?.[0]?.message?.content ?? "";
+      const out = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+      if (!Number.isInteger(out.pick) || !candidates[out.pick]) throw new Error("bad pick");
+      out.runner_ups = (out.runner_ups ?? []).filter((i) => Number.isInteger(i) && candidates[i] && i !== out.pick);
+      console.log(`curator: ${model} (${data.usage?.total_tokens ?? "?"} tokens)`);
+      return { ...out, model };
+    } catch (e) { console.warn(`curator ${model}: ${e.message}`); }
+  }
+  return null;
 }
 
 // ---------------------------------------------------------------- main
@@ -231,7 +236,7 @@ const also = (curated ? curated.runner_ups.map((i) => shortlist[i]).filter(Boole
 const slim = (p) => ({ title: p.title, authors: p.authors.slice(0, 12), authorCount: p.authors.length, venue: p.venue, preprint: p.preprint, date: p.date, doi: p.doi, url: p.url, abstract: p.abstract, reasons: p.reasons, score: p.score });
 const record = {
   date: DATE,
-  pickedBy: curated ? "claude" : "score",
+  pickedBy: curated ? curated.model : "score",
   paper: { ...slim(pick), tldr: curated?.tldr ?? null, why: curated?.why ?? null },
   also: also.map(slim),
   candidates: ranked.length,

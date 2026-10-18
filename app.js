@@ -51,7 +51,7 @@ function paperView(rec) {
       navigator.share ? h("button", { class: "btn", onclick: () => navigator.share({ title: p.title, url: p.url }).catch(() => {}) }, "Share") : null),
     rec.also?.length ? [h("div", { class: "section-title" }, "Also worth a look"),
       rec.also.map((a) => h("a", { class: "item", href: a.url, target: "_blank", rel: "noopener noreferrer" }, h("div", { class: "t" }, a.title), h("div", { class: "m" }, `${a.venue}${a.preprint ? " · preprint" : ""}`)))] : null,
-    h("p", { class: "note" }, rec.pickedBy === "claude" ? `Picked by Claude from ${rec.candidates} candidates.` : `Picked by relevance score from ${rec.candidates} candidates.`),
+    h("p", { class: "note" }, rec.pickedBy === "score" ? `Picked by relevance score from ${rec.candidates} candidates.` : `Picked by AI (${rec.pickedBy}) from ${rec.candidates} candidates.`),
   ];
 }
 
