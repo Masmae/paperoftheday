@@ -4,6 +4,7 @@
 // come back for review on a spaced schedule (kept on this device).
 import { h, store, getJSON, masthead, kids } from "./dom.js";
 import { speech, speak, stopSpeaking, isSpeaking } from "./speech.js";
+import { writeControl, loadGenerated, runningSince } from "./ondemand.js";
 
 const INTERVALS = [1, 3, 7, 16, 35, 90];          // days until the next review, by box
 const today = () => new Date().toISOString().slice(0, 10);
@@ -12,7 +13,8 @@ let curriculum = null, written = null;
 
 async function loadAll() {
   curriculum ??= await getJSON("learn/curriculum.json");
-  written = (await getJSON("data/learn/index.json").catch(() => ({ lessons: {} }))).lessons;
+  // Published index + lessons this device saw written on demand (before the index catches up).
+  written = { ...(await getJSON("data/learn/index.json").catch(() => ({ lessons: {} }))).lessons, ...store.get("readyLessons", {}) };
 }
 const flat = (track) => track.units.flatMap((u) => u.lessons.map((l) => ({ ...l, unit: u })));
 const findLesson = (id) => { for (const t of curriculum.tracks) for (const l of flat(t)) if (l.id === id) return { track: t, lesson: l }; return null; };
@@ -52,7 +54,7 @@ function overview({ view, sync }) {
         h("p", {}, t.blurb), bar,
         next ? h("div", { class: "actions" },
           written[next.id] ? h("a", { class: "btn primary", href: `#/learn/lesson/${next.id}` }, done.size ? "Continue" : "Start")
-            : h("span", { class: "note" }, "Your next lesson is being written. It'll be ready after the next daily run."),
+            : h("a", { class: "btn primary", href: `#/learn/lesson/${next.id}` }, runningSince(`lesson:${next.id}`) ? "Being written…" : "Write it now"),
           h("a", { class: "btn", href: `#/learn/track/${t.id}` }, "All lessons")) : h("p", {}, "Track complete 🎉"),
         next ? h("p", { class: "note" }, `Next: ${next.title} · ${next.unit.title}`) : null);
     }),
@@ -68,7 +70,8 @@ function trackPage({ view, sync }, trackId) {
     view.append(...kids(h("div", { class: "section-title" }, u.title),
       ...u.lessons.map((l) => written[l.id]
         ? h("a", { class: "item", href: `#/learn/lesson/${l.id}` }, h("div", { class: "t" }, done.has(l.id) ? "✓ " : "", l.title), h("div", { class: "m" }, l.focus))
-        : h("div", { class: "item locked" }, h("div", { class: "t" }, l.title), h("div", { class: "m" }, "Not written yet"))),
+        : h("a", { class: "item locked", href: `#/learn/lesson/${l.id}` }, h("div", { class: "t" }, l.title),
+          h("div", { class: "m" }, runningSince(`lesson:${l.id}`) ? "Being written…" : "Not written yet · tap to write it now"))),
       u.resources?.length ? h("div", { class: "resources" }, "Read more: ", u.resources.map((r, i) => [i ? " · " : "", h("a", { href: r.url, target: "_blank", rel: "noopener noreferrer" }, r.title)])) : null));
   }
 }
@@ -89,8 +92,22 @@ async function lessonPage(ctx, id) {
   const { view, sync } = ctx;
   const found = findLesson(id);
   let L;
-  try { L = await getJSON(`data/learn/${id}.json`); } catch { L = null; }
-  if (!found || !L) { view.append(...kids(h("p", { class: "empty" }, "This lesson isn't written yet. It'll be ready after the next daily run."))); return; }
+  if (!found) { view.append(...kids(h("p", { class: "empty" }, "There's no such lesson."))); return; }
+  L = await loadGenerated(sync, `data/learn/${id}.json`);
+  if (!L) {
+    // Not written yet: offer to write it now (GitHub Actions, about 2 minutes).
+    const { track: tr, lesson: le } = found;
+    view.append(...kids(
+      h("div", { class: "kicker" }, h("span", {}, tr.title), h("span", { class: "pre" }, le.unit.title)),
+      h("h2", { class: "title" }, le.title),
+      h("p", { class: "tldr" }, le.focus),
+      writeControl(sync, {
+        kind: "lesson", id, path: `data/learn/${id}.json`, label: "Write this lesson now",
+        onReady: () => { store.set("readyLessons", { ...store.get("readyLessons", {}), [id]: new Date().toISOString().slice(0, 10) }); showLearn(ctx, "lesson", id); },
+      }),
+      h("p", { class: "note" }, "Lessons are normally written a few ahead of where you are, during the daily run.")));
+    return;
+  }
   const { track, lesson } = found;
   const lessons = flat(track), i = lessons.findIndex((l) => l.id === id), next = lessons[i + 1];
 
@@ -115,7 +132,7 @@ async function lessonPage(ctx, id) {
     }, `Learn: finished ${id}`);
     finish.replaceChildren(h("p", { class: "result" }, `${right}/${L.quiz.length} correct. Lesson done${right < L.quiz.length ? "; the ones you missed come back tomorrow" : ""}.`),
       h("div", { class: "actions" },
-        next && written[next.id] ? h("a", { class: "btn primary", href: `#/learn/lesson/${next.id}` }, `Next: ${next.title}`) : h("span", { class: "note" }, next ? "The next lesson will be written in the next daily run." : "That's the last lesson of this track."),
+        next ? h("a", { class: "btn primary", href: `#/learn/lesson/${next.id}` }, `Next: ${next.title}`) : h("span", { class: "note" }, "That's the last lesson of this track."),
         h("a", { class: "btn", href: "#/learn" }, "Back to Learn")));
   };
   L.quiz.forEach((q, k) => quizBox.append(question(q, `${id}#${k}`, (choice) => { answers[k] = choice; drawFinish(); })));

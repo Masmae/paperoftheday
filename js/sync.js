@@ -111,3 +111,27 @@ export async function setToken(token) {
   await update(() => {}, "Sync preferences from a device");
   return status.state === "synced";
 }
+
+// ---- On demand: ask GitHub Actions to write something now (.github/workflows/ondemand.yml) ----
+
+/** Start a job: kind "lesson" (id bio-001…) or "summary" (id = Watching paper key). Needs the token. */
+export async function requestWrite(kind, id) {
+  const token = getToken();
+  if (!token) throw new Error("connect GitHub in Settings first");
+  const res = await fetch(`https://api.github.com/repos/${REPO}/dispatches`, {
+    method: "POST", headers: { ...headers(token), "Content-Type": "application/json" },
+    body: JSON.stringify({ event_type: "ondemand", client_payload: { kind, id } }),
+  });
+  if (res.status !== 204) throw new Error(res.status === 401 || res.status === 403 || res.status === 404 ? "this token can't start jobs" : `GitHub ${res.status}`);
+}
+
+/** A data file read straight from the repo (fresh, before the site redeploys); null if it isn't there. */
+export async function repoJSON(path) {
+  const token = getToken();
+  if (!token) return null;
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=main&t=${Date.now()}`,
+    { headers: { ...headers(token), Accept: "application/vnd.github.raw+json" }, cache: "no-store" });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`GitHub ${res.status}`);
+  return res.json();
+}

@@ -11,7 +11,7 @@ export const h = (tag, attrs = {}, ...kids) => {
     else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
     else el.setAttribute(k, v === true ? "" : v);
   }
-  for (const c of kids.flat()) if (c != null && c !== false) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  for (const c of kids.flat(Infinity)) if (c != null && c !== false) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
   return el;
 };
 export const fmtDate = (d) => new Date(d + "T12:00:00Z").toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" });

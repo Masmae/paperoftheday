@@ -1,6 +1,10 @@
 // Watching: papers matching your rules (authors, journals + title keywords, keywords),
 // collected by the daily run into data/watch.json. Rules are edited here and saved to data/me.json.
 import { h, store, getJSON, fmtShort, masthead, kids, goBack } from "./dom.js";
+import { writeControl, loadGenerated } from "./ondemand.js";
+
+/** Same rule as scripts/ondemand.mjs: the file holding a paper's on-demand summary. */
+const summaryPath = (key) => `data/summaries/${key.toLowerCase().replace(/[^a-z0-9]+/g, "_").slice(0, 120)}.json`;
 
 let filter = "all";
 
@@ -22,7 +26,7 @@ export async function showWatching(ctx, arg) {
   const list = h("div", {});
   const draw = () => {
     const items = feed.items.filter((it) => filter === "all" || it.rules.includes(filter));
-    list.replaceChildren(...(items.length ? items.map((it) => item(it, isNew(it)))
+    list.replaceChildren(...(items.length ? items.map((it) => item(it, isNew(it), sync))
       : [h("p", { class: "empty" }, feed.items.length ? "Nothing for this rule yet." : "No matches yet. They arrive with the next daily run.")]));
   };
   const chips = h("div", { class: "chips filter" });
@@ -39,18 +43,49 @@ export async function showWatching(ctx, arg) {
     list));
 }
 
-function item(it, fresh) {
+function item(it, fresh, sync) {
+  const aiBox = h("div", { class: "ai-box" });
+  let aiLoaded = false;
+  const loadAI = async () => {
+    if (aiLoaded) return;
+    aiLoaded = true;
+    const file = await loadGenerated(sync, summaryPath(it.key));
+    showAI(file);
+  };
+  const showAI = (file) => {
+    if (file?.status === "ok") return aiBox.replaceChildren(summaryEl(file.summary));
+    if (file?.status === "nofulltext") return aiBox.replaceChildren(h("p", { class: "note" }, "No free full text for this paper, so there's no AI summary."));
+    aiBox.replaceChildren(writeControl(sync, {
+      kind: "summary", id: it.key, path: summaryPath(it.key), label: "AI summary from the full text",
+      done: (f, since) => f && (f.status !== "failed" || (f.at ?? 0) > since),     // an old failure doesn't count
+      onReady: showAI,
+    }), file?.status === "failed" ? h("p", { class: "note" }, "The last try didn't work. You can try again.") : null);
+  };
   const detail = h("div", { class: "detail", hidden: true },
+    aiBox,
     it.authors?.length ? h("div", { class: "authors" }, it.authors.join(", ") + (it.authorCount > it.authors.length ? ` +${it.authorCount - it.authors.length} more` : "")) : null,
     it.abstract ? h("p", { class: "abstract" }, it.abstract) : null,
     h("div", { class: "actions" }, h("a", { class: "btn primary", href: it.url, target: "_blank", rel: "noopener noreferrer" }, "Read the paper ↗")));
   const head = h("button", { class: "item-head", "aria-expanded": "false", onclick: () => {
     detail.hidden = !detail.hidden; head.setAttribute("aria-expanded", String(!detail.hidden));
+    if (!detail.hidden) loadAI();
   } },
     h("div", { class: "t" }, fresh ? h("span", { class: "new" }, "New") : null, it.title),
     h("div", { class: "m" }, [it.venue, it.preprint && it.venue !== "Preprint" ? "preprint" : null, it.date ? fmtShort(it.date) : null].filter(Boolean).join(" · ")),
     h("div", { class: "rules" }, it.rules.map((r) => h("span", { class: "rule" }, r))));
   return h("div", { class: "item watch" }, head, detail);
+}
+
+/** The structured summary (same parts as Paper of the Day's). */
+function summaryEl(sm) {
+  return h("section", { class: "summary" },
+    h("div", { class: "summary-head" }, h("b", {}, "AI summary"), h("span", { class: "src" }, `from the ${sm.source}`)),
+    h("p", { class: "tldr" }, sm.tldr),
+    h("h4", {}, "Background"), h("p", {}, sm.background),
+    h("h4", {}, "What they did"), h("p", {}, sm.approach),
+    h("h4", {}, "Key findings"), h("ul", {}, (sm.findings ?? []).map((f) => h("li", {}, f))),
+    h("h4", {}, "Why it matters"), h("p", {}, sm.why),
+    h("h4", {}, "Limitations"), h("p", {}, sm.limitations));
 }
 
 function editRules(ctx) {

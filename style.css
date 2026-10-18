@@ -111,3 +111,16 @@ main > p.note { font: 13px/1.5 var(--sans); }
 .back-btn { appearance: none; border: 1px solid var(--rule); background: var(--card); color: var(--ink); border-radius: 999px; padding: 7px 14px 7px 11px; font: 500 15px var(--sans); cursor: pointer; flex: none; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .back-btn:active { background: var(--chip); }
 .masthead.sub h1 { font-size: 22px; }
+
+/* Home-screen app: keep scrolled content from showing under the status bar (clock, battery). */
+body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: env(safe-area-inset-top); background: var(--bg); z-index: 20; pointer-events: none; }
+
+/* Written on demand (lessons, Watching summaries) */
+.ondemand { margin: 4px 0 20px; }
+.writing { display: flex; align-items: center; gap: 10px; font: 600 16px var(--sans); margin: 0 0 4px; }
+.spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--rule); border-top-color: var(--accent); animation: spin .9s linear infinite; flex: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; border-top-color: var(--rule); } }
+.ai-box { margin-bottom: 8px; }
+.ai-box .summary { margin-bottom: 12px; }
+.item.locked { text-decoration: none; color: inherit; }

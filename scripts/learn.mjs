@@ -4,7 +4,7 @@
 //   node scripts/learn.mjs [--dry-run] [--only bio-001]
 //
 // Uses a cheap model from the OpenCode Go plan (OPENCODE_API_KEY). Each lesson ≈ 6–9K tokens.
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync } from "node:fs";
 
 const ROOT = new URL("../", import.meta.url);
 const OUT = new URL("data/learn/", ROOT);
@@ -26,7 +26,14 @@ const curriculum = JSON.parse(readFileSync(new URL("learn/curriculum.json", ROOT
 const me = (() => { try { return JSON.parse(readFileSync(new URL("data/me.json", ROOT), "utf8")); } catch { return {}; } })();
 mkdirSync(OUT, { recursive: true });
 const indexUrl = new URL("index.json", OUT);
-const index = existsSync(indexUrl) ? JSON.parse(readFileSync(indexUrl, "utf8")) : { lessons: {} };
+// The index is rebuilt from the lesson files, so lessons written on demand (ondemand.yml, which
+// only adds its one file) are picked up and the two workflows never edit the same file.
+const index = { lessons: {} };
+for (const f of readdirSync(OUT)) {
+  const m = f.match(/^((?:bio|ml)-\d{3})\.json$/);
+  if (m) { try { index.lessons[m[1]] = JSON.parse(readFileSync(new URL(f, OUT), "utf8")).created ?? ""; } catch { /* skip a broken file */ } }
+}
+if (!ONLY) writeFileSync(indexUrl, JSON.stringify(index, null, 1));
 
 const LEARNER = `The learner has a computer science degree and has passed advanced CS and machine-learning courses (linear algebra, probability, optimization, classic ML, deep learning). They have worked for a few years in bioinformatics, applying AI to transcriptomics and multiomics, so they know biology concepts loosely but never studied biology systematically.`;
 const STYLE = {
@@ -143,7 +150,8 @@ for (const track of curriculum.tracks) {
   const flat = track.units.flatMap((u) => u.lessons.map((l) => ({ unit: u, lesson: l })));
   const done = new Set(me.learn?.[track.id]?.done ?? []);
   const furthest = flat.reduce((m, x, i) => (done.has(x.lesson.id) ? i : m), -1);
-  const want = flat.slice(0, furthest + 1 + AHEAD).filter((x) => ONLY ? x.lesson.id === ONLY : !index.lessons[x.lesson.id]);
+  const want = ONLY ? flat.filter((x) => x.lesson.id === ONLY && !index.lessons[ONLY])        // on demand: any lesson
+    : flat.slice(0, furthest + 1 + AHEAD).filter((x) => !index.lessons[x.lesson.id]);
   console.log(`${track.id}: ${done.size} done, ${Object.keys(index.lessons).filter((id) => id.startsWith(track.id + "-")).length} written, ${want.length} to write`);
   for (const { unit, lesson } of want.slice(0, MAX_PER_RUN)) {
     if (DRY) { console.log(`  would write ${lesson.id}: ${lesson.title}`); continue; }
@@ -153,6 +161,6 @@ for (const track of curriculum.tracks) {
     if (!out) continue;
     writeFileSync(new URL(`${lesson.id}.json`, OUT), JSON.stringify(out, null, 1));
     index.lessons[lesson.id] = out.created;
-    writeFileSync(indexUrl, JSON.stringify(index, null, 1));
+    if (!ONLY) writeFileSync(indexUrl, JSON.stringify(index, null, 1));
   }
 }

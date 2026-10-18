@@ -43,6 +43,17 @@ Both keep your data in **`data/me.json`**: watch rules, and which lessons you've
   - The syllabus is fixed, in `learn/curriculum.json`. Each daily run writes lessons up to 3 ahead of your progress (at most 4 per track per run, about 7K tokens each) into `data/learn/`. Each lesson has key ideas, an "In your data" section, and a 4-question quiz.
   - Finishing the quiz marks the lesson done. Questions then come back for spaced review, which is kept on each device.
 
+### On demand: write it now
+
+- **What:** on a lesson that isn't written yet, tap **Write this lesson now**. On a Watching paper, tap **AI summary from the full text**.
+- **How it works:**
+  - The app asks GitHub to run `.github/workflows/ondemand.yml`, using the token from ⚙ Settings. That token needs **Contents: Read and write**, nothing else.
+  - The job writes the file (`data/learn/<id>.json` or `data/summaries/<key>.json`) with the OpenCode key from the repo secrets.
+  - The app reads the new file straight from the repo, so it doesn't wait for the site to redeploy.
+- **Wait:** usually about 2 minutes.
+- **Results are kept,** so each one costs tokens only once and shows on every device.
+- **Summaries come only from free full text.** Paywalled papers get "No free full text" and use no tokens.
+
 ## Run it locally
 
 ```sh

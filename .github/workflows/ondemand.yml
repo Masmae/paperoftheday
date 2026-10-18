@@ -1,0 +1,54 @@
+# Writes a lesson or a Watching summary when you tap "Write it now" / "Summarize" in the app.
+# The app sends a repository_dispatch (with your GitHub token, from ⚙ Settings); the OpenCode key
+# stays in this repo's secrets. Each request adds only its own file, so runs never conflict.
+name: On demand
+
+on:
+  repository_dispatch:
+    types: [ondemand]
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      KIND: ${{ github.event.client_payload.kind }}
+      ID: ${{ github.event.client_payload.id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install pdftotext (for papers whose full text is only a PDF)
+        if: ${{ github.event.client_payload.kind == 'summary' }}
+        run: command -v pdftotext || (sudo apt-get update -q && sudo apt-get install -y -q poppler-utils)
+      - name: Write it
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+        run: |
+          case "$KIND" in
+            lesson)
+              # Only ids from the syllabus (bio-001 … ml-089).
+              echo "$ID" | grep -Eq '^(bio|ml)-[0-9]{3}$' || { echo "bad lesson id"; exit 1; }
+              node scripts/learn.mjs --only "$ID" ;;
+            summary)
+              node scripts/ondemand.mjs summary "$ID" ;;
+            *) echo "unknown request: $KIND"; exit 1 ;;
+          esac
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data
+          if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
+          git commit -q -m "On demand: $KIND"
+          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push -q && exit 0; sleep $((i * 3)); done
+          exit 1
+      - name: Redeploy GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages will redeploy on its own"
