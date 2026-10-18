@@ -22,8 +22,15 @@ const dueCards = () => Object.entries(srs()).filter(([, c]) => c.due <= today())
 
 export async function showLearn(ctx, arg, sub) {
   const { view, sync } = ctx;
-  view.replaceChildren(...kids(masthead("Learn", "", sync.getStatus())));
-  try { await loadAll(); } catch { view.append(...kids(h("p", { class: "empty" }, "Couldn't load the course. Check your connection."))); return; }
+  try { await loadAll(); } catch {
+    view.replaceChildren(...kids(masthead("Learn", "", sync.getStatus()), h("p", { class: "empty" }, "Couldn't load the course. Check your connection.")));
+    return;
+  }
+  // Sub-pages get a Back button in the header: track → Learn, lesson → its track, review → Learn.
+  const lessonTrack = arg === "lesson" ? findLesson(sub)?.track : null;
+  const back = lessonTrack ? { href: `#/learn/track/${lessonTrack.id}`, label: lessonTrack.title }
+    : arg === "track" || arg === "review" || arg === "lesson" ? { href: "#/learn", label: "Learn" } : null;
+  view.replaceChildren(...kids(masthead("Learn", "", sync.getStatus(), back)));
   if (arg === "review") return review(ctx);
   if (arg === "lesson" && sub) return lessonPage(ctx, sub);
   if (arg === "track" && sub) return trackPage(ctx, sub);
@@ -56,7 +63,7 @@ function trackPage({ view, sync }, trackId) {
   const t = curriculum.tracks.find((x) => x.id === trackId);
   if (!t) return overview({ view, sync });
   const done = doneSet(sync, t.id);
-  view.append(...kids(h("a", { class: "back", href: "#/learn" }, "‹ Learn"), h("h2", { class: "title" }, t.title)));
+  view.append(...kids(h("h2", { class: "title" }, t.title)));
   for (const u of t.units) {
     view.append(...kids(h("div", { class: "section-title" }, u.title),
       ...u.lessons.map((l) => written[l.id]
@@ -114,7 +121,6 @@ async function lessonPage(ctx, id) {
   L.quiz.forEach((q, k) => quizBox.append(question(q, `${id}#${k}`, (choice) => { answers[k] = choice; drawFinish(); })));
 
   view.append(...kids(
-    h("a", { class: "back", href: `#/learn/track/${track.id}` }, `‹ ${track.title}`),
     h("div", { class: "kicker" }, h("span", {}, track.title), h("span", { class: "pre" }, lesson.unit.title)),
     h("h2", { class: "title" }, L.title),
     h("p", { class: "tldr" }, L.summary),
@@ -157,7 +163,7 @@ function grade(cardId, q, right) {
 
 function review({ view }) {
   const due = dueCards().sort(() => Math.random() - 0.5).slice(0, 15);
-  view.append(...kids(h("a", { class: "back", href: "#/learn" }, "‹ Learn"), h("h2", { class: "title" }, "Review")));
+  view.append(...kids(h("h2", { class: "title" }, "Review")));
   if (!due.length) { view.append(...kids(h("p", { class: "empty" }, "Nothing due. Nice!"))); return; }
   let left = due.length;
   const done = h("div", {});

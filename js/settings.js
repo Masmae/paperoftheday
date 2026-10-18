@@ -15,7 +15,7 @@ export function showSettings({ view, sync }) {
     if (ok) setTimeout(() => showSettings({ view, sync }), 900);
   } }, "Connect");
   view.replaceChildren(...kids(
-    masthead("Settings", "", st),
+    masthead("Settings", "", st, { href: "#/", label: "Back" }),
     h("div", { class: "section-title" }, "Sync to GitHub"),
     h("p", {}, hasToken
       ? `Connected${st.state === "error" ? `, but the last save failed: ${st.message}.` : "."} Watch rules and learning progress are saved to data/me.json, which the daily run uses.`

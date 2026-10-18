@@ -1,11 +1,12 @@
 // Watching: papers matching your rules (authors, journals + title keywords, keywords),
 // collected by the daily run into data/watch.json. Rules are edited here and saved to data/me.json.
-import { h, store, getJSON, fmtShort, masthead, kids } from "./dom.js";
+import { h, store, getJSON, fmtShort, masthead, kids, goBack } from "./dom.js";
 
 let filter = "all";
 
-export async function showWatching(ctx) {
+export async function showWatching(ctx, arg) {
   const { view, sync } = ctx;
+  if (arg === "edit") return editRules(ctx);
   view.replaceChildren(...kids(masthead("Watching", "", sync.getStatus())));
   let feed;
   try { feed = await getJSON("data/watch.json"); } catch { feed = { items: [], rules: [] }; }
@@ -33,7 +34,7 @@ export async function showWatching(ctx) {
   const fresh = feed.items.filter(isNew).length;
   view.append(...kids(
     h("p", { class: "note" }, `${fresh ? `${fresh} new since your last visit · ` : ""}Updated ${feed.updated ? fmtShort(feed.updated) : "—"} · last 60 days`),
-    h("div", { class: "actions" }, h("button", { class: "btn", onclick: () => editRules(ctx) }, "Edit what to watch")),
+    h("div", { class: "actions" }, h("a", { class: "btn", href: "#/watching/edit" }, "Edit what to watch")),
     labels.length ? chips : null,
     list));
 }
@@ -72,7 +73,7 @@ function editRules(ctx) {
   rows.append(...w.journals.map(journalRow));
   const msg = h("p", { class: "note" });
   view.replaceChildren(...kids(
-    masthead("What to watch", "", sync.getStatus()),
+    masthead("What to watch", "", sync.getStatus(), { href: "#/watching", label: "Watching" }),
     sync.getToken() ? null : h("p", { class: "warn" }, "This device isn't connected to GitHub, so the daily run won't see these changes. Connect it in ", h("a", { href: "#/settings" }, "Settings"), "."),
     h("div", { class: "section-title" }, "Journals + title keywords"),
     h("p", { class: "note" }, "A paper matches if it's in the journal and its title contains any keyword. Use the journal's full name, like “Nature Biotechnology”."),
@@ -92,6 +93,6 @@ function editRules(ctx) {
         const st = sync.getStatus();
         msg.textContent = st.state === "error" ? `Not saved to GitHub: ${st.message}` : "Saved. New rules are searched in the next daily run (back 60 days).";
       } }, "Save"),
-      h("a", { class: "btn", href: "#/watching" }, "Back")),
+      h("button", { class: "btn", onclick: () => goBack("#/watching") }, "Back")),
     msg));
 }

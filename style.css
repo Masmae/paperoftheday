@@ -53,7 +53,6 @@ h2.title { font: 600 clamp(26px, 6vw, 36px)/1.15 var(--serif); margin: 0 0 14px;
 .listen { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 24px; }
 .listen .label { font-size: 14px; color: var(--ink-2); }
 .kicker .classic { background: var(--accent); color: var(--bg); padding: 1px 8px; border-radius: 999px; }
-.back { display: inline-block; font-size: 14px; color: var(--ink-2); text-decoration: none; margin-bottom: 12px; }
 
 /* header: settings + sync dot */
 .gear { margin-left: auto; text-decoration: none; color: var(--ink-2); font-size: 20px; display: inline-flex; align-items: center; gap: 6px; }
@@ -106,3 +105,9 @@ code { font: 14.5px ui-monospace, SFMono-Regular, Menlo, monospace; background: 
 .explain { font-size: 14.5px; color: var(--ink-2); margin: 4px 0 0; }
 .result { font: 600 18px var(--serif); }
 main > p.note { font: 13px/1.5 var(--sans); }
+
+/* Back button on pages below the top level */
+.masthead.sub { align-items: center; }
+.back-btn { appearance: none; border: 1px solid var(--rule); background: var(--card); color: var(--ink); border-radius: 999px; padding: 7px 14px 7px 11px; font: 500 15px var(--sans); cursor: pointer; flex: none; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.back-btn:active { background: var(--chip); }
+.masthead.sub h1 { font-size: 22px; }

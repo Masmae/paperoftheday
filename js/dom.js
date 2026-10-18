@@ -21,10 +21,32 @@ export const getJSON = async (path) => { const r = await fetch(path, { cache: "n
 export const fmtShort = (d) => new Date(d + "T12:00:00Z").toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" });
 export const paperKey = (p) => (p.doi ?? p.url ?? p.title).toLowerCase();
 
-/** Page header with a settings link; the dot shows whether your data is syncing to GitHub. */
-export function masthead(title, sub, status) {
+// ---- Back: return to where you came from inside the app, or else to the page's parent ----
+// Each history entry we create is numbered; entry 0 is wherever the app was opened.
+let depth = 0, started = false, replacing = false;
+/** Call on every route change. */
+export function trackHistory() {
+  const d = history.state?.d;
+  if (typeof d === "number") depth = d;
+  else { depth = !started || replacing ? depth : depth + 1; history.replaceState({ d: depth }, ""); }
+  started = true; replacing = false;
+}
+/** Go back one page in the app; if there's nothing to go back to (opened here directly), go to `parent`. */
+export function goBack(parent) {
+  if (depth > 0) history.back();
+  else { replacing = true; location.replace(parent); }
+}
+
+/**
+ * Page header with a settings link; the dot shows whether your data is syncing to GitHub.
+ * `back` ({ href }) adds a Back button for pages below the top level: it returns to the previous
+ * page, or to `href` (the parent) if the app was opened on this page.
+ */
+export function masthead(title, sub, status, back = null) {
   const dot = status ? h("span", { class: `sync ${status.state}`, title: { synced: "Synced to GitHub", saving: "Saving…", error: `Not saved: ${status.message}`, local: "Saved on this device only" }[status.state] }) : null;
-  return h("header", { class: "masthead" }, h("h1", {}, title), sub ? h("span", { class: "date" }, sub) : null,
+  return h("header", { class: "masthead" + (back ? " sub" : "") },
+    back ? h("button", { class: "back-btn", onclick: () => goBack(back.href), "aria-label": "Back" }, "‹ Back") : null,
+    h("h1", {}, title), sub ? h("span", { class: "date" }, sub) : null,
     h("a", { class: "gear", href: "#/settings", "aria-label": "Settings" }, dot, "⚙"));
 }
 

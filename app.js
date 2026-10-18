@@ -1,6 +1,6 @@
 // Paper of the Day — reads data/index.json and data/<date>.json (built daily by GitHub Actions).
 const view = document.getElementById("view");
-import { store, h, fmtDate, authorLine, getJSON, masthead } from "./js/dom.js";
+import { store, h, fmtDate, authorLine, getJSON, masthead, trackHistory } from "./js/dom.js";
 import * as sync from "./js/sync.js";
 import { showWatching } from "./js/watch.js";
 import { showLearn } from "./js/learn.js";
@@ -44,7 +44,6 @@ function paperView(rec, which = null) {
   const others = [{ q: rec.paper, i: null }, ...(rec.also ?? []).map((q, i) => ({ q, i }))].filter(({ i }) => i !== which);
   const more = h("button", { class: "link", onclick: () => { abstract.classList.remove("clamp"); more.remove(); } }, "Read full abstract");
   return [
-    which !== null ? h("a", { class: "back", href: href(null) }, "‹ Paper of the Day") : null,
     h("div", { class: "kicker" }, which !== null ? h("span", { class: "classic" }, "Also worth a look") : null, p.classic ? h("span", { class: "classic" }, "Classic") : null, h("span", {}, p.venue),
       p.preprint ? h("span", { class: "pre" }, "Preprint") : null,
       h("span", { class: "pre" }, p.classic ? `${p.year} · ${p.citations.toLocaleString()} citations` : p.date)),
@@ -74,8 +73,11 @@ function paperView(rec, which = null) {
   ];
 }
 
-async function showDay(date, which = null) {
-  view.replaceChildren(masthead("Paper of the Day", date ? fmtDate(date) : "", sync.getStatus()));
+async function showDay(date, which = null, sub = false) {
+  // Today's page is top level; an older day goes back to the Archive; a runner-up to its day.
+  const back = which !== null ? { href: `#/day/${date}`, label: date === index.days[0]?.date ? "Today" : "That day" }
+    : sub ? { href: "#/archive", label: "Archive" } : null;
+  view.replaceChildren(masthead(which !== null ? "Also worth a look" : "Paper of the Day", date ? fmtDate(date) : "", sync.getStatus(), back));
   if (!date) { view.append(h("p", { class: "empty" }, "No paper yet — the first one arrives with the next daily run.")); return; }
   try { view.append(...paperView(await (async () => { const rec = await getJSON(`data/${date}.json`); if (which !== null && !rec.also?.[which]) which = null; return rec; })(), which).flat(3).filter(Boolean)); }
   catch { view.append(h("p", { class: "empty" }, "Couldn't load this day. Check your connection.")); }
@@ -88,16 +90,17 @@ function showList(title, items, emptyText) {
 }
 
 async function route() {
+  trackHistory();
   const [, page, arg, sub] = (location.hash || "#/").split("/");
   document.querySelectorAll(".tabs a").forEach((a) => (a.dataset.tab === (page || "today") || (a.dataset.tab === "archive" && page === "day")) ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   window.scrollTo(0, 0);
   const ctx = { view, sync };
-  if (page === "watching") return showWatching(ctx);
+  if (page === "watching") return showWatching(ctx, arg);
   if (page === "learn") return showLearn(ctx, arg, sub);
   if (page === "settings") return showSettings(ctx);
   if (page === "archive") return showList("Archive", index.days.map((d) => ({ href: `#/day/${d.date}`, title: d.title, meta: `${fmtDate(d.date)} · ${d.venue}` })), "Nothing here yet.");
   if (page === "saved") return showList("Saved", saved().map((s) => ({ href: s.href ?? `#/day/${s.date}`, title: s.title, meta: `${s.venue} · ${fmtDate(s.date)}` })), "Tap ☆ Save on a paper to keep it here.");
-  if (page === "day" && arg) return showDay(arg, /^\d$/.test(sub ?? "") ? Number(sub) : null);
+  if (page === "day" && arg) return showDay(arg, /^\d$/.test(sub ?? "") ? Number(sub) : null, true);
   return showDay(index.days[0]?.date);
 }
 
