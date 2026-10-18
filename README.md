@@ -27,11 +27,32 @@ One genuinely interesting paper every morning: AI for transcriptomics and multio
   - **Backfill:** on the Actions tab, choose **Run workflow** and tick "backfill". This adds missing summaries to days that are already published. It runs on GitHub, never on your device.
 - **Publish:** it writes `data/<date>.json` and `data/index.json`, commits them, and redeploys Pages. Papers are never repeated.
 
+## Your feedback, Watching and Learn
+
+All three keep your data in **`data/me.json`**: votes, watch rules, and which lessons you've finished. The app writes it, and the daily run reads it.
+
+- **Connect a device (once):** open **⚙ Settings** in the app and paste a GitHub **fine-grained token**. Give it access only to this repository, with **Contents: Read and write** and nothing else.
+  - The token is stored only in that browser, never in the repo.
+  - Without a token, everything still works, but it stays on that device and the daily run can't see it.
+- **👍/👎** on every paper:
+  - Each vote adjusts how much you like each topic label, which nudges the ranking by up to ±3 points.
+  - The AI curator also sees your last 8 likes and dislikes.
+- **Watching** (`scripts/watch.mjs`): new papers from the last 60 days that match your rules: a journal plus title keywords, authors or labs, or keywords in any venue.
+  - It uses the free Europe PMC API, which covers journals and preprints. No AI and no tokens.
+  - Edit the rules in the app with **Edit what to watch**.
+- **Learn** (`scripts/learn.mjs`): two tracks.
+  - **Biology:** systematic, from the foundations up to omics technologies.
+  - **AI/ML:** research level.
+  - The syllabus is fixed, in `learn/curriculum.json`. Each daily run writes lessons up to 3 ahead of your progress (at most 4 per track per run, about 7K tokens each) into `data/learn/`. Each lesson has key ideas, an "In your data" section, and a 4-question quiz.
+  - Finishing the quiz marks the lesson done. Questions then come back for spaced review, which is kept on each device.
+
 ## Run it locally
 
 ```sh
 node scripts/fetch-papers.mjs --dry-run          # show today's pick without saving
 node scripts/fetch-papers.mjs --date 2026-10-15  # pick for a past day
+node scripts/watch.mjs --dry-run                 # what the watch rules would find
+node scripts/learn.mjs --dry-run                 # which lessons would be written next
 ```
 
 The web app (`index.html`, `app.js`, `style.css`) has no build step and no external requests. Saved papers stay in your browser.

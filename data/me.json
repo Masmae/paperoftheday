@@ -1,0 +1,155 @@
+{
+ "version": 1,
+ "votes": {},
+ "watch": {
+  "authors": [],
+  "journals": [
+   {
+    "name": "Nature",
+    "keywords": [
+     "single-cell",
+     "single cell",
+     "spatial",
+     "transcriptom",
+     "multiomic",
+     "multi-omic",
+     "foundation model",
+     "deep learning",
+     "language model",
+     "machine learning",
+     "transformer"
+    ]
+   },
+   {
+    "name": "Science",
+    "keywords": [
+     "single-cell",
+     "single cell",
+     "spatial",
+     "transcriptom",
+     "multiomic",
+     "multi-omic",
+     "foundation model",
+     "deep learning",
+     "language model",
+     "machine learning",
+     "transformer"
+    ]
+   },
+   {
+    "name": "Cell",
+    "keywords": [
+     "single-cell",
+     "single cell",
+     "spatial",
+     "transcriptom",
+     "multiomic",
+     "multi-omic",
+     "foundation model",
+     "deep learning",
+     "language model",
+     "machine learning",
+     "transformer"
+    ]
+   },
+   {
+    "name": "Nature Methods",
+    "keywords": [
+     "single-cell",
+     "single cell",
+     "spatial",
+     "transcriptom",
+     "multiomic",
+     "multi-omic",
+     "foundation model",
+     "deep learning",
+     "language model",
+     "machine learning",
+     "transformer"
+    ]
+   },
+   {
+    "name": "Nature Biotechnology",
+    "keywords": [
+     "single-cell",
+     "single cell",
+     "spatial",
+     "transcriptom",
+     "multiomic",
+     "multi-omic",
+     "foundation model",
+     "deep learning",
+     "language model",
+     "machine learning",
+     "transformer"
+    ]
+   },
+   {
+    "name": "Nature Genetics",
+    "keywords": [
+     "single-cell",
+     "single cell",
+     "spatial",
+     "transcriptom",
+     "multiomic",
+     "multi-omic",
+     "foundation model",
+     "deep learning",
+     "language model",
+     "machine learning",
+     "transformer"
+    ]
+   },
+   {
+    "name": "Nature Machine Intelligence",
+    "keywords": [
+     "single-cell",
+     "single cell",
+     "spatial",
+     "transcriptom",
+     "multiomic",
+     "multi-omic",
+     "foundation model",
+     "deep learning",
+     "language model",
+     "machine learning",
+     "transformer"
+    ]
+   },
+   {
+    "name": "Cell Systems",
+    "keywords": [
+     "single-cell",
+     "single cell",
+     "spatial",
+     "transcriptom",
+     "multiomic",
+     "multi-omic",
+     "foundation model",
+     "deep learning",
+     "language model",
+     "machine learning",
+     "transformer"
+    ]
+   },
+   {
+    "name": "Genome Biology",
+    "keywords": [
+     "single-cell",
+     "single cell",
+     "spatial",
+     "transcriptom",
+     "multiomic",
+     "multi-omic",
+     "foundation model",
+     "deep learning",
+     "language model",
+     "machine learning",
+     "transformer"
+    ]
+   }
+  ],
+  "keywords": []
+ },
+ "learn": {}
+}

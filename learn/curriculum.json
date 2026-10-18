@@ -1,0 +1,1910 @@
+{
+  "version": 1,
+  "tracks": [
+    {
+      "id": "bio",
+      "title": "Biology",
+      "blurb": "A compressed, prerequisite-ordered undergraduate biology sequence, from molecules and cells through genetics, regulation, physiology, and evolution to modern sequencing and omics technologies.",
+      "units": [
+        {
+          "id": "bio-u01",
+          "title": "Chemistry of Life and Macromolecules",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 2: The Chemical Foundation of Life",
+              "url": "https://openstax.org/books/biology-2e/pages/2-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, Ch. 3: Biological Macromolecules",
+              "url": "https://openstax.org/books/biology-2e/pages/3-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, 3.4: Proteins",
+              "url": "https://openstax.org/books/biology-2e/pages/3-4-proteins"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-001",
+              "title": "Atoms, Bonds, and Water",
+              "focus": "Covalent vs non-covalent bonds (hydrogen bonds, ionic, hydrophobic effect, van der Waals) and why water's polarity makes weak interactions the currency of molecular recognition. Emphasize that most biology (TF-DNA binding, protein folding, membranes) runs on many weak, reversible bonds."
+            },
+            {
+              "id": "bio-002",
+              "title": "Energy, Equilibrium, and Free Energy in Cells",
+              "focus": "Gibbs free energy, equilibrium constants, coupling of unfavorable reactions to ATP hydrolysis, and pH/buffers. Frame binding affinity (Kd) and occupancy curves so later lessons on TF binding and receptor signaling feel quantitative."
+            },
+            {
+              "id": "bio-003",
+              "title": "Carbohydrates and Lipids",
+              "focus": "Monosaccharides to polysaccharides, glycosylation, fatty acids, phospholipids, and sterols. Explain why lipid amphipathicity spontaneously forms bilayers and where these molecules show up in metabolism and membrane biology."
+            },
+            {
+              "id": "bio-004",
+              "title": "Amino Acids and the Four Levels of Protein Structure",
+              "focus": "Amino acid side-chain chemistry, peptide bonds, and primary/secondary/tertiary/quaternary structure. Connect sequence-determines-structure to why protein language models and AlphaFold can work."
+            },
+            {
+              "id": "bio-005",
+              "title": "Protein Function: Enzymes, Allostery, and Modifications",
+              "focus": "Enzyme catalysis and Michaelis-Menten kinetics, allosteric regulation, and post-translational modifications (phosphorylation, ubiquitination, acetylation, glycosylation). Note that mRNA abundance misses PTM-level regulation, a key caveat when reading transcriptomics as a proxy for protein activity."
+            },
+            {
+              "id": "bio-006",
+              "title": "Nucleic Acids: DNA and RNA Chemistry",
+              "focus": "Nucleotide structure, base pairing, strand directionality (5' to 3'), RNA secondary structure, and the chemical differences between DNA and RNA. Tie base-pairing to how hybridization-based assays and sequencing primers work."
+            }
+          ]
+        },
+        {
+          "id": "bio-u02",
+          "title": "Genome Organization",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 14: DNA Structure and Function",
+              "url": "https://openstax.org/books/biology-2e/pages/14-introduction"
+            },
+            {
+              "title": "Scitable: DNA Packaging: Nucleosomes and Chromatin",
+              "url": "https://www.nature.com/scitable/topicpage/dna-packaging-nucleosomes-and-chromatin-310/"
+            },
+            {
+              "title": "Scitable: Genome Packaging in Prokaryotes",
+              "url": "https://www.nature.com/scitable/topicpage/genome-packaging-in-prokaryotes-the-circular-chromosome-9113/"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-007",
+              "title": "The Double Helix and Chromosomes",
+              "focus": "DNA double helix geometry, chromosomes, ploidy, karyotypes, and how ~2 m of DNA fits in a nucleus via nucleosomes and higher-order folding. Contrast prokaryotic circular chromosomes and plasmids."
+            },
+            {
+              "id": "bio-008",
+              "title": "Anatomy of the Human Genome",
+              "focus": "Genes, exons/introns, UTRs, promoters, repeats and transposable elements, pseudogenes, and the large noncoding fraction. Give rough numbers (genome size, ~20k protein-coding genes, % coding) the learner should keep in mind."
+            },
+            {
+              "id": "bio-009",
+              "title": "Reference Genomes and Gene Annotation",
+              "focus": "What a reference assembly is (GRCh38, T2T-CHM13), coordinates, GTF/GFF annotations, Ensembl vs RefSeq gene models, transcript isoforms, and gene ID headaches. Explain how annotation choices change RNA-seq gene counts."
+            },
+            {
+              "id": "bio-010",
+              "title": "Organelle Genomes and Genome Diversity Across Life",
+              "focus": "Mitochondrial DNA (maternal inheritance, high copy number, heteroplasmy), and how genome size and gene content vary across bacteria, yeast, flies, mice, and humans. Mention why mitochondrial read fraction is a single-cell QC metric."
+            }
+          ]
+        },
+        {
+          "id": "bio-u03",
+          "title": "DNA Replication, Repair, and Mutation",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, 14.5: DNA Replication in Eukaryotes",
+              "url": "https://openstax.org/books/biology-2e/pages/14-5-dna-replication-in-eukaryotes"
+            },
+            {
+              "title": "OpenStax Biology 2e, 14.6: DNA Repair",
+              "url": "https://openstax.org/books/biology-2e/pages/14-6-dna-repair"
+            },
+            {
+              "title": "Scitable: Genetic Mutation",
+              "url": "https://www.nature.com/scitable/topicpage/genetic-mutation-441/"
+            },
+            {
+              "title": "Scitable: Errors in DNA Replication",
+              "url": "https://www.nature.com/scitable/topicpage/dna-replication-and-causes-of-mutation-409/"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-011",
+              "title": "How DNA Is Copied",
+              "focus": "Replication origins, helicase, primase, DNA polymerases, leading/lagging strands, Okazaki fragments, and telomeres/telomerase. Keep it mechanistic but brief; link polymerase chemistry to PCR and sequencing-by-synthesis."
+            },
+            {
+              "id": "bio-012",
+              "title": "Fidelity and DNA Repair Pathways",
+              "focus": "Proofreading, mismatch repair, base and nucleotide excision repair, and double-strand break repair (NHEJ vs homologous recombination). Connect NHEJ/HDR to how CRISPR edits are resolved and to BRCA-deficient cancers."
+            },
+            {
+              "id": "bio-013",
+              "title": "Types of Mutations and Their Consequences",
+              "focus": "SNVs (synonymous, missense, nonsense), indels and frameshifts, splice-site mutations, copy number variants, and structural variants; germline vs somatic. Explain how each can or cannot be detected from RNA-seq."
+            },
+            {
+              "id": "bio-014",
+              "title": "Recombination and Transposable Elements",
+              "focus": "Homologous recombination in meiosis, crossing over, and transposons/retrotransposons as mutagens and regulatory raw material. Note multimapping reads from repeats as a practical quantification problem."
+            }
+          ]
+        },
+        {
+          "id": "bio-u04",
+          "title": "Transcription and RNA Processing",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 15: Genes and Proteins",
+              "url": "https://openstax.org/books/biology-2e/pages/15-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, 15.4: RNA Processing in Eukaryotes",
+              "url": "https://openstax.org/books/biology-2e/pages/15-4-rna-processing-in-eukaryotes"
+            },
+            {
+              "title": "Scitable: RNA Transcription by RNA Polymerase",
+              "url": "https://www.nature.com/scitable/topicpage/rna-transcription-by-rna-polymerase-prokaryotes-vs-961/"
+            },
+            {
+              "title": "Scitable: RNA Splicing",
+              "url": "https://www.nature.com/scitable/topicpage/rna-splicing-introns-exons-and-spliceosome-12375/"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-015",
+              "title": "The Central Dogma and RNA Polymerases",
+              "focus": "Information flow DNA to RNA to protein, the three eukaryotic RNA polymerases and what each makes, and the transcription cycle (initiation, elongation, termination). Highlight promoter-proximal pausing as a regulatory step."
+            },
+            {
+              "id": "bio-016",
+              "title": "Promoters and the Transcription Initiation Machinery",
+              "focus": "Core promoter elements, general transcription factors, Mediator, and the preinitiation complex. Set up the distinction between core promoter and distal enhancers used in the regulation units."
+            },
+            {
+              "id": "bio-017",
+              "title": "mRNA Capping, Polyadenylation, and Export",
+              "focus": "5' capping, 3' cleavage and poly(A) tailing, alternative polyadenylation, and nuclear export. Explain why poly(A) capture and 3'-end counting (e.g. 10x 3' kits) bias what transcripts you observe."
+            },
+            {
+              "id": "bio-018",
+              "title": "Splicing and Alternative Splicing",
+              "focus": "Spliceosome mechanics, splice-site signals, alternative splicing modes, and isoform diversity. Discuss why short-read gene-level counts hide isoform switching and how intronic reads enable spliced/unspliced (RNA velocity) estimates."
+            },
+            {
+              "id": "bio-019",
+              "title": "RNA Stability, Decay, and the Noncoding RNA Zoo",
+              "focus": "mRNA half-lives, nonsense-mediated decay, and major RNA classes (rRNA, tRNA, snRNA, miRNA, lncRNA, circRNA). Note that steady-state RNA levels reflect both synthesis and decay."
+            }
+          ]
+        },
+        {
+          "id": "bio-u05",
+          "title": "Translation and Protein Fate",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, 15.5: Ribosomes and Protein Synthesis",
+              "url": "https://openstax.org/books/biology-2e/pages/15-5-ribosomes-and-protein-synthesis"
+            },
+            {
+              "title": "Scitable: Translation: DNA to mRNA to Protein",
+              "url": "https://www.nature.com/scitable/topicpage/translation-dna-to-mrna-to-protein-393/"
+            },
+            {
+              "title": "OpenStax Biology 2e, 4.4: The Endomembrane System and Proteins",
+              "url": "https://openstax.org/books/biology-2e/pages/4-4-the-endomembrane-system-and-proteins"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-020",
+              "title": "The Genetic Code and the Ribosome",
+              "focus": "Codons, reading frames, tRNAs and aminoacyl-tRNA synthetases, and the steps of translation. Mention codon usage and ORF calling as computational tasks."
+            },
+            {
+              "id": "bio-021",
+              "title": "Translational Control",
+              "focus": "Regulation via initiation factors, uORFs, mTOR signaling, and miRNAs; why mRNA and protein levels correlate only moderately. Introduce ribosome profiling as a translation-level readout."
+            },
+            {
+              "id": "bio-022",
+              "title": "Protein Targeting and the Secretory Pathway",
+              "focus": "Signal peptides, ER, Golgi, vesicle trafficking, membrane proteins, and secreted proteins. Connect to why plasma cells and secretory cell types have distinctive transcriptomes (ER/UPR genes)."
+            },
+            {
+              "id": "bio-023",
+              "title": "Protein Folding Quality Control and Degradation",
+              "focus": "Chaperones, the unfolded protein response, ubiquitin-proteasome system, and autophagy. Explain how protein turnover rates add another layer between transcript and function."
+            }
+          ]
+        },
+        {
+          "id": "bio-u06",
+          "title": "Cell Architecture",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 4: Cell Structure",
+              "url": "https://openstax.org/books/biology-2e/pages/4-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, Ch. 5: Structure and Function of Plasma Membranes",
+              "url": "https://openstax.org/books/biology-2e/pages/5-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, 4.5: The Cytoskeleton",
+              "url": "https://openstax.org/books/biology-2e/pages/4-5-the-cytoskeleton"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-024",
+              "title": "Prokaryotic vs Eukaryotic Cells and Organelles",
+              "focus": "Compartmentalization, the nucleus, mitochondria, ER, Golgi, lysosomes, peroxisomes, and their functions. Give a sense of scale (cell sizes, molecule counts per cell, mRNA copies per gene)."
+            },
+            {
+              "id": "bio-025",
+              "title": "Membranes and Transport",
+              "focus": "Bilayer structure, membrane proteins, diffusion, channels, transporters, pumps, and endocytosis. Link ion gradients to neuron excitability later."
+            },
+            {
+              "id": "bio-026",
+              "title": "The Cytoskeleton and Motors",
+              "focus": "Actin, microtubules, intermediate filaments, motor proteins, and their roles in shape, migration, division, and transport. Mention cytoskeletal genes as common cell-state markers."
+            },
+            {
+              "id": "bio-027",
+              "title": "Cell Junctions, Adhesion, and the Extracellular Matrix",
+              "focus": "Tight/adherens/gap junctions, desmosomes, integrins, cadherins, and ECM components. Connect to epithelial vs mesenchymal states and EMT signatures in tumor and development data."
+            }
+          ]
+        },
+        {
+          "id": "bio-u07",
+          "title": "Cell Signaling",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 9: Cell Communication",
+              "url": "https://openstax.org/books/biology-2e/pages/9-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, 9.2: Propagation of the Signal",
+              "url": "https://openstax.org/books/biology-2e/pages/9-2-propagation-of-the-signal"
+            },
+            {
+              "title": "Single-cell best practices: Cell-cell communication",
+              "url": "https://www.sc-best-practices.org/mechanisms/cell-cell-communication"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-028",
+              "title": "Principles of Cell Signaling",
+              "focus": "Ligands, receptors, signal amplification, feedback, and signal termination; autocrine, paracrine, endocrine, and juxtacrine modes. Frame signaling as information processing with dose-response and adaptation."
+            },
+            {
+              "id": "bio-029",
+              "title": "Receptor Classes: GPCRs, RTKs, Ion Channels, Nuclear Receptors",
+              "focus": "How each receptor family transduces a signal, with canonical examples. Note which are major drug targets."
+            },
+            {
+              "id": "bio-030",
+              "title": "Intracellular Cascades: MAPK, PI3K-AKT-mTOR, Second Messengers",
+              "focus": "Kinase cascades, scaffolds, second messengers (cAMP, Ca2+), and crosstalk. Emphasize that pathway activity is often post-translational and inferred indirectly from target-gene signatures (e.g. PROGENy-style footprints)."
+            },
+            {
+              "id": "bio-031",
+              "title": "Developmental Signaling Pathways",
+              "focus": "Wnt, Notch, Hedgehog, TGF-beta/BMP, JAK-STAT, and NF-kB: logic, key components, and transcriptional outputs. These recur in development, immunity, and cancer."
+            },
+            {
+              "id": "bio-032",
+              "title": "Cell-Cell Communication Inference from Expression Data",
+              "focus": "How ligand-receptor databases and tools (CellPhoneDB, CellChat, LIANA) infer communication from scRNA-seq or spatial data, and their main assumptions and failure modes."
+            }
+          ]
+        },
+        {
+          "id": "bio-u08",
+          "title": "Cell Cycle, Division, and Cell Death",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 10: Cell Reproduction",
+              "url": "https://openstax.org/books/biology-2e/pages/10-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, 10.3: Control of the Cell Cycle",
+              "url": "https://openstax.org/books/biology-2e/pages/10-3-control-of-the-cell-cycle"
+            },
+            {
+              "title": "OpenStax Biology 2e, Ch. 11: Meiosis and Sexual Reproduction",
+              "url": "https://openstax.org/books/biology-2e/pages/11-introduction"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-033",
+              "title": "Cell Cycle Phases and Mitosis",
+              "focus": "G1/S/G2/M, chromosome condensation, spindle, and cytokinesis. Explain why cell-cycle genes dominate variation in proliferating single-cell data and how cell-cycle scoring/regression works."
+            },
+            {
+              "id": "bio-034",
+              "title": "Cyclins, CDKs, and Checkpoints",
+              "focus": "CDK-cyclin oscillator, Rb-E2F switch, p53 and DNA damage checkpoints, spindle assembly checkpoint. Set up oncogenes and tumor suppressors."
+            },
+            {
+              "id": "bio-035",
+              "title": "Meiosis and Sexual Reproduction",
+              "focus": "Homolog pairing, crossover, independent assortment, and nondisjunction. Connect to inheritance patterns and aneuploidy."
+            },
+            {
+              "id": "bio-036",
+              "title": "Apoptosis, Senescence, and Other Fates",
+              "focus": "Intrinsic vs extrinsic apoptosis, caspases, necroptosis, senescence and SASP, quiescence. Note stress/dissociation signatures that can look like biology in scRNA-seq."
+            }
+          ]
+        },
+        {
+          "id": "bio-u09",
+          "title": "Classical and Chromosomal Genetics",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 12: Mendel's Experiments and Heredity",
+              "url": "https://openstax.org/books/biology-2e/pages/12-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, Ch. 13: Modern Understandings of Inheritance",
+              "url": "https://openstax.org/books/biology-2e/pages/13-introduction"
+            },
+            {
+              "title": "Online Open Genetics (Nickle and Barrette-Ng), LibreTexts",
+              "url": "https://bio.libretexts.org/Bookshelves/Genetics/Online_Open_Genetics_(Nickle_and_Barrette-Ng)"
+            },
+            {
+              "title": "Scitable: Gregor Mendel and Single-Gene Disorders",
+              "url": "https://www.nature.com/scitable/topicpage/mendelian-genetics-patterns-of-inheritance-and-single-966/"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-037",
+              "title": "Mendel's Laws and Probability in Inheritance",
+              "focus": "Segregation, independent assortment, Punnett squares, and pedigree reasoning, framed as probability the learner already knows."
+            },
+            {
+              "id": "bio-038",
+              "title": "Beyond Simple Dominance",
+              "focus": "Incomplete dominance, codominance, multiple alleles, epistasis, penetrance, expressivity, and pleiotropy. Show how genotype-to-phenotype maps become nonlinear."
+            },
+            {
+              "id": "bio-039",
+              "title": "Linkage, Recombination, and Genetic Maps",
+              "focus": "Linked genes, recombination frequency, centimorgans, and the idea of haplotypes. Sets up linkage disequilibrium and GWAS fine-mapping."
+            },
+            {
+              "id": "bio-040",
+              "title": "Sex Chromosomes, Dosage, and Chromosomal Abnormalities",
+              "focus": "X/Y inheritance, dosage compensation (preview of X inactivation), aneuploidy, translocations, and their disease consequences. Mention sex as a covariate in expression analyses."
+            }
+          ]
+        },
+        {
+          "id": "bio-u10",
+          "title": "Human and Population Genetics",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, 19.1: Population Evolution",
+              "url": "https://openstax.org/books/biology-2e/pages/19-1-population-evolution"
+            },
+            {
+              "title": "NHGRI: Genome-Wide Association Studies Fact Sheet",
+              "url": "https://www.genome.gov/about-genomics/fact-sheets/Genome-Wide-Association-Studies-Fact-Sheet"
+            },
+            {
+              "title": "EMBL-EBI Training: Human genetic variation",
+              "url": "https://www.ebi.ac.uk/training/online/courses/human-genetic-variation-introduction/"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-041",
+              "title": "Allele Frequencies and Hardy-Weinberg",
+              "focus": "Population allele frequencies, Hardy-Weinberg equilibrium, and what deviations indicate. Introduce population structure as a confounder."
+            },
+            {
+              "id": "bio-042",
+              "title": "Human Genetic Variation and Linkage Disequilibrium",
+              "focus": "Common vs rare variants, haplotype blocks, LD, ancestry, and resources like gnomAD and 1000 Genomes."
+            },
+            {
+              "id": "bio-043",
+              "title": "Heritability and Complex Traits",
+              "focus": "Polygenic architecture, heritability (and its misinterpretations), twin studies, and polygenic scores."
+            },
+            {
+              "id": "bio-044",
+              "title": "GWAS and Fine-Mapping",
+              "focus": "GWAS design, multiple testing, Manhattan plots, LD-driven ambiguity, and fine-mapping. Emphasize that most hits are noncoding and regulatory."
+            },
+            {
+              "id": "bio-045",
+              "title": "eQTLs and Linking Variants to Function",
+              "focus": "Expression and chromatin QTLs, colocalization, single-cell eQTLs, and how regulatory genomics data is used to interpret GWAS loci."
+            }
+          ]
+        },
+        {
+          "id": "bio-u11",
+          "title": "Transcriptional Regulation",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 16: Gene Expression",
+              "url": "https://openstax.org/books/biology-2e/pages/16-introduction"
+            },
+            {
+              "title": "Working with Molecular Genetics (Hardison), LibreTexts",
+              "url": "https://bio.libretexts.org/Bookshelves/Genetics/Working_with_Molecular_Genetics_(Hardison)"
+            },
+            {
+              "title": "Single-cell best practices: Gene regulatory networks",
+              "url": "https://www.sc-best-practices.org/mechanisms/gene-regulatory-networks"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-046",
+              "title": "Prokaryotic Gene Regulation: The Operon Logic",
+              "focus": "lac and trp operons, repressors, activators, and inducers as the simplest model of regulatory logic. Use it to introduce cis vs trans."
+            },
+            {
+              "id": "bio-047",
+              "title": "Cis-Regulatory Elements: Promoters, Enhancers, Silencers, Insulators",
+              "focus": "How distal enhancers act over long distances, enhancer grammar, and how these elements are annotated (ENCODE cCREs). Connect to ATAC peaks and enhancer-gene linking."
+            },
+            {
+              "id": "bio-048",
+              "title": "Transcription Factors and Binding Motifs",
+              "focus": "TF families and DNA-binding domains, position weight matrices, motif databases (JASPAR), and why most motif matches are not bound. Link to motif enrichment in ATAC/ChIP analysis."
+            },
+            {
+              "id": "bio-049",
+              "title": "Combinatorial Control and Gene Regulatory Networks",
+              "focus": "Cooperative binding, network motifs (feed-forward loops, feedback, bistability), master regulators, and cell identity. Discuss GRN inference from expression (SCENIC-style) and its limits."
+            },
+            {
+              "id": "bio-050",
+              "title": "The 3D Genome",
+              "focus": "Chromatin loops, TADs, compartments, cohesin/CTCF loop extrusion, and Hi-C. Explain why enhancer-gene assignment by nearest gene is often wrong."
+            }
+          ]
+        },
+        {
+          "id": "bio-u12",
+          "title": "Epigenetics and Post-Transcriptional Regulation",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, 16.3: Eukaryotic Epigenetic Gene Regulation",
+              "url": "https://openstax.org/books/biology-2e/pages/16-3-eukaryotic-epigenetic-gene-regulation"
+            },
+            {
+              "title": "Scitable: Chromatin Remodeling in Eukaryotes",
+              "url": "https://www.nature.com/scitable/topicpage/chromatin-remodeling-in-eukaryotes-1082/"
+            },
+            {
+              "title": "Scitable: The Role of Methylation in Gene Expression",
+              "url": "https://www.nature.com/scitable/topicpage/the-role-of-methylation-in-gene-expression-1070/"
+            },
+            {
+              "title": "NHGRI: Epigenomics Fact Sheet",
+              "url": "https://www.genome.gov/about-genomics/fact-sheets/Epigenomics-Fact-Sheet"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-051",
+              "title": "Histone Modifications and the Histone Code",
+              "focus": "Key marks (H3K4me3, H3K27ac, H3K4me1, H3K27me3, H3K9me3, H3K36me3), writers/readers/erasers, and what each mark indicates about promoters, enhancers, and silenced regions."
+            },
+            {
+              "id": "bio-052",
+              "title": "DNA Methylation and Imprinting",
+              "focus": "CpG islands, DNMTs and TETs, methylation in gene silencing, genomic imprinting, and methylation clocks. Mention bisulfite sequencing and methylation arrays."
+            },
+            {
+              "id": "bio-053",
+              "title": "Chromatin Accessibility and Remodeling",
+              "focus": "Nucleosome positioning, pioneer factors, SWI/SNF remodelers, and how accessibility marks regulatory potential. Directly motivates ATAC-seq."
+            },
+            {
+              "id": "bio-054",
+              "title": "Epigenetic Memory: Polycomb, Trithorax, and X Inactivation",
+              "focus": "How repressive and active states are maintained through cell divisions; X-chromosome inactivation by XIST. Note XIST as a sex marker in expression data."
+            },
+            {
+              "id": "bio-055",
+              "title": "Post-Transcriptional Regulation: miRNAs, lncRNAs, RBPs, RNA Modifications",
+              "focus": "miRNA targeting, lncRNA mechanisms, RNA-binding proteins, and m6A. Explain why these layers add noise to RNA-to-protein inference."
+            }
+          ]
+        },
+        {
+          "id": "bio-u13",
+          "title": "Development and Stem Cells",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 43: Animal Reproduction and Development",
+              "url": "https://openstax.org/books/biology-2e/pages/43-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, 43.7: Organogenesis and Vertebrate Axis Formation",
+              "url": "https://openstax.org/books/biology-2e/pages/43-7-organogenesis-and-vertebrate-formation"
+            },
+            {
+              "title": "Scitable: Gene Expression Regulates Cell Differentiation",
+              "url": "https://www.nature.com/scitable/topicpage/gene-expression-regulates-cell-differentiation-931/"
+            },
+            {
+              "title": "OpenStax Anatomy and Physiology 2e, 3.6: Cellular Differentiation",
+              "url": "https://openstax.org/books/anatomy-and-physiology-2e/pages/3-6-cellular-differentiation"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-056",
+              "title": "From Zygote to Gastrula",
+              "focus": "Fertilization, cleavage, blastocyst, gastrulation, and the three germ layers with what each becomes."
+            },
+            {
+              "id": "bio-057",
+              "title": "Morphogens, Patterning, and Hox Genes",
+              "focus": "Morphogen gradients, positional information, body axes, Hox codes, and evolutionary conservation of developmental toolkits."
+            },
+            {
+              "id": "bio-058",
+              "title": "Differentiation and the Waddington Landscape",
+              "focus": "Commitment, lineage restriction, bifurcations, and cell fate as attractor states. Connect to trajectory inference and pseudotime as computational analogs."
+            },
+            {
+              "id": "bio-059",
+              "title": "Stem Cells: Embryonic, Adult, and Induced Pluripotent",
+              "focus": "Potency hierarchy, niches, hematopoietic hierarchy as a canonical example, Yamanaka reprogramming, and directed differentiation."
+            },
+            {
+              "id": "bio-060",
+              "title": "Organoids, Lineage Tracing, and Developmental Atlases",
+              "focus": "Organoids as models, genetic and barcode-based lineage tracing, and single-cell developmental atlases. Discuss what clonal information adds beyond snapshot transcriptomes."
+            }
+          ]
+        },
+        {
+          "id": "bio-u14",
+          "title": "Immunology",
+          "resources": [
+            {
+              "title": "OpenStax Microbiology, Ch. 17: Innate Nonspecific Host Defenses",
+              "url": "https://openstax.org/books/microbiology/pages/17-introduction"
+            },
+            {
+              "title": "OpenStax Microbiology, Ch. 18: Adaptive Specific Host Defenses",
+              "url": "https://openstax.org/books/microbiology/pages/18-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, 42.2: Adaptive Immune Response",
+              "url": "https://openstax.org/books/biology-2e/pages/42-2-adaptive-immune-response"
+            },
+            {
+              "title": "Single-cell best practices: Immune receptor profiling",
+              "url": "https://www.sc-best-practices.org/air-repertoire/ir-profiling"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-061",
+              "title": "Innate Immunity",
+              "focus": "Barriers, pattern recognition receptors, macrophages, neutrophils, dendritic cells, NK cells, complement, and inflammation. Give the major marker genes for each cell type."
+            },
+            {
+              "id": "bio-062",
+              "title": "Antigen Presentation and MHC",
+              "focus": "MHC class I vs II, antigen processing, HLA diversity, and how dendritic cells bridge innate and adaptive immunity."
+            },
+            {
+              "id": "bio-063",
+              "title": "T Cells: Development, Subsets, and Activation",
+              "focus": "Thymic selection, CD4 helper subsets, CD8 cytotoxic cells, Tregs, activation signals, and exhaustion. Emphasize T-cell states as a heavily studied scRNA-seq problem."
+            },
+            {
+              "id": "bio-064",
+              "title": "B Cells and Antibodies",
+              "focus": "B-cell activation, germinal centers, class switching, somatic hypermutation, plasma cells, and antibody structure."
+            },
+            {
+              "id": "bio-065",
+              "title": "V(D)J Recombination and Immune Repertoires",
+              "focus": "How TCR/BCR diversity is generated, clonotypes, and how single-cell VDJ sequencing pairs receptor sequence with transcriptome."
+            },
+            {
+              "id": "bio-066",
+              "title": "Cytokines, Memory, and Immune Dysregulation",
+              "focus": "Cytokine networks, immunological memory, vaccination, autoimmunity, and immunodeficiency. Mention interferon signatures as a common transcriptomic readout."
+            }
+          ]
+        },
+        {
+          "id": "bio-u15",
+          "title": "Cancer Biology",
+          "resources": [
+            {
+              "title": "NCI: What Is Cancer?",
+              "url": "https://www.cancer.gov/about-cancer/understanding/what-is-cancer"
+            },
+            {
+              "title": "OpenStax Biology 2e, 10.4: Cancer and the Cell Cycle",
+              "url": "https://openstax.org/books/biology-2e/pages/10-4-cancer-and-the-cell-cycle"
+            },
+            {
+              "title": "OpenStax Biology 2e, 16.7: Cancer and Gene Regulation",
+              "url": "https://openstax.org/books/biology-2e/pages/16-7-cancer-and-gene-regulation"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-067",
+              "title": "Oncogenes and Tumor Suppressors",
+              "focus": "Gain- vs loss-of-function, two-hit hypothesis, canonical genes (RAS, MYC, TP53, RB1, PTEN), and driver vs passenger mutations."
+            },
+            {
+              "id": "bio-068",
+              "title": "Hallmarks of Cancer",
+              "focus": "The hallmark framework (sustained proliferation, evading suppressors and death, immortality, angiogenesis, invasion, metabolism, immune evasion, plus enabling characteristics) as a map for interpreting cancer omics."
+            },
+            {
+              "id": "bio-069",
+              "title": "Genomic Instability and Mutational Signatures",
+              "focus": "Sources of mutations, mutational signatures, copy-number alterations, and inferring CNVs from scRNA-seq (inferCNV-style) to separate malignant from normal cells."
+            },
+            {
+              "id": "bio-070",
+              "title": "Clonal Evolution and Tumor Heterogeneity",
+              "focus": "Tumor phylogenies, subclones, cancer stem cell ideas, plasticity, and therapy resistance."
+            },
+            {
+              "id": "bio-071",
+              "title": "The Tumor Microenvironment and Immuno-Oncology",
+              "focus": "Cancer-associated fibroblasts, tumor-infiltrating immune cells, immune checkpoints, and immunotherapy response. Link to spatial and single-cell TME atlases."
+            },
+            {
+              "id": "bio-072",
+              "title": "Cancer Genomics Resources",
+              "focus": "TCGA, ICGC, cell line resources (DepMap/CCLE), molecular subtyping, and common pitfalls such as purity confounding in bulk data."
+            }
+          ]
+        },
+        {
+          "id": "bio-u16",
+          "title": "Tissues and Neurobiology Essentials",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 35: The Nervous System",
+              "url": "https://openstax.org/books/biology-2e/pages/35-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, 35.2: How Neurons Communicate",
+              "url": "https://openstax.org/books/biology-2e/pages/35-2-how-neurons-communicate"
+            },
+            {
+              "title": "OpenStax Anatomy and Physiology 2e, Ch. 12: The Nervous System and Nervous Tissue",
+              "url": "https://openstax.org/books/anatomy-and-physiology-2e/pages/12-introduction"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-073",
+              "title": "Tissues and Organ Systems at a Glance",
+              "focus": "The four tissue types, major organ systems, and how cell atlases (Human Cell Atlas, Tabula Sapiens) organize cell types by tissue."
+            },
+            {
+              "id": "bio-074",
+              "title": "Neurons and the Action Potential",
+              "focus": "Resting potential, ion channels, action potential propagation, and myelination, using membrane transport knowledge."
+            },
+            {
+              "id": "bio-075",
+              "title": "Synapses and Neurotransmitters",
+              "focus": "Chemical synapses, major neurotransmitter systems, receptors, and plasticity. Note neurotransmitter genes as neuron subtype markers."
+            },
+            {
+              "id": "bio-076",
+              "title": "Brain Cell Types and Neural Omics",
+              "focus": "Neuronal classes, glia (astrocytes, oligodendrocytes, microglia), single-nucleus RNA-seq for brain, and cell-type taxonomies from large brain atlases."
+            }
+          ]
+        },
+        {
+          "id": "bio-u17",
+          "title": "Metabolism",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 6: Metabolism",
+              "url": "https://openstax.org/books/biology-2e/pages/6-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, Ch. 7: Cellular Respiration",
+              "url": "https://openstax.org/books/biology-2e/pages/7-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, 7.6: Connections of Metabolic Pathways",
+              "url": "https://openstax.org/books/biology-2e/pages/7-6-connections-of-carbohydrate-protein-and-lipid-metabolic-pathways"
+            },
+            {
+              "title": "Fundamentals of Biochemistry (Jakubowski and Flatt), LibreTexts",
+              "url": "https://bio.libretexts.org/Bookshelves/Biochemistry/Fundamentals_of_Biochemistry_(Jakubowski_and_Flatt)"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-077",
+              "title": "Energy Currency and Metabolic Logic",
+              "focus": "ATP, NADH/NADPH, catabolism vs anabolism, and pathway regulation at committed steps."
+            },
+            {
+              "id": "bio-078",
+              "title": "Glycolysis and the TCA Cycle",
+              "focus": "The flow of carbon from glucose to pyruvate to acetyl-CoA and through the TCA cycle, with key regulated enzymes."
+            },
+            {
+              "id": "bio-079",
+              "title": "Oxidative Phosphorylation and Mitochondria",
+              "focus": "Electron transport chain, chemiosmosis, mitochondrial function beyond ATP, and mitochondrial gene signatures."
+            },
+            {
+              "id": "bio-080",
+              "title": "Lipid, Amino Acid, and Nucleotide Metabolism",
+              "focus": "Fatty acid synthesis and oxidation, amino acid metabolism, nucleotide synthesis, and how pathways interconnect."
+            },
+            {
+              "id": "bio-081",
+              "title": "Metabolic Regulation, Cancer Metabolism, and Metabolomics",
+              "focus": "mTOR/AMPK nutrient sensing, the Warburg effect, immunometabolism, and how metabolomics and expression-based flux inference work."
+            }
+          ]
+        },
+        {
+          "id": "bio-u18",
+          "title": "Evolution and Comparative Genomics",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, Ch. 18: Evolution and the Origin of Species",
+              "url": "https://openstax.org/books/biology-2e/pages/18-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, Ch. 19: The Evolution of Populations",
+              "url": "https://openstax.org/books/biology-2e/pages/19-introduction"
+            },
+            {
+              "title": "OpenStax Biology 2e, Ch. 20: Phylogenies and the History of Life",
+              "url": "https://openstax.org/books/biology-2e/pages/20-introduction"
+            },
+            {
+              "title": "Computational Biology: Genomes, Networks, and Evolution (Kellis et al.), LibreTexts",
+              "url": "https://bio.libretexts.org/Bookshelves/Computational_Biology/Book%3A_Computational_Biology_-_Genomes_Networks_and_Evolution_(Kellis_et_al.)"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-082",
+              "title": "Natural Selection, Drift, and Speciation",
+              "focus": "Mechanisms of evolutionary change, fitness, genetic drift, gene flow, and speciation."
+            },
+            {
+              "id": "bio-083",
+              "title": "Molecular Evolution and the Neutral Theory",
+              "focus": "Substitution rates, dN/dS, purifying and positive selection, and molecular clocks."
+            },
+            {
+              "id": "bio-084",
+              "title": "Phylogenetics",
+              "focus": "Tree concepts, homology, alignment-based tree building, and how evolutionary trees relate to cell lineage trees."
+            },
+            {
+              "id": "bio-085",
+              "title": "Gene Families, Orthology, and Model Organisms",
+              "focus": "Gene duplication, paralogs vs orthologs, cross-species gene mapping, and the strengths and limits of mouse and other models for human biology."
+            },
+            {
+              "id": "bio-086",
+              "title": "Conservation as a Signal of Function",
+              "focus": "Comparative genomics, conservation scores (phyloP, PhastCons), and how evolutionary information powers variant-effect predictors and protein language models."
+            }
+          ]
+        },
+        {
+          "id": "bio-u19",
+          "title": "Laboratory Methods and Sequencing Technologies",
+          "resources": [
+            {
+              "title": "OpenStax Biology 2e, 17.1: Biotechnology",
+              "url": "https://openstax.org/books/biology-2e/pages/17-1-biotechnology"
+            },
+            {
+              "title": "NHGRI: Polymerase Chain Reaction (PCR) Fact Sheet",
+              "url": "https://www.genome.gov/about-genomics/fact-sheets/Polymerase-Chain-Reaction-Fact-Sheet"
+            },
+            {
+              "title": "NHGRI: What is genome editing?",
+              "url": "https://www.genome.gov/about-genomics/policy-issues/what-is-Genome-Editing"
+            },
+            {
+              "title": "NHGRI: DNA Sequencing Fact Sheet",
+              "url": "https://www.genome.gov/about-genomics/fact-sheets/DNA-Sequencing-Fact-Sheet"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-087",
+              "title": "PCR, Cloning, and Reporter Assays",
+              "focus": "PCR and qPCR, reverse transcription, plasmids, cloning, and reporter assays (including massively parallel reporter assays). Explain PCR duplicates and UMIs."
+            },
+            {
+              "id": "bio-088",
+              "title": "Protein and Cell Assays: Antibodies, Westerns, Flow Cytometry, Imaging",
+              "focus": "Antibody-based detection, western blots, immunofluorescence, flow cytometry and FACS, and fluorescence microscopy basics. Relate gating in flow cytometry to clustering."
+            },
+            {
+              "id": "bio-089",
+              "title": "Model Systems: Cell Lines, Primary Cells, Animals",
+              "focus": "Immortalized lines, primary cells, iPSC-derived cells, mouse models, and experimental design concepts (replicates, controls, batch)."
+            },
+            {
+              "id": "bio-090",
+              "title": "CRISPR and Genome Engineering",
+              "focus": "Cas9 mechanism, guide design, knockouts, CRISPRi/CRISPRa, base and prime editing, and pooled screens."
+            },
+            {
+              "id": "bio-091",
+              "title": "Short-Read Sequencing: Illumina Chemistry",
+              "focus": "Library prep, adapters, cluster amplification, sequencing-by-synthesis, paired-end reads, quality scores, FASTQ, and common artifacts."
+            },
+            {
+              "id": "bio-092",
+              "title": "Long-Read Sequencing: PacBio and Nanopore",
+              "focus": "How each technology works, error profiles, and applications to full-length isoforms, structural variants, and direct methylation detection."
+            }
+          ]
+        },
+        {
+          "id": "bio-u20",
+          "title": "Bulk Omics Technologies",
+          "resources": [
+            {
+              "title": "Bioconductor RNA-seq workflow (rnaseqGene)",
+              "url": "https://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html"
+            },
+            {
+              "title": "Analyzing RNA-seq data with DESeq2 (vignette)",
+              "url": "https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html"
+            },
+            {
+              "title": "EMBL-EBI Training: Functional genomics II",
+              "url": "https://www.ebi.ac.uk/training/online/courses/functional-genomics-ii-common-technologies-and-data-analysis-methods/"
+            },
+            {
+              "title": "EMBL-EBI Training: Proteomics",
+              "url": "https://www.ebi.ac.uk/training/online/courses/proteomics-an-introduction/"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-093",
+              "title": "Genome Sequencing and Variant Calling",
+              "focus": "Alignment, duplicate marking, germline vs somatic calling, VCFs, and common filters. Brief, to give context for multiomics with genotypes."
+            },
+            {
+              "id": "bio-094",
+              "title": "Bulk RNA-seq: Design, Quantification, and Normalization",
+              "focus": "Library types (poly(A) vs ribo-depletion, stranded), alignment vs pseudoalignment, count matrices, library-size and composition normalization, and replicate design."
+            },
+            {
+              "id": "bio-095",
+              "title": "Differential Expression Statistics",
+              "focus": "Negative binomial GLMs, dispersion shrinkage, design matrices, multiple testing, and enrichment analysis. Emphasize why biological replicates matter."
+            },
+            {
+              "id": "bio-096",
+              "title": "Mapping the Epigenome: ChIP-seq, CUT&Tag, ATAC-seq, Bisulfite-seq",
+              "focus": "Principles of each assay, peak calling, and what signal each captures."
+            },
+            {
+              "id": "bio-097",
+              "title": "Mass-Spectrometry Proteomics and Metabolomics",
+              "focus": "Bottom-up proteomics, DDA vs DIA, quantification, missing values, phosphoproteomics, and how metabolomics differs."
+            },
+            {
+              "id": "bio-098",
+              "title": "Bulk Deconvolution and Integrating Bulk with Single-Cell",
+              "focus": "Estimating cell-type proportions from bulk data using single-cell references and the assumptions involved."
+            }
+          ]
+        },
+        {
+          "id": "bio-u21",
+          "title": "Single-Cell Transcriptomics",
+          "resources": [
+            {
+              "title": "Single-cell best practices: Single-cell RNA sequencing",
+              "url": "https://www.sc-best-practices.org/introduction/scrna-seq"
+            },
+            {
+              "title": "Single-cell best practices: Quality Control",
+              "url": "https://www.sc-best-practices.org/preprocessing-visualization/quality-control"
+            },
+            {
+              "title": "Single-cell best practices: Data integration",
+              "url": "https://www.sc-best-practices.org/cellular-structure/integration"
+            },
+            {
+              "title": "Single-cell best practices: RNA velocity",
+              "url": "https://www.sc-best-practices.org/trajectories/rna-velocity"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-099",
+              "title": "scRNA-seq Technologies",
+              "focus": "Plate-based vs droplet vs combinatorial indexing, cell barcodes and UMIs, 3' vs full-length chemistries, single-nucleus RNA-seq, and throughput/sensitivity trade-offs."
+            },
+            {
+              "id": "bio-100",
+              "title": "From Reads to Count Matrices and Quality Control",
+              "focus": "Barcode processing, ambient RNA, doublets, QC metrics (counts, genes, mitochondrial fraction), and their biological confounds."
+            },
+            {
+              "id": "bio-101",
+              "title": "Normalization, Feature Selection, and Dimensionality Reduction",
+              "focus": "Size factors, variance stabilization, highly variable genes, PCA, kNN graphs, UMAP/t-SNE caveats, and the sparsity/count nature of the data."
+            },
+            {
+              "id": "bio-102",
+              "title": "Clustering, Annotation, and Integration",
+              "focus": "Graph-based clustering, marker-based and reference-based annotation, batch effects, and integration approaches."
+            },
+            {
+              "id": "bio-103",
+              "title": "Trajectories, Pseudotime, and RNA Velocity",
+              "focus": "Pseudotemporal ordering, branch inference, spliced/unspliced dynamics, and the strong assumptions behind velocity."
+            },
+            {
+              "id": "bio-104",
+              "title": "Differential Expression and Composition Across Conditions",
+              "focus": "Pseudobulk vs cell-level tests, pseudoreplication, and compositional analysis of cell-type proportions."
+            }
+          ]
+        },
+        {
+          "id": "bio-u22",
+          "title": "Multimodal, Spatial, and Perturbation Omics",
+          "resources": [
+            {
+              "title": "Single-cell best practices: Single-cell ATAC sequencing",
+              "url": "https://www.sc-best-practices.org/chromatin-accessibility/introduction"
+            },
+            {
+              "title": "Single-cell best practices: Single-cell data resolved in space",
+              "url": "https://www.sc-best-practices.org/spatial/introduction"
+            },
+            {
+              "title": "Single-cell best practices: Perturbation modeling",
+              "url": "https://www.sc-best-practices.org/conditions/perturbation-modeling"
+            },
+            {
+              "title": "Replogle et al., Genome-scale Perturb-seq (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/2021.12.16.473013v1"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "bio-105",
+              "title": "Single-Cell ATAC-seq and Multiome",
+              "focus": "Tn5 tagmentation at single-cell resolution, peak vs bin features, gene activity scores, motif deviation (chromVAR), and joint RNA+ATAC assays."
+            },
+            {
+              "id": "bio-106",
+              "title": "CITE-seq and Multimodal Single-Cell Assays",
+              "focus": "Antibody-derived tags for surface proteins, background/isotype issues, and other modalities (VDJ, lineage barcodes) measured alongside RNA."
+            },
+            {
+              "id": "bio-107",
+              "title": "Spatial Transcriptomics: Sequencing-Based Methods",
+              "focus": "Spot-based capture (Visium), higher-resolution arrays, spot deconvolution, and spatially variable genes."
+            },
+            {
+              "id": "bio-108",
+              "title": "Spatial Transcriptomics: Imaging-Based Methods and Spatial Proteomics",
+              "focus": "smFISH-derived methods (MERFISH, Xenium, CosMx), multiplexed protein imaging, cell segmentation, and neighborhood analysis."
+            },
+            {
+              "id": "bio-109",
+              "title": "Pooled CRISPR Screens and Perturb-seq",
+              "focus": "Fitness screens vs single-cell readouts, guide assignment, MOI, perturbation efficiency, and what genome-scale Perturb-seq revealed."
+            },
+            {
+              "id": "bio-110",
+              "title": "Integrating Omics Layers: Principles and Pitfalls",
+              "focus": "Paired vs unpaired integration, linking peaks to genes, and how the molecular layers learned in this track (chromatin, RNA, protein) relate, causally and statistically."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ml",
+      "title": "Advanced AI/ML",
+      "blurb": "Research-level machine learning, from optimization and generalization theory through modern architectures, generative models, causality, and interpretability to biological foundation models.",
+      "units": [
+        {
+          "id": "ml-u01",
+          "title": "Optimization Dynamics of Deep Networks",
+          "resources": [
+            {
+              "title": "Dive into Deep Learning, Ch. 12: Optimization Algorithms",
+              "url": "https://d2l.ai/chapter_optimization/index.html"
+            },
+            {
+              "title": "Cohen et al., Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability",
+              "url": "https://arxiv.org/abs/2103.00065"
+            },
+            {
+              "title": "Yang et al., Tensor Programs V: Zero-Shot Hyperparameter Transfer (muP)",
+              "url": "https://arxiv.org/abs/2203.03466"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-001",
+              "title": "Loss Landscapes of Overparameterized Networks",
+              "focus": "Nonconvexity, saddles vs local minima, mode connectivity, and why overparameterization makes optimization easier rather than harder."
+            },
+            {
+              "id": "ml-002",
+              "title": "SGD Noise and Implicit Regularization",
+              "focus": "SGD as noisy gradient flow, the batch-size/learning-rate ratio, implicit bias toward low-norm or flat solutions, and what this means for small biological datasets."
+            },
+            {
+              "id": "ml-003",
+              "title": "Adaptive Optimizers and Schedules",
+              "focus": "Adam/AdamW derivation, decoupled weight decay, warmup, cosine and WSD schedules, and why Adam dominates transformer training."
+            },
+            {
+              "id": "ml-004",
+              "title": "Initialization, Normalization, and Signal Propagation",
+              "focus": "Variance-preserving initialization, LayerNorm vs BatchNorm vs RMSNorm, pre-norm vs post-norm, and muP for transferring hyperparameters across widths."
+            },
+            {
+              "id": "ml-005",
+              "title": "Sharpness and the Edge of Stability",
+              "focus": "Hessian sharpness, progressive sharpening, edge-of-stability dynamics, and sharpness-aware minimization; what empirical evidence supports flat-minima arguments."
+            }
+          ]
+        },
+        {
+          "id": "ml-u02",
+          "title": "Generalization in Deep Learning",
+          "resources": [
+            {
+              "title": "Zhang et al., Understanding Deep Learning Requires Rethinking Generalization",
+              "url": "https://arxiv.org/abs/1611.03530"
+            },
+            {
+              "title": "Nakkiran et al., Deep Double Descent",
+              "url": "https://arxiv.org/abs/1912.02292"
+            },
+            {
+              "title": "Jacot et al., Neural Tangent Kernel",
+              "url": "https://arxiv.org/abs/1806.07572"
+            },
+            {
+              "title": "Prince, Understanding Deep Learning (free book)",
+              "url": "https://udlbook.github.io/udlbook/"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-006",
+              "title": "Why Classical Bounds Fail for Deep Nets",
+              "focus": "VC dimension and Rademacher bounds, the random-label memorization experiment, and what a useful generalization theory must explain."
+            },
+            {
+              "id": "ml-007",
+              "title": "Double Descent and Benign Overfitting",
+              "focus": "Model-wise and epoch-wise double descent, interpolation thresholds, and benign overfitting in linear models as intuition."
+            },
+            {
+              "id": "ml-008",
+              "title": "The Neural Tangent Kernel and Lazy Training",
+              "focus": "Infinite-width limit, NTK derivation, when networks behave like kernels, and why feature learning escapes the lazy regime."
+            },
+            {
+              "id": "ml-009",
+              "title": "Inductive Biases and Distribution Shift",
+              "focus": "Architectural priors, invariance, out-of-distribution generalization, and why batch effects and donor shift are the dominant generalization problem in omics."
+            },
+            {
+              "id": "ml-010",
+              "title": "Grokking, PAC-Bayes, and Compression Views",
+              "focus": "Delayed generalization, PAC-Bayes and compression-based bounds, and which perspectives currently give non-vacuous guarantees."
+            }
+          ]
+        },
+        {
+          "id": "ml-u03",
+          "title": "Scaling Laws",
+          "resources": [
+            {
+              "title": "Kaplan et al., Scaling Laws for Neural Language Models",
+              "url": "https://arxiv.org/abs/2001.08361"
+            },
+            {
+              "title": "Hoffmann et al., Training Compute-Optimal Large Language Models (Chinchilla)",
+              "url": "https://arxiv.org/abs/2203.15556"
+            },
+            {
+              "title": "Wei et al., Emergent Abilities of Large Language Models",
+              "url": "https://arxiv.org/abs/2206.07682"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-011",
+              "title": "Power Laws in Loss vs Compute, Data, and Parameters",
+              "focus": "Empirical scaling law forms, irreducible loss, and how they are fitted and extrapolated."
+            },
+            {
+              "id": "ml-012",
+              "title": "Compute-Optimal Training",
+              "focus": "Kaplan vs Chinchilla allocations, tokens-per-parameter, and data-constrained scaling with repeated epochs."
+            },
+            {
+              "id": "ml-013",
+              "title": "Emergence and Its Critiques",
+              "focus": "Claimed emergent abilities, the metric-choice critique, and how to reason about downstream capability vs pretraining loss."
+            },
+            {
+              "id": "ml-014",
+              "title": "Does Scaling Work in Biology?",
+              "focus": "Evidence from protein and genomic language models and single-cell foundation models; data redundancy, effective dataset size, and why more cells is not necessarily more information."
+            }
+          ]
+        },
+        {
+          "id": "ml-u04",
+          "title": "Transformers in Depth",
+          "resources": [
+            {
+              "title": "Vaswani et al., Attention Is All You Need",
+              "url": "https://arxiv.org/abs/1706.03762"
+            },
+            {
+              "title": "Jay Alammar, The Illustrated Transformer",
+              "url": "https://jalammar.github.io/illustrated-transformer/"
+            },
+            {
+              "title": "Dive into Deep Learning, Ch. 11: Attention Mechanisms and Transformers",
+              "url": "https://d2l.ai/chapter_attention-mechanisms-and-transformers/index.html"
+            },
+            {
+              "title": "Lilian Weng, How to Train Really Large Models on Many GPUs?",
+              "url": "https://lilianweng.github.io/posts/2021-09-25-train-large/"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-015",
+              "title": "Attention as Differentiable Retrieval",
+              "focus": "Queries, keys, values, scaled dot-product attention, softmax temperature, and attention as kernel smoothing."
+            },
+            {
+              "id": "ml-016",
+              "title": "Multi-Head Attention and the Residual Stream",
+              "focus": "Heads as parallel subspaces, MLP blocks as key-value memories, residual stream view, and parameter/FLOP accounting."
+            },
+            {
+              "id": "ml-017",
+              "title": "Positional Information: Sinusoidal, Learned, RoPE, ALiBi",
+              "focus": "How each scheme injects position, length extrapolation behavior, and permutation-invariant settings like sets of genes."
+            },
+            {
+              "id": "ml-018",
+              "title": "Encoder, Decoder, and Encoder-Decoder Objectives",
+              "focus": "Causal LM vs masked LM vs seq2seq, when each is preferable, and how bio models pick among them."
+            },
+            {
+              "id": "ml-019",
+              "title": "Training Transformers at Scale",
+              "focus": "Mixed precision, gradient checkpointing, data/tensor/pipeline parallelism, ZeRO/FSDP, and practical stability tricks."
+            },
+            {
+              "id": "ml-020",
+              "title": "Tokenization Beyond Text",
+              "focus": "BPE, k-mers and single-nucleotide tokens for DNA, residues for proteins, image patches (ViT), and genes-as-tokens or value binning for single-cell expression."
+            }
+          ]
+        },
+        {
+          "id": "ml-u05",
+          "title": "Long Context: Efficient Attention and State-Space Models",
+          "resources": [
+            {
+              "title": "Dao et al., FlashAttention",
+              "url": "https://arxiv.org/abs/2205.14135"
+            },
+            {
+              "title": "Gu et al., Efficiently Modeling Long Sequences with Structured State Spaces (S4)",
+              "url": "https://arxiv.org/abs/2111.00396"
+            },
+            {
+              "title": "Sasha Rush, The Annotated S4",
+              "url": "https://srush.github.io/annotated-s4/"
+            },
+            {
+              "title": "Gu and Dao, Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+              "url": "https://arxiv.org/abs/2312.00752"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-021",
+              "title": "The Quadratic Bottleneck and Approximate Attention",
+              "focus": "Sparse, low-rank, and linear (kernelized) attention, and why most approximations underperform exact attention in practice."
+            },
+            {
+              "id": "ml-022",
+              "title": "IO-Aware Exact Attention and KV Caching",
+              "focus": "FlashAttention tiling, memory hierarchy, KV cache, grouped-query attention, and context-length extension techniques."
+            },
+            {
+              "id": "ml-023",
+              "title": "State-Space Models: From Linear ODEs to S4",
+              "focus": "Continuous-time linear systems, discretization, the convolutional vs recurrent views, HiPPO initialization, and S4 parameterization."
+            },
+            {
+              "id": "ml-024",
+              "title": "Selective SSMs: Mamba and Structured State Space Duality",
+              "focus": "Input-dependent dynamics, the parallel scan, Mamba-2 duality with attention, and hybrid attention-SSM architectures."
+            },
+            {
+              "id": "ml-025",
+              "title": "Long-Range Models for Genomic Sequence",
+              "focus": "Why regulatory genomics needs 100kb+ context, and how Hyena/SSM-based DNA models handle it compared with transformers."
+            }
+          ]
+        },
+        {
+          "id": "ml-u06",
+          "title": "Self-Supervised, Contrastive, and Masked Learning",
+          "resources": [
+            {
+              "title": "Lilian Weng, Contrastive Representation Learning",
+              "url": "https://lilianweng.github.io/posts/2021-05-31-contrastive/"
+            },
+            {
+              "title": "Chen et al., SimCLR",
+              "url": "https://arxiv.org/abs/2002.05709"
+            },
+            {
+              "title": "He et al., Masked Autoencoders Are Scalable Vision Learners",
+              "url": "https://arxiv.org/abs/2111.06377"
+            },
+            {
+              "title": "Devlin et al., BERT",
+              "url": "https://arxiv.org/abs/1810.04805"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-026",
+              "title": "A Taxonomy of Self-Supervised Learning",
+              "focus": "Generative, contrastive, self-distillation, and masked prediction families; what makes a good pretext task."
+            },
+            {
+              "id": "ml-027",
+              "title": "InfoNCE and the Mutual Information View",
+              "focus": "Derive InfoNCE, its link to mutual information bounds, temperature, negatives, and alignment/uniformity."
+            },
+            {
+              "id": "ml-028",
+              "title": "Contrastive Methods: SimCLR, MoCo, and Augmentation Design",
+              "focus": "Augmentations as the source of invariance, and the difficulty of defining augmentations for expression data."
+            },
+            {
+              "id": "ml-029",
+              "title": "Non-Contrastive Methods: BYOL, DINO, and Collapse",
+              "focus": "Stop-gradient, momentum encoders, centering, and why collapse is avoided."
+            },
+            {
+              "id": "ml-030",
+              "title": "Masked Modeling: BERT and MAE",
+              "focus": "Masking ratios, reconstruction targets, and transfer behavior of masked models vs contrastive ones."
+            },
+            {
+              "id": "ml-031",
+              "title": "Masked Modeling for Cells and Genes",
+              "focus": "Masking expression values or gene tokens in single-cell models, what the objective rewards, and why reconstruction can be solved by trivial gene-gene correlations."
+            }
+          ]
+        },
+        {
+          "id": "ml-u07",
+          "title": "Latent Variable Models and VAEs",
+          "resources": [
+            {
+              "title": "Kingma and Welling, An Introduction to Variational Autoencoders",
+              "url": "https://arxiv.org/abs/1906.02691"
+            },
+            {
+              "title": "Kingma and Welling, Auto-Encoding Variational Bayes",
+              "url": "https://arxiv.org/abs/1312.6114"
+            },
+            {
+              "title": "scvi-tools user guide: scVI",
+              "url": "https://docs.scvi-tools.org/en/stable/user_guide/models/scvi.html"
+            },
+            {
+              "title": "scvi-tools user guide: totalVI",
+              "url": "https://docs.scvi-tools.org/en/stable/user_guide/models/totalvi.html"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-032",
+              "title": "Variational Inference and the ELBO",
+              "focus": "Latent variable models, KL divergence, ELBO derivation, mean-field vs amortized inference."
+            },
+            {
+              "id": "ml-033",
+              "title": "The VAE: Reparameterization and Its Failure Modes",
+              "focus": "Reparameterization trick, posterior collapse, KL annealing, beta-VAE, and disentanglement claims."
+            },
+            {
+              "id": "ml-034",
+              "title": "Likelihoods for Count Data",
+              "focus": "Poisson, negative binomial, and zero-inflated models for UMI counts, and why the decoder likelihood choice matters more than architecture."
+            },
+            {
+              "id": "ml-035",
+              "title": "scVI: A Deep Generative Model of scRNA-seq",
+              "focus": "Generative process, library size, batch covariates, latent space use for integration, and differential expression from the posterior."
+            },
+            {
+              "id": "ml-036",
+              "title": "Semi-Supervised and Multimodal Extensions: scANVI, totalVI, MultiVI",
+              "focus": "Label-aware latents, joint RNA+protein and RNA+ATAC models, and reference mapping (scArches)."
+            },
+            {
+              "id": "ml-037",
+              "title": "Identifiability and Interpretable Latents",
+              "focus": "Why latent factors are not unique, linear decoders, and identifiable VAE variants for interpretable programs."
+            }
+          ]
+        },
+        {
+          "id": "ml-u08",
+          "title": "Normalizing Flows, Diffusion, and Flow Matching",
+          "resources": [
+            {
+              "title": "Lilian Weng, What are Diffusion Models?",
+              "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/"
+            },
+            {
+              "title": "Papamakarios et al., Normalizing Flows for Probabilistic Modeling and Inference",
+              "url": "https://arxiv.org/abs/1912.02762"
+            },
+            {
+              "title": "Song et al., Score-Based Generative Modeling through SDEs",
+              "url": "https://arxiv.org/abs/2011.13456"
+            },
+            {
+              "title": "Lipman et al., Flow Matching Guide and Code",
+              "url": "https://arxiv.org/abs/2412.06264"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-038",
+              "title": "Normalizing Flows",
+              "focus": "Change of variables, coupling and autoregressive flows, continuous normalizing flows, and exact likelihood trade-offs."
+            },
+            {
+              "id": "ml-039",
+              "title": "Denoising Diffusion Probabilistic Models",
+              "focus": "Forward noising, the variational objective, noise prediction, and sampling."
+            },
+            {
+              "id": "ml-040",
+              "title": "Score Matching and the SDE View",
+              "focus": "Score functions, denoising score matching, reverse-time SDEs, probability-flow ODEs, and their equivalence to DDPM."
+            },
+            {
+              "id": "ml-041",
+              "title": "Guidance and Conditioning",
+              "focus": "Classifier and classifier-free guidance, conditioning on labels or perturbations, and the diversity-fidelity trade-off."
+            },
+            {
+              "id": "ml-042",
+              "title": "Flow Matching and Rectified Flow",
+              "focus": "Conditional flow matching, optimal-transport paths, straightness, and why flow matching has become a default generative recipe."
+            },
+            {
+              "id": "ml-043",
+              "title": "Discrete and Biological Diffusion",
+              "focus": "Diffusion over discrete tokens, structure generation for proteins, and diffusion or flow models for generating cell states."
+            }
+          ]
+        },
+        {
+          "id": "ml-u09",
+          "title": "Graph Neural Networks and Geometric Deep Learning",
+          "resources": [
+            {
+              "title": "Distill: A Gentle Introduction to Graph Neural Networks",
+              "url": "https://distill.pub/2021/gnn-intro/"
+            },
+            {
+              "title": "Bronstein et al., Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges",
+              "url": "https://arxiv.org/abs/2104.13478"
+            },
+            {
+              "title": "Satorras et al., E(n) Equivariant Graph Neural Networks",
+              "url": "https://arxiv.org/abs/2102.09844"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-044",
+              "title": "Message Passing Neural Networks",
+              "focus": "Permutation invariance and equivariance, aggregation, GCN/GAT/GIN, WL expressivity limits, and depth pathologies such as oversmoothing."
+            },
+            {
+              "id": "ml-045",
+              "title": "Symmetry as Inductive Bias",
+              "focus": "The geometric deep learning blueprint: groups, invariance vs equivariance, and how CNNs, GNNs, and transformers fit."
+            },
+            {
+              "id": "ml-046",
+              "title": "Equivariant Networks for 3D Structure",
+              "focus": "E(3)/SE(3) equivariance, EGNN, frame-based approaches, and their use in molecular and protein modeling."
+            },
+            {
+              "id": "ml-047",
+              "title": "Graphs in Omics",
+              "focus": "kNN cell graphs, spatial neighborhood graphs, gene regulatory and interaction graphs, and the danger of using noisy prior networks as ground truth."
+            }
+          ]
+        },
+        {
+          "id": "ml-u10",
+          "title": "Optimal Transport",
+          "resources": [
+            {
+              "title": "Peyre and Cuturi, Computational Optimal Transport",
+              "url": "https://arxiv.org/abs/1803.00567"
+            },
+            {
+              "title": "Cuturi, Sinkhorn Distances",
+              "url": "https://arxiv.org/abs/1306.0895"
+            },
+            {
+              "title": "Schiebinger et al., Waddington-OT (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/191056v1"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-048",
+              "title": "Monge and Kantorovich Formulations",
+              "focus": "Transport maps vs couplings, Wasserstein distances, and the dual problem."
+            },
+            {
+              "id": "ml-049",
+              "title": "Entropic OT and Sinkhorn",
+              "focus": "Entropic regularization, Sinkhorn iterations, differentiability, and computational scaling."
+            },
+            {
+              "id": "ml-050",
+              "title": "Unbalanced and Gromov-Wasserstein Transport",
+              "focus": "Handling mass changes (proliferation/death) and aligning spaces without shared coordinates (e.g. across modalities)."
+            },
+            {
+              "id": "ml-051",
+              "title": "OT for Single-Cell Dynamics and Perturbations",
+              "focus": "Waddington-OT for time courses, neural OT maps for perturbation response, spatial alignment, and the link between OT and flow matching."
+            }
+          ]
+        },
+        {
+          "id": "ml-u11",
+          "title": "Causal Inference and Perturbation Prediction",
+          "resources": [
+            {
+              "title": "Brady Neal, Introduction to Causal Inference (course and book)",
+              "url": "https://www.bradyneal.com/causal-inference-course"
+            },
+            {
+              "title": "Lotfollahi et al., Compositional Perturbation Autoencoder (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/2021.04.14.439903v1"
+            },
+            {
+              "title": "Roohani et al., GEARS (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/2022.07.12.499735v1"
+            },
+            {
+              "title": "Ahlmann-Eltze et al., Deep learning perturbation predictions vs linear baselines (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/2024.09.16.613342v1"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-052",
+              "title": "Potential Outcomes and Structural Causal Models",
+              "focus": "Counterfactuals, ATE, SCMs, and the relationship between the two frameworks."
+            },
+            {
+              "id": "ml-053",
+              "title": "DAGs, Identification, and Confounding",
+              "focus": "d-separation, backdoor/frontdoor criteria, do-calculus intuition, and confounders typical of omics studies."
+            },
+            {
+              "id": "ml-054",
+              "title": "Causal Discovery and GRN Inference",
+              "focus": "Constraint- and score-based discovery, interventional data, invariance principles, and why observational GRN inference is weak."
+            },
+            {
+              "id": "ml-055",
+              "title": "Perturbation Response Models: scGen, CPA, GEARS",
+              "focus": "Latent arithmetic, compositional embeddings of perturbations and doses, and knowledge-graph priors for unseen perturbations."
+            },
+            {
+              "id": "ml-056",
+              "title": "Evaluating Perturbation Predictors",
+              "focus": "Proper splits (unseen perturbations, cell types), metrics on differential effects, mean and linear baselines, and recent findings that complex models often fail to beat them."
+            }
+          ]
+        },
+        {
+          "id": "ml-u12",
+          "title": "Bayesian Deep Learning and Uncertainty",
+          "resources": [
+            {
+              "title": "Murphy, Probabilistic Machine Learning: Advanced Topics (free book)",
+              "url": "https://probml.github.io/pml-book/book2.html"
+            },
+            {
+              "title": "Gal and Ghahramani, Dropout as a Bayesian Approximation",
+              "url": "https://arxiv.org/abs/1506.02142"
+            },
+            {
+              "title": "Lakshminarayanan et al., Deep Ensembles",
+              "url": "https://arxiv.org/abs/1612.01474"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-057",
+              "title": "Aleatoric vs Epistemic Uncertainty",
+              "focus": "Definitions, decomposition, and where each arises in omics (technical noise vs unseen cell types)."
+            },
+            {
+              "id": "ml-058",
+              "title": "Approximate Bayesian Inference for Neural Nets",
+              "focus": "Variational BNNs, MC dropout, Laplace approximation, SWAG, and deep ensembles, with honest assessment of what works."
+            },
+            {
+              "id": "ml-059",
+              "title": "Calibration and Conformal Prediction",
+              "focus": "Reliability diagrams, temperature scaling, and distribution-free conformal guarantees, applied to cell-type annotation."
+            },
+            {
+              "id": "ml-060",
+              "title": "Out-of-Distribution Detection",
+              "focus": "Density, distance, and uncertainty-based OOD detection and flagging novel cell states in reference mapping."
+            }
+          ]
+        },
+        {
+          "id": "ml-u13",
+          "title": "Interpretability",
+          "resources": [
+            {
+              "title": "Sundararajan et al., Axiomatic Attribution for Deep Networks (Integrated Gradients)",
+              "url": "https://arxiv.org/abs/1703.01365"
+            },
+            {
+              "title": "Elhage et al., A Mathematical Framework for Transformer Circuits",
+              "url": "https://transformer-circuits.pub/2021/framework/index.html"
+            },
+            {
+              "title": "Elhage et al., Toy Models of Superposition",
+              "url": "https://transformer-circuits.pub/2022/toy_model/index.html"
+            },
+            {
+              "title": "Bricken et al., Towards Monosemanticity",
+              "url": "https://transformer-circuits.pub/2023/monosemantic-features/index.html"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-061",
+              "title": "Feature Attribution Methods",
+              "focus": "Saliency, Integrated Gradients, DeepLIFT, SHAP, axioms, baselines, and sanity-check failures."
+            },
+            {
+              "id": "ml-062",
+              "title": "Attribution in Genomics Models",
+              "focus": "In-silico mutagenesis, contribution scores, motif discovery from attributions (TF-MoDISco), and validation against known biology."
+            },
+            {
+              "id": "ml-063",
+              "title": "Circuits and the Residual Stream",
+              "focus": "Attention heads as composable circuits, induction heads, and the mathematical framework for reading transformer computations."
+            },
+            {
+              "id": "ml-064",
+              "title": "Superposition and Polysemanticity",
+              "focus": "Why networks represent more features than dimensions and the consequences for neuron-level interpretation."
+            },
+            {
+              "id": "ml-065",
+              "title": "Sparse Autoencoders and Dictionary Learning",
+              "focus": "Training SAEs on activations, feature quality metrics, and applications to protein and single-cell models."
+            },
+            {
+              "id": "ml-066",
+              "title": "Causal Interventions: Probing, Patching, and Steering",
+              "focus": "Linear probes vs activation patching, causal tracing, and the gap between correlational and causal interpretability claims."
+            }
+          ]
+        },
+        {
+          "id": "ml-u14",
+          "title": "Adapting Models: Fine-Tuning, RL, and RLHF",
+          "resources": [
+            {
+              "title": "Hu et al., LoRA: Low-Rank Adaptation of Large Language Models",
+              "url": "https://arxiv.org/abs/2106.09685"
+            },
+            {
+              "title": "OpenAI Spinning Up, Part 1: Key Concepts in RL",
+              "url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro.html"
+            },
+            {
+              "title": "Ouyang et al., Training Language Models to Follow Instructions with Human Feedback",
+              "url": "https://arxiv.org/abs/2203.02155"
+            },
+            {
+              "title": "Rafailov et al., Direct Preference Optimization",
+              "url": "https://arxiv.org/abs/2305.18290"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-067",
+              "title": "Transfer Regimes: Linear Probing, Full Fine-Tuning, and Forgetting",
+              "focus": "When to probe vs fine-tune, catastrophic forgetting, and evaluation of foundation-model embeddings on downstream omics tasks."
+            },
+            {
+              "id": "ml-068",
+              "title": "Parameter-Efficient Fine-Tuning",
+              "focus": "Adapters, prefix tuning, LoRA and QLoRA: the low-rank hypothesis, memory savings, and practical choices."
+            },
+            {
+              "id": "ml-069",
+              "title": "RL Foundations: MDPs and Policy Gradients",
+              "focus": "Returns, value functions, REINFORCE, baselines, and actor-critic, compressed for someone fluent in gradients."
+            },
+            {
+              "id": "ml-070",
+              "title": "PPO and Trust Regions",
+              "focus": "Clipped objectives, KL penalties, GAE, and why PPO became the default for RLHF."
+            },
+            {
+              "id": "ml-071",
+              "title": "RLHF: Reward Models and Preference Learning",
+              "focus": "Bradley-Terry reward modeling, the RLHF pipeline, reward hacking, and KL regularization."
+            },
+            {
+              "id": "ml-072",
+              "title": "Direct Preference Optimization and Verifiable Rewards",
+              "focus": "DPO derivation, variants, and RL with verifiable rewards; uses in molecular and protein design optimization."
+            }
+          ]
+        },
+        {
+          "id": "ml-u15",
+          "title": "Multimodal Learning",
+          "resources": [
+            {
+              "title": "Radford et al., CLIP",
+              "url": "https://arxiv.org/abs/2103.00020"
+            },
+            {
+              "title": "Alayrac et al., Flamingo",
+              "url": "https://arxiv.org/abs/2204.14198"
+            },
+            {
+              "title": "Single-cell best practices: Paired integration",
+              "url": "https://www.sc-best-practices.org/multimodal-integration/paired-integration"
+            },
+            {
+              "title": "scvi-tools user guide: MultiVI",
+              "url": "https://docs.scvi-tools.org/en/stable/user_guide/models/multivi.html"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-073",
+              "title": "Fusion Strategies",
+              "focus": "Early, late, and intermediate fusion, cross-attention, and handling missing modalities."
+            },
+            {
+              "id": "ml-074",
+              "title": "Contrastive Alignment Across Modalities",
+              "focus": "CLIP-style training, shared embedding spaces, and applications pairing histology with expression or text with cells."
+            },
+            {
+              "id": "ml-075",
+              "title": "Multimodal Generative and Vision-Language Models",
+              "focus": "Frozen backbones plus adapters, interleaved token models, and lessons for omics-language models."
+            },
+            {
+              "id": "ml-076",
+              "title": "Multi-Omics Integration Models",
+              "focus": "Factor models (MOFA+), joint VAEs, paired vs mosaic vs diagonal integration, and how to evaluate cross-modal alignment."
+            }
+          ]
+        },
+        {
+          "id": "ml-u16",
+          "title": "Evaluation and Benchmarking Pitfalls",
+          "resources": [
+            {
+              "title": "Kapoor and Narayanan, Leakage and the Reproducibility Crisis in ML-based Science",
+              "url": "https://arxiv.org/abs/2207.07048"
+            },
+            {
+              "title": "Geirhos et al., Shortcut Learning in Deep Neural Networks",
+              "url": "https://arxiv.org/abs/2004.07780"
+            },
+            {
+              "title": "Luecken et al., Benchmarking Atlas-Level Data Integration in Single-Cell Genomics (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/2020.05.22.111161v1"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-077",
+              "title": "Data Leakage and Split Design",
+              "focus": "Taxonomy of leakage, donor/patient-level and sequence-similarity splits, and temporal splits."
+            },
+            {
+              "id": "ml-078",
+              "title": "Shortcut Learning and Confounders",
+              "focus": "Models exploiting batch, site, or sequencing depth instead of biology; diagnostics and controls."
+            },
+            {
+              "id": "ml-079",
+              "title": "Designing Benchmarks and Metrics",
+              "focus": "Metric choice for integration (biological conservation vs batch removal), aggregate-score pitfalls, and benchmark saturation."
+            },
+            {
+              "id": "ml-080",
+              "title": "Strong Baselines and Statistical Rigor",
+              "focus": "Simple baselines, seeds and variance, multiple comparisons across datasets, and reporting standards."
+            }
+          ]
+        },
+        {
+          "id": "ml-u17",
+          "title": "Foundation Models for Proteins and Structure",
+          "resources": [
+            {
+              "title": "Jumper et al., Highly Accurate Protein Structure Prediction with AlphaFold",
+              "url": "https://www.nature.com/articles/s41586-021-03819-2"
+            },
+            {
+              "title": "Abramson et al., Accurate Structure Prediction of Biomolecular Interactions with AlphaFold 3",
+              "url": "https://www.nature.com/articles/s41586-024-07487-w"
+            },
+            {
+              "title": "Elana Simon and Jake Silberg, The Illustrated AlphaFold",
+              "url": "https://elanapearl.github.io/blog/2024/the-illustrated-alphafold/"
+            },
+            {
+              "title": "Lin et al., ESM-2 and ESMFold (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/2022.07.20.500902v1"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-081",
+              "title": "Protein Language Models",
+              "focus": "Masked LM over residues, what embeddings capture (structure, function, fitness), and zero-shot variant effect prediction."
+            },
+            {
+              "id": "ml-082",
+              "title": "AlphaFold2: MSAs, Evoformer, and the Structure Module",
+              "focus": "Pair and MSA representations, triangle updates, invariant point attention, recycling, and confidence metrics."
+            },
+            {
+              "id": "ml-083",
+              "title": "AlphaFold3 and Diffusion-Based Structure Prediction",
+              "focus": "Pairformer, diffusion module, all-atom complexes with nucleic acids and ligands, and limitations."
+            },
+            {
+              "id": "ml-084",
+              "title": "Single-Sequence Folding and Generative Protein Models",
+              "focus": "ESMFold, ESM3-style multimodal generation, and design workflows; how scaling relates to structure emergence."
+            }
+          ]
+        },
+        {
+          "id": "ml-u18",
+          "title": "Foundation Models for Genomics and Single Cells",
+          "resources": [
+            {
+              "title": "Avsec et al., Enformer: Effective Gene Expression Prediction from Sequence",
+              "url": "https://www.nature.com/articles/s41592-021-01252-x"
+            },
+            {
+              "title": "Evo 2: Genome Modeling and Design Across All Domains of Life (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/2025.02.18.638918v1"
+            },
+            {
+              "title": "Cui et al., scGPT (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/2023.04.30.538439v1"
+            },
+            {
+              "title": "Kedzierska et al., Assessing the Limits of Zero-Shot Foundation Models in Single-Cell Biology (bioRxiv)",
+              "url": "https://www.biorxiv.org/content/10.1101/2023.10.16.561085v1"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "ml-085",
+              "title": "Sequence-to-Function Models",
+              "focus": "Supervised models from DNA to chromatin and expression tracks (Basenji/Enformer lineage), variant effect prediction, and cross-cell-type generalization limits."
+            },
+            {
+              "id": "ml-086",
+              "title": "Genomic Language Models",
+              "focus": "Self-supervised DNA LMs (Nucleotide Transformer, HyenaDNA, Evo): tokenization, context length, and what they do and do not learn about regulation."
+            },
+            {
+              "id": "ml-087",
+              "title": "Single-Cell Foundation Models",
+              "focus": "Geneformer rank-value encoding, scGPT gene/value tokens, pretraining corpora, and claimed downstream tasks."
+            },
+            {
+              "id": "ml-088",
+              "title": "Critical Evaluation of Single-Cell Foundation Models",
+              "focus": "Zero-shot benchmarks, comparisons to PCA/HVG and scVI baselines, perturbation-prediction failures, and what would make these models genuinely useful."
+            },
+            {
+              "id": "ml-089",
+              "title": "Towards Virtual Cells",
+              "focus": "Integrating sequence, multiomics, and perturbation models into predictive cell models; open problems and how to read new papers critically."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

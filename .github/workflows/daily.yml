@@ -36,7 +36,18 @@ jobs:
           # OpenCode Go plan choose the most interesting paper and write "why it matters".
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
         run: node scripts/fetch-papers.mjs ${{ inputs.backfill && '--backfill' || '' }}
+      - name: Watching (journals, authors, keywords)
+        if: ${{ !inputs.backfill && !cancelled() }}
+        continue-on-error: true
+        run: node scripts/watch.mjs
+      - name: Learn (write the next lessons)
+        if: ${{ !inputs.backfill && !cancelled() }}
+        continue-on-error: true
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+        run: node scripts/learn.mjs
       - name: Commit
+        if: ${{ !cancelled() }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -46,6 +57,7 @@ jobs:
           for i in 1 2 3; do git pull --rebase -q origin main && git push && exit 0; sleep 5; done
           exit 1
       - name: Redeploy GitHub Pages
+        if: ${{ !cancelled() }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages will redeploy on its own"
