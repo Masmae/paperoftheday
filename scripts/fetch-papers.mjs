@@ -251,28 +251,6 @@ const OPENCODE_URL = "https://opencode.ai/inference/go/openai/v1/chat/completion
 // Cheap, fast Go-plan models that work with a region-restricted workspace.
 const CURATOR_MODELS = ["glm-5.3-flash", "qwen3.8-flash"];   // first that answers wins
 
-// ---------------------------------------------------------------- your 👍/👎 (data/me.json, written by the app)
-
-const ME = (() => { try { return JSON.parse(readFileSync(new URL("me.json", DATA), "utf8")); } catch { return {}; } })();
-const VOTES = Object.values(ME.votes ?? {}).filter((x) => x && (x.v === 1 || x.v === -1)).sort((a, b) => (b.at ?? "").localeCompare(a.at ?? ""));
-// Topic affinity from votes: for each topic label, (likes − dislikes) / (votes with it + 2), so it grows with evidence.
-const AFFINITY = (() => {
-  const net = {}, n = {};
-  for (const x of VOTES) for (const r of x.reasons ?? []) { net[r] = (net[r] ?? 0) + x.v; n[r] = (n[r] ?? 0) + 1; }
-  return Object.fromEntries(Object.keys(net).map((r) => [r, net[r] / (n[r] + 2)]));
-})();
-/** Ranking nudge from your votes: up to ±3 points. */
-const preference = (p) => {
-  const a = (p.reasons ?? []).map((r) => AFFINITY[r]).filter((x) => x !== undefined);
-  return a.length ? Math.max(-3, Math.min(3, 3 * a.reduce((t, x) => t + x, 0) / Math.sqrt(a.length))) : 0;
-};
-const feedbackNote = () => {
-  const liked = VOTES.filter((x) => x.v === 1).slice(0, 8).map((x) => `- ${x.title}`);
-  const disliked = VOTES.filter((x) => x.v === -1).slice(0, 8).map((x) => `- ${x.title}`);
-  if (!liked.length && !disliked.length) return "";
-  return `\n\nThe reader's recent feedback (use it to learn their taste; it matters as much as criterion 4):${liked.length ? `\nLiked:\n${liked.join("\n")}` : ""}${disliked.length ? `\nDisliked:\n${disliked.join("\n")}` : ""}`;
-};
-
 async function curate(candidates) {
   const key = process.env.OPENCODE_API_KEY;
   if (!key) return null;
@@ -285,7 +263,7 @@ Score each candidate privately on five criteria, 1-5 each:
 4. Relevance: AI for transcriptomics / single-cell / spatial / multiomics, protein or genome modeling, or a broadly useful AI method for biology.
 5. Impact: would change how people in the field work, or is simply surprising and delightful.
 Reject: reviews, perspectives, narrow clinical prediction models, gene-signature or hub-gene studies, databases or web servers without a new method, and hype without evidence.
-Pick the paper with the best total (ties: prefer novelty and generality). Answer with JSON only.${feedbackNote()}`;
+Pick the paper with the best total (ties: prefer novelty and generality). Answer with JSON only.`;
   const user = `Today's candidates:\n\n${list}\n\nReply with JSON only, no other text:\n{"pick": <index>, "why": "<2-3 plain-language sentences on why it matters>", "tldr": "<one sentence: what they did and found>", "runner_ups": [<3 indices>]}`;
   for (const model of CURATOR_MODELS) {
     try {
@@ -488,13 +466,12 @@ const recentClassic = index.days.filter((d) => d.date < DATE).slice(0, 3).some((
 const ranked = [...byKey.values()]
   .filter((p) => !seen.has(keyOf(p)) && ageDays(p) <= 21)
   .map((p) => { const sc = score(p); return { ...p, ...sc }; })
-  .map((p) => ({ ...p, rank: p.score - (p.classic ? 0 : 0.15 * ageDays(p)) - 2 * tooSimilar(p) - (p.classic && recentClassic ? 8 : 0) + preference(p) }))
+  .map((p) => ({ ...p, rank: p.score - (p.classic ? 0 : 0.15 * ageDays(p)) - 2 * tooSimilar(p) - (p.classic && recentClassic ? 8 : 0) }))
   .filter((p) => p.score > 8)
   .sort((a, b) => b.rank - a.rank);
 if (!ranked.length) { console.error("no suitable papers found"); process.exit(1); }
 console.log(`pool: ${byKey.size} papers, ${ranked.length} good candidates`);
 
-if (VOTES.length) console.log(`feedback: ${VOTES.length} votes; strongest topics: ${Object.entries(AFFINITY).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1])).slice(0, 5).map(([r, a]) => `${r} ${a > 0 ? "+" : ""}${a.toFixed(2)}`).join(", ")}`);
 const shortlist = ranked.slice(0, 30);
 const curated = await curate(shortlist).catch((e) => { console.warn(`curator failed: ${e.message}`); return null; });
 // Preference order: the curator's pick, its runner-ups, then the rest of the shortlist.

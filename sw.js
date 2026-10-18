@@ -1,5 +1,5 @@
 // Offline: network-first for this site's files, cached copy when offline.
-const CACHE = "potd-v2";
+const CACHE = "potd-v3";
 self.addEventListener("install", (e) => e.waitUntil(caches.open(CACHE).then((c) => c.addAll(["./", "index.html", "style.css", "app.js", "js/dom.js", "js/sync.js", "js/speech.js", "js/watch.js", "js/learn.js", "js/settings.js", "manifest.webmanifest", "icons/icon.svg", "icons/icon-180.png"])).then(() => self.skipWaiting())));
 self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 self.addEventListener("fetch", (e) => {

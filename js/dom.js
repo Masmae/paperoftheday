@@ -21,7 +21,7 @@ export const getJSON = async (path) => { const r = await fetch(path, { cache: "n
 export const fmtShort = (d) => new Date(d + "T12:00:00Z").toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" });
 export const paperKey = (p) => (p.doi ?? p.url ?? p.title).toLowerCase();
 
-/** Page header with a settings link; the dot shows whether your 👍/👎 are syncing to GitHub. */
+/** Page header with a settings link; the dot shows whether your data is syncing to GitHub. */
 export function masthead(title, sub, status) {
   const dot = status ? h("span", { class: `sync ${status.state}`, title: { synced: "Synced to GitHub", saving: "Saving…", error: `Not saved: ${status.message}`, local: "Saved on this device only" }[status.state] }) : null;
   return h("header", { class: "masthead" }, h("h1", {}, title), sub ? h("span", { class: "date" }, sub) : null,

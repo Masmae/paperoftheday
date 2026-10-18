@@ -1,4 +1,4 @@
-// Settings: connect this device to GitHub so 👍/👎, watch rules and learning progress
+// Settings: connect this device to GitHub so watch rules and learning progress
 // are saved to data/me.json, where the daily run reads them.
 import { h, masthead, kids } from "./dom.js";
 
@@ -11,17 +11,15 @@ export function showSettings({ view, sync }) {
     save.disabled = true; msg.textContent = "Checking…";
     const ok = await sync.setToken(input.value);
     save.disabled = false;
-    msg.textContent = ok ? "Connected. Your votes now save to GitHub." : `Didn't work: ${sync.getStatus().message}. Check the token's repository and permission.`;
+    msg.textContent = ok ? "Connected. Your watch rules and progress now save to GitHub." : `Didn't work: ${sync.getStatus().message}. Check the token's repository and permission.`;
     if (ok) setTimeout(() => showSettings({ view, sync }), 900);
   } }, "Connect");
-  const me = sync.getMe();
-  const votes = Object.values(me.votes ?? {});
   view.replaceChildren(...kids(
     masthead("Settings", "", st),
     h("div", { class: "section-title" }, "Sync to GitHub"),
     h("p", {}, hasToken
-      ? `Connected${st.state === "error" ? `, but the last save failed: ${st.message}.` : "."} 👍/👎, watch rules and learning progress are saved to data/me.json, which the daily run uses.`
-      : "Right now your 👍/👎 and settings stay on this device. Connect a GitHub token so they're saved to the repo, where the daily run can use them to choose papers for you."),
+      ? `Connected${st.state === "error" ? `, but the last save failed: ${st.message}.` : "."} Watch rules and learning progress are saved to data/me.json, which the daily run uses.`
+      : "Right now your watch rules and learning progress stay on this device. Connect a GitHub token so they're saved to the repo, where the daily run uses them to fill Watching and write your next lessons."),
     hasToken
       ? h("div", { class: "actions" }, h("button", { class: "btn", onclick: async () => { await sync.setToken(""); showSettings({ view, sync }); } }, "Disconnect this device"))
       : h("div", {},
@@ -33,7 +31,5 @@ export function showSettings({ view, sync }) {
           h("li", {}, "Generate, copy, and paste it here.")),
         h("div", { class: "row" }, input, save), msg,
         h("p", { class: "note" }, "The token is stored only in this browser. It can edit only this one repo, and you can revoke it on GitHub anytime.")),
-    h("div", { class: "section-title" }, "Your feedback"),
-    h("p", {}, `${votes.filter((v) => v.v === 1).length} 👍 · ${votes.filter((v) => v.v === -1).length} 👎. Papers on topics you like get a boost (up to 3 points), the AI curator sees your recent votes, and disliked topics are pushed down.`),
   ));
 }

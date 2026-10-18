@@ -1,4 +1,4 @@
-// Your data (👍/👎, watch rules, learning progress) lives in data/me.json in the repo, so the
+// Your data (watch rules, learning progress) lives in data/me.json in the repo, so the
 // daily run can use it. The app writes it through the GitHub API with a token you paste once;
 // the token stays in this browser only. Without a token everything still works on this device.
 const REPO = "Masmae/paperoftheday";
@@ -12,7 +12,7 @@ const local = {
   del(k) { try { localStorage.removeItem(LS + k); } catch { /* ignore */ } },
 };
 
-export const EMPTY = { version: 1, votes: {}, watch: null, learn: {} };
+export const EMPTY = { version: 1, watch: null, learn: {} };
 let me = local.get("me", null);
 let status = { state: "local", message: "" };       // local | synced | saving | error
 const listeners = new Set();
@@ -35,13 +35,12 @@ async function fetchRemote(token) {
   return { data: { ...EMPTY, ...JSON.parse(b64decode(j.content)) }, sha: j.sha };
 }
 
-/** Union of two copies: newest vote per paper wins; the other fields prefer `a`. */
+/** Union of two copies: finished lessons are combined; the other fields prefer `a`. */
 function merge(a, b) {
-  const votes = { ...b.votes };
-  for (const [k, v] of Object.entries(a.votes ?? {})) if (!votes[k] || (v.at ?? "") >= (votes[k].at ?? "")) votes[k] = v;
   const learn = { ...b.learn };
   for (const [t, v] of Object.entries(a.learn ?? {})) learn[t] = { ...learn[t], ...v, done: [...new Set([...(learn[t]?.done ?? []), ...(v.done ?? [])])] };
-  return { ...b, ...a, votes, learn, watch: a.watch ?? b.watch };
+  const { votes: _retired, ...rest } = { ...b, ...a };
+  return { ...rest, learn, watch: a.watch ?? b.watch };
 }
 
 /** Load: the repo copy (fresh via the API with a token, else the published file), merged with this device's copy. */
@@ -71,8 +70,7 @@ let queue = Promise.resolve();
 /**
  * Change your data: `mutate(copy)` edits a copy in place. Applied locally at once, then
  * committed to the repo (re-applied on top of the latest remote copy if it changed meanwhile).
- * `mutate` may run more than once, so it must set values (not toggle them). An undone vote is
- * stored as { v: 0, at } so merging never brings it back.
+ * `mutate` may run more than once, so it must set values (not toggle them).
  */
 export function update(mutate, message = "Update preferences from the app") {
   const next = structuredClone(getMe());

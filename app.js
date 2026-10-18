@@ -1,6 +1,6 @@
 // Paper of the Day — reads data/index.json and data/<date>.json (built daily by GitHub Actions).
 const view = document.getElementById("view");
-import { store, h, fmtDate, authorLine, getJSON, paperKey, masthead } from "./js/dom.js";
+import { store, h, fmtDate, authorLine, getJSON, masthead } from "./js/dom.js";
 import * as sync from "./js/sync.js";
 import { showWatching } from "./js/watch.js";
 import { showLearn } from "./js/learn.js";
@@ -26,20 +26,6 @@ function paperView(rec, which = null) {
     toggleSave({ url: p.url, title: p.title, venue: p.venue, date: rec.date, href: href(which) });
     saveBtn.className = "btn" + (isSaved() ? " on" : ""); saveBtn.textContent = isSaved() ? "★ Saved" : "☆ Save";
   } }, isSaved() ? "★ Saved" : "☆ Save");
-  const voteRow = h("div", { class: "vote" });
-  const drawVotes = () => {
-    const cur = sync.getMe().votes?.[paperKey(p)]?.v ?? 0;
-    const cast = (v) => {
-      const next = cur === v ? 0 : v;
-      sync.update((m) => { m.votes ??= {}; m.votes[paperKey(p)] = { v: next, title: p.title, venue: p.venue, reasons: p.reasons ?? [], date: rec.date, at: new Date().toISOString() }; },
-        `${next === 1 ? "👍" : next === -1 ? "👎" : "Undo vote"}: ${p.title.slice(0, 60)}`);
-      drawVotes();
-    };
-    voteRow.replaceChildren(h("span", { class: "label" }, "More like this?"),
-      h("button", { class: "btn" + (cur === 1 ? " on" : ""), "aria-pressed": String(cur === 1), onclick: () => cast(1) }, "👍"),
-      h("button", { class: "btn" + (cur === -1 ? " on" : ""), "aria-pressed": String(cur === -1), onclick: () => cast(-1) }, "👎"));
-  };
-  drawVotes();
   const abstract = h("p", { class: "abstract clamp" }, p.abstract);
   const sm = p.summary;
   const summaryText = sm ? [p.title + ".", sm.tldr, "Background. " + sm.background, "What they did. " + sm.approach,
@@ -81,7 +67,6 @@ function paperView(rec, which = null) {
       h("a", { class: "btn primary", href: p.url, target: "_blank", rel: "noopener noreferrer" }, "Read the paper ↗"),
       saveBtn,
       navigator.share ? h("button", { class: "btn", onclick: () => navigator.share({ title: p.title, url: p.url }).catch(() => {}) }, "Share") : null),
-    voteRow,
     others.length ? [h("div", { class: "section-title" }, which === null ? "Also worth a look" : "More from this day"),
       others.map(({ q, i }) => h("a", { class: "item", href: href(i) }, h("div", { class: "t" }, q.title),
         h("div", { class: "m" }, [i === null ? "Paper of the Day" : null, q.venue, q.preprint ? "preprint" : null, q.summary ? "AI summary" : null].filter(Boolean).join(" · "))))] : null,

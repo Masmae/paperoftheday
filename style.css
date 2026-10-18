@@ -60,11 +60,6 @@ h2.title { font: 600 clamp(26px, 6vw, 36px)/1.15 var(--serif); margin: 0 0 14px;
 .sync { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); }
 .sync.synced { background: #3f8f5a; } .sync.saving { background: #c79a2b; } .sync.error { background: #c0392b; }
 
-/* votes */
-.vote { display: flex; align-items: center; gap: 8px; margin: -18px 0 30px; }
-.vote .label { font-size: 14px; color: var(--ink-2); }
-.vote .btn { padding: 8px 14px; }
-
 /* forms */
 .field { width: 100%; font: 16px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }
 textarea.field { resize: vertical; }

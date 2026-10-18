@@ -27,16 +27,13 @@ One genuinely interesting paper every morning: AI for transcriptomics and multio
   - **Backfill:** on the Actions tab, choose **Run workflow** and tick "backfill". This adds missing summaries to days that are already published. It runs on GitHub, never on your device.
 - **Publish:** it writes `data/<date>.json` and `data/index.json`, commits them, and redeploys Pages. Papers are never repeated.
 
-## Your feedback, Watching and Learn
+## Watching and Learn
 
-All three keep your data in **`data/me.json`**: votes, watch rules, and which lessons you've finished. The app writes it, and the daily run reads it.
+Both keep your data in **`data/me.json`**: watch rules, and which lessons you've finished. The app writes it, and the daily run reads it.
 
 - **Connect a device (once):** open **⚙ Settings** in the app and paste a GitHub **fine-grained token**. Give it access only to this repository, with **Contents: Read and write** and nothing else.
   - The token is stored only in that browser, never in the repo.
   - Without a token, everything still works, but it stays on that device and the daily run can't see it.
-- **👍/👎** on every paper:
-  - Each vote adjusts how much you like each topic label, which nudges the ranking by up to ±3 points.
-  - The AI curator also sees your last 8 likes and dislikes.
 - **Watching** (`scripts/watch.mjs`): new papers from the last 60 days that match your rules: a journal plus title keywords, authors or labs, or keywords in any venue.
   - It uses the free Europe PMC API, which covers journals and preprints. No AI and no tokens.
   - Edit the rules in the app with **Edit what to watch**.
