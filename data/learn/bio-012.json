@@ -1,0 +1,86 @@
+{
+ "id": "bio-012",
+ "track": "bio",
+ "unit": "bio-u03",
+ "title": "Fidelity and DNA Repair Pathways",
+ "model": "kimi-k3",
+ "created": "2026-10-18",
+ "summary": "This lesson explains how cells maintain genomic integrity through intrinsic polymerase proofreading and distinct DNA repair pathways. Understanding these mechanisms is crucial for interpreting mutation signatures in cancer, comprehending how CRISPR-Cas9 genome editing resolves, and understanding therapeutic vulnerabilities in DNA repair-deficient tumors.",
+ "sections": [
+  {
+   "heading": "Replication Fidelity and Proofreading",
+   "body": "The human genome consists of approximately 3.2 billion base pairs per haploid set, yet the spontaneous mutation rate after cellular replication is remarkably low—estimated at roughly 10⁻¹⁰ errors per base pair per cell division. This extraordinary fidelity is achieved through layered mechanisms rather than a single perfect process. During DNA synthesis, replicative DNA polymerases (pol δ and pol ε in eukaryotes) select correct nucleotides based on Watson-Crick base pairing geometry, achieving an initial error rate of approximately 10⁻⁴ to 10⁻⁵.\n\n**Proofreading** immediately improves fidelity by 100- to 1000-fold. Replicative polymerases possess a 3′→5′ exonuclease domain physically separate from the polymerase active site. When a mismatched nucleotide is incorporated, the primer terminus destabilizes and migrates to the exonuclease site, where the incorrect nucleotide is excised before synthesis resumes. This is analogous to a cache-coherency check in computing: the polymerase validates each nucleotide before committing it to the nascent strand.\n\nIn omics data, proofreading defects appear as distinctive mutational signatures. Tumors harboring mutations in the exonuclease domain of `POLE` or `POLD1` exhibit hypermutation with characteristic patterns—specifically a high burden of `TCT→TAT` and `TCG→TTG` substitutions—because the initial selection step remains intact but subsequent error correction fails."
+  },
+  {
+   "heading": "Mismatch Repair",
+   "body": "Even after proofreading, approximately 1 in 10⁷ base pairs contains an error when replication completes. **Mismatch repair (MMR)** serves as a post-replicative quality control system, reducing the final error rate to approximately 10⁻¹⁰. The MMR system detects base-base mismatches (such as G:T pairs) and small insertion-deletion loops that escape proofreading.\n\nThe key challenge is strand discrimination: the cell must distinguish the newly synthesized (error-containing) strand from the parental template. In *E. coli*, this is achieved through dam methylation; the parental strand is methylated at GATC sequences, while the nascent strand is transiently unmethylated. Eukaryotes lack this methylation signal; instead, strand discrimination likely involves transient nicks in the nascent strand or interactions with the replication machinery (PCNA). The core machinery involves **MutS** homologs (MSH2-MSH6 heterodimer, or MutSα) that recognize the mismatch, and **MutL** homologs (MLH1-PMS2) that coordinate excision. Exonuclease 1 (EXO1) removes a segment of the nascent strand, and DNA polymerase δ fills the gap using the parental strand as template.\n\nDefective MMR causes **microsatellite instability (MSI)**—a hypermutable phenotype particularly evident in repetitive DNA sequences where polymerase slippage is common. Lynch syndrome, caused by germline mutations in MMR genes (`MLH1`, `MSH2`, `MSH6`, `PMS2`), predisposes to colorectal and endometrial cancers characterized by exceptionally high tumor mutational burden. In transcriptomic analyses, MMR-deficient tumors show distinct expression signatures and respond preferentially to immune checkpoint inhibitors due to elevated neoantigen loads."
+  },
+  {
+   "heading": "Excision Repair: Base and Nucleotide",
+   "body": "While MMR fixes replication errors, **excision repair** pathways correct damage to existing bases caused by chemical modifications, oxidation, or ultraviolet radiation. These systems share a cut-and-patch logic but differ in lesion recognition and excision scale.\n\n**Base excision repair (BER)** corrects small, non-helix-distorting lesions such as deaminated cytosine (converted to uracil), oxidized bases (8-oxoguanine), or alkylated bases. A DNA glycosylase (e.g., **uracil-DNA glycosylase**, UDG) flips the damaged base out of the helix and cleaves the N-glycosidic bond, creating an apurinic/apyrimidinic (AP) site. AP endonuclease (APE1) cuts the phosphodiester backbone, and DNA polymerase β inserts the correct nucleotide. This is a short-patch repair (typically 1-10 nucleotides).\n\n**Nucleotide excision repair (NER)** removes bulky, helix-distorting lesions such as ultraviolet-induced pyrimidine dimers (cyclobutane thymine dimers) or chemical adducts (e.g., from cigarette smoke benzo[a]pyrene). NER recognizes distortion of the double helix rather than specific chemical structures. The XPC complex initiates global genomic NER, while RNA polymerase stalling triggers transcription-coupled NER. The TFIIH complex unwinds ~30 nucleotides around the lesion, and endonucleases XPG and XPF-ERCC1 excise a 24-32 nucleotide single-stranded fragment containing the damage. DNA polymerase δ/ε fills the gap.\n\nIn transcriptomics, NER capacity influences how cells respond to environmental mutagens. Defects in NER cause xeroderma pigmentosum, characterized by extreme UV sensitivity and skin cancer predisposition, illustrating how unrepaired transcription-blocking lesions trigger apoptosis or mutagenesis."
+  },
+  {
+   "heading": "Double-Strand Break Repair",
+   "body": "**Double-strand breaks (DSBs)** are the most cytotoxic DNA lesions, arising from ionizing radiation, reactive oxygen species, or collapsed replication forks. If unrepaired, they cause chromosomal translocations or cell death. Two major pathways compete to repair DSBs, with profound implications for genome editing and cancer therapy.\n\n**Non-homologous end joining (NHEJ)** is the predominant pathway in mammalian cells, active throughout the cell cycle but especially in G1 phase. The Ku70/Ku80 heterodimer binds DNA ends, recruiting DNA-PKcs (DNA-dependent protein kinase catalytic subunit). After end processing (often involving nucleases that trim damaged nucleotides), DNA ligase IV (LIG4) with XRCC4 seals the break. NHEJ is fast but error-prone, frequently producing small insertions or deletions (indels) at the junction because it ligates ends without a template.\n\n**Homologous recombination (HR)** or homology-directed repair (HDR) is restricted to S and G2 phases when a sister chromatid is available as a template. The MRN complex (MRE11-RAD50-NBS1) initiates 5′→3′ end resection, creating 3′ single-stranded overhangs. **BRCA1** and **BRCA2** load **RAD51** recombinase onto these overhangs, forming nucleoprotein filaments that invade the homologous template. DNA synthesis copies genetic information from the sister chromatid, restoring the original sequence with high fidelity.\n\nIn CRISPR-Cas9 genome editing, a guide RNA directs Cas9 to create a DSB at a specific locus. Without an exogenous template, NHEJ typically resolves the break with stochastic indels that disrupt gene function (knockout). If a homologous donor template is provided, HDR can introduce precise edits, though NHEJ usually competes kinetically and often dominates. This pathway choice explains why CRISPR screens show mixed indel patterns unless HDR is artificially enhanced."
+  },
+  {
+   "heading": "Synthetic Lethality and Cancer Therapy",
+   "body": "Defects in DNA repair pathways create therapeutic vulnerabilities exploitable through **synthetic lethality**—a concept where simultaneous loss of two genes/pathways causes cell death, while loss of either alone is viable. The paradigm case involves **BRCA1** and **BRCA2**, tumor suppressors essential for homologous recombination.\n\nApproximately 5-10% of breast and ovarian cancers harbor germline or somatic `BRCA1/2` mutations, resulting in HR deficiency (HRD). These tumors rely heavily on alternative repair mechanisms, particularly **PARP1**-mediated base excision repair and single-strand break repair. **PARP inhibitors** (e.g., olaparib) trap PARP1 on DNA, causing replication fork collapse that requires HR for resolution. In BRCA-deficient cells, collapsed forks cannot be repaired, leading to cell death. This represents a targeted therapy exploiting the cancer's specific repair defect while sparing normal cells with intact HR.\n\nIn multi-omics data, HR deficiency manifests as a characteristic mutational signature (COSMIC signature 3) with specific indel patterns and loss of heterozygosity profiles. Transcriptomic analyses of BRCA-deficient tumors often show elevated expression of DNA damage response genes and replication stress markers. Understanding these repair pathways allows researchers to interpret genomic instability patterns, predict drug responses, and design combination therapies that target backup repair pathways in repair-deficient malignancies."
+  }
+ ],
+ "keyIdeas": [
+  "Replication fidelity relies on sequential layers—nucleotide selection (10⁻⁴ error rate), 3′→5′ proofreading (10⁻⁷), and mismatch repair (10⁻¹⁰)—to achieve near-perfect genome duplication.",
+  "Mismatch repair distinguishes nascent from template strands via strand-specific signals (methylation in bacteria, nicks/PCNA in eukaryotes), enabling correction of polymerase errors that escape proofreading.",
+  "Base excision repair handles small chemical modifications via single-nucleotide replacement, while nucleotide excision repair removes bulky helix-distorting lesions by excising 24-32 nucleotide oligomers.",
+  "NHEJ directly ligates double-strand breaks with frequent indels and dominates in G1 phase, whereas homologous recombination uses the sister chromatid for error-free repair restricted to S/G2.",
+  "CRISPR-Cas9 editing outcomes depend on the competition between NHEJ (error-prone knockout) and HDR (precise knock-in), which can be modulated by cell cycle synchronization or small molecules.",
+  "BRCA1/2-deficient cancers exhibit synthetic lethality with PARP inhibition, demonstrating how defects in homologous recombination create therapeutic windows exploitable in oncology."
+ ],
+ "inYourData": "In transcriptomics and cancer genomics, DNA repair pathway status dictates mutational signatures (e.g., POLE hypermutation vs. MSI-high patterns) that correlate with immunotherapy response. HR deficiency scores predict PARP inhibitor sensitivity in ovarian and breast cancers, while CRISPR screen data requires modeling NHEJ/HDR competition to distinguish true knockouts from in-frame indels that retain function. Multi-omics integration often reveals compensatory upregulation of backup repair pathways (e.g., Pol θ in HR-deficient tumors) as resistance mechanisms.",
+ "quiz": [
+  {
+   "q": "Why does mismatch repair reduce mutation rates specifically during S phase, and what distinguishes its substrate from that of base excision repair?",
+   "options": [
+    "MMR recognizes mismatched bases in double-stranded DNA and requires strand discrimination to excise the newly synthesized strand, whereas BER recognizes chemically modified single bases regardless of strand identity.",
+    "MMR excises large oligonucleotide fragments containing UV damage, whereas BER only repairs double-strand breaks.",
+    "MMR operates only on methylated DNA, whereas BER operates only on unmethylated DNA.",
+    "MMR is active in G1 phase only, whereas BER is active throughout the cell cycle."
+   ],
+   "answer": 0,
+   "explain": "MMR corrects replication errors by distinguishing parental from nascent strands (via methylation or nicks) to remove the error-containing strand. BER repairs spontaneous chemical damage to individual bases (e.g., uracil from cytosine deamination) without needing to identify which strand is 'new.'"
+  },
+  {
+   "q": "A researcher performs CRISPR-Cas9 editing to knock out `TP53` in a haploid human cell line but observes that 30% of clones retain wild-type sequence at the cut site. What is the most likely explanation?",
+   "options": [
+    "The guide RNA had off-target effects that protected the locus.",
+    "The cells were arrested in G1 phase, preventing Cas9 activity.",
+    "Homologous recombination repaired the break using the sister chromatid as a template, restoring the original sequence.",
+    "Non-homologous end joining introduced indels that recreated the wild-type sequence."
+   ],
+   "answer": 2,
+   "explain": "In haploid cells, HDR can use the sister chromatid (present during S/G2) to repair Cas9-induced breaks, restoring the wild-type sequence. This is a common issue in haploid genetic screens, often overcome by using multiple guides targeting different exons or inhibiting HR."
+  },
+  {
+   "q": "Why are PARP inhibitors selectively toxic to `BRCA1`-mutant breast cancers but not to `BRCA1`-proficient cells, despite PARP being active in both?",
+   "options": [
+    "BRCA1-mutant cells express higher levels of PARP1, making them more sensitive to inhibition.",
+    "PARP inhibition traps PARP1 on DNA, causing replication fork collapse that requires homologous recombination for repair; BRCA1-deficient cells cannot perform HR, leading to synthetic lethality.",
+    "PARP inhibitors directly inhibit BRCA1 protein function, causing synthetic sickness only in mutants.",
+    "BRCA1 normally inhibits PARP activity, so BRCA1-mutant cells have hyperactive PARP that becomes toxic when blocked."
+   ],
+   "answer": 1,
+   "explain": "PARP inhibition prevents single-strand break repair and traps PARP1 on DNA, causing replication forks to collapse into double-strand breaks. BRCA1-deficient cells cannot repair these via homologous recombination, leading to cell death, whereas HR-proficient cells survive."
+  },
+  {
+   "q": "During nucleotide excision repair of a UV-induced thymine dimer, what distinguishes the damage recognition step from that of base excision repair?",
+   "options": [
+    "NER recognizes the specific chemical structure of the dimer via a dedicated glycosylase, whereas BER recognizes helix distortion.",
+    "NER recognizes distortion of the DNA double helix (e.g., via XPC or stalled RNA polymerase), whereas BER uses DNA glycosylases to recognize specific chemically modified bases.",
+    "NER requires prior proofreading by DNA polymerase ε, whereas BER does not.",
+    "NER only repairs damage on the transcribed strand, whereas BER repairs both strands simultaneously."
+   ],
+   "answer": 1,
+   "explain": "NER detects helix-destabilizing lesions via distortion-sensing proteins (XPC) or transcriptional stalling (RNA pol II), whereas BER uses specific glycosylases that recognize particular chemical modifications (e.g., uracil, 8-oxoG) regardless of helical distortion."
+  }
+ ]
+}
