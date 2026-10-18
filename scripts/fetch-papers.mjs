@@ -14,6 +14,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 const args = process.argv.slice(2);
 const argVal = (n) => { const i = args.indexOf(n); return i < 0 ? null : args[i + 1]; };
 const DRY = args.includes("--dry-run");
+const BACKFILL = args.includes("--backfill");   // add missing runner-up summaries to saved days
 const DATE = argVal("--date") ?? new Date().toISOString().slice(0, 10);
 const DATA = new URL("../data/", import.meta.url);
 mkdirSync(DATA, { recursive: true });
@@ -294,8 +295,16 @@ const stripXml = (x) => x.replace(/<(script|style|ref-list|back|nav|header|foote
 /** Open full text when available: bioRxiv JATS, arXiv HTML, or Europe PMC open access. */
 async function fullText(p) {
   try {
-    if (p.jatsxml) {
-      const xml = await getText(p.jatsxml);
+    let jats = p.jatsxml;
+    if (!jats && p.doi?.startsWith("10.1101/")) {
+      // Saved records don't keep the XML link; look it up by DOI (bioRxiv, then medRxiv).
+      for (const server of ["biorxiv", "medrxiv"]) {
+        const d = JSON.parse(await getText(`https://api.biorxiv.org/details/${server}/${p.doi}`)).collection?.at(-1);
+        if (d?.jatsxml) { jats = d.jatsxml; break; }
+      }
+    }
+    if (jats) {
+      const xml = await getText(jats);
       const body = xml.match(/<body[\s\S]*<\/body>/i)?.[0] ?? xml;
       return { text: stripXml(body), source: "bioRxiv full text" };
     }
@@ -318,19 +327,22 @@ async function fullText(p) {
   return null;
 }
 
-/** Structured AI summary of the picked paper (full text when available, else the abstract). */
+/** Structured AI summary from the paper's open full text. No full text → no summary (an abstract summary adds nothing). */
 async function summarize(p) {
   const key = process.env.OPENCODE_API_KEY;
   if (!key) return null;
   const ft = await fullText(p);
-  const body = ft && ft.text.length > 2000 ? ft.text.slice(0, 60000) : null;
-  const source = body ? ft.source : "abstract only";
+  if (!ft || ft.text.length < 5000) { console.log(`no open full text: ${p.title.slice(0, 70)}`); return null; }
+  const body = ft.text.slice(0, 60000);
+  const source = ft.source;
   const prompt = `Summarize this paper for a researcher who works on AI for transcriptomics and multiomics, so they can understand it without reading it. Be concrete: name the model/method, data, scale, and the main numbers. Plain language, no hype. About 300-400 words in total.
 
 Title: ${p.title}
 Venue: ${p.venue}${p.classic ? ` (${p.year}, ${p.citations} citations)` : ""}
 Abstract: ${p.abstract}
-${body ? `\nFull text (may be truncated):\n${body}` : ""}
+
+Full text (may be truncated):
+${body}
 
 Reply with JSON only, no other text:
 {"tldr": "<one sentence>", "background": "<2 sentences: the problem and why it is hard>", "approach": "<2-4 sentences: what they built or did>", "findings": ["<3-5 key results, each one sentence, with numbers where given>"], "why": "<2 sentences: why it matters for the field / for this reader>", "limitations": "<1-2 sentences: caveats or open questions>"}`;
@@ -364,6 +376,25 @@ const index = existsSync(indexUrl) ? JSON.parse(readFileSync(indexUrl, "utf8")) 
 const seen = new Set(index.days.flatMap((d) => [d.key, ...(d.also ?? [])]));
 const keyOf = (p) => (p.doi ?? p.url).toLowerCase();
 
+if (BACKFILL) {
+  // Give the runner-ups of already-published days their own AI summary.
+  for (const d of index.days) {
+    const url = new URL(`${d.date}.json`, DATA);
+    if (!existsSync(url)) continue;
+    const rec = JSON.parse(readFileSync(url, "utf8"));
+    let changed = false;
+    for (const a of [rec.paper, ...(rec.also ?? [])]) {
+      if (a.summary && a.summary.source !== "abstract only") continue;
+      const had = !!a.summary;
+      a.summary = await summarize(a).catch((e) => { console.warn(`summary failed: ${e.message}`); return null; });
+      if (a.summary || had) { changed = true; console.log(`${d.date}: ${a.summary ? "summarized" : "removed abstract summary"} — ${a.title}`); }
+    }
+    if (changed && !DRY) writeFileSync(url, JSON.stringify(rec, null, 1));
+  }
+  console.log("backfill done.");
+  process.exit(0);
+}
+
 const [bx, ax, pm, oa] = await Promise.all([fromBiorxiv(), fromArxiv(), fromPubmed(), fromOpenAlex()]);
 console.log(`fetched: bioRxiv/medRxiv ${bx.length}, arXiv ${ax.length}, PubMed ${pm.length}, classics ${oa.length}`);
 
@@ -396,16 +427,28 @@ console.log(`pool: ${byKey.size} papers, ${ranked.length} good candidates`);
 
 const shortlist = ranked.slice(0, 30);
 const curated = await curate(shortlist).catch((e) => { console.warn(`curator failed: ${e.message}`); return null; });
-const pick = curated ? shortlist[curated.pick] : shortlist[0];
-const also = (curated ? curated.runner_ups.map((i) => shortlist[i]).filter(Boolean) : shortlist.slice(1, 4)).filter((p) => p !== pick).slice(0, 3);
+// Preference order: the curator's pick, its runner-ups, then the rest of the shortlist.
+const order = [...new Set([...(curated ? [curated.pick, ...curated.runner_ups] : []), ...shortlist.keys()])].map((i) => shortlist[i]).filter(Boolean);
 
 const slim = (p) => ({ title: p.title, authors: p.authors.slice(0, 12), authorCount: p.authors.length, venue: p.venue, preprint: p.preprint, date: p.date, doi: p.doi, url: p.url, abstract: p.abstract, reasons: p.reasons, score: p.score, ...(p.classic ? { classic: true, citations: p.citations, year: p.year } : {}) });
-const summary = await summarize(pick).catch((e) => { console.warn(`summary failed: ${e.message}`); return null; });
+// The pick and the runner-ups must have an AI summary, which needs open full text,
+// so walk down the preference order (a few tries each) until one works.
+const summaries = new Map();
+const trySummary = async (p) => {
+  if (!summaries.has(p)) summaries.set(p, DRY ? null : await summarize(p).catch((e) => { console.warn(`summary failed: ${e.message}`); return null; }));
+  return summaries.get(p);
+};
+let pick = order[0], summary = null;
+if (!DRY && process.env.OPENCODE_API_KEY) {
+  for (const p of order.slice(0, 6)) if ((summary = await trySummary(p))) { pick = p; break; }
+  if (!summary) pick = order[0];
+}
+const also = order.filter((p) => p !== pick).slice(0, 3);
 const record = {
   date: DATE,
   pickedBy: curated ? curated.model : "score",
-  paper: { ...slim(pick), tldr: curated?.tldr ?? summary?.tldr ?? null, why: curated?.why ?? summary?.why ?? null, summary },
-  also: also.map(slim),
+  paper: { ...slim(pick), tldr: (pick === order[0] && curated?.tldr) || summary?.tldr || null, why: (pick === order[0] && curated?.why) || summary?.why || null, summary },
+  also: [],
   candidates: ranked.length,
 };
 
@@ -413,12 +456,22 @@ console.log(`\n${DATE} — ${record.pickedBy}: ${pick.title} (${pick.venue}, sco
 for (const a of also) console.log(`   also: ${a.title} (${a.venue})`);
 if (DRY) process.exit(0);
 
+// Runner-ups get their own page too, so they need a summary as well.
+const rest = order.filter((p) => p !== pick);
+for (const p of rest.slice(0, 8)) {
+  if (record.also.length === 3) break;
+  const sm = await trySummary(p);
+  if (sm) record.also.push({ ...slim(p), summary: sm });
+}
+for (const p of rest) { if (record.also.length >= 3) break; if (!record.also.some((a) => a.url === p.url)) record.also.push(slim(p)); }
+
+
 writeFileSync(new URL(`${DATE}.json`, DATA), JSON.stringify(record, null, 1));
-const used = new Set([pick, ...also].map(keyOf));
+const used = new Set([pick, ...record.also].map(keyOf));
 const keep = ranked.filter((p) => !used.has(keyOf(p))).slice(0, 250)
   .map(({ rank, score: _s, reasons: _r, ...p }) => ({ ...p, abstract: p.abstract.slice(0, 3000) }));
 writeFileSync(poolUrl, JSON.stringify({ updated: DATE, papers: keep }));
-index.days = [{ date: DATE, title: pick.title, venue: pick.venue, key: keyOf(pick), also: also.map(keyOf), ...(pick.classic ? { classic: true } : {}) }, ...index.days.filter((d) => d.date !== DATE)]
+index.days = [{ date: DATE, title: pick.title, venue: pick.venue, key: keyOf(pick), also: record.also.map(keyOf), ...(pick.classic ? { classic: true } : {}) }, ...index.days.filter((d) => d.date !== DATE)]
   .sort((a, b) => b.date.localeCompare(a.date));
 writeFileSync(indexUrl, JSON.stringify(index, null, 1));
 console.log("saved.");

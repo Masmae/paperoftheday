@@ -20,7 +20,11 @@ One genuinely interesting paper every morning: AI for transcriptomics and multio
   - **How it judges:** it scores each candidate on novelty, generality, rigor, relevance and impact.
   - **Models:** cheap GLM-5.3-Flash, with Qwen3.8-Flash as backup. Both work with a region-restricted workspace.
   - **Usage:** about 12K tokens, one request a day.
-- **AI summary:** for the chosen paper, the script fetches the **open full text** when it exists (bioRxiv, arXiv HTML, or Europe PMC open access) and writes a structured summary of about 300–400 words: TL;DR, background, what they did, key findings, why it matters, and limitations. Without free full text it summarizes the abstract and says so. About 15K tokens on the same flash model.
+- **AI summary:** the pick and the three "Also worth a look" papers each get their own page with a structured summary of about 300–400 words: TL;DR, background, what they did, key findings, why it matters, and limitations.
+  - Summaries are written **only from the open full text** (bioRxiv/medRxiv, arXiv HTML, or Europe PMC open access), never from the abstract alone.
+  - Papers with free full text are preferred. If the curator's choice has none, the next-best paper that does is picked instead. A paper with no free full text shows no summary.
+  - About 15K tokens per summary on the same flash model, so roughly 60–75K tokens a day in total.
+  - **Backfill:** on the Actions tab, choose **Run workflow** and tick "backfill". This adds missing summaries to days that are already published. It runs on GitHub, never on your device.
 - **Publish:** it writes `data/<date>.json` and `data/index.json`, commits them, and redeploys Pages. Papers are never repeated.
 
 ## Run it locally

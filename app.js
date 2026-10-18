@@ -54,11 +54,13 @@ function toggleSave(entry) {
   store.set("saved", list);
 }
 
-function paperView(rec) {
-  const p = rec.paper;
+// `which` is null for the day's pick, or the index of a runner-up ("Also worth a look").
+function paperView(rec, which = null) {
+  const p = which === null ? rec.paper : rec.also[which];
+  const href = (i) => `#/day/${rec.date}${i === null ? "" : `/${i}`}`;
   const isSaved = () => saved().some((s) => s.url === p.url);
   const saveBtn = h("button", { class: "btn" + (isSaved() ? " on" : ""), onclick: () => {
-    toggleSave({ url: p.url, title: p.title, venue: p.venue, date: rec.date });
+    toggleSave({ url: p.url, title: p.title, venue: p.venue, date: rec.date, href: href(which) });
     saveBtn.className = "btn" + (isSaved() ? " on" : ""); saveBtn.textContent = isSaved() ? "★ Saved" : "☆ Save";
   } }, isSaved() ? "★ Saved" : "☆ Save");
   const abstract = h("p", { class: "abstract clamp" }, p.abstract);
@@ -71,14 +73,16 @@ function paperView(rec) {
     if (!speech) return listenRow.replaceChildren();
     if (speaking) return listenRow.replaceChildren(h("button", { class: "btn on", onclick: () => { stopSpeaking(); drawListen(); } }, "■ Stop"));
     const play = (parts) => { speak(parts, drawListen); drawListen(); };
-    listenRow.replaceChildren(h("span", { class: "label" }, "▶ Listen:"),
+    listenRow.replaceChildren(...[h("span", { class: "label" }, "▶ Listen:"),
       sm ? h("button", { class: "btn", onclick: () => play(summaryText) }, "AI summary") : null,
-      h("button", { class: "btn", onclick: () => play(abstractText) }, "Abstract"));
+      h("button", { class: "btn", onclick: () => play(abstractText) }, "Abstract")].filter(Boolean));
   };
   drawListen();
+  const others = [{ q: rec.paper, i: null }, ...(rec.also ?? []).map((q, i) => ({ q, i }))].filter(({ i }) => i !== which);
   const more = h("button", { class: "link", onclick: () => { abstract.classList.remove("clamp"); more.remove(); } }, "Read full abstract");
   return [
-    h("div", { class: "kicker" }, p.classic ? h("span", { class: "classic" }, "Classic") : null, h("span", {}, p.venue),
+    which !== null ? h("a", { class: "back", href: href(null) }, "‹ Paper of the Day") : null,
+    h("div", { class: "kicker" }, which !== null ? h("span", { class: "classic" }, "Also worth a look") : null, p.classic ? h("span", { class: "classic" }, "Classic") : null, h("span", {}, p.venue),
       p.preprint ? h("span", { class: "pre" }, "Preprint") : null,
       h("span", { class: "pre" }, p.classic ? `${p.year} · ${p.citations.toLocaleString()} citations` : p.date)),
     h("h2", { class: "title" }, p.title),
@@ -91,7 +95,7 @@ function paperView(rec) {
       h("h4", {}, "Key findings"), h("ul", {}, sm.findings.map((f) => h("li", {}, f))),
       h("h4", {}, "Why it matters"), h("p", {}, sm.why),
       h("h4", {}, "Limitations"), h("p", {}, sm.limitations))
-    : [p.why ? h("div", { class: "why" }, h("b", {}, "Why it matters"), h("p", {}, p.why)) : null, p.tldr ? h("p", { class: "tldr" }, p.tldr) : null],
+    : [h("p", { class: "note" }, "No free full text for this paper, so there's no AI summary."), p.why ? h("div", { class: "why" }, h("b", {}, "Why it matters"), h("p", {}, p.why)) : null, p.tldr ? h("p", { class: "tldr" }, p.tldr) : null],
     listenRow,
     h("div", { class: "section-title" }, "Abstract"),
     abstract, p.abstract.length > 700 ? more : null,
@@ -100,16 +104,17 @@ function paperView(rec) {
       h("a", { class: "btn primary", href: p.url, target: "_blank", rel: "noopener noreferrer" }, "Read the paper ↗"),
       saveBtn,
       navigator.share ? h("button", { class: "btn", onclick: () => navigator.share({ title: p.title, url: p.url }).catch(() => {}) }, "Share") : null),
-    rec.also?.length ? [h("div", { class: "section-title" }, "Also worth a look"),
-      rec.also.map((a) => h("a", { class: "item", href: a.url, target: "_blank", rel: "noopener noreferrer" }, h("div", { class: "t" }, a.title), h("div", { class: "m" }, `${a.venue}${a.preprint ? " · preprint" : ""}`)))] : null,
-    h("p", { class: "note" }, rec.pickedBy === "score" ? `Picked by relevance score from ${rec.candidates} candidates.` : `Picked by AI (${rec.pickedBy}) from ${rec.candidates} candidates.`),
+    others.length ? [h("div", { class: "section-title" }, which === null ? "Also worth a look" : "More from this day"),
+      others.map(({ q, i }) => h("a", { class: "item", href: href(i) }, h("div", { class: "t" }, q.title),
+        h("div", { class: "m" }, [i === null ? "Paper of the Day" : null, q.venue, q.preprint ? "preprint" : null, q.summary ? "AI summary" : null].filter(Boolean).join(" · "))))] : null,
+    which !== null ? null : h("p", { class: "note" }, rec.pickedBy === "score" ? `Picked by relevance score from ${rec.candidates} candidates.` : `Picked by AI (${rec.pickedBy}) from ${rec.candidates} candidates.`),
   ];
 }
 
-async function showDay(date) {
+async function showDay(date, which = null) {
   view.replaceChildren(h("header", { class: "masthead" }, h("h1", {}, "Paper of the Day"), h("span", { class: "date" }, date ? fmtDate(date) : "")));
   if (!date) { view.append(h("p", { class: "empty" }, "No paper yet — the first one arrives with the next daily run.")); return; }
-  try { view.append(...paperView(await getJSON(`data/${date}.json`)).flat(3).filter(Boolean)); }
+  try { view.append(...paperView(await (async () => { const rec = await getJSON(`data/${date}.json`); if (which !== null && !rec.also?.[which]) which = null; return rec; })(), which).flat(3).filter(Boolean)); }
   catch { view.append(h("p", { class: "empty" }, "Couldn't load this day. Check your connection.")); }
 }
 
@@ -120,12 +125,12 @@ function showList(title, items, emptyText) {
 }
 
 async function route() {
-  const [, page, arg] = (location.hash || "#/").split("/");
+  const [, page, arg, sub] = (location.hash || "#/").split("/");
   document.querySelectorAll(".tabs a").forEach((a) => (a.dataset.tab === (page || "today") || (a.dataset.tab === "archive" && page === "day")) ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   window.scrollTo(0, 0);
   if (page === "archive") return showList("Archive", index.days.map((d) => ({ href: `#/day/${d.date}`, title: d.title, meta: `${fmtDate(d.date)} · ${d.venue}` })), "Nothing here yet.");
-  if (page === "saved") return showList("Saved", saved().map((s) => ({ href: `#/day/${s.date}`, title: s.title, meta: `${s.venue} · ${fmtDate(s.date)}` })), "Tap ☆ Save on a paper to keep it here.");
-  if (page === "day" && arg) return showDay(arg);
+  if (page === "saved") return showList("Saved", saved().map((s) => ({ href: s.href ?? `#/day/${s.date}`, title: s.title, meta: `${s.venue} · ${fmtDate(s.date)}` })), "Tap ☆ Save on a paper to keep it here.");
+  if (page === "day" && arg) return showDay(arg, /^\d$/.test(sub ?? "") ? Number(sub) : null);
   return showDay(index.days[0]?.date);
 }
 

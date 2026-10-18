@@ -5,6 +5,11 @@ on:
   schedule:
     - cron: "0 13 * * *"     # 13:00 UTC = 6 AM Pacific (5 AM in winter)
   workflow_dispatch:          # "Run workflow" button on the Actions tab
+    inputs:
+      backfill:
+        description: "Only add missing full-text AI summaries to already-published days"
+        type: boolean
+        default: false
 
 permissions:
   contents: write             # commit the new day
@@ -17,25 +22,25 @@ concurrency:
 jobs:
   pick:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Pick today's paper
+      - name: ${{ inputs.backfill && 'Backfill AI summaries' || 'Pick today''s paper' }}
         env:
           # Optional: an OPENCODE_API_KEY repository secret lets a model from the
           # OpenCode Go plan choose the most interesting paper and write "why it matters".
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
-        run: node scripts/fetch-papers.mjs
+        run: node scripts/fetch-papers.mjs ${{ inputs.backfill && '--backfill' || '' }}
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
           if git diff --cached --quiet; then echo "no changes"; exit 0; fi
-          git commit -m "Paper of the Day: $(date -u +%F)"
+          git commit -m "${{ inputs.backfill && 'Backfill AI summaries' || 'Paper of the Day' }}: $(date -u +%F)"
           for i in 1 2 3; do git pull --rebase -q origin main && git push && exit 0; sleep 5; done
           exit 1
       - name: Redeploy GitHub Pages
