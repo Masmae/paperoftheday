@@ -20,6 +20,32 @@ const authorLine = (p) => p.authors.length ? p.authors.slice(0, 6).join(", ") + 
 const getJSON = async (path) => { const r = await fetch(path, { cache: "no-cache" }); if (!r.ok) throw new Error(r.status); return r.json(); };
 
 let index = { days: [] };
+
+// ---- Listen: the device's own text-to-speech (free, offline, only when tapped) ----
+const speech = "speechSynthesis" in window ? window.speechSynthesis : null;
+let speaking = false;
+function bestVoice() {
+  const voices = speech.getVoices().filter((v) => v.lang?.startsWith("en"));
+  const prefer = [/premium|enhanced|natural|neural/i, /samantha|ava|zoe|daniel|karen|serena|google us english/i];
+  for (const re of prefer) { const v = voices.find((x) => re.test(x.name)); if (v) return v; }
+  return voices.find((v) => v.lang === "en-US") ?? voices[0] ?? null;
+}
+function stopSpeaking() { if (speech) speech.cancel(); speaking = false; }
+function speak(parts, onEnd) {
+  stopSpeaking();
+  // Short utterances (one sentence each): long ones get cut off on iOS.
+  const sentences = parts.filter(Boolean).join(" ").replace(/\s+/g, " ").match(/[^.!?]+[.!?]*\s*/g) ?? [];
+  const voice = bestVoice();
+  speaking = true;
+  sentences.forEach((text, i) => {
+    const u = new SpeechSynthesisUtterance(text.trim());
+    if (voice) u.voice = voice;
+    u.rate = 1.0;
+    if (i === sentences.length - 1) u.onend = () => { speaking = false; onEnd(); };
+    speech.speak(u);
+  });
+}
+window.addEventListener("hashchange", stopSpeaking);
 const saved = () => store.get("saved", []);
 function toggleSave(entry) {
   const list = saved();
@@ -36,6 +62,11 @@ function paperView(rec) {
     saveBtn.className = "btn" + (isSaved() ? " on" : ""); saveBtn.textContent = isSaved() ? "★ Saved" : "☆ Save";
   } }, isSaved() ? "★ Saved" : "☆ Save");
   const abstract = h("p", { class: "abstract clamp" }, p.abstract);
+  const listenBtn = speech ? h("button", { class: "btn", "aria-label": "Listen to this paper", onclick: () => {
+    if (speaking) { stopSpeaking(); listenBtn.textContent = "▶ Listen"; return; }
+    listenBtn.textContent = "■ Stop";
+    speak([p.title + ".", p.why ? "Why it matters. " + p.why : null, p.tldr, "Abstract. " + p.abstract], () => { listenBtn.textContent = "▶ Listen"; });
+  } }, "▶ Listen") : null;
   const more = h("button", { class: "link", onclick: () => { abstract.classList.remove("clamp"); more.remove(); } }, "Read full abstract");
   return [
     h("div", { class: "kicker" }, h("span", {}, p.venue), p.preprint ? h("span", { class: "pre" }, "Preprint") : null, h("span", { class: "pre" }, p.date)),
@@ -47,6 +78,7 @@ function paperView(rec) {
     p.reasons?.length ? h("div", { class: "chips" }, p.reasons.map((r) => h("span", { class: "chip" }, r))) : null,
     h("div", { class: "actions" },
       h("a", { class: "btn primary", href: p.url, target: "_blank", rel: "noopener noreferrer" }, "Read the paper ↗"),
+      listenBtn,
       saveBtn,
       navigator.share ? h("button", { class: "btn", onclick: () => navigator.share({ title: p.title, url: p.url }).catch(() => {}) }, "Share") : null),
     rec.also?.length ? [h("div", { class: "section-title" }, "Also worth a look"),

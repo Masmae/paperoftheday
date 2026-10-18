@@ -50,9 +50,9 @@ const BIORXIV_CATEGORIES = new Set([
 async function fromBiorxiv() {
   const out = [];
   for (const server of ["biorxiv", "medrxiv"]) {
-    for (let cursor = 0; cursor < 3000; cursor += 30) {
+    for (let cursor = 0; cursor < 6000; cursor += 30) {
       let page;
-      try { page = JSON.parse(await getText(`https://api.biorxiv.org/details/${server}/${day(-3)}/${day(0)}/${cursor}`)); }
+      try { page = JSON.parse(await getText(`https://api.biorxiv.org/details/${server}/${day(-7)}/${day(0)}/${cursor}`)); }
       catch (e) { console.warn(`${server}: ${e.message}`); break; }
       const items = page.collection ?? [];
       for (const p of items) {
@@ -77,13 +77,13 @@ async function fromArxiv() {
   ];
   const out = [];
   for (const q of queries) {
-    const url = `https://export.arxiv.org/api/query?search_query=${encodeURIComponent(q)}&sortBy=submittedDate&sortOrder=descending&max_results=150`;
+    const url = `https://export.arxiv.org/api/query?search_query=${encodeURIComponent(q)}&sortBy=submittedDate&sortOrder=descending&max_results=300`;
     let xml;
     try { xml = await getText(url); } catch (e) { console.warn(`arXiv: ${e.message}`); continue; }
     for (const entry of xml.split("<entry>").slice(1)) {
       const tag = (t) => clean((entry.match(new RegExp(`<${t}[^>]*>([\\s\\S]*?)</${t}>`)) ?? [])[1]);
       const published = tag("published").slice(0, 10);
-      if (published < day(-4) || published > day(0)) continue;
+      if (published < day(-10) || published > day(0)) continue;
       const id = tag("id");
       out.push({
         title: tag("title"), abstract: tag("summary"),
@@ -111,7 +111,7 @@ async function fromPubmed() {
   const base = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils";
   let ids = [];
   try {
-    const s = JSON.parse(await getText(`${base}/esearch.fcgi?db=pubmed&retmode=json&retmax=120&datetype=edat&mindate=${day(-7).replaceAll("-", "/")}&maxdate=${day(0).replaceAll("-", "/")}&term=${encodeURIComponent(term)}`));
+    const s = JSON.parse(await getText(`${base}/esearch.fcgi?db=pubmed&retmode=json&retmax=250&datetype=edat&mindate=${day(-30).replaceAll("-", "/")}&maxdate=${day(0).replaceAll("-", "/")}&term=${encodeURIComponent(term)}`));
     ids = s.esearchresult?.idlist ?? [];
   } catch (e) { console.warn(`PubMed search: ${e.message}`); return []; }
   if (!ids.length) return [];
@@ -155,7 +155,27 @@ const BIO_TERMS = [
   [/CRISPR/i, 1, "CRISPR"], [/RNA-seq|scRNA/i, 2, "RNA-seq"], [/genom/i, 1, "genomics"], [/drug (discovery|design)|molecule generation/i, 2, "drug discovery"],
 ];
 const VENUE_BONUS = { Nature: 5, Science: 5, Cell: 5, "Nat Methods": 4, "Nat Biotechnol": 4, "Nat Genet": 4, "Nat Mach Intell": 4, "Nat Biomed Eng": 3, "Cell Syst": 3, "Cell Genom": 3, "Genome Biol": 3, "Nat Commun": 2, "Sci Adv": 2 };
-const DOWNWEIGHT = [[/\b(review|survey|perspective|commentary|protocol)\b/i, -4], [/case report|erratum|correction/i, -8]];
+// Title red flags.
+const DOWNWEIGHT = [
+  [/\b(review|survey|perspective|commentary|protocol|tutorial|primer)\b/i, -5],
+  [/systematic review|meta-analysis|bibliometric|scoping/i, -10],
+  [/case report|erratum|correction|retraction/i, -12],
+];
+// Whole-text quality signals: [pattern, points, why] — rewards general, rigorous,
+// reusable advances; penalises narrow or low-novelty work.
+const QUALITY = [
+  [/github\.com|code (is |are )?(publicly )?available|open[- ]source|zenodo|huggingface/i, 2, "code released"],
+  [/foundation model|pre-?train(ed|ing) on|million(s)? of cells|atlas[- ]scale|large[- ]scale/i, 2, "scale"],
+  [/zero-shot|generaliz|transfer(s|red)? (across|to)|out-of-distribution|unseen (cell|tissue|species|perturbation)/i, 2, "generalizes"],
+  [/independent (cohort|dataset)s?|external validation|across \d+ (datasets|tissues|species|cohorts)|benchmark(ed|ing)? against/i, 1, "validated"],
+  [/experimental(ly)? validat|wet[- ]lab|in vitro validation|CRISPR (screen|validation)|prospective/i, 2, "wet-lab validated"],
+  [/(we|our) (introduce|present|develop) (a |an )?(new|novel|first)|first (method|model|framework|atlas)/i, 1, "new method"],
+  [/nomogram|radiomic|prognostic (signature|model|gene)|risk (score|signature) for|immune-related gene signature|hub genes|WGCNA/i, -8, null],
+  [/web ?server|\bdatabase\b|R package|Shiny|online (tool|platform)|knowledge ?base/i, -3, null],
+  [/(predict|classif)\w* .{0,40}(patients|diagnosis|prognosis|survival) (using|with|based on) (machine learning|deep learning)/i, -4, null],
+  [/in silico (analysis|study) of|bioinformatics analysis (of|reveals)|identification of (key|hub) genes/i, -6, null],
+  [/single[- ]center|retrospective (study|cohort) of \d{2,3} patients/i, -4, null],
+];
 
 function score(p) {
   const text = `${p.title} ${p.title} ${p.abstract}`;   // title counts double
@@ -169,7 +189,9 @@ function score(p) {
   s += Math.min(VENUE_BONUS[p.venue] ?? 0, Math.max(0, sum(ai)));   // a big journal helps only if there's AI in it
   for (const [re, w] of DOWNWEIGHT) if (re.test(p.title)) s += w;
   if (p.abstract.length < 400) s -= 3;
-  const reasons = [...ai, ...bio].map(([, , label]) => label);
+  const quality = QUALITY.filter(([re]) => re.test(text));
+  s += quality.reduce((t, [, w]) => t + w, 0);
+  const reasons = [...ai, ...bio, ...quality].map(([, , label]) => label).filter(Boolean);
   return { score: s, reasons: [...new Set(reasons)].slice(0, 6) };
 }
 
@@ -181,13 +203,22 @@ function score(p) {
 // session id as OpenCode asks. Without a key, the best score wins.
 const OPENCODE_URL = "https://opencode.ai/inference/go/openai/v1/chat/completions";
 // Go-plan models that work with a region-restricted workspace (DeepSeek needs "Global").
-const CURATOR_MODELS = ["glm-5.3", "kimi-k3"];   // first that answers wins
+// Cheap, fast Go-plan models that work with a region-restricted workspace.
+const CURATOR_MODELS = ["glm-5.3-flash", "qwen3.8-flash"];   // first that answers wins
 
 async function curate(candidates) {
   const key = process.env.OPENCODE_API_KEY;
   if (!key) return null;
   const list = candidates.map((p, i) => `[${i}] ${p.title}\nVenue: ${p.venue}${p.preprint ? " (preprint)" : ""}\nAbstract: ${p.abstract.slice(0, 2200)}`).join("\n\n");
-  const system = "You curate a daily 'Paper of the Day' for a researcher who applies AI to transcriptomics and multiomics. They also love general AI advances with clear biological applications and landmark biotech work (think AlphaFold-level). Choose the single paper they would find most genuinely exciting: new capability, surprising result, or a method they might use. Prefer substance over hype; skip incremental benchmarks, reviews and narrow clinical studies unless remarkable. Answer with JSON only.";
+  const system = `You curate a daily "Paper of the Day" for a researcher who applies AI to transcriptomics and multiomics. They also love general AI advances with clear biological applications and landmark biotech (AlphaFold-level).
+Score each candidate privately on five criteria, 1-5 each:
+1. Novelty: a genuinely new capability, idea or result (not an incremental tweak).
+2. Generality: works across datasets, tissues, species or tasks; reusable by others.
+3. Rigor: large-scale data, independent or experimental validation, strong baselines.
+4. Relevance: AI for transcriptomics / single-cell / spatial / multiomics, protein or genome modeling, or a broadly useful AI method for biology.
+5. Impact: would change how people in the field work, or is simply surprising and delightful.
+Reject: reviews, perspectives, narrow clinical prediction models, gene-signature or hub-gene studies, databases or web servers without a new method, and hype without evidence.
+Pick the paper with the best total (ties: prefer novelty and generality). Answer with JSON only.`;
   const user = `Today's candidates:\n\n${list}\n\nReply with JSON only, no other text:\n{"pick": <index>, "why": "<2-3 plain-language sentences on why it matters>", "tldr": "<one sentence: what they did and found>", "runner_ups": [<3 indices>]}`;
   for (const model of CURATOR_MODELS) {
     try {
@@ -222,13 +253,34 @@ const seen = new Set(index.days.flatMap((d) => [d.key, ...(d.also ?? [])]));
 const keyOf = (p) => (p.doi ?? p.url).toLowerCase();
 
 const [bx, ax, pm] = await Promise.all([fromBiorxiv(), fromArxiv(), fromPubmed()]);
-console.log(`candidates: bioRxiv/medRxiv ${bx.length}, arXiv ${ax.length}, PubMed ${pm.length}`);
-const byKey = new Map();
-for (const p of [...pm, ...bx, ...ax]) if (p.title && p.abstract && !byKey.has(keyOf(p)) && !seen.has(keyOf(p))) byKey.set(keyOf(p), p);
-const ranked = [...byKey.values()].map((p) => ({ ...p, ...score(p) })).filter((p) => p.score > 6).sort((a, b) => b.score - a.score);
-if (!ranked.length) { console.error("no suitable papers found"); process.exit(1); }
+console.log(`fetched: bioRxiv/medRxiv ${bx.length}, arXiv ${ax.length}, PubMed ${pm.length}`);
 
-const shortlist = ranked.slice(0, 25);
+// Rolling pool: the best unpicked papers seen over the last 3 weeks, so the pick
+// doesn't have to come from today's batch.
+const poolUrl = new URL("pool.json", DATA);
+const pool = existsSync(poolUrl) ? JSON.parse(readFileSync(poolUrl, "utf8")).papers ?? [] : [];
+const byKey = new Map(pool.map((p) => [keyOf(p), p]));
+for (const p of [...pm, ...bx, ...ax]) {
+  if (!p.title || !p.abstract || byKey.has(keyOf(p))) continue;
+  byKey.set(keyOf(p), { ...p, firstSeen: DATE });
+}
+const ageDays = (p) => Math.max(0, (Date.parse(DATE) - Date.parse(p.firstSeen ?? DATE)) / 86400000);
+
+// Variety: don't serve the same kind of paper three days running.
+const recent = index.days.filter((d) => d.date < DATE).slice(0, 3)
+  .map((d) => { try { return JSON.parse(readFileSync(new URL(`${d.date}.json`, DATA), "utf8")).paper.reasons ?? []; } catch { return []; } });
+const tooSimilar = (p) => recent.filter((r) => p.reasons.filter((x) => r.includes(x)).length >= 3).length;
+
+const ranked = [...byKey.values()]
+  .filter((p) => !seen.has(keyOf(p)) && ageDays(p) <= 21)
+  .map((p) => { const sc = score(p); return { ...p, ...sc }; })
+  .map((p) => ({ ...p, rank: p.score - 0.15 * ageDays(p) - 2 * tooSimilar(p) }))
+  .filter((p) => p.score > 8)
+  .sort((a, b) => b.rank - a.rank);
+if (!ranked.length) { console.error("no suitable papers found"); process.exit(1); }
+console.log(`pool: ${byKey.size} papers, ${ranked.length} good candidates`);
+
+const shortlist = ranked.slice(0, 30);
 const curated = await curate(shortlist).catch((e) => { console.warn(`curator failed: ${e.message}`); return null; });
 const pick = curated ? shortlist[curated.pick] : shortlist[0];
 const also = (curated ? curated.runner_ups.map((i) => shortlist[i]).filter(Boolean) : shortlist.slice(1, 4)).filter((p) => p !== pick).slice(0, 3);
@@ -247,6 +299,10 @@ for (const a of also) console.log(`   also: ${a.title} (${a.venue})`);
 if (DRY) process.exit(0);
 
 writeFileSync(new URL(`${DATE}.json`, DATA), JSON.stringify(record, null, 1));
+const used = new Set([pick, ...also].map(keyOf));
+const keep = ranked.filter((p) => !used.has(keyOf(p))).slice(0, 250)
+  .map(({ rank, score: _s, reasons: _r, ...p }) => ({ ...p, abstract: p.abstract.slice(0, 3000) }));
+writeFileSync(poolUrl, JSON.stringify({ updated: DATE, papers: keep }));
 index.days = [{ date: DATE, title: pick.title, venue: pick.venue, key: keyOf(pick), also: also.map(keyOf) }, ...index.days.filter((d) => d.date !== DATE)]
   .sort((a, b) => b.date.localeCompare(a.date));
 writeFileSync(indexUrl, JSON.stringify(index, null, 1));
