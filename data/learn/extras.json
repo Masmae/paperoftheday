@@ -1,0 +1,25 @@
+{
+ "units": {
+  "bio-u01": [
+   {
+    "id": "bio-u01-x01",
+    "title": "Protein Folding Landscapes, Proteostasis, and Phase Separation",
+    "focus": "Teach folding as an energy funnel: marginal folding free energies (~5-15 kcal/mol), two-state kinetics and folding rates, denaturation curves and Tm, and why cells need the proteostasis network (Hsp70 and TRiC chaperones, proteasomal and autophagic clearance) to counter aggregation and amyloid formation. Extend to intrinsically disordered regions (~30-40% of eukaryotic proteins) and biomolecular condensates via phase separation as functional non-folded states, covering current methods (MD simulations, cryo-EM, AlphaFold pLDDT as an empirical disorder signal), open questions (in vivo folding ra",
+    "added": "2026-10-18"
+   },
+   {
+    "id": "bio-u01-x02",
+    "title": "The Epitranscriptome: RNA Modifications and RNA Catalysis In Vivo",
+    "focus": "Cover the chemistry and regulation of internal RNA modifications - m6A (DRACH motif, METTL3/14 writers, YTHDF readers, the contested FTO/ALKBH5 eraser story), pseudouridine, m5C, and A-to-I editing - and how the 2'-OH enables RNA to act as catalyst and metabolite sensor (ribozymes, riboswitches), deepening the DNA/RNA chemical contrast. Then cover how modifications and in-vivo structure are actually measured (SHAPE-MaP and DMS-MaPseq probing, direct nanopore RNA sequencing, modification-stoichiometry estimation), how modifications reshape splicing, decay, and translation so RNA-seq abundances ",
+    "added": "2026-10-18"
+   },
+   {
+    "id": "bio-u01-x03",
+    "title": "Measuring the Macromolecular World: Quantitative Proteomics and Multiomics Integration",
+    "focus": "Explain bottom-up LC-MS/MS proteomics mechanistically - enzymatic digestion, electrospray ionization, MS1/MS2 scans, DDA vs DIA, TMT vs label-free quantification - and the resulting data properties: 10^7+ dynamic range, stochastic missingness, the peptide-to-protein inference problem, and PTM-enrichment workflows (phosphoproteomics) that quantify regulatory states invisible to RNA-seq. Close with protein-turnover measurements (pSILAC), why protein-mRNA correlations plateau near r ~ 0.3-0.5 because of translation efficiency and degradation rates, ribosome profiling and proteogenomics as the bri",
+    "added": "2026-10-18"
+   }
+  ]
+ },
+ "at": 1792329582088
+}
