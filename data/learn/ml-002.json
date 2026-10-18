@@ -1,0 +1,85 @@
+{
+ "id": "ml-002",
+ "track": "ml",
+ "unit": "ml-u01",
+ "title": "SGD Noise and Implicit Regularization",
+ "model": "qwen3.8-flash",
+ "created": "2026-10-18",
+ "summary": "This lesson analyzes Stochastic Gradient Descent as a noisy dynamical system, linking the batch-size to learning-rate ratio to implicit regularization and solution geometry. It explains why SGD favors flat minima or low-norm solutions and how these dynamics critically impact generalization in small biological datasets.",
+ "sections": [
+  {
+   "heading": "SGD as Noisy Gradient Flow",
+   "body": "We previously established that overparameterized networks possess vast basins of near-optimal loss values. To understand how we traverse this landscape, we must model Stochastic Gradient Descent (SGD) not merely as an optimization algorithm, but as a stochastic differential equation (SDE). In full-batch gradient descent, the update rule is deterministic: θ_{t+1} = θ_t - η∇L(θ_t). However, in mini-batch SGD, we approximate the true gradient ∇L using a subset of data B of size m. The resulting update is θ_{t+1} = θ_t - η∇L_B(θ_t). This introduces noise ε_t = ∇L_B(θ_t) - ∇L(θ_t), which has zero mean and variance proportional to 1/m. Consequently, SGD behaves like a particle undergoing Brownian motion with drift, governed by the Langevin dynamics approximation: dθ_t = -∇L(θ_t)dt + σ(θ_t)dW_t, where σ represents the noise covariance structure and W_t is a Wiener process.\n\nThe critical insight here is that this noise is not a bug; it is a feature. Deterministic gradient descent tends to get stuck in sharp local minima or saddle points that are difficult to escape without momentum. The stochasticity of SGD allows the optimizer to 'diffuse' out of sharp minima. If the noise magnitude is sufficiently large relative to the curvature of the minimum, the parameter vector will eventually settle into regions where the loss surface is flatter. This diffusion property is fundamental to understanding why SGD often finds solutions that generalize better than those found by deterministic methods, despite both minimizing the same empirical risk."
+  },
+  {
+   "heading": "The Batch-Size/Learning-Rate Ratio",
+   "body": "A central concept in deep learning optimization is the relationship between the learning rate η and the batch size m. Empirically, practitioners observe that doubling the batch size requires doubling the learning rate to maintain similar training stability. This heuristic is formalized through the **linear scaling rule**, popularized by Goyal et al. (2017). Mathematically, this arises because the variance of the stochastic gradient scales inversely with batch size: Var(∇L_B) ≈ (1/m)Var(∇L_full). To keep the signal-to-noise ratio constant during updates, if m increases, η must increase proportionally to compensate for the reduced noise magnitude. If you increase m but keep η fixed, the effective step size becomes too small relative to the noise reduction, causing convergence to slow down dramatically.\n\nHowever, this linear scaling holds only up to a critical batch size. Beyond this point, increasing m yields diminishing returns because the gradient estimate becomes nearly deterministic, and the computational cost per epoch outweighs the benefit of stable large steps. For biological applications, this trade-off is acute. Single-cell RNA sequencing datasets can have millions of cells (high m potential), but labeled examples for supervised tasks (e.g., cell type classification) are often scarce (low effective m). Using large batches with high learning rates on small labeled subsets can lead to poor generalization because the noise required to escape sharp minima is suppressed. Conversely, very small batches introduce excessive noise that prevents convergence. The optimal regime depends on the specific geometry of the loss landscape, which varies significantly between transcriptomic clustering tasks and protein structure prediction."
+  },
+  {
+   "heading": "Implicit Bias Toward Flat Minima",
+   "body": "The noise in SGD induces an **implicit regularization** effect. Unlike explicit L2 regularization, which adds λ||θ||² to the loss function, SGD does not modify the objective. Instead, its dynamics bias the search toward parameters that correspond to 'flat' minima—regions where the loss changes slowly with respect to perturbations in θ. Sharp minima, characterized by large eigenvalues in the Hessian matrix H = ∇²L(θ), are unstable under SGD noise. If the noise scale exceeds the basin width of a sharp minimum, the optimizer will bounce out. Flat minima have smaller Hessian eigenvalues and larger basin widths, making them more robust to stochastic fluctuations.\n\nResearch by Wu et al. (2018) and others has shown that the stationary distribution of SGD approximates a Gibbs measure p(θ) ∝ exp(-L(θ)/T), where T is related to the ratio η/m. Minimizing the free energy in this framework corresponds to finding states with low loss and high entropy (volume). High-volume regions in weight space are typically associated with flat minima. This geometric preference is crucial for generalization because flat minima are less sensitive to variations in the input distribution. In bioinformatics, where test distributions often differ from training distributions (e.g., different patients or experimental batches), this sensitivity translates directly to domain shift errors. A model trained in a sharp minimum may perform well on the training cohort but fail catastrophically when applied to a new clinical dataset due to minor shifts in gene expression profiles."
+  },
+  {
+   "heading": "Low-Norm Solutions and Generalization",
+   "body": "In addition to flatness, SGD exhibits a bias toward solutions with lower norm ||θ||, particularly in linear models and certain nonlinear architectures. Wilson et al. (2017) demonstrated that while Adam optimizers tend to find sharp minima with higher norms, SGD finds flatter minima with lower norms. This occurs because the noise term effectively acts as a regularizer against large weights. When gradients are noisy, updates that push weights toward extreme values are more likely to be reversed by subsequent noise fluctuations, whereas updates toward moderate values persist. This phenomenon is linked to the **margin theory** in classification: maximizing the margin between classes often corresponds to minimizing the weight norm in separable settings.\n\nFor small biological datasets, this implicit bias is vital. Overfitting is the primary risk when applying deep learning to genomics, where feature dimensions (genes) vastly exceed sample sizes. Explicit regularization techniques like dropout or weight decay help, but SGD's inherent preference for simpler functions provides an additional layer of protection. However, this bias is not absolute. In highly non-convex landscapes typical of deep neural networks, the interaction between architecture, initialization, and data complexity determines whether low-norm solutions are truly optimal. Recent work suggests that while low norm correlates with good generalization in many cases, it is not a sufficient condition. The key takeaway is that SGD's trajectory naturally explores the 'simplest' part of the hypothesis space compatible with the data, reducing the need for aggressive manual tuning of regularization parameters in some contexts."
+  },
+  {
+   "heading": "Implications for Small Biological Datasets",
+   "body": "Applying these principles to transcriptomics and multiomics requires careful calibration. Biological data is often high-dimensional, sparse, and noisy. When working with small cohorts (e.g., <1,000 samples), the batch size m is inherently limited by the dataset size. Using standard deep learning practices designed for ImageNet (large m, large η) will fail. With small m, the gradient noise is high. If η is also high, the parameters oscillate wildly, preventing convergence. If η is low, convergence is slow and the model may get trapped in poor local minima before the noise can help it escape.\n\nTherefore, for small biological datasets, one should prefer smaller learning rates relative to the batch size compared to large-scale benchmarks. Alternatively, use techniques that artificially increase the effective batch size or smooth the gradient, such as gradient accumulation or momentum. Momentum β helps dampen the high-frequency noise inherent in small batches, allowing for slightly larger steps without instability. Furthermore, since implicit regularization relies on the noise-to-curvature ratio, ensuring that the model capacity is not excessively large relative to the data is critical. While overparameterization aids optimization, too much capacity combined with insufficient noise (due to overly conservative learning rates) can lead to memorization rather than generalization. Practitioners should monitor the trace of the Hessian or the sharpness metric during validation to ensure the model is settling into flat minima, which are more robust to the biological variability inherent in omics data."
+  }
+ ],
+ "keyIdeas": [
+  "SGD behaves like a noisy dynamical system (Langevin dynamics), where stochastic fluctuations allow escape from sharp minima.",
+  "The batch-size/learning-rate ratio controls the signal-to-noise balance; linear scaling applies until a critical batch size is reached.",
+  "SGD implicitly biases towards flat minima because high curvature amplifies noise-induced instability, pushing parameters to wider basins.",
+  "Flat minima generally correlate with better generalization and robustness to distribution shifts, which is critical for clinical biology applications.",
+  "Small biological datasets require adjusted hyperparameters, as standard large-batch heuristics can suppress the beneficial noise needed for implicit regularization."
+ ],
+ "inYourData": "In single-cell RNA-seq analysis, where sample counts per patient are low but gene features are high, using large batches with high learning rates can cause the model to overfit to batch effects rather than biological signals. By maintaining a lower learning rate relative to batch size, you preserve enough gradient noise to escape sharp minima that capture spurious correlations, leading to models that generalize better across unseen patient cohorts or experimental conditions.",
+ "quiz": [
+  {
+   "q": "Why does SGD tend to avoid sharp minima in the loss landscape?",
+   "options": [
+    "Sharp minima have higher loss values than flat minima.",
+    "The stochastic noise in SGD causes parameters to fluctuate more in directions of high curvature, ejecting the optimizer from narrow basins.",
+    "Gradient descent algorithms explicitly penalize high Hessian eigenvalues.",
+    "Sharp minima are mathematically impossible to reach in overparameterized networks."
+   ],
+   "answer": 1,
+   "explain": "Noise magnitude is inversely related to basin width; in sharp minima (high curvature), the noise easily pushes parameters out, whereas flat minima trap the optimizer."
+  },
+  {
+   "q": "If you double the batch size m in SGD, what is the theoretically justified adjustment to the learning rate η to maintain similar optimization dynamics?",
+   "options": [
+    "Keep η unchanged.",
+    "Halve η.",
+    "Double η.",
+    "Square root η."
+   ],
+   "answer": 2,
+   "explain": "According to the linear scaling rule, doubling m halves the gradient variance, so η must be doubled to keep the signal-to-noise ratio constant."
+  },
+  {
+   "q": "How does implicit regularization in SGD differ from explicit L2 regularization?",
+   "options": [
+    "They are identical in effect.",
+    "Explicit L2 modifies the loss function, while SGD's implicit bias arises from its stochastic trajectory favoring low-norm or flat solutions without changing the objective.",
+    "Implicit regularization only works for linear models.",
+    "Explicit L2 always leads to better generalization than implicit regularization."
+   ],
+   "answer": 1,
+   "explain": "SGD does not add a penalty term to L; instead, its noise-driven dynamics naturally explore and settle in regions of parameter space that correspond to simpler or flatter solutions."
+  },
+  {
+   "q": "In the context of small biological datasets, what is a potential risk of using very large batch sizes with standard large-scale learning rates?",
+   "options": [
+    "The model will converge too slowly.",
+    "The lack of sufficient gradient noise may prevent the model from escaping sharp minima, leading to poor generalization on new data.",
+    "The model will automatically find the global minimum.",
+    "Memory usage will decrease."
+   ],
+   "answer": 1,
+   "explain": "Small datasets limit effective batch size; forcing large batches reduces noise, trapping the optimizer in sharp minima that are sensitive to distribution shifts common in biology."
+  }
+ ]
+}

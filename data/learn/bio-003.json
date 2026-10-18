@@ -1,0 +1,85 @@
+{
+ "id": "bio-003",
+ "track": "bio",
+ "unit": "bio-u01",
+ "title": "Carbohydrates and Lipids",
+ "model": "kimi-k3",
+ "created": "2026-10-18",
+ "summary": "This lesson covers the structure and function of carbohydrates and lipids, explaining how simple sugars polymerize into complex carbohydrates and how lipid amphipathicity drives membrane formation. Understanding these molecules is essential because they form the structural basis of cells, mediate energy storage and signaling, and are directly measurable in metabolomics and glycomics data.",
+ "sections": [
+  {
+   "heading": "Monosaccharides and Glycosidic Bonds",
+   "body": "**Monosaccharides** are simple sugars with the general formula `(CH2O)n`, where n is typically 3-7. The most biologically important is **glucose** (`C6H12O6`), a six-carbon sugar that exists in solution predominantly as a ring structure formed when the aldehyde group at carbon 1 reacts with the hydroxyl group at carbon 5. This intramolecular reaction creates a **hemiacetal**, and the resulting ring can adopt two configurations: **alpha-glucose** has the hydroxyl group on carbon 1 pointing down (trans to the CH2OH group), while **beta-glucose** has it pointing up (cis). This seemingly minor stereochemical difference has enormous structural consequences.\n\nMonosaccharides join via **glycosidic bonds**, formed by a **condensation reaction** (dehydration synthesis) that removes a water molecule. When two glucose molecules link between carbon 1 of the first and carbon 4 of the second, they form **maltose**. The bond is named by the carbons involved and the stereochemistry of the anomeric carbon: maltose contains an `alpha-1,4-glycosidic bond`. These bonds are covalent and relatively stable, but cells hydrolyze them efficiently using enzymes. A free monosaccharide's anomeric carbon (the carbonyl carbon in the open-chain form) is a **reducing end** because it can reduce other molecules; once locked in a glycosidic bond, it can no longer do this.\n\nCommon monosaccharides include **fructose** (a ketohexose, isomeric with glucose), **galactose** (a stereoisomer of glucose differing at carbon 4), and **ribose** (a five-carbon sugar that forms the backbone of RNA). The pool of free monosaccharides in cells is typically small (micromolar to low millimolar concentrations) because they are rapidly phosphorylated and channeled into metabolic pathways. In metabolomics data, you measure monosaccharide pools and their phosphorylated derivatives to infer metabolic flux through glycolysis and the pentose phosphate pathway."
+  },
+  {
+   "heading": "Polysaccharides: Storage and Structure",
+   "body": "**Polysaccharides** are polymers of monosaccharides, ranging from dozens to tens of thousands of units. **Starch** is the primary energy storage polysaccharide in plants, consisting of **amylose** (unbranched chains of glucose in `alpha-1,4` linkages, forming helical coils) and **amylopectin** (branched, with `alpha-1,6` linkages at branch points approximately every 24-30 residues). Animals store glucose as **glycogen**, which is similar to amylopectin but more highly branched (branch points every 8-12 residues), creating a compact structure with many free ends for rapid enzymatic mobilization. A single glycogen granule in liver or muscle can contain up to 55,000 glucose residues.\n\n**Cellulose**, the most abundant organic polymer on Earth, is a structural polysaccharide in plant cell walls. It consists of glucose in `beta-1,4` linkages. The beta configuration forces alternating glucose units to flip 180 degrees, creating straight, extended chains that hydrogen-bond with adjacent chains into rigid microfibrils. Humans lack cellulase enzymes and cannot digest cellulose, though it serves as dietary fiber. In contrast, we readily digest starch because our salivary and pancreatic **amylases** hydrolyze alpha-1,4 linkages.\n\n**Chitin** is a structural polysaccharide in arthropod exoskeletons and fungal cell walls, composed of `N-acetylglucosamine` (glucose with an acetylated amino group at carbon 2) in beta-1,4 linkages. The key principle is that the stereochemistry of the glycosidic bond (alpha vs beta) and the pattern of branching determine whether a polysaccharide is a compact, mobilizable energy store or an extended structural fiber. In genomics, genes encoding glycosyltransferases and glycosidases are annotated based on these linkage specificities, and mutations in them cause glycogen storage diseases."
+  },
+  {
+   "heading": "Glycosylation: Sugars on Proteins and Lipids",
+   "body": "**Glycosylation** is the enzymatic attachment of carbohydrate chains (oligosaccharides) to proteins or lipids, forming **glycoproteins** and **glycolipids**. This is one of the most common post-translational modifications: over half of human proteins are estimated to be glycosylated. Unlike polysaccharide synthesis, glycosylation is template-independent and occurs in the endoplasmic reticulum and Golgi apparatus.\n\nIn **N-linked glycosylation**, an oligosaccharide is attached to the nitrogen atom of an **asparagine** side chain, specifically at the consensus sequence `Asn-X-Ser/Thr` (where X is any amino acid except proline). The process begins in the ER with transfer of a preassembled 14-sugar precursor (containing glucose, mannose, and `N-acetylglucosamine`) from a **dolichol** lipid carrier to the nascent protein. The chain is then trimmed and modified in the Golgi. In **O-linked glycosylation**, sugars attach to the oxygen of **serine** or **threonine** side chains, typically starting with `N-acetylgalactosamine` in the Golgi, with no consensus sequence.\n\nGlycosylation affects protein folding, stability, trafficking, and cell-cell recognition. The **ABO blood group antigens** are oligosaccharides on glycolipids and glycoproteins of red blood cells, differing by terminal sugars added by specific glycosyltransferases. Immune recognition, viral entry (e.g., the influenza virus hemagglutinin binds sialic acid on host glycoproteins), and protein quality control all depend on glycosylation patterns. In proteomics data, glycosylation appears as mass shifts of specific peptide masses (e.g., a mass increase of 162 Da indicates addition of a hexose) and is analyzed using specialized glycoproteomics workflows."
+  },
+  {
+   "heading": "Fatty Acids and Triacylglycerols",
+   "body": "**Fatty acids** are carboxylic acids with long hydrocarbon chains, typically 12-24 carbons. **Saturated fatty acids** have no double bonds (e.g., **palmitic acid**, 16:0, and **stearic acid**, 18:0), allowing tight packing and higher melting points. **Unsaturated fatty acids** contain one or more cis double bonds (e.g., **oleic acid**, 18:1, with a double bond between carbons 9 and 10), which introduce kinks that prevent tight packing and lower melting points. The notation `18:1 Δ9` means 18 carbons, 1 double bond, starting at carbon 9 from the carboxyl end. Humans cannot synthesize **linoleic acid** (18:2) or **alpha-linolenic acid** (18:3), making them essential fatty acids that must come from diet; they are precursors to signaling molecules like prostaglandins.\n\n**Triacylglycerols** (triglycerides) consist of three fatty acids esterified to a **glycerol** backbone. This is the primary form of energy storage in animals: a typical human stores over 100,000 kcal as triglycerides in adipose tissue, compared to less than 2,000 kcal as glycogen. Fatty acid oxidation yields about 9 kcal/g, more than twice the energy density of carbohydrates (4 kcal/g), because fatty acids are more reduced (fewer oxygen atoms per carbon). Triglycerides are hydrophobic and stored in anhydrous droplets, whereas glycogen binds water, making fat a more space-efficient long-term energy store.\n\nFatty acids are synthesized by **fatty acid synthase**, a large multienzyme complex that iteratively adds two-carbon units from `malonyl-CoA` to a growing chain attached to an **acyl carrier protein**. Beta-oxidation in mitochondria shortens fatty acids by two carbons per cycle, generating acetyl-CoA, NADH, and FADH2. In lipidomics, you quantify hundreds of distinct lipid species (differing in chain length and saturation) to infer metabolic states, membrane composition, and disease phenotypes."
+  },
+  {
+   "heading": "Phospholipids, Sterols, and Membrane Architecture",
+   "body": "**Phospholipids** are **amphipathic** molecules with a hydrophilic head and hydrophobic tails. **Glycerophospholipids** have a glycerol backbone with two fatty acids esterified at positions 1 and 2, and a phosphate group at position 3, often linked to head groups like choline (forming **phosphatidylcholine**), ethanolamine, serine, or inositol. **Sphingolipids** use **sphingosine** (an amino alcohol) instead of glycerol, with one fatty acid attached via an amide bond (forming **ceramide**), plus a head group. **Cholesterol** is a **sterol** with a rigid four-ring structure, a hydroxyl group at one end, and a short hydrocarbon tail; it is weakly amphipathic.\n\nAmphipathicity drives spontaneous membrane formation. When phospholipids are dispersed in water, the hydrophobic effect (the tendency of water to exclude nonpolar surfaces, increasing entropy of water molecules) forces the fatty acid tails to aggregate, while hydrophilic heads remain hydrated. A **micelle** (a sphere with tails inward) works for single-tailed lipids like detergents, but phospholipids with two tails are too bulky to pack into a sphere. Instead, they form a **bilayer**: two leaflets with tails facing inward and heads facing the aqueous environment on both sides. This self-assembly is driven by entropy (release of ordered water molecules) and requires no energy input. The resulting membrane is a **fluid mosaic**, with lipids and proteins diffusing laterally. At 37°C, typical membranes have a viscosity similar to olive oil, with individual phospholipids diffusing laterally at rates of ~1-2 micrometers per second.\n\nCholesterol intercalates between phospholipids, with its hydroxyl group near the head groups and its rigid rings restricting fatty acid chain motion at high temperatures (reducing fluidity) while preventing tight packing at low temperatures (maintaining fluidity). It also reduces permeability to small water-soluble molecules. Membrane lipid composition varies by organelle and cell type, affecting protein function and signaling. For example, lipid rafts are transient, cholesterol- and sphingolipid-enriched microdomains that cluster signaling proteins. In single-cell lipidomics and spatial metabolomics, you can now measure lipid composition at near-cellular resolution, revealing metabolic reprogramming in cancer and neurodegeneration."
+  }
+ ],
+ "keyIdeas": [
+  "Monosaccharides like glucose cyclize into alpha and beta anomers, and the stereochemistry of glycosidic bonds determines whether polysaccharides serve as energy stores (alpha-1,4 in starch/glycogen) or structural fibers (beta-1,4 in cellulose).",
+  "Glycosylation covalently attaches oligosaccharides to proteins (N-linked to asparagine, O-linked to serine/threonine) and lipids, affecting folding, trafficking, cell recognition, and immune responses in a template-independent manner.",
+  "Fatty acids are hydrocarbon chains with a carboxyl group; saturated chains pack tightly while cis double bonds introduce kinks that lower melting points, and triacylglycerols store energy at twice the density of carbohydrates.",
+  "Phospholipid amphipathicity drives spontaneous bilayer formation via the hydrophobic effect, creating a fluid, semi-permeable membrane that compartmentalizes cells and organelles without requiring energy input.",
+  "Cholesterol modulates membrane fluidity and permeability by intercalating between phospholipids, and its rigid sterol backbone both stabilizes and disorders lipid packing depending on temperature."
+ ],
+ "inYourData": "In transcriptomics, glycosylation defects appear as altered expression of glycosyltransferases and glycosidases, and congenital disorders of glycosylation show pathway-level dysregulation. Metabolomics and lipidomics directly quantify monosaccharides, phosphorylated sugar intermediates (e.g., glucose-6-phosphate), fatty acids, and complex lipids, allowing you to infer glycolytic flux, beta-oxidation activity, and membrane remodeling. In cancer multiomics, altered lipid metabolism (e.g., upregulated fatty acid synthase) and glycosylation changes (e.g., truncated O-glycans) are common features that correlate with tumor aggressiveness and can be used as biomarkers or drug targets.",
+ "quiz": [
+  {
+   "q": "Why can humans digest starch but not cellulose, even though both are glucose polymers?",
+   "options": [
+    "Cellulose contains toxic modifications that block enzyme binding",
+    "Starch has alpha-1,4 linkages that amylases hydrolyze, while cellulose has beta-1,4 linkages that amylases cannot cleave",
+    "Cellulose is too large to be transported across the intestinal epithelium",
+    "Starch is branched while cellulose is linear, and only branched polymers fit into amylase active sites"
+   ],
+   "answer": 1,
+   "explain": "The stereochemistry of the glycosidic bond determines enzyme specificity. Alpha-amylases recognize the alpha-1,4 linkage in starch but cannot hydrolyze the beta-1,4 linkage in cellulose, which requires cellulase enzymes that humans do not produce."
+  },
+  {
+   "q": "A researcher observes a membrane that remains fluid at low temperatures but becomes excessively leaky. Which change in lipid composition would most likely explain this phenotype?",
+   "options": [
+    "Increased proportion of saturated fatty acids in phospholipids",
+    "Decreased cholesterol content",
+    "Increased length of fatty acid chains in phospholipids",
+    "Increased proportion of phosphatidylserine relative to phosphatidylcholine"
+   ],
+   "answer": 1,
+   "explain": "Cholesterol prevents tight packing of fatty acid chains at low temperatures (maintaining fluidity) and reduces membrane permeability by filling gaps between phospholipids. Decreasing cholesterol would make the membrane more fluid at low temperature but also more permeable to small molecules."
+  },
+  {
+   "q": "In a glycoproteomics experiment, you identify a peptide with a mass shift of +203 Da at an asparagine residue within the sequence Asn-Gly-Thr. What does this modification most likely represent?",
+   "options": [
+    "O-linked glycosylation with a single N-acetylglucosamine",
+    "N-linked glycosylation with a single N-acetylglucosamine",
+    "Phosphorylation of the threonine residue",
+    "Acetylation of the asparagine side chain"
+   ],
+   "answer": 1,
+   "explain": "A mass shift of +203 Da corresponds to addition of a single N-acetylglucosamine (GlcNAc) residue. The sequence Asn-Gly-Thr matches the N-linked glycosylation consensus motif Asn-X-Ser/Thr, indicating N-linked glycosylation at the asparagine. O-linked glycosylation typically occurs on serine or threonine and usually starts with N-acetylgalactosamine (also 203 Da, but the consensus sequence points to N-linked)."
+  },
+  {
+   "q": "Why does storing energy as triacylglycerols rather than glycogen provide a weight advantage for long-term energy storage in animals?",
+   "options": [
+    "Triacylglycerols are stored with bound water molecules, making them lighter per unit energy",
+    "Fatty acids are more reduced than carbohydrates, yielding more ATP per gram upon oxidation, and triacylglycerols are stored anhydrously",
+    "Glycogen synthesis requires more energy input than triglyceride synthesis, so less net energy is stored",
+    "Triacylglycerols are smaller molecules than glycogen, so they occupy less volume"
+   ],
+   "answer": 1,
+   "explain": "Fatty acids have fewer oxygen atoms per carbon than carbohydrates (more reduced), so their complete oxidation yields more energy (~9 kcal/g vs ~4 kcal/g). Additionally, triglycerides are hydrophobic and stored without water, whereas glycogen binds about 2 grams of water per gram, further increasing its effective weight."
+  }
+ ]
+}

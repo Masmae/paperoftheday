@@ -1,0 +1,81 @@
+{
+ "id": "bio-002",
+ "track": "bio",
+ "unit": "bio-u01",
+ "title": "Energy, Equilibrium, and Free Energy in Cells",
+ "model": "qwen3.8-flash",
+ "created": "2026-10-18",
+ "summary": "This lesson establishes the thermodynamic principles governing biological reactions, focusing on Gibbs free energy, equilibrium constants, and reaction coupling. It provides the quantitative framework necessary to understand molecular binding affinities and pH regulation, which are foundational for interpreting gene expression and signaling data.",
+ "sections": [
+  {
+   "heading": "Thermodynamics in Biological Systems",
+   "body": "Biological systems operate far from equilibrium, driven by continuous energy flux. To predict whether a chemical reaction will proceed spontaneously, we use **Gibbs free energy** (`ΔG`), defined as `ΔG = ΔH - TΔS`, where `ΔH` is enthalpy (heat content), `T` is absolute temperature, and `ΔS` is entropy (disorder). A negative `ΔG` indicates an exergonic reaction that releases free energy and proceeds spontaneously; a positive `ΔG` indicates an endergonic reaction requiring energy input. Unlike physics textbooks often assume constant pressure and volume, cellular conditions involve aqueous environments with specific solute concentrations. Therefore, the actual free energy change depends on the ratio of product to reactant concentrations, described by `ΔG = ΔG°' + RT ln([Products]/[Reactants])`. Here, `ΔG°'` is the standard transformed free energy at pH 7.0, `R` is the gas constant (8.314 J/mol·K), and `T` is typically 310 K (37°C) for human cells. This equation reveals that even reactions with unfavorable `ΔG°'` can proceed if reactant concentrations are high enough or products are rapidly removed.\n\nEquilibrium occurs when `ΔG = 0`, meaning the forward and reverse reaction rates are equal. The equilibrium constant `Keq` relates to standard free energy via `ΔG°' = -RT ln(Keq)`. For every 5.7 kJ/mol difference in `ΔG°'`, `Keq` changes by an order of magnitude. At physiological temperature, a `ΔG°'` of -20 kJ/mol corresponds to a `Keq` of roughly 3,000, indicating strong product preference. In omics data, this implies that enzymes catalyzing steps with large negative `ΔG` values often act as irreversible regulatory points, while those near zero are reversible and sensitive to substrate availability."
+  },
+  {
+   "heading": "Coupling Reactions via ATP",
+   "body": "Cells sustain life by coupling energetically unfavorable reactions to favorable ones, primarily through **ATP hydrolysis**. The hydrolysis of ATP to ADP and inorganic phosphate (`Pi`) has a `ΔG°'` of approximately -30.5 kJ/mol under standard conditions, but in the cytosol, where [ATP] >> [ADP], the actual `ΔG` is often between -50 and -60 kJ/mol. This makes ATP a potent \"energy currency.\" When a biosynthetic reaction, such as glutamine synthesis from glutamate and ammonia (`ΔG°'` ≈ +14 kJ/mol), is coupled to ATP hydrolysis, the combined process becomes exergonic (`ΔG°'` ≈ -16.5 kJ/mol). Mechanistically, this coupling usually involves enzyme-mediated transfer of a phosphoryl group, creating a high-energy intermediate like phosphoglucomutase intermediates or aminoacyl-tRNA synthetase complexes. \n\nThink of ATP not as a battery storing static charge, but as a reactive intermediate that lowers activation barriers while driving net flux. In transcriptomics, genes encoding ATP-consuming enzymes (kinases, ligases) are often upregulated during growth phases, whereas catabolic pathways generating ATP (glycolysis, oxidative phosphorylation) dominate in starvation states. The cell maintains a high ATP/ADP ratio (~10:1) to ensure `ΔG` remains sufficiently negative for most processes. Disruption of this ratio, known as energetic stress, triggers signaling cascades like AMPK activation, which reprograms metabolic gene expression."
+  },
+  {
+   "heading": "Binding Affinity and Occupancy",
+   "body": "Molecular interactions, such as transcription factors (TFs) binding DNA or receptors binding ligands, are governed by the same thermodynamic principles. The dissociation constant `Kd` quantifies binding affinity, defined as the concentration of ligand at which half the binding sites are occupied. It relates to the standard free energy of binding via `ΔG_bind = RT ln(Kd)`. Lower `Kd` values indicate tighter binding. For example, a TF might bind its consensus sequence with a `Kd` of 10 nM, implying a `ΔG_bind` of about -50 kJ/mol. This energy comes from hydrogen bonds, van der Waals forces, and electrostatic interactions, offset by the loss of translational and rotational entropy upon complex formation.\n\nThe fraction of bound sites (`θ`) follows the Langmuir isotherm: `θ = [L] / ([L] + Kd)`. This curve is hyperbolic, not linear. If `[L] << Kd`, occupancy increases linearly with concentration; if `[L] >> Kd`, occupancy saturates near 1.0. In ChIP-seq or ATAC-seq data, signal intensity correlates with occupancy, but interpretation requires knowing the local concentration of the TF. A TF expressed at levels below its `Kd` will show low occupancy despite being present. Cooperative binding, where one protein facilitates another's attachment, creates sigmoidal occupancy curves, enabling switch-like behavior in gene regulation. This nonlinearity allows cells to filter out noise and respond sharply to threshold signals, a concept critical for modeling Boolean networks in multiomics integration."
+  },
+  {
+   "heading": "pH, Buffers, and Proton Gradients",
+   "body": "**pH** measures proton activity, defined as `-log10[H+]`. Most intracellular proteins function optimally within a narrow pH range (typically 7.0–7.4 in cytosol). Deviations alter the ionization state of amino acid side chains (e.g., histidine pKa ~6.0), disrupting hydrogen bonding and electrostatic interactions essential for structure and catalysis. Cells resist pH fluctuations using **buffers**, weak acids or bases that absorb or release protons without significant pH change. The Henderson-Hasselbalch equation describes buffer capacity: `pH = pKa + log10([A-]/[HA])`. Effective buffering occurs within ±1 pH unit of the pKa. Common intracellular buffers include phosphate and proteins themselves, particularly histidine residues.\n\nBeyond homeostasis, proton gradients store potential energy. Mitochondria maintain a pH gradient across the inner membrane (intermembrane space pH ~7.0, matrix pH ~7.8) alongside an electrical potential. This proton-motive force drives ATP synthase. In omics studies, pH-sensitive fluorescent probes or ratiometric imaging reveal these dynamics. Furthermore, lysosomes maintain acidic pH (~4.5–5.0) via V-ATPase pumps, activating hydrolytic enzymes. Transcriptomic signatures of unfolded protein response (UPR) often correlate with pH dysregulation, as misfolded proteins accumulate when chaperone efficiency drops due to suboptimal protonation states."
+  }
+ ],
+ "keyIdeas": [
+  "Spontaneity is determined by Gibbs free energy (ΔG), which depends on both standard energy (ΔG°') and current reactant/product concentrations.",
+  "ATP hydrolysis couples to endergonic reactions, making them spontaneous by providing a large negative ΔG contribution.",
+  "Binding affinity (Kd) dictates molecular occupancy nonlinearly, following a hyperbolic curve that saturates at high ligand concentrations.",
+  "Buffers stabilize pH by resisting changes in proton concentration, crucial for maintaining protein structure and enzymatic activity.",
+  "Proton gradients represent stored free energy used to drive ATP synthesis and transport across membranes."
+ ],
+ "inYourData": "In transcriptomics, pathway enrichment analysis should weight steps based on their ΔG proximity to equilibrium; near-equilibrium steps are flux-controlling, while far-from-equilibrium steps are regulated. Binding site occupancy models require estimating local TF concentrations relative to Kd to interpret ChIP-seq peaks accurately. Multiomics integration must account for pH-dependent enzyme kinetics, especially in cancer metabolism where Warburg effect alters intracellular acidity.",
+ "quiz": [
+  {
+   "q": "If a reaction has a ΔG°' of +10 kJ/mol, under what condition could it proceed spontaneously in a cell?",
+   "options": [
+    "Only if the temperature is increased significantly.",
+    "If the ratio of [Products]/[Reactants] is very small.",
+    "If the enzyme concentration is doubled.",
+    "It never proceeds spontaneously because ΔG°' is positive."
+   ],
+   "answer": 1,
+   "explain": "Actual ΔG depends on concentrations; removing products or accumulating reactants shifts the equilibrium term (RT ln Q) to be more negative, overcoming the positive ΔG°'."
+  },
+  {
+   "q": "Why is the ATP/ADP ratio maintained much higher than 1 in healthy cells?",
+   "options": [
+    "To prevent ATP degradation by nucleases.",
+    "To ensure the actual ΔG of hydrolysis remains strongly negative.",
+    "Because ADP is toxic to mitochondria.",
+    "To increase the Keq of ATP hydrolysis."
+   ],
+   "answer": 1,
+   "explain": "While ΔG°' is fixed, the actual ΔG depends on mass action; high [ATP] and low [ADP] make the logarithmic term negative, resulting in a larger magnitude of free energy release."
+  },
+  {
+   "q": "A transcription factor has a Kd of 10 nM. What fraction of binding sites are occupied if the nuclear concentration is 10 nM?",
+   "options": [
+    "0%",
+    "25%",
+    "50%",
+    "100%"
+   ],
+   "answer": 2,
+   "explain": "By definition, Kd is the ligand concentration at which half-maximal binding occurs; thus, at [L] = Kd, occupancy θ = 0.5."
+  },
+  {
+   "q": "Which statement best describes the role of buffers in cellular biochemistry?",
+   "options": [
+    "They permanently remove H+ ions from the system.",
+    "They minimize pH changes by converting strong acids/bases into weak ones.",
+    "They increase the entropy of the solution to drive reactions.",
+    "They provide the primary source of energy for ATP synthesis."
+   ],
+   "answer": 1,
+   "explain": "Buffers consist of weak acid/base pairs that absorb or donate protons, stabilizing pH against external perturbations without eliminating protons entirely."
+  }
+ ]
+}

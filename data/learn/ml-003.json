@@ -1,0 +1,85 @@
+{
+ "id": "ml-003",
+ "track": "ml",
+ "unit": "ml-u01",
+ "title": "Adaptive Optimizers and Schedules",
+ "model": "kimi-k3",
+ "created": "2026-10-18",
+ "summary": "This lesson derives Adam from adaptive gradient methods, explains why AdamW's decoupled weight decay fixed a subtle but consequential bug, and shows why warmup and cosine or WSD schedules dominate large-model training. It matters because the optimizer-schedule pair is the main reason transformer training is stable enough to scale to large models and large batches.",
+ "sections": [
+  {
+   "heading": "From SGD to Adam",
+   "body": "Start from the practical failure mode of plain SGD: a single global step size is a poor fit when curvature varies by many orders of magnitude across parameters. Deep networks are strongly ill-conditioned, and this is especially bad when different weights see gradients with very different typical magnitudes. Heavy-ball momentum fixes one part of the problem by smoothing noisy gradient estimates and moving faster along persistent directions, but it still rescales all coordinates identically. **AdaGrad** (Duchi, Hazan, and Singer, 2011) introduced per-coordinate adaptivity by dividing by the square root of accumulated squared gradients, which is elegant in convex online learning but decays the effective step size too aggressively in deep learning. **RMSProp** (Hinton, 2012 lecture notes) replaced the full sum with an exponential moving average, and **Adam** (Kingma and Ba, 2015) combined that with momentum and bias correction. In modern notation, with gradients `g_t = ∇θ L(θ_t)` and decays `β1`, `β2`, Adam computes `m_t = β1 m_{t-1} + (1-β1) g_t`, `v_t = β2 v_{t-1} + (1-β2) g_t^2`, bias-corrects them as `m̂_t = m_t/(1-β1^t)` and `v̂_t = v_t/(1-β2^t)`, and updates `θ_{t+1} = θ_t - η m̂_t/(sqrt(v̂_t)+ε)`. The first moment `m_t` is an exponential moving average of the mean gradient, while `v_t` tracks the second moment; the bias correction matters most early in training, when both accumulators are initialized at zero and otherwise underestimate their true values.\n\nAdam should be interpreted less as a Newton method than as a cheap, robust per-coordinate gradient normalization. The update is approximately sign-like when the signal-to-noise ratio is high, and it automatically shrinks coordinates with consistently large gradients while enlarging those with consistently small ones. That is a very good match to transformer blocks, where attention projections, feed-forward matrices, biases, and normalization gains can have very different gradient statistics. The trade-off is that `v_t` can react to recent gradient noise and spike in nonstationary phases, so the effective step can shrink or destabilize unless the schedule is designed carefully. Adam also does not preserve SGD's particular noise structure, so the implicit regularization story from earlier lessons changes: adaptivity can improve optimization speed while sometimes worsening generalization in image classification, although this concern is much weaker in large-scale self-supervised training where the optimization challenge dominates."
+  },
+  {
+   "heading": "Weight decay and AdamW",
+   "body": "Classic L2 regularization adds `λ||θ||²/2` to the loss, so with SGD the gradient step becomes `θ_{t+1} = θ_t - η(∇L(θ_t) + λθ_t)`, which is exactly multiplicative shrinkage of the weights. That equivalence breaks under Adam, because the gradient of the penalty is rescaled by `1/(sqrt(v̂_t)+ε)` just like the data gradient. Parameters with historically large gradients then receive less effective weight decay than parameters with small gradients, so `λ` no longer means a uniform decay rate. **Decoupled weight decay** fixes this by separating loss minimization from shrinkage: `θ_{t+1} = θ_t - η(m̂_t/(sqrt(v̂_t)+ε)) - η λ θ_t`. **AdamW** (Loshchilov and Hutter, 2019) made this explicit and showed empirically that Adam with L2-in-the-gradient and AdamW are not interchangeable in practice.\n\nThe reason this matters is conceptual as well as empirical. Decoupling restores weight decay to something close to its intended role: a direct prior toward smaller weights, applied uniformly across coordinates, while Adam adapts only the loss-driven term. This interacts well with large transformers, where many matrices are overparameterized and scale-sensitive, and where weight decay is one of the main tools for controlling norm growth over long runs. There is still nuance. In practice, weight decay is often omitted from biases and normalization parameters, and there is debate about how much of AdamW's benefit comes from better generalization versus better effective step-size control over long schedules. But the core fact is well established: if you want Adam-style adaptivity, L2-in-the-gradient is not the same object as weight decay."
+  },
+  {
+   "heading": "Warmup and schedules",
+   "body": "A modern optimizer is only half the algorithm; the learning-rate schedule is the other half. **Warmup** increases the learning rate from zero or a small value over the first few thousand steps. One rationale is statistical: early in training, Adam's `m̂_t` and `v̂_t` are estimated from very few samples, so aggressive steps can be driven by poor second-moment estimates and can push the model into a bad basin from which it never recovers. Another rationale is dynamical: large transformers often begin training far from any stable operating regime, so a smaller initial step reduces the chance of loss spikes, norm explosions, or attention-logit blowups. Warmup is therefore not a cosmetic trick; it is a stability mechanism for the most fragile phase of optimization.\n\nAfter warmup, the dominant long-run choice is still **cosine decay**: `η_t = η_min + (η_max-η_min) * 0.5 * (1 + cos(π t/T))`, possibly with `η_min = 0` or a small floor. Cosine schedules keep the learning rate high through the middle of training, then anneal it smoothly so the iterate can settle into a flatter low-loss region with less gradient-noise jitter. A close competitor is **WSD**: warmup, stable, decay. The model trains at a roughly constant high learning rate for most of the run, then decays at the end. This has become popular in large-model practice because it is easier to reuse checkpoints across runs and because the final decay phase can be shortened relative to the full run. Evidence from large-scale LLM training suggests WSD can match or slightly beat cosine in some settings, but the comparison is still active and implementation details matter. The robust takeaway is narrower: almost all successful transformer schedules combine an early ramp with a late anneal, because early optimization needs stability and late optimization benefits from reduced noise."
+  },
+  {
+   "heading": "Why Adam dominates transformers",
+   "body": "Adam is not universally superior to SGD; it is unusually well matched to transformers. Transformer training is nonstationary, highly heterogeneous across layers, and often batch-parallel at enormous scale. Coordinates in attention and feed-forward blocks can have very different gradient scales, and rare-token or rare-context effects can make some parameter groups effectively sparse in their update statistics. SGD with a single scalar learning rate handles this poorly unless the architecture and initialization are tuned to make the problem look more uniform. Adam's per-coordinate normalization does much of that adaptation automatically, which is one reason transformers became trainable at scale with less architecture-specific optimizer engineering. The original transformer recipe (Vaswani et al., 2017) already used Adam with warmup, and modern language-model training still reflects that design.\n\nThere is also a stability story. In very deep residual stacks, gradient scale and update scale can drift during training, especially when the model is pushed toward large batch sizes or long context lengths. Adam's sign-like normalization keeps updates closer to a controlled magnitude per coordinate, which helps avoid a few parameters taking outsized steps early on. This interacts with the schedule: warmup prevents early variance explosions, and cosine or WSD reduces late-time oscillation so training lands in a better final solution. The failure modes are real, though. Adam uses more memory because it stores two optimizer states per parameter, it can be more sensitive to `β2` and ε choices than textbook treatments suggest, and it can still diverge in unstable regimes such as very large learning rates, poorly normalized activations, or adversarial nonstationarity. Newer methods promise lower memory or better second-order structure, but AdamW plus a strong schedule remains the baseline because it is simple, robust, and unusually hard to beat at scale."
+  },
+  {
+   "heading": "Practical rules and failure modes",
+   "body": "The practical default for transformer training is AdamW with `β1≈0.9`, `β2≈0.95` or `0.999`, warmup, and a late-decay schedule. Use cosine when you want one smooth recipe for a fixed budget; use WSD when you want checkpoint reuse or the option to extend training without committing to a full cosine cycle in advance. Decouple weight decay from the adaptive update, and be deliberate about which parameter groups should receive it. Most importantly, treat instability as a coupled optimizer-architecture problem: if training spikes or diverges, the cause may be the learning rate, but it may also be initialization, residual scaling, normalization, or attention-logit growth, which is exactly what the next lesson addresses.\n\nThe common failure modes are diagnostic rather than mysterious. If the loss explodes in the first few thousand steps, suspect insufficient warmup, too high a peak learning rate, or poor early second-moment estimates. If training improves but the final validation loss plateaus with noisy oscillations, suspect insufficient annealing. If the model trains smoothly but generalizes worse than expected, test whether weight decay was applied as true decoupled decay rather than folded into the adaptive gradient. And if AdamW underperforms a carefully tuned SGD baseline on a small vision task, that is not a paradox: Adam's advantage is largest in regimes where heterogeneity and scale dominate, not in every smooth, well-conditioned benchmark."
+  }
+ ],
+ "keyIdeas": [
+  "Adam combines momentum with per-coordinate normalization by an exponential moving average of squared gradients, making it well suited to heterogeneous transformer blocks.",
+  "L2 regularization and weight decay coincide for SGD but not for Adam; AdamW restores uniform shrinkage by decoupling decay from the adaptive update.",
+  "Warmup protects the early, high-variance phase of training, while cosine and WSD schedules reduce late-time noise and improve final convergence.",
+  "Adam dominates transformer training because it adapts to unequal gradient scales across layers and parameter groups with very little architecture-specific tuning.",
+  "The optimizer and schedule should be treated as one coupled system whose main job is to keep training stable early and low-noise late."
+ ],
+ "inYourData": "In transcriptomics and multiomics, AdamW-style training shows up in scVI-like deep generative models, transformer models for single-cell foundation modeling, and protein or genomic sequence models where gradient scales vary sharply across modules and rare features matter. If a model on sparse scRNA-seq counts, batch-corrected multiomics, or long-range genomic sequence data diverges early, warmup and peak learning rate are often more important than architectural novelty. When fine-tuning a pretrained biological transformer, a short warmup plus cosine or WSD decay is usually the safest default, and decoupled weight decay is preferable to naive L2-in-the-gradient if you want predictable regularization.",
+ "quiz": [
+  {
+   "q": "Why does L2 regularization fail to be equivalent to weight decay under Adam?",
+   "options": [
+    "Because Adam removes the need for regularization entirely",
+    "Because the L2 gradient is divided by the same adaptive denominator as the loss gradient",
+    "Because Adam already includes a Bayesian prior on all weights",
+    "Because L2 regularization is incompatible with momentum"
+   ],
+   "answer": 1,
+   "explain": "In Adam, any term added to the gradient is rescaled coordinate-wise by `1/(sqrt(v̂_t)+ε)`, so the effective shrinkage is no longer uniform. AdamW fixes this by applying weight decay outside the adaptive update."
+  },
+  {
+   "q": "What is the best interpretation of the `v_t` term in Adam?",
+   "options": [
+    "An estimate of the gradient's covariance matrix",
+    "An exponential moving average of squared gradients used for per-coordinate scaling",
+    "A momentum buffer for rare parameters",
+    "A bias-correction term for the loss"
+   ],
+   "answer": 1,
+   "explain": "`v_t` tracks a moving average of squared gradients, and Adam uses it to normalize each coordinate by its recent gradient scale. It is not a full covariance estimate and it is not the momentum buffer."
+  },
+  {
+   "q": "Why is warmup especially useful at the start of transformer training?",
+   "options": [
+    "It guarantees convergence to the global minimum",
+    "It makes the schedule unnecessary later in training",
+    "It reduces the effect of poor early second-moment estimates and prevents early instability",
+    "It increases weight decay while the model is small"
+   ],
+   "answer": 2,
+   "explain": "Early in training, Adam's moment estimates are noisy and the network is far from a stable regime, so large steps can cause spikes or divergence. Warmup limits that risk until the statistics and dynamics settle."
+  },
+  {
+   "q": "When is WSD often preferred over cosine in large-model training?",
+   "options": [
+    "When the model has no normalization layers",
+    "When checkpoints may need to be reused or the decay phase kept short and flexible",
+    "When the task is convex",
+    "When AdamW cannot be used"
+   ],
+   "answer": 1,
+   "explain": "WSD holds a stable high learning rate for most of training and then anneals, which is convenient for reusing checkpoints and managing long runs. Cosine is smoother, but WSD is often more operationally flexible."
+  }
+ ]
+}
