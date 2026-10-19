@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-10-19",
+   "title": "Genetic Perturbation Prediction Models Fail Out-of-Distribution: A Rigorous Benchmark and Systematic Evaluation",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.16.759604",
+   "also": [
+    "10.64898/2026.10.13.758170",
+    "10.64898/2026.10.07.757371",
+    "https://arxiv.org/abs/2610.08544v1"
+   ]
+  },
+  {
    "date": "2026-10-18",
    "title": "Tissue Reconstruction with Generative AI",
    "venue": "bioRxiv",

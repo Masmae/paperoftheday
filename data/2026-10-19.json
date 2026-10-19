@@ -1,0 +1,181 @@
+{
+ "date": "2026-10-19",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Genetic Perturbation Prediction Models Fail Out-of-Distribution: A Rigorous Benchmark and Systematic Evaluation",
+  "authors": [
+   "Tiwari, K.",
+   "Mahajan, G.",
+   "Bellad, R. P.",
+   "Dhruw, N. K.",
+   "Jha, A. K."
+  ],
+  "authorCount": 5,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-19",
+  "doi": "10.64898/2026.10.16.759604",
+  "url": "https://doi.org/10.64898/2026.10.16.759604",
+  "abstract": "Perturbation prediction models - which forecast transcriptional responses to gene inactivation - are increasingly proposed as in silico surrogates for genome-scale drug discovery screens. Yet, rigorous evaluation of whether these models genuinely generalize beyond their training distribution has been lacking. Existing benchmarks rely predominantly on random train-test splits, obscuring systematic failure modes that only emerge under realistic out-of-distribution (OOD) conditions. Here we introduce EL-PERTURB (Extrapolative Learning for PERTURBation Prediction), a benchmarking framework that stress-tests 20 perturbation prediction models spanning six architecture classes on both essential gene and genome-wide Perturb-seq screens, using a novel stratified OOD splitting strategy that partitions train and test sets into functionally distinct regions of transcriptional space. We find that model performance degrades substantially under OOD conditions, and that architectural complexity - including single-cell foundation model embeddings - confers no reliable advantage over well-tuned simpler baselines. EL-PERTURB establishes a rigorous benchmark for perturbation effect prediction across a gradient of generalization difficulty, providing a guide for building models that can genuinely serve as surrogates for wet-lab screening.",
+  "reasons": [
+   "foundation model",
+   "single-cell",
+   "perturbation",
+   "genomics",
+   "drug discovery",
+   "scale"
+  ],
+  "score": 22,
+  "tldr": "They built a stress-test benchmark (EL-PERTURB) that evaluates 20 perturbation prediction models across functionally stratified out-of-distribution train-test splits on Perturb-seq data, finding substantial OOD performance collapse and no reliable benefit from architectural complexity or scFM embeddings.",
+  "why": "EL-PERTURB delivers a rigorous, field-level correction: 20 perturbation-prediction models, spanning foundation-model architectures, largely fail under realistic out-of-distribution splits and offer no advantage over simple tuned baselines. This directly challenges the premise of in-silico perturbation screening and gives the community a durable benchmark with stratified OOD splits to build against. It is the most likely of today's candidates to change how people evaluate and trust perturbation models.",
+  "summary": {
+   "tldr": "A new benchmark (EL-PERTURB) shows that 20 perturbation-response prediction models largely fail out-of-distribution, and architectural complexity—including scGPT/Geneformer embeddings—gives no advantage over simple baselines.",
+   "background": "Models predicting transcriptional responses to gene knockdown are proposed as in silico surrogates for genome-scale drug discovery screens, but published evaluations use random train-test splits with 50–80% training fractions, letting models interpolate among biologically similar genes rather than extrapolate to genuinely novel perturbations. Genuine OOD generalization—predicting responses to unseen genes in few-shot settings—is the realistic use case, yet has been poorly tested.",
+   "approach": "The authors built EL-PERTURB, a benchmarking framework that evaluates 20 model configurations across six architecture classes (linear/kernel, KNN, MLP, attention-based PRESAGE, VAE-like scLAMBDA, graph-based GEARS, LLM-based LangPert) under unified conditions. They use single-gene CRISPRi Perturb-seq data from four essential-gene screens (K562, HepG2, RPE1, Jurkat; 1060 perturbations over 1463 genes each) and four genome-wide screens (K562, HCT116, HEK293, CD4+ T cells; 3065 perturbations over 3202 genes). Their key methodological contribution is a stratified OOD split: K-means clusters of ground-truth response profiles are assigned wholesale to train or test, forcing functionally distinct train/test regions. They compare input strategies (knowledge priors only; cross-context features; multi-context joint training), few-shot training fractions of 10/30/50% with leave-one-cell-line-out, and score with 8 scaled metrics (vs a Cell-Mean baseline) aggregated into Global and Specificity Scores. In a separate experiment they swap PRESAGE's 40-source curated knowledge embeddings (GO, Reactome, STRING, DepMap, etc., each PCA-reduced to d=128) for scGPT or Geneformer embeddings.",
+   "findings": [
+    "Under stratified OOD splits, all models degrade substantially: the OOD gap on unseen perturbations ranges from ~-10% to worse than -40% across models, and more training data reduces but does not close the gap.",
+    "Architectural complexity buys nothing: attention (PRESAGE) does not beat an MLP, and on genome-wide screens simple baselines (ridge, KNN, kernel ridge) and LangPert consistently outperform deep learning models, with best Global Score ≤0.09 (vs 0.24–0.42 on essential genes).",
+    "Multi-context joint training (MultiCtx) genuinely helps on essential-gene screens—PRESAGE-MultiCtx achieves >2x the Global Score of single-context variants at 10% training fraction—but only because essential-gene knockdowns have strongly correlated responses across cell lines; on the heterogeneous genome-wide screens this advantage disappears.",
+    "scGPT and Geneformer embeddings (including Geneformer-style in-silico perturbation embeddings) substantially underperform curated knowledge-prior embeddings and add nothing when combined with them.",
+    "Model rankings are metric- and dataset-dependent (GEARS ranks near-last on error metrics but first on manifold preservation; between-seed Spearman ρ on stratified/unseen essential-gene rankings is only 0.26–0.65), motivating their multi-metric Global Score."
+   ],
+   "why": "For anyone building or benchmarking foundation-model-based multiomics pipelines, this is a concrete evaluation-methods warning: random splits and single metrics systematically overstate perturbation-prediction capability, and transcriptomic FM embeddings appear not to encode perturbation-relevant biology better than curated knowledge-graph priors. The proposed standards—cluster-stratified OOD splits, few-shot training regimes, multi-metric scoring—provide a testbed for whether 'virtual cell' models actually generalize or just do sophisticated nearest-neighbor regression.",
+   "limitations": "The study is pseudobulk-only, single-gene, same-lineage few-shot settings; it excludes zero-shot transfer to entirely unseen cell lines and multi-gene perturbations, and results may depend on the specific public Perturb-seq screens used (results are reported primarily for K562). The authors also note possible data leakage for the LLM-based LangPert, since frontier LLMs may have seen the relevant biomedical literature.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 96427
+  }
+ },
+ "also": [
+  {
+   "title": "DeepD enables efficient genome modeling and controllable long-context sequence generation across domains of life",
+   "authors": [
+    "Lai, J.",
+    "Xin, B.",
+    "Wang, Z.",
+    "Yu, A.",
+    "Chen, Z.",
+    "Guo, Y.",
+    "Zhang, M.",
+    "Hu, B.",
+    "Ye, C.",
+    "Chen, J.",
+    "Liu, Q.",
+    "Zhao, H."
+   ],
+   "authorCount": 17,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-18",
+   "doi": "10.64898/2026.10.13.758170",
+   "url": "https://doi.org/10.64898/2026.10.13.758170",
+   "abstract": "Genome foundation models hold great potential for advancing biological research, but modeling diverse complex genomes and generating controllable genome-scale sequences remain challenging. We present DeepD, a phylogeny-informed sparse mixture-of-experts model operating at single-nucleotide resolution over a 1-million-token context while reducing active computation. Pretrained on unselected whole-genome sequences across all domains of life, DeepD learns genic and intergenic sequence features and supports broad sequence-to-function prediction across species. DeepD performs well in human protein fitness and disease variants effect prediction, such as BRCA1 and BRCA2, with particular strength in regulatory regions, such as promoter and transcription-factor binding sites. Expert routing captures exon-intron boundaries, transposable elements, and distal cis-regulatory elements. DeepD also generates experimentally validated core promoters with specified transcriptional strengths. Finally, the Context-Anchor-Body strategy enables generation of complete yeast chromosome sequences and megabase-scale Arabidopsis segments, preserving gene structure and order while introducing variations within natural ranges. Together, DeepD is an efficient genome foundation model that unifies accurate sequence-to-function prediction with controllable genome-scale generation, advancing predictive and generative design of complex genomes.",
+   "reasons": [
+    "foundation model",
+    "generative model",
+    "genomics",
+    "scale",
+    "wet-lab validated"
+   ],
+   "score": 15,
+   "summary": {
+    "tldr": "DeepD is a phylogeny-informed sparse mixture-of-experts genome foundation model (single-nucleotide resolution, 1M-token context) trained on unselected whole genomes across all domains of life, unifying sequence-to-function prediction with controllable genome-scale generation.",
+    "background": "Genome foundation models struggle to model long, heterogeneous, evolutionarily diverse genomes at single-nucleotide resolution, and existing models either train on sampled/gene-enriched sequence or cannot generate coherent, controllable sequences beyond a few hundred kilobases. Ultra-long-context training with dense architectures is computationally prohibitive, and autoregressive generation errors compound over long genomic distances.",
+    "approach": "The team built DeepD, a sparse MoE model with species-label embeddings, a species-informed router, and multi-scale gated attention (24 sliding-window + 8 full-attention heads), extended from 8K to 1M-token context in stages. Two model sizes were trained: DeepD-2B (1.8B params, 1T tokens) and DeepD-60B (63B params, 5.69T tokens) on ~5.90 Tb of unselected whole-genome sequence from eukaryotes (5,434 genomes, 5.39 Tb), archaea (6,932), bacteria (136,485), and viruses (2,917,521), without downsampling intergenic/repetitive regions. For generation they introduced a Context–Anchor–Body (CAB) strategy that iteratively infills 8-kb Body chunks between an upstream anchor and downstream context.",
+    "findings": [
+     "Zero-shot prediction: mean |Spearman| of 0.551 across seven bacterial protein fitness datasets, 0.478 across five eukaryotic protein datasets, and 0.297 across seven ncRNA datasets (best among genome models, beating RiNALMo), and 0.627 on human protein fitness (vs. Evo2-40B 0.618, ESM-2-650M 0.571).",
+     "Human variant effect: AUROC 0.934 on ClinVar SNVs and 0.965 on ClinVar non-SNVs (vs. AlphaGenome 0.485 on non-SNVs), 0.814 on SpliceVarDB splice-altering variants, and 0.825/0.825 for BRCA1/BRCA2.",
+     "Supervised regulatory tasks from embeddings: yeast H3/H4 AUROC 0.764/0.811 (Evo best 0.600/0.741); human promoter detection 0.860 vs. AlphaGenome 0.692; MoE routing weights decoded human CDS and SINEs with AUPRC 0.96/0.95 and resolved maize tb1 distal Hopscotch enhancer (~60 kb upstream) that benefited from 1M context.",
+     "Maize core promoter generation: fine-tuned on STARR-seq-labeled promoters, generated 170-bp promoters validated by dual-luciferase in maize protoplasts, with 76% of High-conditioned and 83% of Low-conditioned designs meeting their intended activity thresholds.",
+     "Chromosome-scale generation: fine-tuned on 762 S. cerevisiae pangenome genomes (S288C excluded), CAB generated 29 full-length ChrIII sequences (~310-317 kb) with 138-140 genes (S288C: 139), 10 tRNAs, 138/140 collinear genes, and 3,288-4,025 SNPs plus 8-10 SVs per chromosome largely (e.g., 100% of AIYeast25 SNPs) found in natural accessions."
+    ],
+    "why": "For someone working on AI for transcriptomics/multiomics, DeepD demonstrates that retaining full intergenic and repetitive sequence during pretraining yields markedly stronger regulatory-region prediction (promoters, TF binding, distal enhancers), and that MoE routing weights are interpretable probes for genomic annotations. It also shows a practical template for compute-efficient long-context genome modeling and controlled generation of functional regulatory and chromosomal-scale sequences relevant to regulatory circuit design and cis-element engineering.",
+    "limitations": "The paper is a non-peer-reviewed bioRxiv preprint, and DeepD remains behind AlphaGenome on mouse/human TF-binding and splice-site supervised tasks where functional-genomic supervision was the latter's training signal. Controllable generation is demonstrated on relatively well-annotated systems (maize promoters, yeast ChrIII, Arabidopsis megabase segments); robustness on larger, more repeat-rich plant/mammalian chromosomes and experimental validation of chromosome-scale outputs remain open questions.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 98107
+   }
+  },
+  {
+   "title": "SVC: A Vision Transformer-based Spatially and Virtually Embedded Cell Model for Deciphering Subcellular Spatial Transcriptomic Heterogeneity",
+   "authors": [
+    "Wan, H.",
+    "Yang, P.",
+    "Hou, S.",
+    "Wang, J.",
+    "Zhou, X."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-14",
+   "doi": "10.64898/2026.10.07.757371",
+   "url": "https://doi.org/10.64898/2026.10.07.757371",
+   "abstract": "Subcellular transcript localization shapes gene regulation and cellular function, yet profiling it at scale remains difficult, limiting our ability to study subcellular heterogeneity across tissues and disease. Here, we present SVC, a Vision Transformer-based spatially and virtually embedded cell model that learns subcellular transcript organization within native tissue context directly from subcellular-resolution spatial transcriptomics. SVC represents each gene's subcellular localization as an image patch and uses other genes within the same cell as context, enabling subcellular contextual learning of spatial dependencies that govern intracellular organization. By integrating gene-function priors, cell morphology, spatial context, and, when available, cell identity, SVC captures unified, spatially grounded representations across genes and cells that connect subcellular organization to cellular state and tissue microenvironment. Across diverse subcellular-resolution spatial transcriptomics datasets, SVC accurately predicts cell-specific subcellular transcript localization and co-organization, generalizes across tissues and technical platforms, and supports subcellular imputation of unmeasured genes and in silico perturbation. Leveraging these capabilities, SVC highlights disease-associated patterns of intracellular transcript reorganization and spatially heterogeneous responses to gene perturbations. Beyond prediction, SVC reveals systematic variation in subcellular transcript organization associated with gene function, cellular states, and tissue microenvironments, uncovering de novo spatial biology that is not accessible by cell-level analysis. SVC's learned representations further transfer to cell- and tissue-level tasks, including cell-level expression imputation, cell clustering, and spatial domain detection. Together, SVC provides a general framework for modeling and interrogating subcellular transcript organization in situ, enabling scalable discovery of subcellular spatial biology.",
+   "reasons": [
+    "transformer",
+    "transcriptomics",
+    "spatial omics",
+    "perturbation",
+    "generalizes"
+   ],
+   "score": 16,
+   "summary": {
+    "tldr": "SVC is a Vision Transformer-based model that learns and predicts subcellular transcript localization within cells directly from subcellular-resolution spatial transcriptomics data, integrating morphology, spatial context, and gene-function priors.",
+    "background": "Subcellular transcript localization (e.g., nuclear vs. cytoplasmic vs. protrusion) reflects cellular state and function, but existing subcellular ST analysis methods are task-specific and cannot comprehensively predict or model transcript localization in a cell-specific, context-aware way. Prediction is hard because localization depends on multi-gene interactions, cell morphology, neighboring-cell context, and cell state, requiring nonlinear multi-scale modeling.",
+    "approach": "SVC extends a ViT by treating each gene's within-cell spatial expression pattern as an image 'patch' and using other genes in the same cell as context, trained with self-supervised masked gene modeling. It combines five embeddings: gene subcellular localization, gene functional priors from bulk RNA-seq, neighbor-cell expression, cell/nuclear morphology (DAPI or H&E), and optional cell identity labels. Trained models support subcellular imputation of unmeasured genes, in silico perturbation, cell clustering, and spatial domain detection.",
+    "findings": [
+     "On seqFISH+ mouse embryonic fibroblasts (171 cells, 1,000 genes), SVC beat four image-based baselines on 20-fold masked gene prediction with median gains of 5.2-37.1%, and recovered known localization patterns for 49 annotated genes (predicted vs. measured nuclear distance Pearson r = 0.97); it also matched or beat ENVI, Tangram, gimVI, and uniPort at cell-level imputation (median RMSE 5.12, PCC 0.50).",
+     "On MERFISH U2-OS osteosarcoma data (1,022 cells, 119 genes), gains of 3.4-87% over baselines, predicted nuclear distances correlated with observed at r = 0.99, and predicted nuclear distance negatively correlated with unspliced/spliced ratio (r = -0.92) as biology predicts; 83.3% of compartment-enriched genes matched observed data and many matched Human Protein Atlas protein localization.",
+     "On Xenium mouse brain, SVC-derived spatial domains reproduced cortical layers and hippocampal subfields with correct marker enrichment, and SVC imputed 84 genes in the sparser Xenium 5K panel with anatomically consistent patterns (e.g., Wfs1 in CA1).",
+     "In matched WT vs. P301S tauopathy Xenium 5K data, SVC predicted disease-associated localization shifts in imputed genes: Laptm5 and Kctd12 shifted away from the nucleus in microglia (FDR < 0.005) and Clmn shifted nuclear-ward in astrocytes.",
+     "In Xenium breast cancer (trained on section 1 only), SVC recovered tumor domains (IDC, DCIS) in held-out section 2 and discovered an apicobasal RNA polarity axis in 4,678 ACTA2+ myoepithelial cells explaining 62.8% of directional variation (vs. 8.5-12.8% in controls), with basal genes enriched for contractile programs and apical genes for hormone-response programs."
+    ],
+    "why": "For transcriptomics/multiomics researchers, this extends spatial gene imputation and representation learning from cell level down to subcellular resolution, a scale where disease-associated transcript reorganization could not previously be modeled computationally. Its learned representations transfer across tasks (cell clustering, spatial domains, imputation) and platforms, making it a general foundation-style model for subcellular spatial biology.",
+    "limitations": "There were no prior methods for subcellular localization prediction, so benchmarking relied on purpose-built baselines rather than established competitors. Validation is descriptive (recapitulating known patterns, marker enrichment) rather than experimental, and results are preprint, not peer reviewed.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 176245
+   }
+  },
+  {
+   "title": "How High Is 0.6? Floors, Ceilings, and Headroom in Interpretability Probing",
+   "authors": [
+    "Pranjal Garg"
+   ],
+   "authorCount": 1,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-10-06",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2610.08544v1",
+   "abstract": "Probes are the workhorse of interpretability. If a model's hidden states predict a variable, the model is said to represent it. But a probe score has no fixed meaning. An $R^2$ of 0.6 may only reflect what the input already gives away, and the same score can mean different things on different data. We propose reading every probe score against two reference points: a floor, what a declared set of simple inputs already predicts, and a ceiling, what the full input can predict. The gap between them, the headroom, is the range in which a probe can show that a model computes something beyond the simple inputs. We prove that headroom vanishes in two ways: the target stops depending on a hidden variable the model must infer, or the input stops revealing it. We test this on transformers trained for in-context meta-analysis, which must infer the hidden heterogeneity between studies to weight them correctly, and where both reference points are known. Under distribution shift, probe scores fall and prediction error rises $12$--$15\\times$, yet the model recovers a similar share of the headroom, indicating that the data lost information, not the representation. We then analyze the real models. The single-cell foundation model scGPT encodes biological variability only partially. We also revisit four influential LLM probing studies, which claim that models represent geography, the state of an Othello board, truth, and the demographics of their users. Against a floor computed from the input text alone, some of these claims hold, while others are largely explained by the text itself.",
+   "reasons": [
+    "foundation model",
+    "language model",
+    "transformer",
+    "zero-shot",
+    "single-cell",
+    "scale"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "This paper argues that raw probe scores (R², accuracy) are meaningless without normalization against a data-dependent floor (what a simple baseline input predicts) and ceiling (what the full input can predict), and proposes a 'headroom' framework applied to transformers trained on in-context meta-analysis, the single-cell foundation model scGPT, and four published LLM probing studies.",
+    "background": "Probing hidden states is the standard method for claiming that a model 'represents' a variable, but a raw probe score has no fixed evidential meaning: the same R² can reflect information already present in the input rather than internal computation, and baselines shift across distributions. This makes it hard to know whether a drop in decodability means the representation degraded or the data simply became less informative about the target.",
+    "approach": "The authors define a floor ρ²_O (max R² achievable from a declared restricted input set O), a ceiling ρ²_I (max R² from the full input I), and headroom Δ = ceiling − floor as the range where a probe can show computation beyond O; the normalized score U_H is the fraction of headroom recovered. They prove headroom vanishes via two mechanisms: weak target sensitivity (target stops depending on a latent variable) and weak identification (input stops revealing it). They validate on causal transformers (3.3k–794k params) trained on random-effects meta-analysis where reference points are computable in closed form, plus a synthetic single-cell Gamma–Poisson model, then apply the method to frozen scGPT and to published LLM probes.",
+    "findings": [
+     "In the meta-analysis testbed, distribution shift drops raw probe R² (0.64→0.40 for log S₁; 0.64→0.34 for τ²) and raises prediction error 12–15×, yet recovered headroom stays ~constant (U_H 0.78→0.82 and 0.84→0.85), showing the data lost information (identification), not the representation.",
+     "For frozen scGPT on four 10x scRNA-seq datasets, raw probe R² for gene effective precision ranges 0.35–0.81 while recovered headroom ranges 0.28–0.57 (e.g., floor 0.60 vs raw 0.81 in one dataset, floor 0.13 vs raw 0.57 in another), indicating scGPT encodes biological overdispersion beyond sequencing depth only partially (0.70 on synthetic genes).",
+     "Re-analyzing published probes: Gurnee & Tegmark's space probe holds (recovers 63–77% of headroom for world places, but NYC scores fall at/below an n-gram floor of 0.33); the Li et al. absolute Othello board probe (0.74) falls below a no-flip-placement floor (0.80), while the Nanda relative encoding holds (92% of headroom).",
+     "Truth-in-LLM probes mostly reflect wording within datasets (floors 0.97–0.99 on larger_than/smaller_than) but hold under cross-dataset transfer (U_H 0.94–0.98); Chen et al.'s user-attribute probes (0.94–0.98) are fully within the n-gram conversation floor (0.92–0.98)."
+    ],
+    "why": "For researchers auditing scientific foundation models—where claims like 'scGPT encodes cell-state information' rest on probe scores—this gives a principled way to state what a score means relative to a pre-declared baseline, complementing causal-intervention methods and simple-baseline audits. It also cautions that observed decodability drops under distribution shift (e.g., new sequencing regimes or disease cohorts) may reflect reduced information in the data rather than representation loss.",
+    "limitations": "Normalized scores are defined relative to a researcher-chosen contrast (O, I, T), and with observational data the reference points are estimated; underestimated ceilings inflate U_H. For the LLM re-analyses the ceiling is set to 1, so those normalized scores are approximate, and the controlled testbeds are small and simple.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 178476
+   }
+  }
+ ],
+ "candidates": 350
+}
