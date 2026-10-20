@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-10-20",
+   "title": "Predicting cell-state-specific gene regulation from DNA across species",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.19.760026",
+   "also": [
+    "10.64898/2026.10.07.757352",
+    "https://arxiv.org/abs/2610.24458v1",
+    "10.64898/2026.03.02.708991"
+   ]
+  },
+  {
    "date": "2026-10-19",
    "title": "Genetic Perturbation Prediction Models Fail Out-of-Distribution: A Rigorous Benchmark and Systematic Evaluation",
    "venue": "bioRxiv",

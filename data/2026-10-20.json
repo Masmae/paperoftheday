@@ -1,0 +1,192 @@
+{
+ "date": "2026-10-20",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Predicting cell-state-specific gene regulation from DNA across species",
+  "authors": [
+   "Liu, H.",
+   "Mao, S.",
+   "Gallent, T.",
+   "Chen, Y.",
+   "Yan, Z.",
+   "Vogel, I.",
+   "Traunmuller, L.",
+   "Zhang, R.",
+   "Buenrostro, J. D.",
+   "Zhou, J.",
+   "Greenberg, M. E."
+  ],
+  "authorCount": 11,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-20",
+  "doi": "10.64898/2026.10.19.760026",
+  "url": "https://doi.org/10.64898/2026.10.19.760026",
+  "abstract": "DNA encodes the cell's phenotype, but the same DNA sequence is interpreted differently in every cell type, developmental stage, and activity state. Existing deep-learning models solve only half of this puzzle: sequence-to-function models read DNA but treat cell state as a fixed label, while single-cell foundation models represent cell state but not sequence. We developed Bolero, a sequence-to-function model whose parameters condition on atlas-scale cell-state embeddings and additional biological variables to predict cell-state-specific chromatin accessibility and transcript abundance from DNA. Trained on 10.7 million cells from 33 datasets across six mammals, Bolero matched or exceeded specialised models and resolved regulatory differences between closely related cell states, including cortical regional and developmental gradients. Extrapolating cell-state embeddings extended Bolero's predictions to cell states that are absent from training. Cell-state conditioning facilitated tracing of the effects of non-coding variants to the cell types in which they act. Using an AP-1 activity score as a further continuous conditioning axis, Bolero predicted activity-regulated chromatin changes without requiring actual stimulation data. Across human cell types, we reconstructed the cooperative grammar of motif identity and spacing underlying predicted AP-1 responses. Bolero further predicted cell-type-specific chromatin accessibility and AP-1 responses in species excluded from training, extending comparative genomics from sequence conservation to predicted functional conservation. Across 84 mammals, we found that predicted AP-1 responses were less conserved than chromatin accessibility at cis-regulatory elements, driven by the human-specific sequence variants on AP-1 and cooperating motifs. By combining reference genomes with reference cell atlases, Bolero allowed genome sequences, either native or mutated, to be queried across cell states, perturbations, and different species for their chromatin and expression signatures.",
+  "reasons": [
+   "foundation model",
+   "single-cell",
+   "perturbation",
+   "epigenomics",
+   "cell atlas",
+   "genomics"
+  ],
+  "score": 18,
+  "tldr": "They built a sequence-to-function model conditioned on atlas-scale cell-state embeddings that predicts cell-type-specific chromatin accessibility and expression from DNA across species, resolving regulatory differences between cell states, tracing non-coding variants to acting cell types, and extending comparative genomics to predicted functional conservation.",
+  "why": "Bolero unifies sequence-to-function models with single-cell foundation model embeddings, predicting cell-state-specific chromatin and expression from DNA across six mammals and generalizing to unseen cell states and species — a genuinely new capability connecting genome sequence, cell state, and non-coding variant interpretation. The scale (10.7M cells, 33 datasets), cross-species extrapolation, and coherent biological findings (AP-1 grammar and its human-specific divergence) make it both rigorous and field-changing.",
+  "summary": {
+   "tldr": "Bolero is a cell-state-conditioned sequence-to-function model (Borzoi backbone with low-rank adapters) that predicts cell-state-specific chromatin accessibility and transcript abundance from DNA, trained on a 10.7M-cell multiomics atlas spanning six mammals.",
+   "background": "Sequence-to-function models (Borzoi, ChromBPNet, AlphaGenome) read DNA but treat cell state as a fixed label, while single-cell foundation models represent cell state but cannot interpret sequence. This gap limits noncoding variant interpretation, perturbation prediction, and cross-species functional comparison, because atlases cannot cover the full space of cell type x stimulus x development x species.",
+   "approach": "Bolero keeps the FlashAttn variant of Borzoi's weights fixed and generates small additive weight updates at every layer from a continuous cell-state embedding (computed from integrated single-cell ATAC/RNA, e.g. MultiVI, scVI, scANVI), plus extra conditioning variables such as developmental age and an AP-1 chromVAR activity score. Training data (Bolero-10M) comprises 10.7 million cells from 33 datasets across six mammals, converted to pseudobulk profiles; input length is 524,288 bp. Optional scoring modes allow predictions from DNA alone or with reference accessibility.",
+   "findings": [
+    "On across-sample correlation (distinguishing cell states) Bolero outperformed fine-tuned Borzoi and Scooby on all 10 benchmark datasets, e.g.≈0.59/0.62 vs 0.38/0.41 for Scooby on mouse cortical subclass/brain-region DARs (~50% improvement), and matched Borzoi on across-peak performance.",
+    "It extrapolates to held-out cell states (random cell groups, developmental time points, inhibitory lineages, visual cortex), beating a 'closest training pseudobulk' baseline in 17 of 18 cases and approaching the fully trained upper bound.",
+    "Variant-effect benchmarks: caQTL effect r=0.79 (adult neuron caQTLs), eQTL AUROC/AUPRC comparable to task-specific baselines (Scooby, Decima); S-LDSC showed ~20-fold ASD heritability enrichment in high-attribution neuronal peak regions; autism de novo noncoding variants had larger predicted effects at autism-risk genes, e.g. a ZBTB20 variant predicted to create a SOX motif.",
+    "Bolero-AP1-Score, conditioned on AP-1 chromVAR score, predicted activity-induced accessibility in paradigms held out of training (fear engram: r=0.78; up to 29-fold gain over motif scan), and sek sinc let/motif-insertion analyses recovered cell-class-specific AP-1 cooperators (FOX, ETS, NF-I, TEAD, IRF...) with spacing-dependent syntax.",
+    "Cross-species: mouse-trained Bolero predicted human cortical accessibility including human-only peaks (≈35% of human peaks lack syntenic mouse counterparts); across 84 Zoonomia mammals, predicted AP-1 responses at basal-ganglia D1 MSN peaks were less conserved than accessibility in all 13 cell types, with 6,203 of 10,385 human AP-1 peaks predicted human-specific, motif changes (AP-1 itself 12.2%) explaining 13.8% of predicted response loss."
+   ],
+   "why": "For transcriptomics/multiomics researchers, this shows a practical way to fuse single-cell reference atlases with DNA sequence models: conditioning via embeddings (not fixed cell-type labels) converts an atlas into a genome-to-function model at effectively 1e9 parameters. It enables cell-state-resolved eQTL/caQTL interpretation, in-silico motif grammar design, and comparative functional genomics (predicted responsiveness, not just sequence conservation) without needing matching single-cell data for every species or stimulus.",
+   "limitations": "Predictions for fine-mapped eQTLs missed ~76% of variants (mostly distal/long-range effects, a known limitation of current sequence models), and accuracy plateaued at the tested data budget and model size (~1e9 parameters). Embedding extrapolation to genuinely novel cell states and species relies on model-inferred accessibility, and human AP-1 predictions are unvalidated by actual (impossible-in-human) stimulation data.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 159561
+  }
+ },
+ "also": [
+  {
+   "title": "From Closed-Set Annotation to In-Context Discovery: Biologically Grounded LLMs for Cellular Profiling",
+   "authors": [
+    "Gelard, M.",
+    "Benkirane, H.",
+    "Pierrot, T.",
+    "Cournede, P.-H.",
+    "P. de Almeida, B."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-14",
+   "doi": "10.64898/2026.10.07.757352",
+   "url": "https://doi.org/10.64898/2026.10.07.757352",
+   "abstract": "Tumour heterogeneity reflects both cellular identity (lineage) and state (active transcriptional programs), yet computational methods generally analyse these axes separately. We introduce CellScribe, a generative framework that conditions a pretrained language model on frozen single cell foundation model embeddings through AdaLN adapters, enabling one shared model to generate an ontology- grounded cell type or a quantified meta-program profile. Supervised multitask fine- tuning produces fine grained typing across hundreds of cell types and outperforms generative and retrieval baselines on meta-program identification under study-holdout evaluation. We further train the model with reinforcement learning, scoring its generations against cell ontology distance and meta-program agreement, so that they align with biological knowledge rather than token agreement. To identify new cell types not present in the supervised training data, we post-train the model to read several labelled example cells in a single context, each conditioning its own text span, and infer the type of a query cell through in-context learning. CellScribe thus unifies cell identity and state in one generative interface, grounds both in biological structure, and identifies cell types outside the supervised vocabulary.",
+   "reasons": [
+    "foundation model",
+    "language model",
+    "generative model",
+    "zero-shot",
+    "single-cell",
+    "scale"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "CellScribe is an AdaLN-conditioned Qwen2.5-0.5B LLM on frozen scFoundation embeddings that generates both cell-type labels (cell ontology) and quantified 3CA meta-program profiles, with RL alignment (GRPO) and span-conditioned in-context learning for unseen types.",
+    "background": "Single-cell analysis separates cell identity (lineage, closed-set fixed heads) from cell state (cohort-specific NMF meta-programs), and neither handles unseen types or new studies easily. Typing at hundreds-of-types scale, cross-study state transfer, and open-vocabulary discovery remain unsolved.",
+    "approach": "They freeze a 100M-param scFoundation encoder (pretrained on 50M cells, 19,264 genes, 3072-d embedding) and modulate Qwen2.5-0.5B-Instruct decoder blocks via AdaLN-Zero adapters, training only the projection and scale/shift layers. Supervised fine-tuning on 20M cells (CELLxGENE 62.6M cells, 700+ ontology types for typing; 3CA 4.07M cells, 41 meta-programs, 11 hallmarks for state) teaches the model to answer both prompts. GRPO then aligns generations to cell-ontology path distance (typing) and program agreement/MAE (state), and a 6M-cell span-AdaLN post-training stage lets each labelled demonstration cell modulate its own prompt span for in-context annotation of 50 held-out types. Evaluation is strictly study-holdout.",
+    "findings": [
+     "Typing on 4.44M held-out CELLxGENE cells over 309 types: CellScribe reaches 0.223 macro-F1 / 0.484 weighted-F1, beating a supervised probe on frozen scFoundation embeddings (0.194/0.366); generative baselines (Cell2Sentence 0.083, CellWhisperer 0.053, InstructCell 0.009) fail at this scale.",
+     "State prediction on held-out 3CA malignant cells (257k): 0.344 hallmark accuracy, 0.298 program-set F1, 0.330 NDCG@5 vs probe baselines 0.227/0.205/0.233.",
+     "GRPO alignment with biological rewards adds ~2.8 macro-F1 points on typing (hF1 at ±1/±2 edge tolerance up 1.3/1.6) and lifts state top-1, hallmark and NDCG@5 by 1.7/2.1/5.7 points.",
+     "On held-out Tabula Sapiens (1.14M cells), CellScribe reaches 0.441 weighted-F1 full-atlas vs CellWhisperer's 0.072, and 0.713 vs 0.473 on 16 immune-focused types.",
+     "In-context one-shot discovery of 50 unseen types (4,671 queries): post-training lifts exact hierarchical F1 from 0.023 to 0.435 with correct demos (0.032 without), and constrained-decoding exact match reaches 0.882 with the 3 demonstrated candidates; permuting support labels drops scores ~10-fold.",
+     "AdaLN conditioning ablation: token-projection alternatives cut typing macro-F1 by 11-43% and state top-1/hallmark accuracy by 50-80%."
+    ],
+    "why": "For multiomics readers, this shows LLM adapters on frozen sc foundation-model embeddings can unify closed-set annotation and quantitative state profiling in one generative interface, and that biological-structure rewards (ontology distance) beat token-likelihood objectives. In-context, demonstration-based annotation of types outside the training vocabulary removes the fixed-head limitation.",
+    "limitations": "Absolute typing macro-F1 (~0.22) is still low at 309-type scale, and state coverage is limited to 41 NMF-derived 3CA meta-programs across 24 cancer types. The unseen-type task is evaluated only in three-way one-shot episodes with constrained decoding; unconstrained exact match is 0.364. Perturbation prediction and bulk deconvolution remain future work.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 31597
+   }
+  },
+  {
+   "title": "Generative Retrieval for Reverse Target Fishing with a Proteome-Scale Benchmark",
+   "authors": [
+    "Zhichao Deng",
+    "Haichuan Tan",
+    "Xin Hong",
+    "Huaizhi Wang",
+    "Tao Huang",
+    "Bowen Gao",
+    "Yanyan Lan"
+   ],
+   "authorCount": 7,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-10-17",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2610.24458v1",
+   "abstract": "Reverse target fishing identifies protein targets for a query molecule and is central to drug discovery and repurposing. Discriminative approaches adapted from virtual screening face sparse, long-tailed associations and missing-not-at-random measurements: treating unrecorded pairs as negatives can suppress genuine targets. We reformulate the task as generative retrieval and introduce GenFish. Residual vector quantization converts frozen protein language model features into shared semantic identifiers. Given a molecular fingerprint, GenFish autoregressively models codes conditioned on the query and preceding code, ranking proteins by identifier likelihood without explicitly labeling unrecorded pairs as negatives. We introduce ProTargetBench, the first proteome-scale benchmark for reverse target fishing to jointly support measured-panel discrimination and full-catalogue recovery of experimentally recorded positives. Covering 20,431 UniProt-reviewed human proteins, it integrates curated bioactivity evidence and distinguishes experimental inactivity from unmeasured associations. On 198 held-out molecules, GenFish achieves higher mean performance across all three full-catalogue retrieval metrics than four discriminative neural baselines and three non-neural baselines, including ligand-based methods. A controlled positive-hiding experiment shows that targeted removal of false-negative competition improves contrastive retrieval beyond matched random masking; GenFish remains stronger under the same incomplete supervision. Pfam alignment indicates that the semantic identifiers capture biologically meaningful relationships among proteins. These results establish generative retrieval as a principled paradigm for reverse target fishing under incomplete bioactivity records.",
+   "reasons": [
+    "language model",
+    "generative model",
+    "representation learning",
+    "proteomics",
+    "proteins",
+    "drug discovery"
+   ],
+   "score": 18,
+   "summary": {
+    "tldr": "The paper introduces GenFish, a generative retrieval model that ranks protein targets for a query molecule by autoregressively predicting quantized semantic protein identifiers, plus ProTargetBench, a proteome-scale benchmark for reverse target fishing.",
+    "background": "Reverse target fishing asks which of ~20k human proteins a small molecule binds, but bioactivity databases record only ~1.3 targets per molecule on average, so treating unmeasured pairs as negatives (as discriminative/contrastive methods do) can suppress genuine undiscovered targets. Existing benchmarks either use only small measured panels or ignore the difference between experimentally inactive and simply unmeasured pairs.",
+    "approach": "GenFish uses residual vector quantization over frozen ESMC-600M protein embeddings to build 7-code semantic identifiers for each protein (codebooks of sizes 4096/32/128/128/256/128, plus a collision-resolving suffix), trained only on protein features with no interaction labels. A molecular predictor takes 2048-bit Morgan fingerprints, predicts each identifier code autoregressively with molecule-conditioned low-rank (rank-16) logit corrections at intermediate levels, and is trained purely on positive associations via 7-code cross-entropy—unmeasured pairs are never labeled negative. Proteins are ranked at inference simply by the log-likelihood of their stored identifier, requiring no beam search.",
+    "findings": [
+     "On 198 held-out test molecules against the full 20,431-protein catalogue, GenFish reaches 35.27% R@10, 51.96% R@50, and 46.31% MRR, beating four neural baselines (DrugCLIP, ConPLex, LigUnity, HypSeek) and three non-neural ones (SEA, weighted k-NN, target frequency); the best neural comparator, ConPLex, gets only 46.50% R@50.",
+     "On measured-panel discrimination (150 binding + 48 enzyme-activity queries, 8,835 labeled test pairs), GenFish achieves the best overall AP (58.58%) and binding AP (51.34%), though LigUnity stays strongest on enzyme panels (81.97% AP).",
+     "A controlled experiment hiding 41,290 training positives shows oracle masking of false negatives lifts contrastive-training R@50 only from 31.30% to 33.40%, while GenFish under the same incomplete supervision reaches 50.59%—a 17-19 point gain over the contrastive variants.",
+     "Post-hoc Pfam analysis (never used in training) shows 34.98% of annotated protein pairs sharing a level-1 code also share a Pfam, vs. 0.47% of random catalogue pairs, indicating biologically coherent identifier structure.",
+     "Training data comprise 381,225 positive associations across 291,337 molecules from ChEMBL 36, BindingDB, and curated PubChem assays, with positives defined as sub-micromolar Ki/Kd/IC50."
+    ],
+    "why": "GenFish offers a template for relaxing the standard discriminative/contrastive assumption that absent evidence means negative evidence—a problem shared by many sparse multiomics association tasks (e.g., protein-gene, drug-response, pair-level omics links) where measurement is missing-not-at-random. The semantic-identifier mechanism shares supervision across related entities (here, proteins), which could be transferred to other sparse entity-retrieval problems in transcriptomics and proteomics.",
+    "limitations": "The identifiers are learned from sequence similarity only, so they may not capture binding-relevant structure, and gains are established against the benchmark's specific curation choices; predictions are treated as research hypotheses, with recall of recorded positives necessarily biased toward heavily studied targets.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 83511
+   }
+  },
+  {
+   "title": "Rigidity-Aware Geometric Pretraining for Protein Design and Conformational Ensembles",
+   "authors": [
+    "Ni, Z.",
+    "Li, Y.",
+    "Qiu, Z.",
+    "Schölkopf, B.",
+    "Guo, H.",
+    "Liu, W.",
+    "Liu, S."
+   ],
+   "authorCount": 7,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-18",
+   "doi": "10.64898/2026.03.02.708991",
+   "url": "https://doi.org/10.64898/2026.03.02.708991",
+   "abstract": "Generative models have recently advanced de novo protein design by learning the statistical regularities of natural structures. However, current approaches face three key limitations: (1) Existing methods cannot jointly learn protein geometry and design tasks, where pretraining can be a solution; (2) Current pretraining methods mostly rely on local, non-rigid atomic representations for property prediction downstream tasks, limiting global geometric understanding for protein generation tasks; and (3) Existing approaches have yet to effectively model the rich dynamic and conformational information of protein structures. To overcome these issues, we introduce RigidSSL (Rigidity-Aware Self-Supervised Learning}, a geometric pretraining framework that front-loads geometry learning prior to generative finetuning. Phase I (RigidSSL-Perturb) learns geometric priors from 432K structures from the AlphaFold Protein Structure Database with simulated perturbations. Phase II (RigidSSL-MD) refines these representations on 1.3K molecular dynamics trajectories to capture physically realistic transitions. Underpinning both phases is a bi-directional, rigidity-aware flow matching objective that jointly optimizes translational and rotational dynamics to maximize mutual information between conformations. Empirically, RigidSSL variants improve designability by up to 43% while enhancing novelty and diversity in unconditional generation. Furthermore, RigidSSL-Perturb improves the success rate by 5.8% in zero-shot motif scaffolding and RigidSSL-MD captures more biophysically realistic conformational ensembles in G protein-coupled receptor modeling. The code is available at: https://github.com/ZhanghanNi/RigidSSL.git.",
+   "reasons": [
+    "generative model",
+    "representation learning",
+    "zero-shot",
+    "perturbation",
+    "proteins",
+    "code released"
+   ],
+   "score": 16,
+   "summary": {
+    "tldr": "RigidSSL is a two-phase geometric self-supervised pretraining framework for protein backbone generation that first learns SE(3)-level geometry from static structures and MD trajectories, then improves downstream generative models' designability and conformational fidelity.",
+    "background": "Protein generative models (diffusion/flow over SE(3) residue frames) must jointly learn geometry and generation end-to-end, and existing geometric pretraining uses local, non-rigid representations trained mostly on static structures, missing global folding patterns and conformational dynamics. Databases like AFDB/PDB offer huge static structure sets but no physically realistic flexible motions, making multi-scale dynamic pretraining hard.",
+    "approach": "Proteins are represented as rigid residue frames (translation + rotation per residue, AlphaFold2-style), canonicalized into an inertial reference frame, and encoded with IPA. Pretraining uses a bi-directional rigidity-aware flow matching objective (LERP for translations, SLERP for rotations) that maximizes mutual information between two views of each structure. Phase I (RigidSSL-Perturb) pretrains on 432K AlphaFold DB structures with simulated SE(3) noise (Gaussian translation + IG-SO(3) rotation); Phase II (RigidSSL-MD) finetunes on 1.3K ATLAS MD trajectories using frame pairs 2 ns apart. The pretrained IPA module is then plugged into FrameDiff, FoldFlow-2, and AlphaFlow for downstream generation.",
+    "findings": [
+     "RigidSSL-Perturb improves FoldFlow-2 unconditional-generation designability by 42.9% vs no pretraining (0.758 vs 0.329, scRMSD ≤ 2 Å) and FrameDiff designability by 10% (0.875 vs 0.775), while raising novelty and diversity.",
+     "RigidSSL-MD trades some designability (FoldFlow-2: 0.584) for higher diversity (best MaxCluster 0.318) and best distributional match to natural structures (best FPSD for FrameDiff; best fold-JSD: 4.99 FrameDiff, 5.07 FoldFlow-2).",
+     "In zero-shot motif scaffolding on 22 targets, RigidSSL-Perturb raises average success rate to 15.19% vs 9.35% unpretrained (+5.8 points), e.g., 51% on 5TRV_long (21 points above the next best).",
+     "RigidSSL-Perturb enables stereochemically clean generation of 700–800 residue chains (best Clashscore/MolProbity).",
+     "For GPCR ensemble generation with AlphaFlow, RigidSSL best matches MD reference ensembles (7/9 metrics: e.g., pairwise RMSD 2.20 vs ground truth 1.55; best Jaccard for weak contacts 0.43 and cryptically exposed residues 0.71)."
+    ],
+    "why": "This shows that front-loading residue-level rigid-frame geometry pretraining (rather than local all-atom pretraining) transfers to standard SE(3) generative backbones like FrameDiff/FoldFlow-2/AlphaFlow with substantial gains. For a transcriptomics/multiomics researcher, it illustrates a template for two-phase pretraining over static + dynamic structured data, and offers pretrained backbones potentially useful as structural components in multimodal models linking sequence to structure/function.",
+    "limitations": "Pretraining requires a large encoder (IPA) and benchmarks that are computational oracles (designability, scRMSD) without wet-lab validation; RigidSSL-MD can cause negative transfer for design tasks (MD inherits force-field biases toward metastable states), and evaluation is limited to single-chain backbones and a narrow set of generators. Code: github.com/ZhanghanNi/RigidSSL.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 108223
+   }
+  }
+ ],
+ "candidates": 358
+}
