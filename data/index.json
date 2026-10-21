@@ -1,6 +1,18 @@
 {
  "days": [
   {
+   "date": "2026-10-21",
+   "title": "CellFM: a large-scale foundation model pre-trained on transcriptomics of 100 million human cells",
+   "venue": "Nature Communications",
+   "key": "10.1038/s41467-025-59926-5",
+   "also": [
+    "10.1038/s41592-024-02191-z",
+    "https://arxiv.org/abs/2610.28579v1",
+    "10.64898/2026.06.04.730272"
+   ],
+   "classic": true
+  },
+  {
    "date": "2026-10-20",
    "title": "Predicting cell-state-specific gene regulation from DNA across species",
    "venue": "bioRxiv",

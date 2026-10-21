@@ -1,0 +1,195 @@
+{
+ "date": "2026-10-21",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "CellFM: a large-scale foundation model pre-trained on transcriptomics of 100 million human cells",
+  "authors": [
+   "Yuansong Zeng",
+   "Jiancong Xie",
+   "Ningyuan Shangguan",
+   "Zhuoyi Wei",
+   "Wenbing Li",
+   "Yun Su",
+   "Shuangyu Yang",
+   "Chengyang Zhang",
+   "Jinbo Zhang",
+   "Nan Fang",
+   "Hongyu Zhang",
+   "Yutong Lu"
+  ],
+  "authorCount": 16,
+  "venue": "Nature Communications",
+  "preprint": false,
+  "date": "2025-05-20",
+  "doi": "10.1038/s41467-025-59926-5",
+  "url": "https://doi.org/10.1038/s41467-025-59926-5",
+  "abstract": "Abstract The rapid evolution of single-cell sequencing technologies has facilitated precise transcriptomics profiling at the single-cell level, shedding light on the intricate heterogeneity within cellular populations. Despite these advances, the inherent diversity of cells and data challenges such as noise, batch effects, and sparsity, underscores the pressing need for a unified model to learn and represent cellular states effectively. Single-cell Large Language Models (LLMs) have been crafted to bridge this gap yet exhibit limited performance on human cells. This short-fall may stem from the confounding effects of training data from diverse species, partly because of limited cells for the single species. Here, we have compiled a dataset of approximately 100 million human cells sequenced by multiple technolo-gies from human single-cell datasets with various file types deposited in public databases and websites. Leveraging these extensive data cohorts, we developed CellFM, a robust single-cell foundation model with an impressive 800 million parameters, marking an eight-fold increase over the current largest single-species model. To ensure the training of CellFM on the MindSpore AI framework from Huawei, we have integrated RetNet, a Transformer architecture variant with lin-ear complexity for a balance between efficiency and performance, serving as the backbone of our model. Our comprehensive experiments have shown that CellFM outperforms existing models across diverse applications, such as cell annotation, perturbation prediction, and gene function prediction.",
+  "reasons": [
+   "foundation model",
+   "language model",
+   "transformer",
+   "AI",
+   "single-cell",
+   "transcriptomics"
+  ],
+  "score": 25.88896534430034,
+  "classic": true,
+  "citations": 88,
+  "year": 2025,
+  "tldr": "They compiled the largest human single-cell transcriptomics dataset (~100M cells) and pre-trained an 800M-parameter foundation model that beats existing single-cell LLMs on cell annotation, perturbation prediction, and gene function prediction.",
+  "why": "CellFM is a genuine capability step: an 800M-parameter single-cell foundation model trained on ~100M human cells with a linear-complexity RetNet backbone, and it outperforms prior models across annotation, perturbation, and gene-function prediction. It is broadly reusable by the transcriptomics community and matches the user's interest in landmark-scale AI for single-cell data. Most other candidates are reviews or narrower methods.",
+  "summary": {
+   "tldr": "CellFM is an 800M-parameter single-cell transcriptomics foundation model pre-trained on ~100 million human cells, using a RetNet-based architecture, that outperforms prior scFoundation/scGPT/UCE models on cell annotation, perturbation prediction, and gene function prediction.",
+   "background": "Single-cell foundation models are needed to handle noise, sparsity, batch effects, and scale in scRNA-seq data, but existing single-species (human) models are limited to ~50M cells and <100M parameters because training data is scattered across repositories in many formats (FASTQ, h5ad, Seurat, 10x).",
+   "approach": "The authors curated 19,914 samples totaling 102.3M human cells (from GEO, ENA, GSA, ImmPort; 46.3M normal donors, 66.7M from 10x 3' chemistry) and standardized QC, HGNC gene names, and sparse matrix format into the SynEcoSys pipeline. They trained CellFM (800M params, ~8x larger than the largest single-species model) with ERetNet (a RetNet variant with linear-complexity gated attention), a value-projection objective (predicting masked gene expression vectors, 2048-gene input cap, embedding dim 1536), and LoRA for fine-tuning, using Huawei MindSpore on 4 Atlas800 servers with Ascend910 NPUs.",
+   "findings": [
+    "Gene function prediction (zero-shot, 3 binary tasks): best accuracy among foundation models, +5.68% and +5.86% over UCE and scGPT; GO AUPR +1.6–1.9% over GeneCompass/UCE.",
+    "Perturbation prediction (Adamson and Norman Perturb-seq, combined with GEARS): +1% PCC and +4.75% PCC vs scFoundation and GEARS respectively; reverse perturbation prediction hit rate 81.8% in top-10, 18.1% higher than scGPT.",
+    "Cell type annotation (zero-shot, CellFM-80M): 92.91% average accuracy on 8 intra-datasets (+2.02% over scFoundation); +2.3% on 7 inter-datasets with batch effects; fine-tuned CellFM-800M was +12.8%/+15.9% over scGPT/Geneformer across inter-datasets.",
+    "Attention scores identify perturbation-affected genes: on average 18 of the top 20 genes per perturbed gene (9 case genes) were confirmed in the ChIP-Atlas database; gene embeddings also captured biologically valid relationships (e.g., IL2/IL3/IL4) and 59 unique immune pathways beyond co-expression networks, including cell-type-specific lncRNAs like HOTAIRM1 for CD14+ monocytes.",
+    "Ablations on the 80M model show SGLU, DeepNorm, and gated MHA each contribute ~0.8–1.2% accuracy, and LoRA cuts fine-tuning time without hurting performance."
+   ],
+   "why": "For a multiomics researcher, CellFM shows that scaling a human-only corpus to 100M cells plus a linear-complexity backbone can improve embeddings for annotation and perturbation tasks, and its gene/cell embeddings are plug-in features (tested with GEARS and CellOT). It also exposes Buzz-worthy practical details: LoRA-based fine-tuning, batch-effect resistance, and use of attention maps for gene-gene relationship inference, though it currently covers only scRNA transcripts (including lncRNAs), no protein or other modalities.",
+   "limitations": "The model is human-only, does not incorporate biological prior knowledge (e.g., protein embeddings like UCE), and its attention maps can only reflect global/static gene relationships; drug perturbation prediction is not yet supported and drug-perturbed datasets like sciPlex are excluded.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 76848
+  }
+ },
+ "also": [
+  {
+   "title": "Toward universal cell embeddings: integrating single-cell RNA-seq datasets across species with SATURN",
+   "authors": [
+    "Yanay Rosen",
+    "Maria Brbić",
+    "Yusuf Roohani",
+    "Kyle Swanson",
+    "Ziang Li",
+    "Jure Leskovec"
+   ],
+   "authorCount": 6,
+   "venue": "Nature Methods",
+   "preprint": false,
+   "date": "2024-02-16",
+   "doi": "10.1038/s41592-024-02191-z",
+   "url": "https://doi.org/10.1038/s41592-024-02191-z",
+   "abstract": "Analysis of single-cell datasets generated from diverse organisms offers unprecedented opportunities to unravel fundamental evolutionary processes of conservation and diversification of cell types. However, inter-species genomic differences limit the joint analysis of cross-species datasets to homologous genes. Here, we present SATURN, a deep learning method for learning universal cell embeddings that encodes genes' biological properties using protein language models. By coupling protein embeddings from language models with RNA expression, SATURN integrates datasets profiled from different species regardless of their genomic similarity. SATURN has a unique ability to detect functionally related genes co-expressed across species, redefining differential expression for cross-species analysis. We apply SATURN to three species whole-organism atlases and frog and zebrafish embryogenesis datasets. We show that cell embeddings learnt in SATURN can be effectively used to transfer annotations across species and identify both homologous and species-specific cell types, even across evolutionarily remote species. Finally, we use SATURN to reannotate the five species Cell Atlas of Human Trabecular Meshwork and Aqueous Outflow Structures and find evidence of potentially divergent functions between glaucoma associated genes in humans and other species.",
+   "reasons": [
+    "language model",
+    "deep learning",
+    "single-cell",
+    "proteins",
+    "cell atlas",
+    "RNA-seq"
+   ],
+   "score": 21.207607441911914,
+   "classic": true,
+   "citations": 127,
+   "year": 2024,
+   "summary": {
+    "tldr": "SATURN is a deep learning method that integrates scRNA-seq datasets across species into a shared cell embedding space by combining gene expression with protein language model embeddings (ESM2), enabling cell-type comparison, label transfer, and cross-species differential expression without requiring one-to-one gene homologs.",
+    "background": "Jointly analyzing single-cell data from different organisms is key to studying conservation and diversification of cell types, but each species has different genes, so existing methods must restrict analysis to one-to-one homologs, discarding many biologically relevant genes. Sequence-alignment approaches (e.g., BLAST-based SAMap) miss remote homology and depend on arbitrary thresholds.",
+    "approach": "SATURN (Species Alignment Through Unification of Rna and proteiNs) represents each gene by its protein embedding from a large protein language model (primarily ESM2) and defines 'macrogenes'—groups of functionally related genes across species—initialized by k-means clustering of protein embeddings. It pretrains an autoencoder with ZINB loss regularized so gene-to-macrogene weights reflect protein-embedding similarity, then fine-tunes with a weakly supervised triplet metric-learning objective using only within-species cell-type labels. Inputs are count matrices, protein embeddings, and per-species cell annotations; output is a joint low-dimensional cell embedding plus interpretable macrogene weights enabling cross-species differential expression.",
+    "findings": [
+     "On three Tabula atlases (human, mouse lemur, mouse; 335,000 cells, nine tissues), SATURN aligned major cell types across species, correctly flagged a mislabeled mouse macrophage cluster as granulocytes (Cd55+/Cd74-), and separated species-specific types like human erythrocytes.",
+     "Integrating frog (97,000 cells) and zebrafish (63,000 cells) embryogenesis data, SATURN aligned conserved types (e.g., neural crest, organizer cells) while keeping species-specific types separate, even for rare types like notoplate (339 frog / 115 zebrafish cells).",
+     "In label transfer from zebrafish to frog, SATURN reached 85.8% median accuracy versus a 93% ceiling, a large gain over the next-best method SAMap; Harmony, scVI, and Scanorama (restricted to one-to-one homologs) failed to integrate the species.",
+     "Macrogenes recapture sequence homology: 56% contained a homolog pair among top-ranked genes (91.2% with ten per species) versus 0.25% and 18.8% for random assignment, and macrogene differential expression recovered known markers (e.g., Foxi, Dmrt2, claudins for ionocytes) that lacked one-to-one homologs.",
+     "Reannotating the five-species (50,000-cell) AH trabecular meshwork atlas, SATURN regrouped beam/JCT/fibroblast cell types and found human MYOC protein embedding assigns to a different macrogene (with A2M) than other species' Myoc, suggesting divergent glaucoma-gene function across species."
+    ],
+    "why": "For multiomics researchers, SATURN shows how protein language model representations can replace one-to-one orthology as the basis for integrating datasets with non-matching feature spaces—a strategy applicable beyond cross-species to CITE-seq, genotypes, or spatial assays with partial gene panels. The macrogene concept also offers an interpretable gene-module layer between gene-level and embedding representations.",
+    "limitations": "SATURN requires a reference proteome (missing or incomplete for many species), averages protein embeddings over isoforms (ignoring splicing), and needs per-dataset cell-type labels or clusters; very rare cell types (e.g., germline, 33+53 cells) fail to integrate.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 64344
+   }
+  },
+  {
+   "title": "Spatially Informed and Direction Sensitive Representation Learning for Spatial Transcriptomics",
+   "authors": [
+    "Azim Dehghani Amirabad",
+    "Ali Khodabandeh Yalabadi",
+    "Artem Moskalev",
+    "Yun-Ching Chen",
+    "Mehdi Pirooznia",
+    "Scott Oloff",
+    "Rui Liao"
+   ],
+   "authorCount": 7,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-10-20",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2610.28579v1",
+   "abstract": "Cellular states are shaped by both intrinsic gene expression programs and the spatial microenvironment in which cells reside. Spatial transcriptomics makes this context measurable, but effective representation learning requires capturing both spatially informative molecular signals and intercellular organization. Existing approaches address these challenges only partially: conventional gene selection can overlook spatially structured signals, while methods for encoding cell-cell relationships often either reduce a cell's microenvironment to proximity alone, discarding direction, or rely on absolute coordinates tied to an arbitrary tissue frame. Consequently, cells with similar neighbor distances but distinct spatial organization may receive overly similar representations, despite experiencing different biological contexts that shape their cellular states. We introduce Tessera, a spatial representation learning framework that addresses both molecular selection and cellular context. Tessera combines spatially informed gene selection with a geometric inductive bias that contextualizes each cell within its local tissue environment. By modeling relative cell-cell relationships, Tessera is translation-invariant while preserving direction, allowing neighboring cells to contribute differently according to their spatial context and cellular state. Across held-out tissues and technologies, Tessera outperforms existing spatial foundation models in representation quality and generalizes zero-shot to contexts up to $16\\times$ larger than those seen during training.",
+   "reasons": [
+    "foundation model",
+    "representation learning",
+    "zero-shot",
+    "transcriptomics",
+    "spatial omics",
+    "scale"
+   ],
+   "score": 22,
+   "summary": {
+    "tldr": "Tessera is a spatial transcriptomics representation learning model that combines spatially informed gene selection with direction-sensitive relative-position attention (2D RoPE), outperforming existing spatial foundation models on held-out imputation and neighborhood-prediction tasks.",
+    "background": "Cellular state depends on both gene expression and the spatial microenvironment, and spatial transcriptomics makes this measurable. Existing gene-selection strategies miss spatially structured signals, and existing spatial encodings either discard direction (pairwise distances, neighborhood graphs) or depend on arbitrary absolute tissue coordinates.",
+    "approach": "Tessera has two components: (1) spatially informed ranking (SIR) selects K=500 genes per cell by combining cell-specific TF-IDF ranks with tissue-level Moran's I spatial autocorrelation ranks, encoded by a frozen scGPT backbone; (2) a trainable 19M-parameter, 6-layer attention aggregator contextualizes cell embeddings using relative displacement Δij between cells, instantiated with 2D RoPE (frequencies 10 μm–2 mm, hard 200 μm cutoff), giving translation invariance plus direction sensitivity in physical units. Training uses cross-cell masked reconstruction (10% of cells masked per 256-cell window, negative-binomial loss on raw counts). Training data: spatially resolved subset of SpatialCorpus-110M (43 sections, ~20M cells; 30/4/9 split; nine held-out sections across two imaging technologies, Xenium and MERSCOPE, and seven tissues).",
+    "findings": [
+     "Held-out imputation Pearson r = 0.449 vs. 0.308 for the best non-geometric baseline (+0.141 over the strongest); the geometry-free ablation of the identical architecture drops to 0.266.",
+     "Under matched training, relative encodings (RoPE 0.431, PoPE 0.424, radial-distance 0.418) beat absolute sinusoidal encoding by +0.16–0.17; RoPE shows the strongest attention anisotropy (CV = 0.49 vs. 0.05 for isotropic distance bias).",
+     "Zero-shot extrapolation from 256 (1×) to 4096 (16×) cells: RoPE degrades only 1.6% and PoPE 2.0%, vs. 23% for the fixed-range distance bias.",
+     "Versus spatial foundation models on neighborhood-density prediction (linear probes, 9 held-out sections, ~5M scored cells): Tessera r = 0.625 vs. 0.253 for scGPT-spatial and 0.213 for Nicheformer; cross-platform transfer Xenium→MERSCOPE r = 0.409 vs. 0.004 for Nicheformer.",
+     "On a HER2 cohort clustering task, SIR gene selection beats HVG and SVG (kNN purity 0.815 vs. 0.624/0.767; ARI 0.511 vs. ~0.29)."
+    ],
+    "why": "For someone building multiomics foundation models, this shows that relative directional geometry in physical units—not just proximity or graph edges—is what makes spatial embeddings transferable across platforms and scales, and that gene selection combining TF-IDF and Moran's I matters comparably. It offers a concrete, lightweight add-on (frozen scRNA backbone + 19M-parameter aggregator) rather than a new full foundation model retrain.",
+    "limitations": "Evaluation is limited to expression imputation and neighborhood-density linear probes on nine held-out sections; downstream biology (target discovery, treatment response) is only hypothesized. RoPE is rotation-equivariant rather than rotation-invariant, so orientation in a lab frame is retained, which the authors justify but which may not suit all applications.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 65290
+   }
+  },
+  {
+   "title": "Re-evaluating the benefit of pretraining scale in cell foundation models",
+   "authors": [
+    "Shakeel, M. H.",
+    "Shen, M.",
+    "Mangiola, S."
+   ],
+   "authorCount": 3,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-18",
+   "doi": "10.64898/2026.06.04.730272",
+   "url": "https://doi.org/10.64898/2026.06.04.730272",
+   "abstract": "Single-cell foundation models are self-supervised neural networks pretrained on millions of cellular transcriptomes to learn representations that transfer across biological domains and downstream tasks. Recent benchmarks have questioned the training data scaling law for these models, showing early finetuning performance saturation on a fraction of available pretraining data. However, whether this trend holds for larger second-generation foundation models, and whether it reflects genuine saturation of foundation representations remains unclear. To resolve these aspects, we tested the performance of second- and first-generation cell foundation models across corpus sizes using the standard finetuning approach, and extended it with a comprehensive fully frozen evaluation. We revealed that the training-data scaling relationship becomes apparent under fully frozen finetuning, particularly for second-generation models. Zero-shot analyses similarly recovered dependence on pretraining scale. We conclude that finetuning performance saturation does not imply biological representations saturation, and that a shift in standards of cell foundation model evaluation is needed, complementing standard finetuning with fully frozen benchmarking to capture the quality of the foundation representations.",
+   "reasons": [
+    "foundation model",
+    "deep learning",
+    "representation learning",
+    "zero-shot",
+    "single-cell",
+    "transcriptomics"
+   ],
+   "score": 22,
+   "summary": {
+    "tldr": "This paper shows that early performance saturation of single-cell foundation models under standard finetuning is an artifact of task adaptation ('finetuning-masking'), and that pretraining-scale benefits become visible when the encoder is fully frozen or evaluated zero-shot.",
+    "background": "Recent benchmarks (DenAdel et al.) found that cell foundation models reach finetuning performance saturation using only a small fraction of their pretraining corpus, challenging the assumed data scaling law. But finetuning performance conflates representation quality with the adaptive capacity of unfrozen layers, so it is unclear whether this reflects true saturation of the learned biological representations, especially for larger second-generation models.",
+    "approach": "The authors pretrained 38 Geneformer variants from scratch—second-generation (104M parameters) and first-generation (10M parameters)—on curated cellNexus corpora subsampled from 34M cells down to 266k cells (19 corpus sizes, balanced vs. random subsampling; 12,104 GPU-hours total), producing 400 task-adapted models. They evaluated five downstream tasks (cell-type, heart-disease, COVID-19, drug-dosage classification; Norman double-perturbation prediction) under the standard partially unfrozen regime and a fully frozen regime where only the task head is trained. They also ran zero-shot probes: HLA gene-module recovery from gene embeddings and ChIP-Atlas-supported target recovery from attention changes (BHLHE40, Adamson data).",
+    "findings": [
+     "Under standard partially unfrozen finetuning, all model-task combinations saturated at 266k cells (~0.78% of the corpus), confirming saturation for both generations; e.g., second-generation cell-type macro-F1 was 0.934 at 266k vs. 0.966 at 34M cells.",
+     "Under fully frozen finetuning, the scaling law reappeared, especially for the second-generation model: cell-type macro-F1 ranged from 0.720 at 266k to 0.951 at 3.8M cells (saturation at 2M), and heart-disease F1 went from 0.401 to 0.695 (saturation at 3.8M).",
+     "Most recoverable performance was acquired between 266k and 3.8M pretraining cells (~11% of the corpus); beyond that, gains were small or non-monotonic, and intermediate corpora sometimes beat the full 34M corpus.",
+     "Zero-shot HLA module recovery showed a threshold-and-saturation pattern (2 genes at 266k → 8-9 genes at 2-7.2M cells), while attention-derived regulatory signals showed no consistent scaling trend.",
+     "The larger second-generation model was more sensitive to data starvation but achieved stronger performance in data-rich regimes, and balanced (diversity-preserving) subsampling outperformed random subsampling at small corpus sizes."
+    ],
+    "why": "For anyone building or benchmarking transcriptomics/multiomics foundation models, this shows that finetuning-based benchmarks can wrongly conclude that more pretraining data is useless. The paper proposes complementing standard finetuning with fully frozen benchmarking, zero-shot biological probes, and data-starvation curves to measure actual representation quality.",
+    "limitations": "Only Geneformer variants were tested, so generality across model families (scGPT, scBERT, CellFM, etc.) is unproven, and the tested parameter/corpus ranges do not define upper limits of scaling benefit. Saturation thresholds are empirical within the tested 266k-34M range, not universal data requirements.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 70554
+   }
+  }
+ ],
+ "candidates": 366
+}
