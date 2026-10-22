@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-10-22",
+   "title": "CoxFormer enables spatial omics inference with multimodal generative modeling.",
+   "venue": "Nat Commun",
+   "key": "10.1038/s41467-026-76404-8",
+   "also": [
+    "10.64898/2026.10.02.756356",
+    "10.1038/s41467-026-72310-1",
+    "10.1093/bioinformatics/btag710"
+   ]
+  },
+  {
    "date": "2026-10-21",
    "title": "CellFM: a large-scale foundation model pre-trained on transcriptomics of 100 million human cells",
    "venue": "Nature Communications",

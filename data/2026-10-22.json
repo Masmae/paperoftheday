@@ -1,0 +1,193 @@
+{
+ "date": "2026-10-22",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "CoxFormer enables spatial omics inference with multimodal generative modeling.",
+  "authors": [
+   "Yang",
+   "Liao",
+   "Zhang",
+   "Wu",
+   "Jiao",
+   "Sun",
+   "Wang",
+   "Yu",
+   "Liu"
+  ],
+  "authorCount": 9,
+  "venue": "Nat Commun",
+  "preprint": false,
+  "date": "2026-10-12",
+  "doi": "10.1038/s41467-026-76404-8",
+  "url": "https://doi.org/10.1038/s41467-026-76404-8",
+  "abstract": "Gene co-expression maps transcriptome-wide gene-gene relationships, yet high-quality estimates cover less than half the genome. Meanwhile, spatial omics either profiles restricted in situ panels or lacks cellular resolution. Extending co-expression transcriptome-wide could overcome these limitations by inferring unassayed gene expression at subcellular resolution. Here we show that CoxFormer integrates literature-derived gene knowledge with co-expression networks from bulk tissues and large-scale single-cell atlases to learn 512-dimensional representations for 32,016 human genes. These embeddings capture functional gene relationships and serve as a generative prior for spatial inference across platforms and modalities. Without requiring a matched single-cell RNA-sequencing reference, CoxFormer supports four applications beyond measured genes: histology-based expression imputation, gene activity prediction from chromatin accessibility, subcellular super-resolution inference, and pathological region detection. Together, CoxFormer extends gene embedding from gene- and cell-level tasks to whole-transcriptome spatial inference, providing a unified framework for biological analysis beyond the limited gene coverage of current spatial omics technologies.",
+  "reasons": [
+   "generative model",
+   "single-cell",
+   "transcriptomics",
+   "spatial omics",
+   "epigenomics",
+   "cell atlas"
+  ],
+  "score": 18,
+  "tldr": "They built 32k gene embeddings from bulk/single-cell co-expression networks and knowledge bases, then used them as a generative prior to infer unmeasured gene expression spatially, predict gene activity, super-resolve subcellular signal, and detect pathological regions.",
+  "why": "CoxFormer tackles a real bottleneck in spatial omics: limited gene panels and lack of cellular resolution. By learning whole-transcriptome gene embeddings from co-expression networks plus literature knowledge, it enables spatial inference on unassayed genes without a matched scRNA reference, which is highly reusable across platforms and modalities.",
+  "summary": {
+   "tldr": "CoxFormer learns 512-d embeddings factoring literature knowledge and bulk/single-cell co-expression networks for 32,016 human genes to become a generative prior for reference-free, whole-transcriptome spatial inference across transcriptomic and epigenomic modalities.",
+   "background": "High-quality gene co-expression covers <50% of the genome, and spatial omics platforms either profile restricted panels (Xenium, MERFISH, CosMx) or lack cellular resolution (Visium, Slide-seq). Existing imputation methods require matched scRNA-seq references and handle only single modalities, limiting extension to unassayed genes across platforms.",
+   "approach": "CoxFormer (Co-expression pre-trained Transformer) integrates three sources: text descriptions of 43,661 genes from NCBI/GeneCards/UniProt encoded as 3072-d vectors via OpenAI text-embedding-3-large; gene-gene correlations for 32,101 genes from ~10.4M cells across 123 Human Cell Atlas projects; and bulk co-expression for 18,858 genes from COXPRESdb. A graph neural network on a sparsified correlation graph is trained to reconstruct observed COXPRESdb co-expression and propagate to the 32,016-gene universe, which is compressed by an autoencoder into 512-d embeddings. These embeddings seed a Transformer-based generative framework that also ingests histology image features (ViT) and spatial coordinate encodings to predict expression for unseen genes without external references.",
+   "findings": [
+    "On four gene-level binary classification tasks (TF dosage sensitivity, bivalent promoter states, regulatory range) and four cell-level tasks, CoxFormer achieved the best combined score, beating scGPT, Geneformer, GenePT and other baselines while training on a single GPU.",
+    "On a pseudo-panel benchmark in six Visium breast cancer sections (900 observed HVGs predicting 100 held-out HVGs), CoxFormer attained the highest average Pearson correlation, outperforming eight reference-based methods (Tangram, SpaGE, Seurat, LIGER, gimVI, etc.) even without a scRNA-seq reference.",
+    "On a human hippocampus spatial ATAC-RNA-seq dataset, the same framework predicted gene activity scores for held-out genes better than single-source variants using only co-expression, correlation, or description data.",
+    "On Xenium skin sections (378- vs 280-gene panels), CoxFormer outperformed iStar across RMSE, SSIM and PCC for spot-level and subcellular super-resolution imputation, and recovered zero-shot patterns for 56 genes masked in both sections.",
+    "Reference-free pathological region detection in four colorectal cancer liver metastasis sections achieved mean AUROC 0.91 and recall >0.98 via a pseudo-healthy baseline trained on housekeeping genes."
+   ],
+   "why": "CoxFormer combines gene embeddings with a multimodal generative model for spatial data, extending the utility of embeddings from gene/cell-level tasks to transcriptome-wide spatial imputation without matched single-cell references. For the multiomics researcher, its cross-omics generalization (RNA expression, ATAC gene activity) and panel-to-transcriptome expansion (e.g., 280 to ~32,000 genes enabling richer cell-cell communication inference) are directly relevant to integrating sparse spatial assays.",
+   "limitations": "The model captures co-expression but not signed regulatory relationships, and does not explicitly model 3D tissue or additional modalities like proteomics and metabolomics; extension depends on the composition and health-only bias of the HCA data used for pretraining.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 122640
+  }
+ },
+ "also": [
+  {
+   "title": "DECONVersation: Single Cell Foundation Model-Derived Embeddings for Robust Cell Type Deconvolution of Bulk RNA-seq",
+   "authors": [
+    "Oku, A.",
+    "Geiger, H.",
+    "Robine, N.",
+    "Fu, R."
+   ],
+   "authorCount": 4,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-09",
+   "doi": "10.64898/2026.10.02.756356",
+   "url": "https://doi.org/10.64898/2026.10.02.756356",
+   "abstract": "AI and deep learning have transformed single-cell transcriptomics, empowering unsupervised annotation, trajectory inference, and cross-dataset integration at scale. Here, we propose bulk RNA-seq deconvolution as a novel task for single-cell foundation models. Deconvolution estimates cell type proportions from bulk RNA-seq using single-cell reference data, with applications spanning tumor microenvironment profiling to the detection of disease-associated shifts in tissue composition. However, existing methods remain vulnerable to batch effects, subject-level variation, and marker gene selection sensitivity. We introduce DECONVersation, which leverages embeddings from pretrained and fine-tuned single-cell foundation models, coupled with a non-negative least squares solver, to estimate cell type proportions. Foundation model embeddings are robust to batch effects and implicitly encode complex gene relationships, sidestepping explicit marker gene selection. Benchmarked against MuSiC, DWLS, and BayesPrism, DECONVersation achieved comparable or superior performance across diverse tissues. Performance further improved with tissue-specific fine-tuning.",
+   "reasons": [
+    "foundation model",
+    "deep learning",
+    "AI",
+    "single-cell",
+    "transcriptomics",
+    "RNA-seq"
+   ],
+   "score": 22,
+   "summary": {
+    "tldr": "DECONVersation repurposes single-cell foundation model (scFM) cell embeddings for bulk RNA-seq cell type deconvolution, feeding bulk and signature embeddings into NNLS instead of raw gene expression.",
+    "background": "Bulk RNA-seq deconvolution estimates cell type proportions using single-cell reference-derived signature matrices, and is widely used for tumor microenvironment and tissue composition analysis. Existing methods (MuSiC, DWLS, BayesPrism) work in gene expression space and remain vulnerable to batch effects, donor variation, and marker gene selection sensitivity.",
+    "approach": "The method treats bulk samples as pseudo-cells and embeds both the bulk profiles and a cell-type-summarized signature matrix using one of four scFMs: Geneformer (~104M cell pretraining, zero-shot and fine-tuned variants), Cell2Sentence (C2S-410M on Pythia, C2S-2B on Gemma 2, fine-tuned only), scGPT (33M cells), or CellHermes (LLaMA-based, 4096-d embeddings). Embeddings are passed to a non-negative least squares solver (alternatives: nuSVR, ridge, gradient descent, Python-DWLS); fine-tuning is cell-type classification on the reference with undersampling for imbalance. They benchmark on six bulk datasets with ground truth (3 FACS-ground-truth PBMC cohorts, retina, prefrontal cortex, cell line mixtures) plus pseudobulk experiments (e.g., 500 samples of 1000 cells; endometrium and PBMC datasets with graded reference-vs-source dissimilarity such as 3' reference deconvolving 5', snRNA-seq, and Flex data).",
+    "findings": [
+     "Fine-tuned C2S-2B and Geneformer (zero-shot or fine-tuned) consistently outperformed MuSiC and BayesPrism and were on par with DWLS, the strongest baseline; zero-shot Geneformer achieved near-best performance without fine-tuning.",
+     "Standard tools failed selectively: e.g., BayesPrism had poor correlation on PBMC datasets (r = 0.080–0.330) and DWLS/MuSic performed near zero or negative on prefrontal cortex (r = -0.004 and -0.181).",
+     "In graded-dissimilarity pseudobulk tests (same donor → different donor → different assay), scFM embeddings degraded less than raw counts and most standard tools; when dissimilarity is minimal all methods exceeded ~0.8 correlation.",
+     "Embeddings respect linear structure (median cosine similarity near 1 between pseudobulk embeddings and proportion-weighted signature embedding sums, with anisotropy caveats), and Geneformer final-layer (layer 18) attention genes recapitulate cell type markers.",
+     "Compute is modest: <30 seconds for 10 samples on an NVIDIA L40S GPU, <270 seconds on CPU for 10 samples, and fine-tuning under 240 minutes for 10,000 cells, scaling roughly linearly."
+    ],
+    "why": "It establishes bulk deconvolution as a new benchmark task for scFMs, showing embeddings implicitly handle batch/technical variation that plagues matrix-based methods and avoiding manual marker selection. For multiomics researchers, it offers a practical pip-installable tool (PyPI: DECONVersation, github.com/nygenome/DECONVersation) suitable for 10–100s of bulk samples without heavy GPU needs.",
+    "limitations": "Ground truth is imperfect (FACS, scRNA-seq, or RNAScope estimates), reference tissues likely overlap scFM pretraining corpora, and performance on novel tissues or rare cell types is unknown. scGPT and CellHermes performed inconsistently (fine-tuning sometimes hurt), embeddings are hard to interpret, and no method dominated across all datasets.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 38999
+   }
+  },
+  {
+   "title": "Personalized single-cell transcriptomics reveals molecular diversity in Alzheimer's disease.",
+   "authors": [
+    "Chandrashekar",
+    "Alatkar",
+    "Cohen Kalafut",
+    "Jin",
+    "Gupta",
+    "Burczak",
+    "Huang",
+    "Liu",
+    "Li",
+    "Girdhar",
+    "Voloudakis",
+    "Hoffman"
+   ],
+   "authorCount": 17,
+   "venue": "Nat Commun",
+   "preprint": false,
+   "date": "2026-10-12",
+   "doi": "10.1038/s41467-026-72310-1",
+   "url": "https://doi.org/10.1038/s41467-026-72310-1",
+   "abstract": "Alzheimer's disease (AD) is highly heterogeneous and driven by diverse molecular and cellular mechanisms. Functional genomics investigates these mechanisms from genetic variants to gene expression and regulation. We performed personalized functional genomics analysis on population-scale single-nucleus RNA-seq data, with cross-cohort validation across multiple cohorts comprising over 1900 individual brains, capturing donor-level cell type interactions and gene regulatory networks. Using a knowledge-guided graph neural network, we learned latent representations of each donor's functional genomics that accurately classified AD phenotypes, identified molecularly defined subpopulations, and traced disease progression trajectories. Our importance scores, derived from graph attentions, identified significant inter-donor differences and prioritized personalized cell&#xa0;type genes and regulatory networks. Finally, we identified gene regulatory QTLs (grQTLs) linking genetic variants to donor-level regulatory changes, providing insights into gene regulatory relationships beyond traditional eQTLs. All results are summarized into a personalized functional genomics atlas for AD, including an open-source framework, iBrainMap, for general use.",
+   "reasons": [
+    "deep learning",
+    "graph neural network",
+    "single-cell",
+    "transcriptomics",
+    "gene regulation",
+    "RNA-seq"
+   ],
+   "score": 20,
+   "summary": {
+    "tldr": "The authors build iBrainMap, a knowledge-guided graph neural network framework that converts each donor's single-nucleus RNA-seq data into a personalized functional genomic graph (cell-type interactions + TF-target regulatory links) and uses learned graph embeddings to classify AD phenotypes, subtype donors, trace disease trajectories, and map donor-level gene regulatory QTLs.",
+    "background": "AD is heterogeneous, and most single-cell analyses pool cells across individuals, losing donor-level variation in cell-type interactions and gene regulatory networks. Existing personalized network methods rely on correlation-based co-expression and lack cell-type-specific resolution, and population-scale single-cell data (>1900 postmortem brains) require scalable graph-learning methods to model each individual.",
+    "approach": "For each donor, they construct a personalized functional genomic graph (PFG): CellChat-derived cell-type communication edges plus SCENIC/GRNBoost2-derived TF-target regulatory links across 27 brain cell subclasses, with edges enhanced by diffusion from known AD/SCZ disease genes. A multi-head graph attention network (KG-GNN) trained on PFGs from 1494 PsychAD donors (~6.3M nuclei, DLPFC; mainly MSSM n=1042) yields graph embeddings and attention-based importance scores; independent validation used RADC (n=152), SEA-AD (n=80), and ROSMAP. Genotypes are then associated with TF-TG regulatory edges to define gene regulatory QTLs (grQTLs).",
+    "findings": [
+     "The KG-GNN classified AD vs. control at AUC 0.913 on held-out MSSM donors (AD n=62, control n=30) and AUC 0.805 on independent RADC+SEA-AD donors (n=161), beating prior graph-embedding methods (SIMBA, scGNN) and correlation-based PFG alternatives.",
+     "Embeddings transferred to other phenotypes: SCZ AUC 0.83, AD-resilience AUC 0.87, early-vs-late BRAAK AUC 0.788 (ROSMAP), with multi-class progression (CERAD, Cogdx) around 0.75–0.79; neuropsychiatric symptom contrasts were weaker (0.61–0.67).",
+     "Unsupervised clustering of embeddings gave five donor subtypes showing monotonic enrichment from early (BRAAK 0–2, no AD) to late (BRAAK 5–6, dementia) disease, and pseudotime from embeddings correlated with plaque (r²=0.684) and cognitive rating (r²=0.856); SEA-AD pseudotime matched a neuropathology-derived pseudoprogression score (Jensen-Shannon similarity 0.77).",
+     "Attention-based importance scores prioritized neuronal subtypes (e.g., EN_L6_IT, EN_L5_6_NP, IN_LAMP5_LHX6), AD-enriched IN_SST-derived interactions, control-enriched microglial edges (e.g., IRF8→RASGEF1C), and a top-1% consensus subnetwork overrepresented for known AD genes (p<9.8e-4, e.g., PCDH11X, CR1 via FOSB).",
+     "They identified 465,396 cisTF-grQTLs (15,656 lead SNPs) and 573,366 cisTG-grQTLs (17,458 lead SNPs) across 27 cell types; 30 loci colocalized with AD GWAS (PP>0.7), top hit rs9648346 linked to IKZF1→JAZF1 regulation (PP=0.99)."
+    ],
+    "why": "For transcriptomics/multiomics researchers, this shows a concrete recipe for scaling per-individual functional genomics (cell-cell communication + GRNs) to population-scale single-cell data, with donor-level embeddings usable for classification, subtyping, and pseudotime, and a variant-to-regulatory-edge QTL framework beyond eQTLs. The open iBrainMap framework and atlas (PFGs, pre-trained KG-GNN, grQTL catalog) are reusable resources for other brain or genetically complex disease cohorts.",
+    "limitations": "The KG-GNN treats nodes/edges homogeneously (no heterogeneous-GNN distinctions), GRNs are restricted to top-RSS TF/target genes, and performance drops for comorbid conditions (NPSs, AD-DLBD) and cross-cohort SCZ; genotype-only imputed embeddings classify phenotypes only modestly (AUC ~0.57). Results are from postmortem DLPFC snRNA-seq, so extension to other tissues, living samples, and multimodal (epigenomic/spatial) data remains future work.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 71826
+   }
+  },
+  {
+   "title": "Genome-wide-scale prediction of compound-protein interactions using foundation and language models based on three-dimensional structures of compounds and proteins.",
+   "authors": [
+    "Moriyama",
+    "Matsukiyo",
+    "Kimura",
+    "Yamamoto",
+    "Sakajiri",
+    "Shibata",
+    "Sawada",
+    "Yamanishi"
+   ],
+   "authorCount": 8,
+   "venue": "Bioinformatics",
+   "preprint": false,
+   "date": "2026-10-12",
+   "doi": "10.1093/bioinformatics/btag710",
+   "url": "https://doi.org/10.1093/bioinformatics/btag710",
+   "abstract": "The identification of compound-protein interactions (CPIs) is crucial in the early stages of drug discovery. However, machine-learning (ML)-based methods based on one- and two-dimensional representations cannot capture important geometric information on the binding sites of CPIs, which limits their predictive accuracy. We propose DESTIN (dual structure-guided estimation of substance-target interaction networks), an ML framework for CPI prediction on a genome-wide scale from the three-dimensional (3D) structures of compounds and proteins. We constructed compound feature vectors that spatially reflect stable 3D conformations from a quantum-chemical perspective by fine-tuning a 3D structure-based foundation model. Furthermore, we constructed protein feature vectors leveraging sequence-based structure representations and protein language models, even for proteins that do not have 3D structures determined experimentally. CPI prediction was performed using an integrative ML model on 3D structure-aware feature vectors for compounds and proteins. The effectiveness of the proposed model was validated via rigorous benchmark tests on practical scenarios. DESTIN exhibited good predictive performance, even for structurally complex and pharmacologically important membrane proteins. These results show that DESTIN is promising for various pharmaceutical applications. All source code and data supporting this study are publicly available on GitHub and archived on Zenodo (https://doi.org/10.5281/zenodo.21759701).",
+   "reasons": [
+    "foundation model",
+    "language model",
+    "proteins",
+    "genomics",
+    "drug discovery",
+    "code released"
+   ],
+   "score": 21,
+   "summary": {
+    "tldr": "DESTIN is a machine-learning framework for genome-wide compound-protein interaction (CPI) prediction that combines 3D-structure-aware compound representations (Uni-Mol pretrained on ~18.8M stabilized conformers plus 3D distance graphs) with structure-aware protein language model embeddings (SaProt on ProstT5-derived 3Di sequences), fused via a GraphBAN-style knowledge-distillation and domain-adaptation pipeline.",
+    "background": "Predicting which compounds bind which proteins is central to drug discovery, but most ML CPI methods use only 1D/2D representations (SMILES, 2D graphs, sequences) and miss the 3D geometry of binding sites. 3D approaches like docking are too expensive for genome-wide screening and require experimentally solved structures, which exist for only ~259k of ~200M proteins.",
+    "approach": "Compound features come from fine-tuning/pretraining Uni-Mol on ~18.84M structurally stabilized 3D conformers (from Uni-Mol, ZINC, and ChEMBL sets, stabilized via a GEOM-Drugs-finetuned model), combined with graph attention networks over 6 Å distance graphs. Protein features come from ProstT5-generated 3Di (structure-alphabet) sequences interleaved with amino acid sequences and encoded by SaProt, so 3D information is available even without experimental structures. A bilinear attention network (BAN) fuses both embeddings, with a graph autoencoder teacher providing knowledge distillation and a conditional domain adversarial network (CDAN) handling unseen compounds/proteins. They benchmarked on four datasets (BindingDB, BioSNAP, PDBbind 2016, KIBA) under inductive (cluster-based split to unseen compounds/proteins) and transductive (random 80/10/10) scenarios.",
+    "findings": [
+     "Under the inductive scenario, DESTIN achieved the best AUC/F1 on BindingDB (AUC 0.627 vs GraphBAN's 0.618), and best on all metrics for BioSNAP (AUC 0.806, AUPR 0.821, F1 0.743 vs GraphBAN's 0.751/0.807/0.697) and PDBbind 2016 (AUC 0.721 vs 0.561).",
+     "On KIBA (a kinase-focused dataset), DESTIN underperformed prior methods (AUC 0.623 vs GraphBAN's 0.654, AUPR 0.274 vs 0.379 for GraphsformerCPI).",
+     "Per-protein analysis on BindingDB and BioSNAP showed DESTIN beat GraphBAN for more proteins across major classes including kinases, ion channels, GPCRs, and transporters—membrane proteins being over 50% of therapeutic targets.",
+     "For specific membrane proteins, gains were large: e.g., vasopressin V1a receptor (AUC difference +0.455) and NMDA receptor 2B (+0.428), with DESTIN exceeding 0.9 AUC where GraphBAN was near 0.5."
+    ],
+    "why": "It demonstrates that injecting 3D structure information on both the compound and protein sides—via pretrained foundation models rather than expensive docking or DFT—usable at genome-wide scale, with particular benefit for membrane proteins that are hard to model from sequence alone. For multiomics/transcriptomics researchers, it is an example of how structure-aware protein language models (ProstT5/SaProt) and chemistry foundation models (Uni-Mol) can be combined in a distillation + adversarial domain adaptation framework.",
+    "limitations": "Compound conformers come from RDKit/Uni-Mol stabilization without solvent or induced-fit effects, and predictions degrade for proteins poorly represented by ProstT5's 3Di alphabet or badly predicted by AlphaFold. The method also underperformed on the kinase-centric KIBA dataset, and BindingDB labels carry assay-heterogeneity issues.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 37743
+   }
+  }
+ ],
+ "candidates": 343
+}
