@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-10-23",
+   "title": "Generative Retrieval for Reverse Target Fishing with a Proteome-Scale Benchmark",
+   "venue": "arXiv",
+   "key": "https://arxiv.org/abs/2610.24458v2",
+   "also": [
+    "10.64898/2026.08.14.744937",
+    "10.64898/2026.04.10.717709",
+    "10.64898/2026.10.08.757741"
+   ]
+  },
+  {
    "date": "2026-10-22",
    "title": "CoxFormer enables spatial omics inference with multimodal generative modeling.",
    "venue": "Nat Commun",

@@ -1,0 +1,193 @@
+{
+ "date": "2026-10-23",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Generative Retrieval for Reverse Target Fishing with a Proteome-Scale Benchmark",
+  "authors": [
+   "Zhichao Deng",
+   "Haichuan Tan",
+   "Xin Hong",
+   "Huaizhi Wang",
+   "Tao Huang",
+   "Bowen Gao",
+   "Yanyan Lan"
+  ],
+  "authorCount": 7,
+  "venue": "arXiv",
+  "preprint": true,
+  "date": "2026-10-17",
+  "doi": null,
+  "url": "https://arxiv.org/abs/2610.24458v2",
+  "abstract": "Reverse target fishing identifies protein targets for a query molecule and is central to drug discovery and repurposing. Discriminative approaches adapted from virtual screening face sparse, long-tailed associations and missing-not-at-random measurements: treating unrecorded pairs as negatives can suppress genuine targets. We reformulate the task as generative retrieval and introduce GenFish. Residual vector quantization converts frozen protein language model features into shared semantic identifiers. Given a molecular fingerprint, GenFish autoregressively models codes conditioned on the query and preceding code, ranking proteins by identifier likelihood without explicitly labeling unrecorded pairs as negatives. We introduce ProTargetBench, the first proteome-scale benchmark for reverse target fishing to jointly support measured-panel discrimination and full-catalogue recovery of experimentally recorded positives. Covering 20,431 UniProt-reviewed human proteins, it integrates curated bioactivity evidence and distinguishes experimental inactivity from unmeasured associations. On 198 held-out molecules, GenFish achieves higher mean performance across all three full-catalogue retrieval metrics than four discriminative neural baselines and three non-neural baselines, including ligand-based methods. A controlled positive-hiding experiment shows that targeted removal of false-negative competition improves contrastive retrieval beyond matched random masking; GenFish remains stronger under the same incomplete supervision. Pfam alignment indicates that the semantic identifiers capture biologically meaningful relationships among proteins. These results establish generative retrieval as a principled paradigm for reverse target fishing under incomplete bioactivity records.",
+  "reasons": [
+   "language model",
+   "generative model",
+   "representation learning",
+   "proteomics",
+   "proteins",
+   "drug discovery"
+  ],
+  "score": 18,
+  "tldr": "The paper introduces GenFish, a generative-retrieval model that ranks protein targets for a query molecule by autoregressively predicting quantized protein semantic identifiers trained only on positives, plus ProTargetBench, a proteome-scale benchmark for reverse target fishing.",
+  "why": "This transfers generative retrieval with semantic identifiers (DSI/TIGER-style) from documents to protein-space retrieval, providing a way to handle sparse, missing-not-at-random bioactivity labels without explicit negatives. The benchmark and identifiers built from protein language model features should interest anyone doing retrieval or foundation-model work over proteomes or other sparse multi-omics association settings.",
+  "summary": {
+   "tldr": "The paper introduces GenFish, a generative-retrieval model that ranks protein targets for a query molecule by autoregressively predicting quantized protein semantic identifiers trained only on positives, plus ProTargetBench, a proteome-scale benchmark for reverse target fishing.",
+   "background": "Reverse target fishing asks which of ~20k human proteins a molecule binds, but bioactivity databases are sparse and selectively measured—only ~1.3 recorded targets per molecule on average, and unrecorded pairs may be unmeasured binders rather than non-binders. Discriminative/contrastive models therefore treat unknown pairs as negatives, which can suppress genuine targets.",
+   "approach": "GenFish converts frozen ESMC-600M protein features into 7-code (6 semantic + tie-breaking suffix) discrete identifiers via residual vector quantization, then trains an MLP on Morgan fingerprints to predict identifier codes autoregressively from positive molecule-protein pairs only, ranking the catalogue by identifier likelihood. They also release ProTargetBench, built from ChEMBL 36, BindingDB, and PubChem over 20,431 UniProt-reviewed human proteins with 381,225 positives across 291,337 molecules, distinguishing inactive from unmeasured pairs; evaluation covers full-catalogue recovery (198 test queries, rank all 20,431 proteins) and measured-panel discrimination (150 binding + 48 enzyme queries).",
+   "findings": [
+    "On full-catalogue retrieval, GenFish reaches R@10=35.27%, R@50=51.96%, MRR=46.31%, beating four neural baselines (DrugCLIP, HypSeek, LigUnity, ConPLex) and three simple baselines (SEA, weighted k-NN, target frequency), including a +5.46-point R@50 gain over the best neural comparator (ConPLex).",
+    "On measured-panel discrimination, GenFish achieves the best overall AP (58.58%) and binding AP (51.34%), while LigUnity stays strongest on enzyme panels (81.97% AP).",
+    "A controlled experiment hiding 41,290 training positives shows oracle masking of false negatives lifts contrastive held-out R@50 from 31.30% to 33.40%, confirming false negatives hurt—while GenFish under identical supervision reaches 50.59% R@50.",
+    "Post-hoc Pfam analysis (excluded from training) shows the identifiers encode biology: 34.98%±1.34% of protein pairs sharing a level-1 code also share a Pfam, versus 0.47% of all annotated pairs."
+   ],
+   "why": "This transfers generative retrieval with semantic identifiers (DSI/TIGER-style) from documents to protein-space retrieval, providing a way to handle sparse, missing-not-at-random bioactivity labels without explicit negatives. The benchmark and identifiers built from protein language model features should interest anyone doing retrieval or foundation-model work over proteomes or other sparse multi-omics association settings.",
+   "limitations": "Full-catalogue metrics measure recovery of recorded positives only, not validation against genuinely unmeasured binders; the collision-resolving suffix and identifier assignment are catalogue-specific and would need refitting as the catalogue grows, and molecular inputs are limited to nonchiral Morgan fingerprints.",
+   "source": "arXiv full text",
+   "model": "glm-5.3-flash",
+   "chars": 83511
+  }
+ },
+ "also": [
+  {
+   "title": "Signature Recontextualization: Mapping perturbational signatures across biological contexts",
+   "authors": [
+    "Chen, A. D.",
+    "Rappaport, N.",
+    "Schork, N.",
+    "Girke, T.",
+    "Monti, S."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-22",
+   "doi": "10.64898/2026.08.14.744937",
+   "url": "https://doi.org/10.64898/2026.08.14.744937",
+   "abstract": "Perturbational transcriptomics is a powerful tool for understanding gene function and drug effects, yet predicting how perturbations manifest across different biological contexts remains a central challenge, limiting translation from model systems to clinically relevant tissues. Despite growing interest in this problem, benchmarking efforts have been hindered by inconsistent evaluation tasks, heterogeneous metrics, and limited assessment across perturbation types and biological systems. Here, we introduce a benchmarking framework for cross-context perturbation-signature prediction (a task we define as signature recontextualization), grounded in explicit definitions of the prediction task, target-data availability, and evaluation metrics centered on signature recovery. The framework evaluates prediction performance across three target-context data regimes: (1) control only, where only control profiles from the target context are measured; (2) low coverage, where a limited subset of perturbations in the target context are measured; and (3) high coverage, where most perturbations in the target context are measured. This design enables systematic assessment of how prediction performance depends on target-context sample size while providing a standardized basis for comparing methods. We evaluate newly developed projection-based (projectCor) and network-based (netProp) methods alongside deep learning-based foundation models (scGPT, STACK) and statistical baselines. The benchmark spans diverse perturbational datasets: CRISPR knockdowns and drug perturbations in cell lines, plus in vivo chemical perturbations in rat tissues from DrugMatrix, extending evaluation beyond isolated cell-line models to tissue-level responses. For each method, evaluation was limited to the datasets, and perturbation types each model supports. Across tasks, projection and network propagation approaches show strong flexibility across perturbation types and biological contexts, and in several cases match or exceed the performance of deep learning and foundation models. We further show that perturbation predictability varies substantially with pathway conservation, transcriptional response strength, and baseline similarity between source and target contexts. All datasets, methods, and evaluation utilities are released as an open-source R package (sigRecon), providing a foundation for reproducible benchmarking and future method development.",
+   "reasons": [
+    "foundation model",
+    "deep learning",
+    "transcriptomics",
+    "perturbation",
+    "CRISPR",
+    "code released"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "This paper defines and benchmarks the task of predicting a perturbation's transcriptomic signature in a new biological context (\"signature recontextualization\"), showing that lightweight projection and network-propagation methods match or beat foundation models like scGPT and STACK.",
+    "background": "Predicting how a genetic or chemical perturbation alters gene expression in a different cell line, tissue, or in vivo setting (e.g., moving from a cell line to a clinically relevant tissue) remains unsolved and poorly benchmarked; prior evaluation efforts used inconsistent tasks, metrics, and largely assumed abundant target-context data. Recent benchmarks show deep learning and foundation models often fail to beat simple baselines for perturbation response prediction.",
+    "approach": "The authors formalize recontextualization as recovering target-context DEG signatures under three regimes of target-data availability: control only (no target perturbations), low coverage (10% of target perturbations measured), and high coverage (90% measured), forming a three-point learning curve. They benchmark two new lightweight methods they developed (projectCor, which projects signatures via gene–signature activity correlations; and netProp, which uses random-walk-with-restart on WGCNA co-expression networks) plus scGPT, STACK, Orthos, and mean/no-change baselines. The benchmark spans four datasets: Perturb-seq (2,557 CRISPR knockdowns, K562/RPE1), SciPlex (129 drugs, 3 cell lines), Tahoe-100M (875 drugs, 10 sampled cell lines with NCI-H23 as source), and DrugMatrix (78 in vivo rat tissue drug perturbations, liver/kidney bulk microarray). Performance is scored by Jaccard similarity of predicted DEGs and fgsea NES against true target signatures, with paired Wilcoxon tests vs. the no-change baseline.",
+    "findings": [
+     "In the control regime (no target perturbation data), no method beat the no-change baseline on any dataset — unperturbed profiles alone cannot predict perturbation signatures.",
+     "With some target perturbation data, both netProp and projectCor-GSVA significantly improved over no-change on Perturb-seq and SciPlex, matching or outranking scGPT and STACK; netProp ranked best on Perturb-seq by NES and projectCor-GSVA by Jaccard.",
+     "On DrugMatrix, the mean baseline performed best overall (significant NES gains), and on Tahoe-100M no method improved over no-change at all.",
+     "Recontextualization success depends on mechanism: statins and fibrates (2–4 drugs each, acting via broadly conserved SREBP2/PPARα lipid pathways) transferred well between liver and kidney, while tissue-specific corticosteroids and anthracyclines transferred poorly.",
+     "Predictability correlated positively with perturbation strength (TRADE effective DEG count/transcriptional impact) in Perturb-seq and SciPlex, but baseline source–target similarity only predicted success in SciPlex, and not in the other three datasets.",
+     "All data, methods, and evaluation utilities are released as an open-source R package, sigRecon."
+    ],
+    "why": "For multiomics/transcriptomics researchers with foundation-model experience, this is a rigorous, definitions-first benchmark showing that pretrained single-cell models (scGPT, STACK) do not outperform simple correlation- and network-based methods when the goal is DEG-signature recovery across contexts — consistent with earlier critiques of perturbation-prediction benchmarks. It provides a reusable evaluation scaffold and practical decision rules for choosing methods under realistic data-availability constraints.",
+    "limitations": "Only two foundation models were tested (STATE was excluded over training-data overlap concerns), evaluation was confined to upregulated top-100-gene signatures with fixed DEG thresholds, and key analyses have sample-size caveats (Tahoe effectively has a single source context, and some MOA classes contain only 2–4 drugs).",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 82875
+   }
+  },
+  {
+   "title": "Predicting Pre-treatment Resistance or Post-treatment Effect? A Systematic Benchmarking of Single-Cell Drug Response Models",
+   "authors": [
+    "Shen, L.",
+    "Sun, X.",
+    "Zheng, S.",
+    "Hashmi, A.",
+    "Eriksson, J.",
+    "Mustonen, H.",
+    "Seppänen, H.",
+    "Shen, B.",
+    "Li, M.",
+    "Vähä-Koskela, M.",
+    "Tang, J."
+   ],
+   "authorCount": 11,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-22",
+   "doi": "10.64898/2026.04.10.717709",
+   "url": "https://doi.org/10.64898/2026.04.10.717709",
+   "abstract": "Intratumoral heterogeneity drives variable drug responses in cancer. Single-cell RNA sequencing (scRNA-seq) enables characterization of such heterogeneity and prediction of drug response at single-cell resolution. Accordingly, various computational models have been developed to infer drug response from scRNA-seq data. However, their performance, robustness, and generalizability across different biological contexts remain insufficiently evaluated. To address this gap, we benchmarked representative single-cell drug response prediction models using 26 curated datasets comprising over 760,000 cells across 12 cancer types and 21 therapeutic agents. We constructed balanced and imbalanced scenarios to explore model behavior under different label distributions. To address the lack of ground-truth labels in conventional scRNA-seq datasets, we incorporated two lineage-tracing datasets with experimentally validated drug-response annotations, enabling evaluation in a clinically relevant pre-treatment prediction setting. Our results show that prediction performance was markedly higher in cell lines than in tissue samples and varied substantially across datasets, treatment types, and imbalance levels. Under increasing class imbalance, several methods showed reduced performance, and no single method consistently dominated across all evaluation settings. In lineage-tracing datasets, treatment-associated states were more readily distinguished than lineage-defined pre-sensitive and pre-resistant states, while transcriptomic analyses indicated that pre-existing resistance-related signals were detectable but relatively subtle. For scDEAL, which showed competitive performance across several benchmark settings, label-substitution and ablation analyses further indicated that its performance was jointly influenced by training-label definition and architectural design. Application to an independent PDAC organoid dataset showed that scDEAL predictions were associated with treatment-related transcriptional state changes and biological programs. In summary, our study systematically characterizes the performance and limitations of current single-cell drug response prediction approaches across diverse evaluation settings. These results highlight the influence of dataset characteristics, class imbalance, training design, and the strength of resistance-associated signals on model performance, providing a reference for the evaluation and further development of single-cell drug response prediction methods.",
+   "reasons": [
+    "AI agents",
+    "single-cell",
+    "transcriptomics",
+    "RNA-seq",
+    "generalizes",
+    "wet-lab validated"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "A systematic benchmark of nine single-cell drug response prediction methods plus two foundation models across 26 curated scRNA-seq datasets (~760,000 cells, 12 cancer types, 21 drugs), showing no method dominates and predicting truly pre-existing resistance is much harder than detecting treatment-associated states.",
+    "background": "Many computational models claim to predict per-cell drug response from scRNA-seq, but existing drugs/resistant labels are usually proxies (pre- vs post-treatment or responder vs non-responder status), so reported performance may be inflated. It is unclear which methods work where, how they behave under class imbalance, and whether they can actually identify pre-existing resistant subpopulations.",
+    "approach": "The authors curated 26 single-drug datasets from the DRMREF database (760,090 cells; 14 cell-line, 6 PBMC, 3 tissue, 3 bone marrow samples; 15 targeted, 6 chemo, 5 immunotherapy drugs) and built balanced (500-5000 cells) and imbalanced (1:3 to 1:100) evaluation scenarios. They benchmarked nine methods (Beyondcell, CaDRReS-sc, DREEP, DrugFormer, Precily, SCAD, scDEAL, scDr, scIDUC) plus scGPT and scFoundation, using AUROC, normalized AUPRC, accuracy, and F1. Critically, they added two lineage-tracing datasets (ReSisTrace ovarian cancer + olaparib; Watermelon PC9 lung cancer, GSE150949) with experimentally validated pre-sensitive/pre-resistant labels, plus label-substitution and ablation analyses of scDEAL and validation on an in-house PDAC organoid dataset (trametinib, paclitaxel).",
+    "findings": [
+     "Performance was markedly higher on cell lines than tumor tissues (e.g., scDEAL mean AUROC 0.790 on cell lines vs 0.672 on tissue; overall p = 2.8e-11) and higher for targeted than chemo drugs (p = 3e-7).",
+     "On balanced subsets, scDEAL was the top method (median AUROC 0.67-0.82) but showed high dataset-level variability (AUROC 0.46-0.99) and instability to subsampling (CV ~0.14 vs 0.02-0.06 for others).",
+     "Under class imbalance, scDEAL led at 1:3-1:10 (median normAUPRC 0.587/0.271) but collapsed at 1:30-1:100 (0.119/0.056), where DREEP and DrugFormer were better (0.275-0.299); no method dominated everywhere.",
+     "Foundation models (scGPT, scFoundation) beat scDEAL within-dataset (scFoundation median AUROC 0.982) but failed on cross-dataset generalization (scFoundation median AUROC 0.346 vs scDEAL), i.e., they mostly memorize dataset-specific signal.",
+     "On lineage-tracing data, all methods performed poorly at predicting pre-treatment resistance (mean AUROC 0.502-0.622) — treatment-associated states are easy to distinguish, but pre-existing resistance signals are subtle; scDEAL's advantage was traced partly to its training-label definition, and its PDAC organoid predictions aligned with treatment-induced transcriptional programs."
+    ],
+    "why": "For researchers building multiomics response models, this is a sobering reminder that proxy labels (pre/post status) inflate benchmark numbers and that real pre-treatment resistance prediction is far from solved; normalized AUPRC under realistic class imbalance should be the reporting standard. It provides a practical reference for method selection and highlights that foundation-model success in-dataset does not transfer.",
+    "limitations": "Results are limited to 26 binary-labeled single-drug datasets and two lineage-tracing systems, so conclusions may not extend to combination therapies or other cancers; most users of conventional datasets still lack single-cell ground-truth response labels, and scDEAL's sensitivity to sampling variation complicates its top ranking.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 107345
+   }
+  },
+  {
+   "title": "NoiTox: A Machine Learning Strategy for Peptide Toxicity Prediction Reveals Label Noise in Benchmark Datasets",
+   "authors": [
+    "Almeida, G. O.",
+    "Albuquerque, M. C.",
+    "Silva, B. M.",
+    "Silva, O. A. B.",
+    "Ferreira, R. S.",
+    "Meira, W.",
+    "Pires, D. V.",
+    "Prata, W. M.",
+    "Silveira, S. A."
+   ],
+   "authorCount": 9,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-15",
+   "doi": "10.64898/2026.10.08.757741",
+   "url": "https://doi.org/10.64898/2026.10.08.757741",
+   "abstract": "Motivation: Peptide toxicity remains a major bottleneck in drug development, as small sequence variations can drastically alter cytotoxic profiles. Experimental assessment is costly and time-consuming, motivating computational predictors. Existing approaches often rely on single black-box architectures, limiting interpretability and obscuring the contribution of individual sequence features. Furthermore, benchmark datasets frequently define the negative class through annotation filters rather than direct experimental evidence, introducing structural label noise that can compromises training and evaluation. Results: We present NoiTox, a multi-model strategy for peptide toxicity prediction integrating three complementary architectures, evaluated as four model variants: NoiToxML (Bo/full), an Extremely Randomized Trees classifier with Boruta-selected or complete physicochemical, compositional, and atomic descriptors; NoiToxDP, a deep learning model leveraging ESM-2 protein language model embeddings; and NoiToxGP, a graph neural network that combines ESM-2 residue embeddings, a fully connected residue graph with attention, and the Boruta descriptors as global features. Averaged over five random seeds, the models approached the state-of-the-art predictor ToxiPep on CD-HIT-controlled test sets, and on an independent dataset the interpretable NoiToxML variants and a probability-averaging consensus of the four models exceeded it, showing that physicochemical descriptors are highly informative for toxicity prediction. Cross-referencing negative-labeled sequences against curated databases of hemolytic, cytotoxic, and neurotoxic peptides flagged a small set annotated as toxic elsewhere, consistent with label noise by omission. However, removing the sequences that all models contradicted did not improve, and for some models reduced, ranking performance, indicating that such sequences carry useful information and are better treated as candidates for curation than discarded automatically. Availability and implementation: https://github.com/goalmeida05/NoiTox.",
+   "reasons": [
+    "language model",
+    "deep learning",
+    "graph neural network",
+    "AI",
+    "proteins",
+    "code released"
+   ],
+   "score": 18,
+   "summary": {
+    "tldr": "NoiTox is a four-variant peptide toxicity predictor (ensemble of interpretable ML, ESM-2 deep learning, and a GNN) that matches ToxiPep on benchmarks and highlights structural label noise in the 'non-toxic' negative class of standard benchmark datasets.",
+    "background": "Peptide toxicity (hemolysis, cytotoxicity) is a key bottleneck in developing peptide therapeutics, and sequence predictors are needed because experimental assays are costly. Benchmark datasets assign 'non-toxic' labels by filtering out toxin annotations rather than by direct experiments, creating label noise by omission that undermines training and evaluation.",
+    "approach": "They built three architectures on data from ToxinPred2/ATSE/DRAMP/dbAMP (positives) and UniProt/Swiss-Prot (negatives), with CD-HIT 0.8/0.9 redundancy reduction: NoiToxML, an Extremely Randomized Trees classifier on 8,461 descriptors (full variant) or 44 Boruta-selected ones (Bo variant); NoiToxDP, an MLP on ESM-2 mean-pooled sequence embeddings; and NoiToxGP, a GNN (three GATv2 layers over a fully connected residue graph) using ESM-2 residue embeddings plus the 44 descriptors as global features. All were run with five random seeds, benchmarked against ToxinPred2.0, CSM-Toxin, PepNet, and ToxiPep on CD-HIT 0.8/0.9 test sets (1,388/1,766 peptides) and an independent DBAASP-derived set (958 peptides), plus a probability-averaging consensus.",
+    "findings": [
+     "ToxiPep led on CD-HIT test sets (MCC 0.701 at 0.9, 0.680 at 0.8); the NoiTox consensus was statistically indistinguishable (MCC 0.679-0.680 and 0.666-0.668) and all NoiTox models beat PepNet (MCC 0.596).",
+     "On the independent dataset, NoiToxML variants and the consensus exceeded ToxiPep in MCC (e.g., NoiToxML Bo 0.730 vs 0.670 at CD-HIT 0.9), though only the consensus improvement survived multiple-testing correction at 0.8 (ΔMCC 0.083, Holm p=0.004).",
+     "After removing same-label training-overlap sequences (~30-37% of the independent set), the NoiToxML models' MCC dropped sharply (0.730→0.503) revealing descriptor-based memorization, while NoiToxDP/GP and ToxiPep stayed stable or improved.",
+     "Feature analysis showed cysteine/sulfur content and net charge dominate toxicity prediction; toxic peptides are cysteine-enriched, while methionine, valine, and leucine are enriched in non-toxic ones.",
+     "20 non-toxic-labeled sequences were unanimously predicted toxic by all four models and misclassified negatives were significantly enriched for exact matches to curated hemolytic/cytotoxic/neurotoxic databases (odds ratios 6.5-48.2), yet automatically removing contradicted sequences did not improve and sometimes reduced AUROC (ΔAUROC -0.004 to -0.027)."
+    ],
+    "why": "For anyone using binary classifiers on sequence data with annotation-derived negatives, this is a concrete demonstration that apparent model errors can be label noise and that benchmark splits can encode leakage or noise systematically. It also shows embedding-based models (relevant to protein-language-model workflows) are more robust than hand-crafted-descriptor models to near-duplicate leakage.",
+    "limitations": "Negative labels were never experimentally verified, Cross-label and near-identical contamination was not fully quantified, and the 20 suspected mislabeled sequences still await experimental validation; subtype validation and cleaning effects relied on relatively small counts.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 58304
+   }
+  }
+ ],
+ "candidates": 277
+}
