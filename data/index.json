@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-10-24",
+   "title": "SPATNIC enables H&E-grounded cancer-cell identification across spatial and single-cell transcriptomic modalities in colorectal cancer",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.21.760612",
+   "also": [
+    "https://arxiv.org/abs/2610.19738v1",
+    "10.64898/2026.09.30.755585",
+    "10.1038/s41586-026-11205-z"
+   ]
+  },
+  {
    "date": "2026-10-23",
    "title": "Generative Retrieval for Reverse Target Fishing with a Proteome-Scale Benchmark",
    "venue": "arXiv",

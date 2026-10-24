@@ -1,0 +1,171 @@
+{
+ "date": "2026-10-24",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "SPATNIC enables H&E-grounded cancer-cell identification across spatial and single-cell transcriptomic modalities in colorectal cancer",
+  "authors": [
+   "Sakai, S. A.",
+   "Nomura, R.",
+   "Ohira, M.",
+   "Kurihara, K.",
+   "Chi, S.",
+   "Matsubara, Y.",
+   "Morinaga, Y.",
+   "Kato, T.",
+   "Takeda-Miyata, N.",
+   "Kojima, M.",
+   "Sakashita, S.",
+   "Ebi, H."
+  ],
+  "authorCount": 21,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-22",
+  "doi": "10.64898/2026.10.21.760612",
+  "url": "https://doi.org/10.64898/2026.10.21.760612",
+  "abstract": "Tumors contain diverse non-cancer cells that constitute the tumor microenvironment; thus, identifying which cells are cancerous is a foundational and critical first step in cancer research. However, to our knowledge, no transcriptome-based classifier has been trained using pathologist-defined annotations from matched H&E images at single-cell resolution. Moreover, few tools can be shared across diverse platforms. Here, we present SPATNIC, a variational autoencoder that classifies individual cells as cancer or normal, trained on Xenium cells labeled by a pathologist review of matched H&E images. It matches or exceeds the performance of existing tools in primary colorectal tumors and liver and lung metastases. SPATNIC generalizes zero-shot across Visium, Visium HD, CosMx, Xenium, MERSCOPE, and single-cell RNA sequencing. In public single-cell atlases, it identified a rare POU2F3 tuft-like cancer stem cell population missed by existing annotations and associated with worse survival. In rectal cancer profiled before and after chemoradiotherapy, it separated cancer from normal epithelium in tissue, thus enabling per-patient screening of antibody-drug conjugate (ADC) targets.",
+  "reasons": [
+   "zero-shot",
+   "single-cell",
+   "transcriptomics",
+   "cell atlas",
+   "generalizes"
+  ],
+  "score": 16,
+  "tldr": "SPATNIC is a variational autoencoder that classifies individual cells as cancer vs normal from gene expression, trained on pathologist H&E-derived labels from colorectal cancer Xenium data, and generalizes zero-shot across most major spatial and single-cell platforms.",
+  "why": "It provides histology-grounded (rather than expression-derived) cancer/normal labels, partially addressing label circularity and panel/organ dependence that plague tools like inferCNV, CancerFinder, ikarus, and scMalignantFinder—relevant to anyone needing clean cancer-cell masks before running cell-state, deconvolution, or multiomics analyses. The per-patient, per-compartment differential expression framework on treated tissues offers a practical spatial-transcriptomics pipeline for target prioritization (e.g., ADC antigens) that could be adapted to other tissues and streaming/catalog-scale data.",
+  "summary": {
+   "tldr": "SPATNIC is a variational autoencoder that classifies individual cells as cancer vs normal from gene expression, trained on pathologist H&E-derived labels from colorectal cancer Xenium data, and generalizes zero-shot across most major spatial and single-cell platforms.",
+   "background": "Identifying which cells in a tumor are cancerous is a foundational step for spatial/single-cell cancer analyses, but existing classifiers rely on expression-derived labels (or CNV inference needing broad transcriptomes and normal references), which limits accuracy on targeted panels and creates label circularity. They also tend to be developed and evaluated on scRNA-seq only, ignoring organ-site differences (normal colon vs liver vs lung epithelium) and platform differences in gene coverage and sensitivity.",
+   "approach": "They built SPATNIC (Spatial Pathology-based Typist for Normal/Cancer), a heteroscedastic VAE with a Student-t reconstruction likelihood (ν=5, heavy tails damp extreme counts) plus a classification head, trained on standardized log1p expression over 3,000 highly variable genes. Training data: 52 rectal cancer Xenium (5,001-gene panel) samples where a pathologist labeled individual cells cancer/normal against matched H&E images (~244,509 cells per class, class-balanced), yielding an organ-specific primary model, fine-tuned into liver- and lung-metastasis models using independent Xenium cohorts. They benchmarked against CancerFinder, scMalignantFinder, and ikarus (default and retrained), tested cross-platform generalization without retraining (Visium, Visium HD, CosMx, MERSCOPE, scRNA-seq), and applied the model to public CRC scRNA-seq atlases and a Visium HD rectal cancer chemoradiotherapy cohort for ADC target screening.",
+   "findings": [
+    "SPATNIC reached AUROC 0.991/AUPRC 0.990 on the internal primary test set, with similar performance in an external primary cohort (0.984), liver metastases (0.992), and lung metastases (0.998); primary MCC 0.922.",
+    "Pretrained baselines failed on Xenium (near-chance balanced accuracy; ikarus called all cells normal), and even retrained on SPATNIC's data CancerFinder only reached MCC 0.909 without exceeding SPATNIC on any cohort; SPATNIC also scaled to ~10^8 cells where baselines hit runtime/memory limits.",
+    "Zero-shot cross-platform performance stayed high on Visium (AUROC 0.99), Visium HD (0.97–1.00), Xenium V1 422-gene panel (0.98), and scRNA-seq (0.93–0.98), but degraded on CosMx (~6,000-plex; AUROC 0.75) and on a restricted 181-gene overlap.",
+    "In three public CRC scRNA-seq atlases, cells SPATNIC called cancer but that authors annotated normal formed a coherent POU2F3+ASCL2+ tuft-like cancer stem cell population (n=398), confirmed in independent Xenium tissue (P=0.0078 tumor-enriched), with worse disease-free survival in their cohort (log-rank P=0.00141) and in three external bulk cohorts (P=0.0159–0.0406).",
+    "On a 24-patient locally advanced rectal cancer Visium HD cohort (pre- and post-chemoradiotherapy), SPATNIC-separated tumor vs normal epithelium revealed patient-specific and treatment-stage-dependent ADC target enrichment (e.g., ERBB2/CEACAM5 pre-treatment; CEACAM6 and DPEP1 persisting in post-CRT non-responders)."
+   ],
+   "why": "It provides histology-grounded (rather than expression-derived) cancer/normal labels, partially addressing label circularity and panel/organ dependence that plague tools like inferCNV, CancerFinder, ikarus, and scMalignantFinder—relevant to anyone needing clean cancer-cell masks before running cell-state, deconvolution, or multiomics analyses. The per-patient, per-compartment differential expression framework on treated tissues offers a practical spatial-transcriptomics pipeline for target prioritization (e.g., ADC antigens) that could be adapted to other tissues and streaming/catalog-scale data.",
+   "limitations": "SPATNIC is developed and validated only for colorectal cancer (primary plus liver and lung metastases); extension to other cancer types is untested. The biological and translational findings (tuft-like cancer stem cells' causal role in recurrence; ADC target candidates) are exploratory and associative, requiring protein-level and functional validation, and CosMx-scale targeted panels remain a weak spot.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 108455
+  }
+ },
+ "also": [
+  {
+   "title": "ProtModernBERT: Compute-Efficient Protein Language Modeling",
+   "authors": [
+    "Alberto Martínez",
+    "Natalia Flechas Manrique",
+    "Llorenç Espinosa-Portalés",
+    "Luc Andrea"
+   ],
+   "authorCount": 4,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-10-14",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2610.19738v1",
+   "abstract": "Large protein language models provide a powerful framework for learning sequence-function relationships and guiding experimental design. However, architectural improvements are underexplored, especially in low-compute regimes of relevance for resource-constrained research laboratories. We show that the training cost for encoder-only transformer architectures can be reduced by leveraging modern architectural refinements, offering an encouraging performance / compute-efficiency trade-off. We introduce ProtModernBERT, a modernized BERT-style model pre-trained on amino acid sequences, and compare it with ProtBert, Amplify, and ESM2 across a set of supervised structural tasks -encompassing secondary structure prediction, disorder prediction, and subcellular localization- and ProteinGym's zero-shot functional benchmark. We find that ProtModernBERT matches or closely tracks the performance of Amplify-120M and ProtBert with up to 80-90\\% reduction in pre-training FLOPs, and narrows the gap to ESM2 when controlling for pre-training. Our analysis using a cluster-based validation protocol for hyperparameter selection and randomly initialized models disentangles the contributions of architecture and data, showing that modern components provide stronger inductive biases that are more consequential than parameter count in low-compute regimes.",
+   "reasons": [
+    "language model",
+    "transformer",
+    "zero-shot",
+    "proteins",
+    "scale",
+    "generalizes"
+   ],
+   "score": 18,
+   "summary": {
+    "tldr": "ProtModernBERT is a BERT-style protein language model (140M params) using ModernBERT architectural components (FlashAttention, RoPE, bias-free layers) that matches ProtBert and Amplify-120M performance while using 80–90% less pre-training compute.",
+    "background": "Protein language models like ESM2 and ProtBert require large pre-training budgets, making them costly for resource-constrained labs, and architectural refinements from modern NLP have been underexplored for proteins. Disentangling architecture from data and compute effects is difficult because published baselines differ in training data, scale, and recipes.",
+    "approach": "The authors built ProtModernBERT (22 layers, hidden 768, RoPE, GeGLU, FlashAttention) and pre-trained it with masked language modeling on the UR100P corpus (~364M sequences from UniRef100, OAS antibodies, SCOP2), processing 137B tokens in 20 hours on 96 A100 GPUs. They compared against ProtBert (420M), Amplify-120M/350M, and ESM2-150M under both pre-trained and randomly initialized (randinit) conditions on secondary structure (CASP12, TS115, CB513, NEW364), disorder, DeepLoc localization, and ProteinGym zero-shot fitness prediction.",
+    "findings": [
+     "ProtModernBERT (5.8×10^20 FLOPs) matches or closely tracks ProtBert (6.0×10^21) and Amplify-120M (1.6×10^21), an 80–90% FLOP reduction.",
+     "On ProteinGym zero-shot substitutions, ProtModernBERT scored 0.373 overall Spearman vs ProtBert's 0.376 and ESM2-150M's 0.387, but won the Organismal Fitness subtask (0.379 vs 0.305).",
+     "Pre-training benefits are strongly task-dependent: large pretrained-vs-randinit gaps for secondary structure and localization, but disorder prediction is near saturation, where random initialization already performs well.",
+     "Under randinit, ProtModernBERT retains non-trivial accuracy while ProtBert collapses (macro-F1 near chance on secondary structure), and the gap to ESM2 largely disappears, showing modern components provide stronger inductive biases than raw parameter count.",
+     "RoPE showed no consistent accuracy gains over absolute positional embeddings within their compute budget, offering mainly training-stability benefits."
+    ],
+    "why": "It demonstrates that encoder architecture design (not just scale) matters for protein representation learning in low-compute regimes, making custom PLM training feasible for smaller labs. For multiomics researchers, it also highlights that pre-training data curation and task choice strongly regulate how much a protein backbone contributes downstream.",
+    "limitations": "Comparisons happen at early pre-training stages (rankings could shift with longer training), no variance estimates are provided, models and code are not yet publicly released, and the redundant UR100P corpus may bias the model against rare or evolutionarily divergent proteins.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 46416
+   }
+  },
+  {
+   "title": "Slide-level batch structure limits histology-guided supervision of transcriptomic foundation models",
+   "authors": [
+    "McConnell, U.",
+    "Nonchev, K.",
+    "Koelzer, V. H.",
+    "Raetsch, G."
+   ],
+   "authorCount": 4,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-05",
+   "doi": "10.64898/2026.09.30.755585",
+   "url": "https://doi.org/10.64898/2026.09.30.755585",
+   "abstract": "Spatial transcriptomics pairs spatially resolved gene expression with tissue morphology in the same tissue section. Transcriptomic foundation models encode such expression profiles into general-purpose representations, but these representations can retain slide- and cohort-specific variation that obscures biological signal. Here, we test whether matched H\\&E histology can improve these representations as a training-time supervisory signal that is discarded at inference. Across three transcriptomic foundation models, histology-guided supervision provides no consistent aggregate improvement in cross-donor annotation transfer, despite substantially stronger transfer from histology alone. We find that gene-expression embeddings from spot-based spatial transcriptomics are low-dimensional and strongly structured by slide identity, limiting the shared gene--morphology signal available for cross-modal transfer. Guidance benefits some morphologically distinctive classes but reduces held-out gene predictivity broadly across the transcriptome. These results suggest that cross-modal supervision can reorganize information already encoded in a frozen representation but cannot recover information the representation does not retain, highlighting the importance of diagnosing slide-specific structure before applying such supervision. Code availability: https://github.com/ratschlab/vision-guided-transcriptomics-fm-2026",
+   "reasons": [
+    "foundation model",
+    "transcriptomics",
+    "spatial omics",
+    "code released",
+    "scale"
+   ],
+   "score": 18,
+   "summary": {
+    "tldr": "Using matched H&E morphology as a training-time teacher for transcriptomic foundation model embeddings on spot-based Visium data gives no consistent cross-donor improvement because the expression embeddings are low-dimensional and structured by slide identity.",
+    "background": "Spatial transcriptomics offers matched gene expression and histology per spot, raising the question of whether morphology can improve gene-expression representations via cross-modal 'privileged information' supervision ( morphology available at training only, discarded at inference ). Transcriptomic foundation model embeddings of Visium data are known to transfer poorly to unseen donors, but it is unclear whether cross-modal supervision can fix this.",
+    "approach": "They train a small encoder ( 128-d ) plus a decoder that predicts pathology foundation model ( Midnight ) morphology embeddings, using frozen gene-expression embeddings from three transcriptomic FMs ( Geneformer V2, scGPT, CancerFoundation ) as input, with the decoder discarded at inference. Training data: 10x Visium from MOSAIC and lung samples from De Zuani et al.; evaluation: USZ (6 slides, 6 donors, kidney+lung) and Tumor Profiler (18 slides, 7 donors, melanoma) via leave-one-donor-out k-NN (k=5) macro-F1 on expert annotations, plus controls like shuffled H&E patches and non-destructive edits such as Harmony/ComBat.",
+    "findings": [
+     "On TuPro melanoma, histology-guided representations reach macro-F1 0.52–0.56 versus 0.53–0.55 for gene-only PCA — no consistent improvement; the morphology-only PCA reference reaches 0.77.",
+     "Frozen gene-expression embeddings have very low effective rank (17.1–28.9 in 256–1152 dims) vs. Midnight morphology embeddings (80.5 in 3072 dims).",
+     "About 90% of the leading gene–morphology canonical correlation is accounted for by slide identity, so the shared cross-modal signal is largely slide-confounded.",
+     "Guidance helps only morphologically distinctive classes: tumor F1 rises 0.46→0.53 (kidney) and 0.52→0.59 (lung); benefits vanish with globally shuffled patches.",
+     "Guidance reduces held-out per-gene ridge R² broadly across the transcriptome, by 49% (CancerFoundation), 46% (Geneformer V2), and 28% (scGPT)."
+    ],
+    "why": "For anyone building multiomics/histology-expression fusion models, this shows that cross-modal supervision can only reorganize information the frozen expression embedding already contains — effective rank and slide-specific structure should be diagnosed before assuming a morphology teacher helps. It also echoes reported zero-shot limitations of single-cell FMs on spatial data.",
+    "limitations": "One pathology FM only, two held-out cohorts with mixed donor/cohort/slide shifts, fixed patch size without stain normalization, and transcriptomic FMs pre-trained on dissociated single cells rather than multi-cell spots, which may itself depress effective rank.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 12485
+   }
+  },
+  {
+   "title": "Programmable design of functional proteins from natural language.",
+   "authors": [
+    "Dai",
+    "You",
+    "Zhu",
+    "Gao",
+    "Fu",
+    "Zhou",
+    "Su",
+    "Wang",
+    "Fan",
+    "Tan",
+    "Ma",
+    "Deng"
+   ],
+   "authorCount": 33,
+   "venue": "Nature",
+   "preprint": false,
+   "date": "2026-10-23",
+   "doi": "10.1038/s41586-026-11205-z",
+   "url": "https://doi.org/10.1038/s41586-026-11205-z",
+   "abstract": "Programming biological function-designing bespoke proteins to perform specified molecular tasks-is a foundational goal of molecular engineering. However, current design models remain fundamentally limited1-3: they typically require either natural proteins as starting points for optimization or manual reformulation of functional goals as geometric and sequence-level constraints to guide candidate generation. Here we introduce Pinal, a 16-billion-parameter foundation model that designs candidate proteins from natural-language descriptions of desired function. Trained on 1.7 billion synthetically annotated protein-text pairs, Pinal links functional intent to protein sequence and structure. In computational evaluations, generated candidates combined high predicted foldability with functional-description alignment and sequence diversity, providing a basis for prioritizing experimentally testable designs. We applied Pinal to four distinct design tasks-a fluorescent protein, a polyethylene terephthalate hydrolase, an alcohol dehydrogenase and a metabolic H-protein-and experimentally observed the intended function in each case, including catalytic activity for both designed enzymes. Without iterative experimental optimization, a Pinal-designed H-protein increased product titre by 1.7-fold relative to the corresponding native Escherichia coli H-protein in a multi-enzyme CO2 fixation pathway. These findings support natural language as a high-level interface for candidate generation in protein design, enabling programmable exploration with reduced reliance on manually specified structural or sequence constraints.",
+   "reasons": [
+    "foundation model",
+    "proteins",
+    "scale"
+   ],
+   "score": 17
+  }
+ ],
+ "candidates": 369
+}
