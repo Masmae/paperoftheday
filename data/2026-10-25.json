@@ -1,0 +1,206 @@
+{
+ "date": "2026-10-25",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "DNA methylation atlas of the mouse brain at single-cell resolution",
+  "authors": [
+   "Hanqing Liu",
+   "Jingtian Zhou",
+   "Wei Tian",
+   "Chongyuan Luo",
+   "Anna Bartlett",
+   "Andrew I. Aldridge",
+   "Jacinta D. Lucero",
+   "Julia K. Osteen",
+   "Joseph R. Nery",
+   "Huaming Chen",
+   "Angeline C. Rivkin",
+   "Rosa Castanon"
+  ],
+  "authorCount": 29,
+  "venue": "Nature",
+  "preprint": false,
+  "date": "2021-10-06",
+  "doi": "10.1038/s41586-020-03182-8",
+  "url": "https://doi.org/10.1038/s41586-020-03182-8",
+  "abstract": "Abstract Mammalian brain cells show remarkable diversity in gene expression, anatomy and function, yet the regulatory DNA landscape underlying this extensive heterogeneity is poorly understood. Here we carry out a comprehensive assessment of the epigenomes of mouse brain cell types by applying single-nucleus DNA methylation sequencing 1,2 to profile 103,982 nuclei (including 95,815 neurons and 8,167 non-neuronal cells) from 45 regions of the mouse cortex, hippocampus, striatum, pallidum and olfactory areas. We identified 161 cell clusters with distinct spatial locations and projection targets. We constructed taxonomies of these epigenetic types, annotated with signature genes, regulatory elements and transcription factors. These features indicate the potential regulatory landscape supporting the assignment of putative cell types and reveal repetitive usage of regulators in excitatory and inhibitory cells for determining subtypes. The DNA methylation landscape of excitatory neurons in the cortex and hippocampus varied continuously along spatial gradients. Using this deep dataset, we constructed an artificial neural network model that precisely predicts single neuron cell-type identity and brain area spatial location. Integration of high-resolution DNA methylomes with single-nucleus chromatin accessibility data 3 enabled prediction of high-confidence enhancer–gene interactions for all identified cell types, which were subsequently validated by cell-type-specific chromatin conformation capture experiments 4 . By combining multi-omic datasets (DNA methylation, chromatin contacts, and open chromatin) from single nuclei and annotating the regulatory genome of hundreds of cell types in the mouse brain, our DNA methylation atlas establishes the epigenetic basis for neuronal diversity and spatial organization throughout the mouse cerebrum.",
+  "reasons": [
+   "deep learning",
+   "single-cell",
+   "multiomics",
+   "epigenomics",
+   "genomics"
+  ],
+  "score": 20.900498216638724,
+  "classic": true,
+  "citations": 282,
+  "year": 2021,
+  "tldr": "Profiled 103,982 nuclei by single-nucleus DNA methylation sequencing across the mouse cerebrum, identifying 161 epigenetic cell types, building an ANN that predicts cell identity and brain region from methylation, and validating predicted enhancer-gene interactions with cell-type-specific capture data.",
+  "why": "A landmark single-cell multiomic resource mapping DNA methylation, chromatin accessibility and chromatin contacts across >100,000 mouse brain cell types, with a neural network model that predicts cell type and spatial origin and experimentally validated enhancer-gene links. It sets the epigenetic reference for neuronal diversity and will be mined for years.",
+  "summary": {
+   "tldr": "This study profiles DNA methylation in 103,982 single nuclei from 45 regions of the adult mouse cerebrum, defining 161 epigenetic cell types and building a multimodal regulatory atlas including enhancer-gene maps and a methylome-based spatial/cell-type classifier.",
+   "background": "The mammalian brain contains hundreds of molecularly and spatially distinct cell types, but the regulatory DNA landscape underlying this diversity was poorly characterized. Transcriptome-based atlases alone miss regulatory mechanisms, and single-cell methylome profiling is technically demanding because methylomes must encode both cell identity and spatial origin, plus link distal enhancers to target genes.",
+   "approach": "The authors applied snmC-seq2 to 103,982 nuclei (95,815 NeuN+ neurons, 8,167 non-neuronal) from 45 dissected regions of cortex, hippocampus, striatum/pallidum, and olfactory areas of P56 male C57BL/6 mice (mean 1.5M reads/cell, 6.2% cytosines covered). They used three-level iterative clustering on mCH/mCG in 100-kb bins, integrated matched snATAC-seq data from the same tissue (parallel study), built a taxonomy of subtypes with branch-annotated genes and TF motifs, and profiled 5,142 hippocampal nuclei with sn-m3C-seq (mean 152,000 contacts/cell) to validate enhancer-gene links. A multi-task artificial neural network on mCH 100-kb bins predicted cell subtype and dissection region.",
+   "findings": [
+    "Iterative clustering resolved 161 subtypes (68 excitatory, 77 inhibitory, 16 non-neuronal) with distinct spatial locations and, for some L5 ET neurons, projection targets (validated against epi-retro-seq).",
+    "They identified 3.9 million subtype-specific CG-DMRs (mean 624 bp) covering ~50% of the mouse genome, plus 16,451 CH-differentially methylated genes, and annotated taxonomy branches with TF genes/motifs (e.g., ROR, CUX families) showing reuse of regulators across lineages.",
+    "Integration with snATAC-seq yielded 1,612,198 enhancer-like eDMRs (73% overlapping ATAC peaks); partial correlations with gene-body mCH across 145 subtypes linked 1,038,853 DMRs (64%) to at least one gene.",
+    "sn-m3C-seq identified 19,151 loops, 48.7% cell-type-differential, with eDMRs enriched at differential loop anchors, confirming physical enhancer-gene contacts (e.g., Foxp1 in CA1).",
+    "The ANN predicted single-neuron subtype identity with 95% accuracy and brain-region origin with 89% accuracy using mCH profiles alone, capturing continuous spatial methylation gradients in cortical IT neurons and DG granule cells (gradient DMRs enriched for developmental vs synaptic genes)."
+   ],
+   "why": "For multiomics researchers, this is a flagship demonstration that DNA methylation alone encodes both cell type and spatial origin at scale, and provides a public resource (http://neomorph.salk.edu/omb) of cell-type regulatory elements for the entire mouse cerebrum rivals in information content transcriptomic atlases. The gene-annotated taxonomy, enhancer-gene predictions, and matched methylome/ATAC/Hi-C modalities offer a direct template for multiomic cell-type characterization and enhancer-driven targeting tools like AAVs.",
+   "limitations": "Bisulfite-based snmC-seq2 cannot distinguish 5mC from 5hmC, which accumulates in the brain. Annotations rely on dissection-region provenance rather than intact spatial mapping, and enhancer-gene assignments remain computational predictions validated only in hippocampus.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 100476
+  }
+ },
+ "also": [
+  {
+   "title": "A foundational large language model for edible plant genomes",
+   "authors": [
+    "Javier Mendoza‐Revilla",
+    "Evan Trop",
+    "Liam Gonzalez",
+    "Maša Roller",
+    "Hugo Dalla-Torre",
+    "Bernardo P. de Almeida",
+    "Guillaume Richard",
+    "Jonathan Caton",
+    "Nicolás López Carranza",
+    "Marcin J. Skwark",
+    "Alexandre Laterre",
+    "Karim Beguir"
+   ],
+   "authorCount": 14,
+   "venue": "Communications Biology",
+   "preprint": false,
+   "date": "2024-07-09",
+   "doi": "10.1038/s42003-024-06465-2",
+   "url": "https://doi.org/10.1038/s42003-024-06465-2",
+   "abstract": "Significant progress has been made in the field of plant genomics, as demonstrated by the increased use of high-throughput methodologies that enable the characterization of multiple genome-wide molecular phenotypes. These findings have provided valuable insights into plant traits and their underlying genetic mechanisms, particularly in model plant species. Nonetheless, effectively leveraging them to make accurate predictions represents a critical step in crop genomic improvement. We present AgroNT, a foundational large language model trained on genomes from 48 plant species with a predominant focus on crop species. We show that AgroNT can obtain state-of-the-art predictions for regulatory annotations, promoter/terminator strength, tissue-specific gene expression, and prioritize functional variants. We conduct a large-scale in silico saturation mutagenesis analysis on cassava to evaluate the regulatory impact of over 10 million mutations and provide their predicted effects as a resource for variant characterization. Finally, we propose the use of the diverse datasets compiled here as the Plants Genomic Benchmark (PGB), providing a comprehensive benchmark for deep learning-based methods in plant genomic research. The pre-trained AgroNT model is publicly available on HuggingFace at https://huggingface.co/InstaDeepAI/agro-nucleotide-transformer-1b for future research purposes.",
+   "reasons": [
+    "language model",
+    "transformer",
+    "deep learning",
+    "genomics",
+    "code released",
+    "scale"
+   ],
+   "score": 20.08278537031645,
+   "classic": true,
+   "citations": 110,
+   "year": 2024,
+   "summary": {
+    "tldr": "AgroNT is a 1-billion-parameter BERT-style DNA language model trained on reference genomes from 48 edible plant species that matches or beats task-specific models across plant genomic prediction tasks while enabling zero-shot variant scoring and in silico mutagenesis for understudied crops.",
+    "background": "Deep learning models in plant genomics are usually trained per task on single species with abundant labels, so 'orphan crops' like cassava lack functional annotations and predictive resources. Tissue-specific gene expression prediction from sequence is especially hard because distant regulatory elements and species-specific effects are poorly captured by promoter-proximal sequences alone.",
+    "approach": "They pre-trained AgroNT via masked language modeling on ~10.5M genomic sequences (~6100 bp, non-overlapping 6-mer tokens, 15% masked) from 48 mostly edible plant reference genomes in Ensembl Plants, totaling 472.5B tokens on 512 TPU.v4 devices over ~4 days. The encoder-only transformer has ~1B parameters, 40 attention blocks, 1500-dim embeddings, and inputs of up to ~6000 bp. Downstream tasks used parameter-efficient fine-tuning (IA3, ~1% of parameters trained) across 8任务: polyadenylation, splice sites, lncRNA vs mRNA, promoter/terminator strength (STARR-seq), chromatin accessibility (ATAC-seq), gene expression, and enhancer prediction. They also compiled these datasets into the Plant Genomic Benchmark (PGB).",
+    "findings": [
+     "Polyadenylation: AUC 0.89-0.96 across five species (PlantAPAdb), and 0.99 on the DeepPolyA Arabidopsis dataset, beating DeepPolyA's 0.97.",
+     "Splice site prediction reached AUROC 0.97 (acceptor) / 0.95 (donor) in Arabidopsis; lncRNA classification ranged 0.79-0.89 AUROC on GC/length-matched negatives.",
+     "Promoter strength prediction R2 = 0.70 (maize) and 0.73 (tobacco), ~3 R2 points better than prior CNNs; terminators R2 = 0.67-0.77.",
+     "Chromatin accessibility: AUROC 0.94-0.98 across six species/tissues, comparable or better than plantDeepSEA at 1000 bp context; zero-shot variant scoring (LLR and embedding dot-product) outperformed GPN in rice (up to 8x higher odds ratios for very rare variants), though not in Arabidopsis.",
+     "Gene expression prediction from promoter-proximal sequence: R2 = 0.42-0.62 across five species (up to 3x better than prior models), but tissue-specificity is weak (LFC correlation 0.18-0.24); in maize, extending context to 5000 bp downstream of the TSS raised R2 to 0.662.",
+     "In silico saturation mutagenesis in cassava profiled >10M mutations in the top 1000 predicted enhancers (AUC 0.88) and promoters (R2 = 0.51), identifying ~120 enhancer-disrupting and ~136 expression-reducing mutations at enriched motifs (e.g., DOF, TCGAAT, Trihelix), all released as a resource."
+    ],
+    "why": "This is the first plant DNA foundation model demonstrated across many tasks and species, and it shows multi-species pre-training transfers to data-poor orphan crops where supervised CNNs can't be trained—relevant for variant prioritization and regulatory element prediction in any crop genome. For transcriptomics-focused readers, it offers a practical baseline for predicting tissue gene expression from sequence alone, plus the PGB benchmark and released HuggingFace weights for standardized comparison.",
+    "limitations": "Tissue-specific expression prediction is weak (direction accuracy only 0.54-0.58), likely because remote enhancers exceed the context window and cis-regulatory interactions are not modeled; zero-shot performance depends on phylogenetic diversity of pre-training species, and no experimental validation of predicted mutations was performed.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 87285
+   }
+  },
+  {
+   "title": "The Application of Deep Learning in Cancer Prognosis Prediction",
+   "authors": [
+    "Wan Zhu",
+    "Longxiang Xie",
+    "Jianye Han",
+    "Xiangqian Guo"
+   ],
+   "authorCount": 4,
+   "venue": "Cancers",
+   "preprint": false,
+   "date": "2020-03-05",
+   "doi": "10.3390/cancers12030603",
+   "url": "https://doi.org/10.3390/cancers12030603",
+   "abstract": "Deep learning has been applied to many areas in health care, including imaging diagnosis, digital pathology, prediction of hospital admission, drug design, classification of cancer and stromal cells, doctor assistance, etc. Cancer prognosis is to estimate the fate of cancer, probabilities of cancer recurrence and progression, and to provide survival estimation to the patients. The accuracy of cancer prognosis prediction will greatly benefit clinical management of cancer patients. The improvement of biomedical translational research and the application of advanced statistical analysis and machine learning methods are the driving forces to improve cancer prognosis prediction. Recent years, there is a significant increase of computational power and rapid advancement in the technology of artificial intelligence, particularly in deep learning. In addition, the cost reduction in large scale next-generation sequencing, and the availability of such data through open source databases (e.g., TCGA and GEO databases) offer us opportunities to possibly build more powerful and accurate models to predict cancer prognosis more accurately. In this review, we reviewed the most recent published works that used deep learning to build models for cancer prognosis prediction. Deep learning has been suggested to be a more generic model, requires less data engineering, and achieves more accurate prediction when working with large amounts of data. The application of deep learning in cancer prognosis has been shown to be equivalent or better than current approaches, such as Cox-PH. With the burst of multi-omics data, including genomics data, transcriptomics data and clinical information in cancer studies, we believe that deep learning would potentially improve cancer prognosis.",
+   "reasons": [
+    "deep learning",
+    "AI",
+    "transcriptomics",
+    "multiomics",
+    "genomics",
+    "drug discovery"
+   ],
+   "score": 24.16184995135124,
+   "classic": true,
+   "citations": 381,
+   "year": 2020,
+   "summary": {
+    "tldr": "This is a narrative review of deep learning methods for cancer survival/prognosis prediction, organizing published studies into three classes: plain neural networks, feature-extracted multi-omics networks, and CNN-based image models.",
+    "background": "Cancer prognosis prediction (survival estimation, recurrence/progression risk) has historically relied on Cox proportional hazards, Kaplan-Meier, and log-rank statistics on clinical variables, but modern high-dimensional multi-omics data (mRNA, miRNA, CNA, methylation, proteomics) strain these methods. Public resources like TCGA (>11,000 patients, 33 tumor types), GEO, GTEx (~960 donors), and METABRIC now provide the data needed for machine learning approaches.",
+    "approach": "The authors reviewed 2019-earlier PubMed literature on deep learning for cancer prognosis (searching 'deep learning', 'neural networks', 'cancer prognosis') and summarized models in three categories: (1) fully connected NNs without feature extraction, e.g., Cox-nnet (TCGA expression, 5031 patients, 10 cancers), DeepSurv (METABRIC n=1980, GBSG n=1546), and RankDeepSurvival; (2) NNs with feature extraction from omics data, e.g., MDNNMD (mRMR feature selection on TCGA breast cancer, n=1980, ROC 0.845), SALMON (lmQCM eigengene extraction, c-index 0.7285), PASNet (pathway-constrained network for glioblastoma, AUC 0.66), and autoencoder-based HCC models (360 TCGA samples); (3) CNN models on pathology/radiology images, e.g., ResNet50 for MGMT methylation prediction (accuracy ~95%), survival CNN with genomics on glioma H&E slides (769 patients, c-index 0.754 to 0.801 with IDH/1p19q features), and tissue-class CNNs reaching 94-99% accuracy on 100,000 colorectal image patches.",
+    "findings": [
+     "Neural networks with Cox regression output layers (Cox-nnet, DeepSurv, RankDeepSurvival) generally match or beat Cox-PH; DeepSurv reached c-index 0.654 (METABRIC) and 0.676 (GBSG), and RankDeepSurvival improved this to 0.661 and 0.688.",
+     "Multi-omics integration with feature extraction (e.g., SALMON combining mRNA, miRNA, copy number burden, TMB, and clinical data) improved performance to a median c-index of 0.7285 in breast cancer.",
+     "Pathway-informed architectures like PASNet mapped 4359 genes to 574 MSigDB pathways for glioblastoma prognosis, achieving AUC 0.66 despite class imbalance (only 20% long-term survivors).",
+     "Image-based deep learning is competitive: VCNN+genomics on glioma histology reached c-index 0.801 (better than WHO grading), ResNet50 transfer learning detected MGMT methylation at ~95% accuracy, and a CNN+LSTM model achieved AUC 0.69 on colorectal tissue microarrays vs 0.57-0.58 for human experts.",
+     "The authors identify seven recurring challenges: small sample sizes, imbalanced cohorts, missing data, high dimensionality, lack of benchmarks, infrastructure/privacy needs, and shortage of domain-expert ML researchers.",
+     "Most models are trained on only hundreds of patients; regularization, dropout, and transfer learning help but rarely eliminate overfitting (e.g., one CRNN reached 0.97 training accuracy but only 0.67/0.62 validation/test accuracy)."
+    ],
+    "why": "For researchers building multiomics transcriptomics models, this review maps which architectures and feature-extraction strategies (dimension-reduction algorithms, pathway constraints, autoencoders, Cox-output layers) were tried against which public cohorts and what performance to expect relative to Cox-PH baselines. It also documents persistent failure modes — small n, imbalance, missing data — that remain relevant design constraints today.",
+    "limitations": "The review predates most transformer/foundation-model work, covers only pre-2020 studies (the current 381 citations suggest it's now a historical snapshot), and relies on each paper's self-reported metrics, which are not comparable across datasets. It is a narrative review without systematic quantification or meta-analysis.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 46456
+   }
+  },
+  {
+   "title": "Multiomics Research: Principles and Challenges in Integrated Analysis",
+   "authors": [
+    "Yunqing Luo",
+    "Chengjun Zhao",
+    "Fei Chen"
+   ],
+   "authorCount": 3,
+   "venue": "BioDesign Research",
+   "preprint": false,
+   "date": "2024-01-01",
+   "doi": "10.34133/bdr.0059",
+   "url": "https://doi.org/10.34133/bdr.0059",
+   "abstract": "Multiomics research is a transformative approach in the biological sciences that integrates data from genomics, transcriptomics, proteomics, metabolomics, and other omics technologies to provide a comprehensive understanding of biological systems. This review elucidates the fundamental principles of multiomics, emphasizing the necessity of data integration to uncover the complex interactions and regulatory mechanisms underlying various biological processes. We explore the latest advances in computational methodologies, including deep learning, graph neural networks (GNNs), and generative adversarial networks (GANs), which facilitate the effective synthesis and interpretation of multiomics data. Additionally, this review addresses the critical challenges in this field, such as data heterogeneity, scalability, and the need for robust, interpretable models. We highlight the potential of large language models to enhance multiomics analysis through automated feature extraction, natural language generation, and knowledge integration. Despite the important promise of multiomics, the review acknowledges the substantial computational resources required and the complexity of model tuning, underscoring the need for ongoing innovation and collaboration in the field. This comprehensive analysis aims to guide researchers in navigating the principles and challenges of multiomics research to foster advances in integrative biological analysis.",
+   "reasons": [
+    "language model",
+    "deep learning",
+    "generative model",
+    "graph neural network",
+    "transcriptomics",
+    "multiomics"
+   ],
+   "score": 23.93696589710787,
+   "classic": true,
+   "citations": 93,
+   "year": 2024,
+   "summary": {
+    "tldr": "A review (not a new method) covering how multiomics data (genomic, transcriptomic, proteomic, epigenomic, metabolomic, phenomic, single-cell) are generated, formatted, preprocessed, and integrated, with emphasis on hardware, computational tools, and remaining challenges.",
+    "background": "Biological systems can only be understood by combining data from multiple omics layers, but each layer comes from different instruments, file formats, and scales, with high dimensionality, sparsity, batch effects, and missing data. Integration is hard because platforms are heterogeneous and there is no single standardized pipeline spanning genomics through phenomics.",
+    "approach": "The authors survey the instrument landscape (Illumina short-read sequencers producing 150-400 bp reads at billions of reads/run; PacBio Revio HiFi long reads averaging 10-15 kb; ONT nanopore reads up to hundreds of kb; Orbitrap/Q-TOF mass spectrometry; high-field >800 MHz NMR; MRI/CT and plant imaging), then catalog data formats per omics layer (FASTQ/BAM/VCF for genomics, FPKM/TPM and DEG outputs for transcriptomics, mzML/TMT/iTRAQ for proteomics, BED/BAM for epigenomics including a detailed table of ~12 m6A detection methods), and describe preprocessing (Z-score/min-max normalization, ComBat batch correction, KNN/MICE imputation, PCA/SVD/NMF denoising) and integration methods (Seurat, Harmony, LIGER, MOFA, VAEs, plus deep learning, GNNs, GANs, and LLMs).",
+    "findings": [
+     "Standard pipelines per omics are well established (FastQC/BWA/GATK for genomics; STAR/HISAT2 + HTSeq for RNA-seq; MaxQuant/Mascot for proteomics; Bismark for bisulfite data), but cross-omics joint analysis remains largely unsolved.",
+     "For RNA modifications, >150 types exist (m6A most prevalent), and the review tabulates strengths/limits of detection methods from MeRIP-seq to antibody-free DART-seq and single-nucleus sn-m6A-CT.",
+     "Single-cell and spatial multiomics (10x Chromium, Visium, sci-CAR, Paired-Seq) plus tools like Seurat, MOFA, scVelo, and SCENIC now allow integrating transcriptome and epigenome at cellular resolution.",
+     "Persistent challenges named are data heterogeneity, scalability, batch effects, missing data, and the need for interpretable models.",
+     "Future directions proposed include multimodal imaging (MRI/PET/CT + optical), combined MS-NMR, sequencing-MS coupling, and automated intelligent data platforms, with LLMs suggested for automated feature extraction and knowledge integration.",
+     "No new model, benchmark, or quantitative performance result is presented; the paper's substantive numbers are instrument specs (e.g., gigabytes-to-hundreds-of-gigabytes per sample) rather than evaluation metrics."
+    ],
+    "why": "For someone building AI on transcriptomics/multiomics data, the paper is mostly a reference for where the data come from, their formats, and the standard preprocessing stack, which is useful for pipeline design and data ingestion but not for choosing a model. Its value is as a taxonomy and tool catalog rather than as evidence for any particular integration approach.",
+    "limitations": "As a review, it offers no empirical comparison of integration methods and does not benchmark deep learning, GNN, GAN, or LLM approaches on real datasets; claims about LLM potential are qualitative. The discussion of computational cost and model-tuning complexity stays at the level of acknowledged problems without proposed metrics or solutions.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 91357
+   }
+  }
+ ],
+ "candidates": 362
+}

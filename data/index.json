@@ -1,6 +1,18 @@
 {
  "days": [
   {
+   "date": "2026-10-25",
+   "title": "DNA methylation atlas of the mouse brain at single-cell resolution",
+   "venue": "Nature",
+   "key": "10.1038/s41586-020-03182-8",
+   "also": [
+    "10.1038/s42003-024-06465-2",
+    "10.3390/cancers12030603",
+    "10.34133/bdr.0059"
+   ],
+   "classic": true
+  },
+  {
    "date": "2026-10-24",
    "title": "SPATNIC enables H&E-grounded cancer-cell identification across spatial and single-cell transcriptomic modalities in colorectal cancer",
    "venue": "bioRxiv",
