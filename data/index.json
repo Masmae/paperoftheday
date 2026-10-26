@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-10-26",
+   "title": "Fine-Grained and Reliable Cell Classification from Pathology Images",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.20.760347",
+   "also": [
+    "10.64898/2026.10.16.759724",
+    "10.64898/2026.10.22.761199",
+    "10.64898/2026.03.28.714542"
+   ]
+  },
+  {
    "date": "2026-10-25",
    "title": "DNA methylation atlas of the mouse brain at single-cell resolution",
    "venue": "Nature",

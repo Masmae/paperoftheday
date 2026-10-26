@@ -1,0 +1,192 @@
+{
+ "date": "2026-10-26",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Fine-Grained and Reliable Cell Classification from Pathology Images",
+  "authors": [
+   "Ogut, S.",
+   "Merchant, A.",
+   "Vahidi, A.",
+   "Jeong, D.",
+   "Birk, S.",
+   "Boxall, A.",
+   "Miraki Feriz, A.",
+   "Sallese, M. R.",
+   "Chang, Y.",
+   "Frossard, P.",
+   "Thanou, D.",
+   "Lotfollahi, M."
+  ],
+  "authorCount": 12,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-24",
+  "doi": "10.64898/2026.10.20.760347",
+  "url": "https://doi.org/10.64898/2026.10.20.760347",
+  "abstract": "Molecular assays such as spatial transcriptomics facilitate fine-grained identification of cell types for analyzing tumor microenvironments. However, they are expensive to acquire in routine clinical practice compared to hematoxylin and eosin (H&E) images. With molecular guidance, such images can distinguish cell lineages, yet often fail to resolve closely related subtypes. To overcome this, we introduce CellBridge, a multi-modal contrastive learning framework pretrained on 16M cells with paired H&E and spatial profiles, for transferring molecular information into morphological representations. CellBridge further incorporates a Cell-Ontology-aware conformal prediction module that assigns labels at different levels of specificity: leaf-level cell types when morphology alone provides sufficient evidence, and broader ancestor categories when distinguishing among more specific cell types would require molecular information. Across in-domain and out-of-domain benchmarks, CellBridge outperforms leading pathology foundation models in macro F1 by up to 16 percentage points, with the largest gains on the most fine-grained label spaces. It consistently achieves smaller prediction sets, while reducing class-wise coverage gaps. We envision CellBridge as a step toward extracting cellular information that currently requires costly molecular assays from routinely acquired pathology images, while explicitly identifying where such assays remain necessary. Our code is available at https://github.com/Lotfollahi-lab/cellbridge.",
+  "reasons": [
+   "foundation model",
+   "representation learning",
+   "transcriptomics",
+   "spatial omics",
+   "code released",
+   "scale"
+  ],
+  "score": 20,
+  "tldr": "CellBridge is a multi-modal contrastive framework that distills spatial-transcriptomics-derived cell identity into H&E image representations and uses Cell Ontology-aware conformal prediction to output the most specific cell type morphology can support.",
+  "why": "This is directly relevant to multimodal transcriptomics work: it shows that single-cell-resolution pairing (not spot-level) is key for transferring molecular cell identity to H&E, and that pairing an ST foundation model encoder (TERRA) with a pathology FM via LoRA is an efficient recipe. The ontology-aware conformal prediction is a practical template for expressing the predictability limits of H&E without molecular assays.",
+  "summary": {
+   "tldr": "CellBridge is a multi-modal contrastive framework that distills spatial-transcriptomics-derived cell identity into H&E image representations and uses Cell Ontology-aware conformal prediction to output the most specific cell type morphology can support.",
+   "background": "H&E images are cheap and routine, but morphologically similar subtypes (e.g., T vs B cells, macrophages in tumor nests) cannot always be resolved without expensive single-cell spatial transcriptomics like Xenium. Existing image-expression alignment methods mostly use spot-level ST that aggregates multiple cells, and pathology models treat cell types as flat labels with no way to signal when a prediction is unreliable.",
+   "approach": "The authors pretrained CellBridge by aligning cell-centered H&E crop embeddings from UNI2-h (adapted via LoRA + projection head) with embeddings from a frozen single-cell ST foundation model (TERRA-112M), using a symmetric InfoNCE loss on ~16M paired cells from the human Xenium cohort of HEST-1k (~23.8M cells across ~19 organs; 59 sections pretraining, 6 validation, 14 held-out test). At inference they discard the transcriptomic side, fit a lightweight linear probe, and add a Cell-Ontology-Fallback (COF) conformal prediction module: ontology-based nonconformity scores plus branch-conditional (Mondrian) calibration per Cell Ontology lineage, returning leaf-level labels when probability mass is sufficient and coarse ancestor categories otherwise, with per-branch coverage guarantees (α = 0.1).",
+   "findings": [
+    "On 14 held-out HEST sections CellBridge reaches ~50% macro F1, beating the strongest baseline (PAST); gains over the best FM grow from ~+10 pp on coarse NuCLS labels (5 classes) to +16 pp on detailed (12 classes).",
+    "On five external datasets (NuCLS, PanNuke, Lizard, PhenoCell all/immune), CellBridge wins 9 of 10 linear/kNN probe configurations; largest linear-probe gains: NuCLS +16.0 pp (41.1 vs 25.1) and PhenoCellall +12.0 pp (37.1).",
+    "Under COF at 90% coverage, CellBridge is best or second-best in mean set size and singleton rate on every dataset; on PanNuke and Lizard it cuts set size by 0.37/0.64 labels and raises singleton rates by 14.8/11.3 points.",
+    "Branch-conditional calibration reduces class-wise coverage gaps up to ~5x vs standard CP (e.g., Lizard: 4.6 vs 24.1 pp CovGap).",
+    "Teacher-model ablation: TERRA beats NOVAE as the frozen transcriptomic teacher on all tasks (up to +18.6 pp macro F1 on Lizard), and low reliability scores localize to expert-confirmed ambiguous cells (macrophages infiltrating tumor clusters)."
+   ],
+   "why": "This is directly relevant to multimodal transcriptomics work: it shows that single-cell-resolution pairing (not spot-level) is key for transferring molecular cell identity to H&E, and that pairing an ST foundation model encoder (TERRA) with a pathology FM via LoRA is an efficient recipe. The ontology-aware conformal prediction is a practical template for expressing the predictability limits of H&E without molecular assays.",
+   "limitations": "Pretrained only on the HEST-1k Xenium human cohort (breast/ovary/pancreas dominate benchmarks), needs precomputed cell segmentations, and performance depends on the quality of the frozen foundation model embeddings; the text is a non-peer-reviewed bioRxiv preprint.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 91002
+  }
+ },
+ "also": [
+  {
+   "title": "GeoSinkhorn Flow: Geometry-Aware Flow Matching for Perturbation-Conditioned Dynamics in Single cell Data Phenoscapes",
+   "authors": [
+    "XU, K.",
+    "Wilkinson, A.",
+    "Shuang, N.",
+    "Huguet, G.",
+    "Gerstein, M.",
+    "Wolf, G.",
+    "Tape, C. J.",
+    "Krishnaswamy, S."
+   ],
+   "authorCount": 8,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-22",
+   "doi": "10.64898/2026.10.16.759724",
+   "url": "https://doi.org/10.64898/2026.10.16.759724",
+   "abstract": "Single-cell technologies increasingly enable large-scale profiling of complex biological systems across many experimental perturbations, but understanding how a system reorganizes across an entire space of conditions is difficult to interpret from single-cell embeddings alone. Phenoscapes address this by embedding entire cell-state distributions, rather than individual cells, as points in a data-driven landscape. Thus, a single dot represents one experimental condition rather than one cell, yielding a map of the perturbation or patient landscape that reveals how phenotype varies continuously across conditions. Phenoscapes remain a comparatively new and underexplored representation and existing static phenoscapes position experimental conditions relative to one another without specifying trajectories that describe how a cellular population moves from one condition to another. Flow- and trajectory-based models for single-cell data are numerous, but existing approaches operate at the level of individual cells, are not built to respect the geometry of a phenoscape, and typically cannot generalize their predicted flows to conditions not seen during training. Here we introduce GeoSinkhorn Flow, a perturbation-conditioned, geometry-aware flow-matching framework specialized designed to convert a static phenoscape into a dynamic phenoscape, in which each condition-level point is additionally connected by geodesic, condition-aware transport trajectories that are consistent with the phenoscape's underlying geometry. GeoSinkhorn Flow can also model transitions directly between time points without constructing a phenoscape. GeoSinkhorn Flow uses heat-diffusion geometry to define manifold-aware transport costs and trains a geometric autoencoder whose latent Euclidean distances stay aligned with the static phenoscape geometry while extending it to unseen cells. By explicitly conditioning the learned transport dynamics on perturbation-specific gene or drug embeddings, GeoSinkhorn Flow generalizes its trajectories to new measurement conditions, produces intermediate progression states along a trajectory, and extends predictions to unseen cells and held-out perturbations. An unbalanced optimal transport variant further learns growth or transition weights, so that changes in relative cell-state abundance or transition propensity are modeled together with state movement. Across synthetic manifolds, patient-derived organoid drug responses, Perturb-seq knockdowns, and time-resolved CyTOF signaling, GeoSinkhorn Flow recovered intrinsic manifold geometry, inferred biologically coherent response trajectories, and generalized to held-out drug combinations, perturbation genes, and time points. Together, these results establish GeoSinkhorn Flow as a perturbation-conditioned, phenoscape-consistent dynamical framework, distinct from standard flow-matching approaches, for converting static phenoscapes into dynamic ones that generalize across experimental conditions.",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "perturbation",
+    "scale",
+    "generalizes"
+   ],
+   "score": 15,
+   "summary": {
+    "tldr": "GeoSinkhorn Flow turns static 'phenoscapes' (maps where each point is a whole perturbed cell population, not a cell) into dynamic, geometry-aware trajectories that generalize to unseen perturbations, drugs, and time points.",
+    "background": "Single-cell perturbation datasets give unpaired snapshots of cell populations per condition, and phenoscapes embed each condition as one point using heat-geodesic (Geodesic Sinkhorn) optimal-transport distances—but they are static and don't show how populations move between conditions. Existing flow/trajectory models work at the single-cell level, don't respect manifold geometry, and can't extrapolate to conditions not seen in training.",
+    "approach": "GeoSinkhorn Flow has three stages: (1) a geometric autoencoder is trained so Euclidean distances in latent space match heat-diffusion (heat-kernel/Varadhan) distances computed on a kNN graph, making geodesic transport tractable for unseen cells; (2) Geodesic Sinkhorn couplings between neighboring progression states (real time points or MELD-inferred control-to-treatment pseudotime bins) provide geometry-aware supervision; (3) conditional flow matching trains a vector field taking cell state, progression time, and a perturbation embedding (e.g., compositional drug embeddings, GeneWalk gene embeddings, genotype-ligand identity), with an unbalanced-OT variant and a learned growth-rate model capturing changes in cell-state abundance.",
+    "findings": [
+     "On three synthetic manifolds (Swiss roll, saddle, torus; 100 local distributions x 50 points = 5,000 points each), the autoencoder's latent Euclidean distances recovered ground-truth geodesic Wasserstein distances better than ambient Euclidean cost (Spearman correlation; full metrics in Supplementary Table B2).",
+     "On colorectal cancer patient-derived organoid CyTOF data (Ramos Zapatero et al.; 10 PDO lines, 44 antibodies, monoculture), training on single drugs only, the model predicted held-out drug combinations: SN-38-containing combinations showed aligned trajectories with pairwise Spearman correlations frequently exceeding ρ > 0.85, and Ward clustering kept S-backbone treatments within linkage distance < 0.1 across patients.",
+     "On a Perturb-seq CRISPRi CAD screen in human arterial endothelial cells (Schnitzler et al., 5,000 HVGs; six genes—CCM2, MAP2K5, EDN1, NOS3, TSPAN14, PECAM1—held out), the model inferred coherent control-to-knockdown trajectories for the unseen gene TSPAN14 and also produced growth/abundance scores via unbalanced transport.",
+     "On time-resolved CyTOF of HeLa spheroids with WT, 1×, or 2× PIK3CA H1047R under EGF/IGF1 stimulation, the model interpolated genotype- and ligand-specific signaling trajectories (pAKT, pERK, pS6) and accurately reconstructed the 20-minute time point withheld during training, evaluated by marker-wise Wasserstein distances."
+    ],
+    "why": "For transcriptomics/multiomics researchers doing perturbation modeling, this connects population-level OT distance geometry (Geodesic Sinkhorn/HeatGeo) with conditional flow matching, so dynamics are learned in a latent space that provably preserves diffusion geometry rather than arbitrary Euclidean space. The compositional conditioning (drug pairs built from single-drug embeddings, GeneWalk gene embeddings) is a concrete recipe for extrapolating to unseen combinations or perturbations without measuring them all.",
+    "limitations": "The geometric autoencoder and graph are dataset-specific, so strong emergent drug-combination effects or poorly tuned diffusion parameters can degrade latent geometry; when no real time exists, MELD-based progression is an approximation rather than observed dynamics, and trajectories are model-based reconstructions from unpaired snapshots, not observed single-cell fates.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 63802
+   }
+  },
+  {
+   "title": "Overcoming segmentation bottlenecks in brain tissue for spatial proteomic inference at population scale",
+   "authors": [
+    "You, L.",
+    "Durbin, J. L.",
+    "Meng, G.",
+    "Stallaert, W.",
+    "Li, G.",
+    "Uttam, S.",
+    "Feng, H.",
+    "Glausier, J. R.",
+    "Wang, J."
+   ],
+   "authorCount": 9,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-24",
+   "doi": "10.64898/2026.10.22.761199",
+   "url": "https://doi.org/10.64898/2026.10.22.761199",
+   "abstract": "In spatial proteomics across large cohorts, downstream estimates from tens of thousands of images depend on accurate cell segmentation. Yet pretrained segmentation models struggle with morphologically complex cell bodies in human brain tissue, and how domain adaptation affects downstream discovery remains unclear. Here, we introduce SPInfer, a workflow for spatial proteomic inference developed using 5,832 manually annotated cell bodies from 120 immunofluorescence images of the human prefrontal cortex. After benchmarking eight segmentation methods spanning classical, convolutional, and foundation models, we adapted Cellpose-SAM, raising cell segmentation F1 from 0.37 to 0.84 and recovering cell compositions concordant with matched single-nucleus RNA-seq and spatial transcriptomics. Across 14,765 images from 69 postmortem donors, identical Alzheimer's disease pathology models found no significant associations after false discovery rate correction using zero-shot masks, versus four using fine-tuned masks; three linked higher OLIG2-positive fractions to greater neurofibrillary tangle and plaque burden. Using the fine-tuned masks, a graph attention network over nuclear neighborhoods classified four cell types without marker information, and differential expression analysis linked cell morphology to gene expression. This provides a pipeline for fine-tuning foundation models to segment complex tissues, enabling biological discovery in spatial proteomics at the population scale.",
+   "reasons": [
+    "foundation model",
+    "zero-shot",
+    "transcriptomics",
+    "spatial omics",
+    "proteomics",
+    "RNA-seq"
+   ],
+   "score": 22,
+   "summary": {
+    "tldr": "SPInfer is a pipeline that fine-tunes Cellpose-SAM on ~5,800 expert-annotated brain cell bodies, showing that domain adaptation of segmentation is necessary for valid downstream spatial-proteomic inference in large postmortem cohorts.",
+    "background": "Cohort-scale spatial proteomics on immunofluorescence images requires accurate cell-body segmentation, but pretrained models fail on morphologically complex human brain cells (astrocytes, microglia with branched processes), and it was unclear whether segmentation errors actually change biological conclusions. Cell-body annotations for postmortem brain were lacking, so neither benchmarking nor domain adaptation was possible.",
+    "approach": "The authors annotated 5,832 marker-positive cell bodies (GFAP, IBA1, NeuN, OLIG2) plus 14,678 nuclei across 120 IF images of dorsolateral prefrontal cortex from ROSMAP donors, and benchmarked eight segmentation methods (classical, convolutional, foundation models). They fine-tuned Cellpose-SAM (SAM ViT encoder + Cellpose flow decoder; best benchmark candidate, nuclear F1 0.91) with a two-channel DAPI+marker input, then validated cell compositions against matched snRNA-seq and RCTD-deconvolved Visium spatial transcriptomics. Finally they ran the same downstream pathology statistics on zero-shot vs fine-tuned masks across 14,765 images from 69 donors (8.4 million nuclei).",
+    "findings": [
+     "Zero-shot Cellpose-SAM cell-body F1 was 0.37; fine-tuning on the marker channel raised it to 0.81 and adding DAPI as a second input raised it to 0.84 (donor-disjoint test set), versus 0.68 for fine-tuned StarDist.",
+     "Only ~2 annotated images per marker captured most of the gain (F1 ~0.76), and active sampling offered no advantage over random selection.",
+     "Cross-platform checks: IF-derived cell fractions correlated with snRNA-seq at Spearman 0.61 (CCC 0.71), and with RCTD-deconvolved Visium composition at rho 0.72 in the best section (0.48–0.62 in others), including the untrained TMEM119 marker.",
+     "With identical beta-binomial mixed models on the 69-donor cohort, zero-shot masks yielded zero FDR-significant associations with AD pathology, while fine-tuned masks yielded four — three linking higher OLIG2-positive fractions to worse Braak stage and CERAD scores.",
+     "A two-layer GATv2 over Delaunay graphs of nuclear neighborhoods (37 CellProfiler nuclear features, no marker info) classified four cell types at macro-F1 0.89 vs ~0.68–0.70 for MLP/XGBoost baselines, and morphology–expression edgeR analysis found 2,267 FDR-significant gene–feature associations (e.g., elongated IBA1+ cells express more PSTPIP2 and LILRB3)."
+    ],
+    "why": "For anyone doing multiomics integration at imaging scale, this shows segmentation quality is not a neutral preprocessing detail — it determines which associations survive FDR correction, a concrete warning for downstream transcriptomic inference pipelines. It also shows that ~120 annotated images (few per marker) suffice to adapt a foundation segmenter to a new tissue, and that spatial graph context (GATv2 over nuclear Delaunay graphs) can substitute for marker panels in cell typing, useful when only nuclear features and expression data are available.",
+    "limitations": "AD and morphology–expression associations are observational (imaging and RNA from the same donors but not the same cells), so causal or single-cell-level claims are unsupported; the single-marker image design may confound image identity with cell type, and findings need replication in independent cohorts.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 91998
+   }
+  },
+  {
+   "title": "scTGCL: A Transformer-Based Graph Contrastive Learning Approach for Efficiently Clustering Single-Cell RNA-seq Data",
+   "authors": [
+    "Khan, M. S. A.",
+    "Kabir, M. H.",
+    "Faisal, M. M."
+   ],
+   "authorCount": 3,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-26",
+   "doi": "10.64898/2026.03.28.714542",
+   "url": "https://doi.org/10.64898/2026.03.28.714542",
+   "abstract": "Motivation: Single-cell RNA sequencing (scRNA-seq) enables characterization of cellular heterogeneity at unprecedented resolution. However, accurate clustering of scRNA-seq data remains challenging due to high dimensionality, dropout-induced sparsity, and technical noise. Existing contrastive learning methods usually create augmented views by perturbing gene expression values, so the uncertainty in cell-cell relationships caused by dropout events is not properly modeled. Results: We propose scTGCL, a novel Transformer-based graph contrastive learning framework that learns robust and discriminative cell representations directly from gene expression data. scTGCL employs multi-head self-attention to adaptively construct weighted cell-cell graphs and a Transformer encoder to generate cell embeddings from them, capturing diverse biological relationships. For contrastive augmentation, we apply feature-level gene masking together with attention masking that randomly drops edges of the learned attention matrices, enabling the model to withstand dropout events and technical noise. A symmetric contrastive loss maximizes agreement between original and augmented representations, while joint optimization with reconstruction and imputation losses preserves biological interpretability. Extensive experiments on twenty real and simulated scRNA-seq datasets demonstrate that scTGCL achieves the highest average performance among nine state-of-the-art baseline methods in clustering accuracy, normalized mutual information, and adjusted Rand index, while also achieving superior imputation performance and substantially lower runtime on large-scale datasets. Furthermore, biological analysis confirms that the learned clusters align with known cell types and yield biologically interpretable pathway enrichment, validating the utility of scTGCL for downstream cell annotation and marker gene discovery. Availability and Implementation: The source code and test data are freely available at GitHub (https://github.com/ShoaibAbdullahKhan/scTGCL)",
+   "reasons": [
+    "transformer",
+    "representation learning",
+    "single-cell",
+    "perturbation",
+    "RNA-seq",
+    "code released"
+   ],
+   "score": 19,
+   "summary": {
+    "tldr": "scTGCL is a Transformer-based graph contrastive learning method for scRNA-seq cell clustering that learns weighted cell-cell attention graphs during training and augments views by masking both genes and attention edges.",
+    "background": "Clustering scRNA-seq data is hard because of high dimensionality, dropout-induced sparsity, and noise, which distort cell-cell similarity estimates. Existing graph and contrastive methods build their cell-cell graph once before training (e.g., kNN graphs), so dropout-driven wrong connections persist throughout learning.",
+    "approach": "scTGCL projects expression data (2500 HVGs after Scanpy normalization/log transform) into an embedding, then uses multi-head self-attention (8 heads) where each attention head acts as a weighted, learned cell-cell graph, decoded into a 64-dim latent space. For contrastive augmentation, it applies random gene masking (25%) plus random edge dropping on the learned attention matrices (35%, diagonal preserved, rows renormalized). It jointly optimizes a symmetric contrastive loss, reconstruction loss, and imputation loss; embeddings are clustered with K-Means (run on one RTX 5070 Ti GPU, PyTorch).",
+    "findings": [
+     "Evaluated on 20 real datasets (90 to 54,865 cells, 4-55 cell types, human and mouse, multiple platforms) plus Splatter simulations, against nine baselines (scSimGCL, scMAE, scAGCL, CIDR, scDCCA, k-means, scMMN, scAMAC, scDFN), each run 10 times per dataset.",
+     "Best average clustering performance: CA 84.98%, NMI 87.13%, ARI 80.47%, vs. next-best scSimGCL at 80.50/83.12/75.13; scTGCL wins on 15/20 datasets for CA and NMI, 14/20 for ARI.",
+     "Imputation: lowest L1 distance and highest PCC against GE-Impute, scGCL, scGNN, and AutoClass at 10-30% artificial dropout, with the advantage growing as dropout increases (also best PCC on most datasets at 40-60% dropout).",
+     "Ablations show attention masking matters more than gene masking under dropout and noise, and replacing attention-based graph learning with a fixed KNN graph or removing the contrastive loss degrades performance.",
+     "Scalability/biology: second-lowest runtime among methods on datasets up to 100K cells, and on the Muraro pancreas dataset 8/9 clusters were confidently annotated to known cell types with KEGG pathways (e.g., insulin secretion for beta cells) matching known physiology.",
+     "Robustness analysis on Splatter data shows the highest CA/NMI/ARI under increasing dropout and difficult (low differential expression scale) settings."
+    ],
+    "why": "For someone working on transcriptomic representation learning, it demonstrates that learned, attention-based cell-cell graphs are more robust to dropout than fixed kNN-style graphs, and attention masking is a simple augmentation trick that could transfer to other single-cell or multiomics contrastive models. The scalability results (up to 100K cells on modest hardware) are relevant for large-scale atlas work.",
+    "limitations": "The paper is a non-peer-reviewed bioRxiv preprint, and per-dataset comparison tables with exact values are mostly relegated to figures and supplements, so citing specific wins per dataset requires reading them; all evaluation uses ground-truth-label-supervised K-Means with the true number of clusters, and transfer to multiomics data is untested.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 85173
+   }
+  }
+ ],
+ "candidates": 343
+}
