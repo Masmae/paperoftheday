@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-10-28",
+   "title": "ProtCell: a foundation model for single-cell proteomics",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.22.760932",
+   "also": [
+    "10.64898/2026.05.26.727927",
+    "10.64898/2026.10.21.760716",
+    "https://arxiv.org/abs/2610.28266v1"
+   ]
+  },
+  {
    "date": "2026-10-27",
    "title": "DAPE-PD: Diffusion adaptation of genomic foundation model enables tailored-generation of cis-regulatory DNA",
    "venue": "bioRxiv",

@@ -1,0 +1,176 @@
+{
+ "date": "2026-10-28",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "ProtCell: a foundation model for single-cell proteomics",
+  "authors": [
+   "Hu, B.",
+   "Li, Z.",
+   "Jiang, Q.",
+   "Yin, Q.",
+   "Liu, Z.",
+   "Jiang, R."
+  ],
+  "authorCount": 6,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-27",
+  "doi": "10.64898/2026.10.22.760932",
+  "url": "https://doi.org/10.64898/2026.10.22.760932",
+  "abstract": "Single-cell proteomics provides a direct functional readout of cellular states, but targeted assays measure limited and non-identical protein panels, fragmenting information across experiments. Here, we present ProtCell, a foundation model developed using approximately 380 million cells from 98 datasets for pretraining and evaluation. ProtCell combines protein-identity and continuous-abundance embeddings in a transformer encoder and learns cell- and protein-level representations through masked abundance modeling. ProtCell first connects fragmented profiles through transferable annotation and batch correction while preserving biological organization. It then extends limited profiles through abundance reconstruction and inference of an unmeasured cytotoxic protein program enriched in natural killer cells and memory CD8$^+$ T cells. The learned protein dependencies further guide the selection of compact panels that retain information for profile reconstruction and biological classification. ProtCell thus provides a framework for connecting fragmented proteomic profiles, extending information beyond measured panels and guiding more informative measurements.",
+  "reasons": [
+   "foundation model",
+   "transformer",
+   "single-cell",
+   "proteomics",
+   "scale"
+  ],
+  "score": 17,
+  "tldr": "ProtCell is a transformer foundation model for single-cell proteomics (CITE-seq and CyTOF), pretrained on ~380M cells from 98 datasets covering >600 proteins, that enables cross-dataset annotation, batch correction, imputation of unmeasured proteins, and data-driven marker panel design.",
+  "why": "For multiomics researchers, this is the protein-analog of scGPT/scBERT: it shows masked-value pretraining with a shared protein vocabulary transfers across datasets despite disjoint panels, and that a single checkpoint can power annotation, integration, imputation and assay design in one scaffold. It also demonstrates inference of functionally meaningful (cytotoxic) programs never measured in a target dataset, a capability RNA-side models have pursued from a different angle.",
+  "summary": {
+   "tldr": "ProtCell is a transformer foundation model for single-cell proteomics (CITE-seq and CyTOF), pretrained on ~380M cells from 98 datasets covering >600 proteins, that enables cross-dataset annotation, batch correction, imputation of unmeasured proteins, and data-driven marker panel design.",
+   "background": "Single-cell protein assays measure small, non-identical marker panels, so protein-level information is fragmented across studies, and protein states cannot be fully inferred from RNA. Existing tools (CytoVI, FlowSOM, omicsGMF) handle clustering or imputation within a single dataset's marker set but cannot reuse protein relationships learned in other experiments with different panels.",
+   "approach": "Each cell is encoded as a variable-length sentence of protein-identity tokens (from a shared codebook giving consistent embeddings per protein across studies) plus continuous abundance values encoded by an MLP; these feed a transformer with a [CLS] cell token. Pretraining uses BERT-style masked abundance modeling (MSE loss on masked measured values) plus reconstruction of the observed profile from [CLS]. Fine-tuning for batch correction adds LoRA adapters with an unbalanced optimal-transport contrastive loss; collected data come from SPDB, SingPro and related repositories, with CLR (CITE-seq) or arcsinh (CyTOF) transformations.",
+   "findings": [
+    "Integration: fine-tuning on Beneyto-Calabuig2023 raised the weighted integration score from 0.33 (zero-shot) to 0.49, beating PCA, CytoVI, FlowSOM and omicsGMF.",
+    "Annotation: with a frozen backbone and a trained classifier head, within-batch accuracy/macro-F1 were ~0.98 on Kotliarov2020, and cross-batch accuracy stayed at 0.971-0.974; the head transferred from Kotliarov2020 to Sacco2022, preserving naive vs memory CD4+/CD8+ T-cell structure.",
+    "Imputation: ProtCell beat CytoVI across Wagner2019, Kotliarov2020 and Peterson2021; e.g., mean protein-wise Pearson on Kotliarov2020 was 0.586 vs 0.484 (random split, 25% masking), and ProtCell won on 67 of 79 Kotliarov2020 proteins under one-at-a-time masking.",
+    "Unmeasured-protein inference: with no fine-tuning, ProtCell inferred GZMB, PRF1, KLRD1, TBX21 and EOMES (absent from Kotliarov2020), yielding a cytotoxic score highest in NK cells (1.656) and lowest in naive CD8+ T cells (-0.664), concordant with measured markers (ITGB2, CD244, KLRG1, NCAM1) across ten samples.",
+    "Panel design: a frozen-ProtCell search selected 60 of 128 proteins in Sparks2023, achieving Spearman correlations of 0.616-0.630 within-platform and 0.380-0.390 after transfer to Beneyto-Calabuig2023 (lower RMSE than QR and CytoVI panels), and mapped 40-protein panels gave median patient-level AUROC/AUPRC of 0.809/0.968 for AML clone discrimination vs 0.478/0.786 (QR) and 0.475/0.785 (CytoVI)."
+   ],
+   "why": "For multiomics researchers, this is the protein-analog of scGPT/scBERT: it shows masked-value pretraining with a shared protein vocabulary transfers across datasets despite disjoint panels, and that a single checkpoint can power annotation, integration, imputation and assay design in one scaffold. It also demonstrates inference of functionally meaningful (cytotoxic) programs never measured in a target dataset, a capability RNA-side models have pursued from a different angle.",
+   "limitations": "Training data are concentrated on immune/surface-marker panels (>600 proteins), so coverage outside immunology is limited, and modified forms like phosphorylation are not systematically distinguished. Panel-search evaluation is retrospective (test results had been inspected earlier), search budgets were unequal across methods, and inferred proteins rest on indirect concordance rather than direct validation.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 59764
+  }
+ },
+ "also": [
+  {
+   "title": "Species phylogenetics using intraprotein residue dependence inferred with protein foundation models",
+   "authors": [
+    "Alibutud, R. F.",
+    "Mowlaei, M. E.",
+    "Kumar, S."
+   ],
+   "authorCount": 3,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-27",
+   "doi": "10.64898/2026.05.26.727927",
+   "url": "https://doi.org/10.64898/2026.05.26.727927",
+   "abstract": "Traditional molecular phylogenetic inference uses multiple sequence alignments and amino acid substitution models that generally assume that sites evolve independently. In contrast, protein foundation models (pFMs) are deep learning models that reveal residue dependence patterns within sequences. There are two types of pFMs: Evolutionary Scale Models (esm-pFM) for analyzing individual protein sequences, and MSA Transformer (msat-pFM) models for analyzing MSAs. Using pFMs to analyze sequences produces residue attention matrices (RAMs) and sequence attention matrices (SAMs), respectively. RAMs and SAMs can be used to estimate pairwise distances and, thus, reconstruct phylogenies using the Neighbor-Joining (NJ) method. Here, we compare the performance of RAM-NJ and SAM-NJ phylogenies in reconstructing established species relationships across different proteins and taxon sets. Surprisingly, RAM-NJ phylogenies were generally as accurate as SAM-NJ phylogenies even though RAM inference does not require construction or analysis of an MSA. Our results show that pFM-based analyses can recover species relationships without conventional substitution models or, in the case of RAMs, a multiple sequence alignment. These results suggest that evolutionary relationships are reflected not only in primary sequence differences between species, but also in the sequence-specific patterns of inter-residue dependence produced by pFM analysis of individual sequences. However, pFM phylogenies are less accurate than those obtained with standard maximum likelihood approaches, underscoring the need to further develop methods to harness RAMs and SAMs more effectively.",
+   "reasons": [
+    "foundation model",
+    "transformer",
+    "deep learning",
+    "proteins",
+    "scale"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "Protein language model attention matrices (residue-level from ESM, sequence-level from MSA Transformer) can be converted into pairwise distances that recover mammalian species phylogenies with neighbor-joining, surprisingly without needing a multiple sequence alignment, though accuracy trails maximum likelihood.",
+    "background": "Standard phylogenetics relies on MSAs and substitution models that assume sites evolve independently, ignoring epistasis and residue context. Protein foundation models (pFMs) capture inter-residue dependence, but whether their internal attention patterns contain species-tree signal—and whether an MSA is needed at all—was untested, especially for established species relationships. ",
+    "approach": "The authors ran pretrained ESM (35M-parameter, 12 layers × 20 heads) on individual ortholog sequences to get residue attention matrices (RAMs), pairwise-aligned sequences (Needleman-Wunsch), pruned gap positions, renormalized attention rows, and computed Hellinger distances between RAMs to build distance matrices. For MSA Transformer (100M, 12 layers × 12 heads) they derived sequence attention matrices (SAMs) from MSAs and applied the same Hellinger-distance scheme. All layer/head distance matrices yielded NJ trees, combined per protein via ASTRAL; accuracy was compared to IQ-TREE 2 maximum likelihood (ML) against the OrthoMaM v12 reference tree. ",
+    "findings": [
+     "On 4 distantly related mammals (20 proteins), RAM-NJ trees were correct for 97.3% of layer-heads vs 91.2% for SAM-NJ; for transferrin alone, RAM was 100% correct (240/240) vs 95.8% for SAM (138/144).",
+     "On the harder 4-great-ape topology, RAM (59.2%) and SAM (58.3%) were similar and both struggled with the short human-chimp-gorilla internode.",
+     "For 34 mammals × 20 proteins, mean percentage of clades correct was nearly identical for RAM (39.8%) and SAM (39.2%), despite RAM requiring no MSA; pooled 20-protein RAM consensus recovered many reference clades and even the human-chimp clade missed by the ML consensus (though with modest support 0.53).",
+     "ML was generally more accurate; the gap was largest for slow-evolving proteins (ΔPCC ≈ +28 vs +19 for fast-evolving ones), and SAM accuracy correlated with total branch length (r = 0.475, p = 0.03).",
+     "RAM phylogenetic signal was concentrated in the first transformer layer (~50% mean PCC, declining with depth, p < 0.02), whereas SAM accuracy peaked at intermediate layers (4, 5, 7, 8)."
+    ],
+    "why": "For anyone building models on sequence representations, this shows that intraprotein attention patterns from ESM encode cross-species evolutionary signal comparable to MSA-based quantities—a shortcut to phylogeny-aware analyses without alignment pipelines. It also suggests pFM-derived dependencies (like Potts models but pretrained, no per-family fitting) could complement substitution-model-based approaches in comparative genomics.",
+    "limitations": "pFM phylogenies are still less accurate than ML, lack interpretable branch lengths (attention distances are not substitutions per site), confidence procedures, and any explicit evolutionary model; they are position-agnostic regarding training data and are best viewed as complementary methods for now.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 63553
+   }
+  },
+  {
+   "title": "Prediction transfer does not imply reliability transfer in single-cell foundation models",
+   "authors": [
+    "Park, H. J.",
+    "Sriram, A.",
+    "Luo, T.",
+    "Zhang, L."
+   ],
+   "authorCount": 4,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-26",
+   "doi": "10.64898/2026.10.21.760716",
+   "url": "https://doi.org/10.64898/2026.10.21.760716",
+   "abstract": "Single-cell foundation models are increasingly transferred across tissues, diseases, perturbation screens, and experimental platforms. Although substantial effort has focused on prediction transfer, it remains unclear whether a model's assessment of its own reliability transfers similarly across biological contexts. Here we define reliability transfer as the ability to transfer an accurate assessment of when model predictions are likely to be correct or incorrect and investigate its behavior across ten perturbation-prediction systems spanning multiple datasets, models, and evaluation settings. We find that reliability transfer varies substantially across source-target pairs and cannot be inferred from predictive performance alone, indicating that prediction transfer and reliability transfer constitute distinct forms of generalization. Analyses of biological annotations, network connectivity, target exposure, and contextual factors reveal that prediction reliability is associated with both shared and context-dependent signals, with their relative importance differing across systems. To characterize this variability, we introduce reliability-attribution fingerprints, context-level signatures derived from strictly cross-fitted SHAP explanations that summarize how reliability estimators combine biological and contextual information when assigning confidence. Across systems, contexts with similar attribution-magnitude fingerprints tended to transfer reliability more successfully, and fingerprint similarity identified transfer sources achieving higher reliability-transfer performance within the observed candidate set. However, these relationships weakened under stricter cross-family transfer settings, indicating that transferable reliability structure remains partly dependent on shared contextual information. Finally, transferred reliability estimators produced different perturbation rankings despite identical perturbation predictions, illustrating a practical consequence of reliability transfer for downstream prioritization. Together, these results establish reliability transfer as a distinct aspect of foundation-model generalization and introduce reliability-attribution fingerprints as a framework for characterizing transferable reliability structure across biological contexts.",
+   "reasons": [
+    "foundation model",
+    "single-cell",
+    "perturbation",
+    "scale",
+    "generalizes"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "This paper shows that a single-cell foundation model's ability to predict when its perturbation predictions are reliable ('reliability transfer') does not follow from prediction transfer, and introduces 'reliability-attribution fingerprints' — cross-fitted SHAP-based signatures of how reliability estimators use biological/contextual features — to predict which source contexts will transfer reliability well.",
+    "background": "Single-cell perturbation-prediction models (e.g., scGPT, GEARS, CPA) are routinely transferred across datasets, but it is unknown whether a model's confidence estimates stay accurate in a new biological context. Reliability is confounded by target exposure, dataset-specific biology, and prediction quality, making it hard to tell when a confidence estimator is itself transferable.",
+    "approach": "They analyze ten model–dataset systems: four methods (including GEARS and CPA) on Adamson Perturb-seq, four on Norman Perturb-seq (91,205 cells, 284 perturbation conditions, 116 held-out in Norman), the original Norman scGPT system, and Jurkat C2S. Reliability per query is defined as Pearson correlation between predicted and observed delta-expression. They train reliability classifiers (elastic-net, linear SVM, plus five other families) with constituent-gene-disjoint cross-validation, decompose transfer into covariate shift, prediction error, query ranking, and calibration, and build 'reliability-attribution fingerprints' from strictly out-of-fold SHAP values aggregated over eight feature domains (system context, regulatory connectivity, network context, cellular localization, perturbation complexity, expression support, gene category, model exposure).",
+    "findings": [
+     "Reliability transfer varies widely across source–target pairs (ROC AUC spans a broad range) and is consistent across classifier families, but cannot be inferred from predictive performance alone.",
+     "A few biological signals are shared (nucleolar localization positively associated, β ≈ 0.06, FDR = 1.7e-4; mitochondrial and cytoskeleton/centrosome negatively), while network-connectivity associations flip sign between systems (e.g., CollecTRI connectivity r = −0.95 in Adamson GEARS vs +0.70 in Adamson scGPT).",
+     "Fingerprint magnitude similarity predicts transfer success (mean Spearman ρ ≈ −0.43 between fingerprint distance and transfer AUC), and fingerprint-nearest source selection gains ~0.15 AUC over the average source; under evaluation-only settings (20 queries) gains are ~0.08 AUC, but this weakens under strict cross-family transfer.",
+     "Different transferred reliability estimators reorder the same 213 Norman scGPT perturbations: top-10 mean observed Pearson correlation 0.189 (fingerprint-nearest, source transfer AUC 0.803) vs 0.168 (distant source, AUC 0.601).",
+     "However, population-level prioritization analyses (100 splits, 10 targets) show fingerprint-nearest selection (precision@10 = 0.587) does not significantly beat average-source (0.603), context-matched (0.526), or random (0.526) baselines (all p ≥ 0.232)."
+    ],
+    "why": "For anyone using foundation models for perturbation/multiomics prediction, this separates two notions of generalization — whether predictions transfer vs whether confidence estimates transfer — and gives a concrete, leak-free framework (scPerturbTrust, code on GitHub) for auditing confidence behavior across contexts. It matters for downstream applications like perturbation prioritization, where trustworthy ranking of the same predictions depends on which reliability source you pick.",
+    "limitations": "The analysis is limited to perturbation-prediction settings with a finite set of datasets/models, fingerprints describe fitted estimators rather than causal predictability, downstream prioritization benefits are not significant at the population level, and outcomes are retrospective rather than prospective experimental validations.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 70475
+   }
+  },
+  {
+   "title": "VGL-stGen: Learning a shared multimodal model for lung histology and spatial transcriptomics",
+   "authors": [
+    "Haenara Shin",
+    "Dongjoo Lee",
+    "Sungwoo Bae",
+    "Kwon Joong Na",
+    "Daeseung Lee",
+    "Hongyoon Choi"
+   ],
+   "authorCount": 6,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-10-20",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2610.28266v1",
+   "abstract": "VGL-stGen is a multimodal large language model adapted from a pretrained medical vision-language model using paired lung H&amp;E and spatial transcriptomics with single-cell references. Training integrates image-expression and expression-cell-type pairs, and gene-conditioned pseudo-labels transfer transcriptomic cell-type supervision to histology images. One deployed checkpoint supports thirteen evaluated tasks spanning tissue and cell-type classification, gene prediction and conditional expression completion from combinations of histology, cell identity and observed gene expression. Task-specific decoding produces categorical labels, gene lists and structured expression levels. For conditional completion, fixing queried gene identities and predicting their levels autoregressively improves structured prediction. Controlled adaptation shows that restricting supervision to requested expression-level tokens can further improve image-conditioned completion. Image-permutation experiments indicate that correctly paired histology adds information beyond observed expression. External classification relies partly on computational references with shared annotation lineage, and some H&amp;E sources were exposed during cancer training or model development. Within these conditions, VGL-stGen demonstrates how a medical vision-language backbone can learn from spatial transcriptomics and histology to connect tissue morphology and molecular states through shared generative modeling.",
+   "reasons": [
+    "language model",
+    "generative model",
+    "single-cell",
+    "transcriptomics",
+    "spatial omics"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "Portrai adapted MedGemma-1.5-4B into a single multimodal model (VGL-stGen) that generates cell-type labels, gene lists, and discretized expression levels from lung H&E, gene expression, or both, across 13 task formulations.",
+    "background": "Histology images, spatial gene expression, and cell identity are usually modeled in separate task-specific systems, so morphology and molecular state are not connected in one framework. Bridging them requires handling very different output types (categorical labels, gene names, ordinal expression levels) within one generative model.",
+    "approach": "They fine-tuned MedGemma-1.5-4B-it via QLoRA (frozen vision tower, rank-16 adapters averaged across checkpoints) on paired lung H&E + spatial transcriptomics from 69 samples (47 Xenium, 22 Visium) plus the LuCA single-cell atlas (~1.75M cells/spots) and 30,965 cancer patches. A gene-teacher distills cell-type pseudo-labels onto spatial images (1.32M retained items of 1.75M). Expression levels are discretized into Absent plus four quartile bins; completion tasks supply 75 observed levels and autoregressively predict 25 queried gene levels with fixed gene names.",
+    "findings": [
+     "Genes-to-cell-type: balanced accuracy 0.629 / macro-F1 0.602, vs Genes to cell type 0.629 BA / 0.602 macro-F1 vs 0.503/0.487 for the best off-the-shelf comparator (Gemma4-31B), on 224,210 cells/spots; a fine-tuned logistic regression scores higher BA (0.66) but lower macro-F1.",
+     "Binary tumor detection on 357,692 TCGA-LUAD patches (452 slides): BA 0.752, AUROC 0.827, ranking 6th of 15 systems against encoder-probe baselines (0.694-0.763 range).",
+     "Expression completion (75 observed levels -> 25 queries): pair-F1 0.660 image-conditioned and 0.686 cell-type-conditioned, beating all ten general multimodal comparators, though full-input MLPs still score higher (0.681, 0.730).",
+     "Pseudo-label distillation raised image-only cell-type BA from 0.161 to 0.226 (deployed 0.201); image permutation controls show correctly paired histology adds a small but significant +0.008-0.010 pair-F1 beyond observed expression.",
+     "Application analyses: 0.815 BA against published GSE127465 NSCLC annotations (11 classes), and histology-to-bulk RNA concordance in 459 TCGA patients with 152 of 317 genes at FDR<0.05, strongest for lymphoid/stromal programs (CD3E r=0.41)."
+    ],
+    "why": "It demonstrates that a modest medical vision-language backbone (~4B parameters) can serve as a unified generative interface for morphological and spatial-transcriptomic tasks, an architecture pattern directly relevant to multiomics foundation-model work. The loss-masking and fixed-name autoregressive decoding tricks are practical lessons for structured biological prediction with LLMs.",
+    "limitations": "References are largely computational (silver labels sharing annotation lineage with training), some evaluation H&E was seen during training, a 39-slide TCGA development subset is inside the main benchmark, and scheduled tasks lack patient-independent validation. Absolute performance is modest (e.g., image-only cell typing BA 0.20; nine-class tissue F1 needs transductive correction from 0.12 to 0.28).",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 119071
+   }
+  }
+ ],
+ "candidates": 378
+}
