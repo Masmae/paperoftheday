@@ -1,6 +1,18 @@
 {
  "days": [
   {
+   "date": "2026-10-29",
+   "title": "Hallucinating symmetric protein assemblies",
+   "venue": "Science",
+   "key": "10.1126/science.add1964",
+   "also": [
+    "10.1038/s41467-022-32007-7",
+    "10.1002/mco2.315",
+    "10.7150/thno.49864"
+   ],
+   "classic": true
+  },
+  {
    "date": "2026-10-28",
    "title": "ProtCell: a foundation model for single-cell proteomics",
    "venue": "bioRxiv",

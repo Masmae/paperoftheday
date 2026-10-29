@@ -1,0 +1,206 @@
+{
+ "date": "2026-10-29",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Hallucinating symmetric protein assemblies",
+  "authors": [
+   "Basile I. M. Wicky",
+   "Lukas F. Milles",
+   "Alexis Courbet",
+   "Robert J. Ragotte",
+   "Justas Dauparas",
+   "Elias S. Kinfu",
+   "Samuel W. K. Tipps",
+   "Ryan D. Kibler",
+   "Minkyung Baek",
+   "Frank DiMaio",
+   "Xinting Li",
+   "Lauren P. Carter"
+  ],
+  "authorCount": 16,
+  "venue": "Science",
+  "preprint": false,
+  "date": "2022-09-15",
+  "doi": "10.1126/science.add1964",
+  "url": "https://doi.org/10.1126/science.add1964",
+  "abstract": "Abstract Deep learning generative approaches provide an opportunity to broadly explore protein structure space beyond the sequences and structures of natural proteins. Here we use deep network hallucination to generate a wide range of symmetric protein homo-oligomers given only a specification of the number of protomers and the protomer length. Crystal structures of 7 designs are very close to the computational models (median RMSD: 0.6 Å), as are 3 cryoEM structures of giant rings with up to 1550 residues, C33 symmetry, and 10 nanometer in diameter; all differ considerably from previously solved structures. Our results highlight the rich diversity of new protein structures that can be created using deep learning, and pave the way for the design of increasingly complex nanomachines and biomaterials. One-sentence summary Deep network-based protein design enables the generation of cyclic homo-oligomers across the nanoscopic scale.",
+  "reasons": [
+   "deep learning",
+   "generative model",
+   "proteins"
+  ],
+  "score": 19.760422483423213,
+  "classic": true,
+  "citations": 240,
+  "year": 2022,
+  "tldr": "A Science 2022 paper (Wicky et al., Baker lab) shows that AlphaFold2-based 'hallucination' plus ProteinMPNN sequence redesign can generate cyclic homo-oligomeric proteins de novo that experimentally match design models (median 0.6 Å RMSD), including ~10 nm rings unlike any known structure.",
+  "why": "For a researcher applying generative AI to transcriptomics/multiomics, this is a canonical demonstration that a generative model trained on natural data can interpolate and extrapolate into novel, valid regions of biological design space, and that an inverse-mapping model (ProteinMPNN) is key to converting confident predictions into physically realizable molecules. The adversarial-overfitting failure mode of activation maximization, and the two-stage fix, transfer conceptually to any generative pipeline over biological sequences.",
+  "summary": {
+   "tldr": "A Science 2022 paper (Wicky et al., Baker lab) shows that AlphaFold2-based 'hallucination' plus ProteinMPNN sequence redesign can generate cyclic homo-oligomeric proteins de novo that experimentally match design models (median 0.6 Å RMSD), including ~10 nm rings unlike any known structure.",
+   "background": "Cyclic protein oligomers make up ~30% of PDB structures and are useful building blocks, but prior de novo design methods required the protomer structure to be specified in advance, then dock and optimize interfaces. That constraint limited exploration of assembly space; the open question was whether a network could jointly generate protomer fold and oligomeric assembly from just a chain length and a symmetry order.",
+   "approach": "The method starts from a random sequence with chosen length and cyclic valency, and runs MCMC optimization through AlphaFold2, using a loss combining pLDDT, pTM, and a symmetry metric (deviation of inter-protomer center-of-mass distances). Direct AF2-hallucinated sequences failed experimentally (adversarial/overfit outputs), so the fix was to keep the hallucinated backbone and generate 24–48 new sequences per design with ProteinMPNN, filtering by AF2 and cross-checking with RoseTTAFold2. They tested 96 redesigned 'HALs' (C2–C7, 65–130 aa protomers) and larger rings with internal repeat symmetry up to C42 and assembly lengths up to 1800 residues.",
+   "findings": [
+    "Original AF2-hallucinated designs largely failed: 150 designs gave median soluble yield of 9 mg/L in E. coli and none passed oligomer-state and CD checks.",
+    "ProteinMPNN rescue worked: of 96 tested designs, 71 (74%) expressed well (median 247 mg/L), 50 (52%) had correct SEC retention volume, 21 (22%) correct oligomeric state by SEC-MALS, 96% of soluble samples matched designed secondary structure, and 54/71 tolerated 95°C.",
+    "Seven crystal structures (C2, C3, C4) matched design models with median Cα RMSD 0.6 Å (resolutions 1.8–3.4 Å).",
+    "Three cryoEM structures of giant rings (up to C33-3, ~1550 total residues, ~10 nm diameter) matched designs at 0.81–2.30 Å RMSD, with map resolutions of 4.38–6.51 Å.",
+    "Designs generalize beyond the training set: median TM-scores to closest PDB matches were 0.67 (protomers) and 0.57 (oligomers), and BLAST E-values against UniRef100 were ~1.3 (no significant hits)."
+   ],
+   "why": "For a researcher applying generative AI to transcriptomics/multiomics, this is a canonical demonstration that a generative model trained on natural data can interpolate and extrapolate into novel, valid regions of biological design space, and that an inverse-mapping model (ProteinMPNN) is key to converting confident predictions into physically realizable molecules. The adversarial-overfitting failure mode of activation maximization, and the two-stage fix, transfer conceptually to any generative pipeline over biological sequences.",
+   "limitations": "Experimental success rates drop with stricter validation (22% correct oligomeric state by MALS; 7 of 19 crystallization attempts succeeded), and only cyclic homomers were addressed. The designs are structurally validated but not shown to have any function, and hallucination is computationally expensive, motivating later diffusion-based approaches.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 24215
+  }
+ },
+ "also": [
+  {
+   "title": "ProtGPT2 is a deep unsupervised language model for protein design",
+   "authors": [
+    "Noelia Ferruz",
+    "Steffen Schmidt",
+    "Birte Höcker"
+   ],
+   "authorCount": 3,
+   "venue": "Nature Communications",
+   "preprint": false,
+   "date": "2022-07-27",
+   "doi": "10.1038/s41467-022-32007-7",
+   "url": "https://doi.org/10.1038/s41467-022-32007-7",
+   "abstract": "Abstract Protein design aims to build new proteins from scratch thereby holding the potential to tackle many environmental and biomedical problems. Recent progress in the field of natural language processing (NLP) has enabled the implementation of ever-growing language models capable of understanding and generating text with human-like capabilities. Given the many similarities between human languages and protein sequences, the use of NLP models offers itself for predictive tasks in protein research. Motivated by the evident success of generative Transformer-based language models such as the GPT-x series, we developed ProtGPT2, a language model trained on protein space that generates de novo protein sequences that follow the principles of natural ones. In particular, the generated proteins display amino acid propensities which resemble natural proteins. Disorder and secondary structure prediction indicate that 88% of ProtGPT2-generated proteins are globular, in line with natural sequences. Sensitive sequence searches in protein databases show that ProtGPT2 sequences are distantly related to natural ones, and similarity networks further demonstrate that ProtGPT2 is sampling unexplored regions of protein space. AlphaFold prediction of ProtGPT2-sequences yielded well-folded non-idealized structures with embodiments as well as large loops and revealed new topologies not captured in current structure databases. ProtGPT2 has learned to speak the protein language. It has the potential to generate de novo proteins in a high throughput fashion in a matter of seconds. The model is easy-to-use and freely available.",
+   "reasons": [
+    "language model",
+    "transformer",
+    "generative model",
+    "proteins"
+   ],
+   "score": 19.789739313490504,
+   "classic": true,
+   "citations": 785,
+   "year": 2022,
+   "summary": {
+    "tldr": "ProtGPT2 is a 738M-parameter GPT-2-style autoregressive Transformer trained on ~50M UniRef50 sequences that generates de novo proteins with natural-like amino-acid propensities, disorder, predicted structure, and energetics, while sampling previously unexplored ('dark') regions of protein space.",
+    "background": "De novo protein design has historically required bespoke, expert-driven pipelines and typically yielded idealized backbones lacking natural-like loops and binding pockets. The authors test whether an unsupervised autoregressive language model can learn the 'protein language' from raw sequences alone and generate novel, foldable proteins.",
+    "approach": "They train a decoder-only Transformer with the GPT2-large architecture (36 layers, hidden dim 1280, 738M parameters) using a BPE tokenizer (50,256 tokens, ~4 amino acids each) on UniRef50 v2021_04 (44.9M train / 4.99M held-out sequences), taking 4 days on 128 A100 GPUs; generation uses top_k=950 sampling with a repetition penalty of 1.2. They then compare 10,000 generated vs 10,000 natural sequences using IUPred3, PSIPRED, HHblits, AlphaFold2, Rosetta Relax, 10.8 microseconds of molecular dynamics, and sequence-similarity networks.",
+    "findings": [
+     "87.59% of generated proteins are predicted globular by IUPred3 vs 88.40% of natural ones, with similar secondary-structure content (48.64% helix vs 45.19% natural).",
+     "HHblits finds remote homologs above the HSSP curve for 93% of generated sequences (natural: 96.2%; random sequences: only 7% above), and no long alignments over 90% identity, arguing against memorization.",
+     "AlphaFold2 gives a mean pLDDT of 63.2 (best of 5 predictions) with 37% of sequences above 70, versus 66% above 70 for natural and 7.4% for random sequences.",
+     "Rosetta energies (-1.73 REU/residue vs -1.90 natural) and MD RMSD (3.12 A vs 2.93 A natural, not significant) fall in the natural range; random sequences fail both (-0.13 REU; 9.41 A).",
+     "In a 59,612-node similarity network the generated sequences bridge separate islands of fold space; examples include membrane proteins, an all-beta fold, a TIM-barrel, and a topology absent from the PDB, with some ligand-binding residues conserved at ~30% sequence identity."
+    ],
+    "why": "For someone building sequence models for omics, this is a canonical demonstration that GPT-style autoregressive pretraining with subword tokenization transfers to a non-linguistic modality, alongside related models like ESM and ProGen. It also offers a reusable evaluation playbook — homology searches, structure prediction, energetics, dynamics — for judging generated biological sequences beyond likelihood alone.",
+    "limitations": "All validation is computational (AlphaFold, Rosetta, MD, IUPred3); no designs were experimentally confirmed, and generated proteins are measurably less ordered than natural ones (mean pLDDT 63.2 vs 75.3). Generation is unconditional — controlling fold or function requires finetuning, as conditional tags were left for future work.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 43502
+   }
+  },
+  {
+   "title": "Applications of multi‐omics analysis in human diseases",
+   "authors": [
+    "Chongyang Chen",
+    "Jing Wang",
+    "Donghui Pan",
+    "Xinyu Wang",
+    "Yuping Xu",
+    "Junjie Yan",
+    "Lizhen Wang",
+    "Xifei Yang",
+    "Min Yang",
+    "Gong‐Ping Liu"
+   ],
+   "authorCount": 10,
+   "venue": "MedComm",
+   "preprint": false,
+   "date": "2023-07-31",
+   "doi": "10.1002/mco2.315",
+   "url": "https://doi.org/10.1002/mco2.315",
+   "abstract": "Multi-omics usually refers to the crossover application of multiple high-throughput screening technologies represented by genomics, transcriptomics, single-cell transcriptomics, proteomics and metabolomics, spatial transcriptomics, and so on, which play a great role in promoting the study of human diseases. Most of the current reviews focus on describing the development of multi-omics technologies, data integration, and application to a particular disease; however, few of them provide a comprehensive and systematic introduction of multi-omics. This review outlines the existing technical categories of multi-omics, cautions for experimental design, focuses on the integrated analysis methods of multi-omics, especially the approach of machine learning and deep learning in multi-omics data integration and the corresponding tools, and the application of multi-omics in medical researches (e.g., cancer, neurodegenerative diseases, aging, and drug target discovery) as well as the corresponding open-source analysis tools and databases, and finally, discusses the challenges and future directions of multi-omics integration and application in precision medicine. With the development of high-throughput technologies and data integration algorithms, as important directions of multi-omics for future disease research, single-cell multi-omics and spatial multi-omics also provided a detailed introduction. This review will provide important guidance for researchers, especially who are just entering into multi-omics medical research.",
+   "reasons": [
+    "deep learning",
+    "generative model",
+    "AI",
+    "single-cell",
+    "transcriptomics",
+    "multiomics"
+   ],
+   "score": 24.46317753037348,
+   "classic": true,
+   "citations": 539,
+   "year": 2023,
+   "summary": {
+    "tldr": "A comprehensive review of multi-omics categories, experimental design, ML/DL-based data integration methods, and applications in human disease research.",
+    "background": "Single omics types (genomics, transcriptomics, proteomics, etc.) capture only one molecular layer and cannot fully explain disease mechanisms or establish causality. Integrating heterogeneous data across these layers is difficult due to different scales, dynamic ranges, missing values, high dimensionality, and low sample sizes.",
+    "approach": "The authors systematically review the main omics categories (genomics, transcriptomics, proteomics, metabolomics, single-cell omics, spatial transcriptomics, epigenomics, microbiomics, radiomics), experimental design principles, and three ML-based integration paradigms: concatenation-based (e.g., MOFA, MoCluster, random forest/SVM on joint matrices), model-based (e.g., Multi-omics Supervised Autoencoder, DFNForest, ATHENA), and transformation-based (e.g., PAMOGK, Multi-Omics Graph Convolutional Networks). They also cover DL pipelines (autoencoders for feature reduction followed by clustering/classification) and catalog open-source tools including DeepOmix, DeepProg, DeepDRK, netOmics, OmicsNet 2.0, and MetaboAnalyst 5.0.",
+    "findings": [
+     "DL-based multi-omics integration (autoencoder on mRNA, DNA methylation, and miRNA data) robustly predicted liver cancer survival subtypes, evaluated by C-index, log-rank p-value, and Brier score.",
+     "A sleep-deprivation study integrating plasma proteomics, metabolomics, and PBMC transcriptomics from 32 volunteers identified neutrophil-mediated immune processes as the dominant pathway and SOD1/S100A8 as candidate biomarkers.",
+     "mRNA–protein correlation is often weak (e.g., 42% of Tau-induced transcripts in Alzheimer's disease were discordant with the proteome), motivating multi-omics over single-omics approaches.",
+     "Spatial transcriptomics resolved spatially organized immune–malignant cell networks in colorectal cancer, and HER2+ breast tumor ST signals correlated with overall survival.",
+     "Single-cell and spatial multi-omics are highlighted as the two key future directions for disease research.",
+     "The number of Alzheimer's disease patients is projected to rise from ~57 million (2019) to ~150 million by 2050, underscoring the need for better biomarker discovery."
+    ],
+    "why": "For researchers working on AI for transcriptomics and multiomics, this review provides a structured taxonomy of integration paradigms (concatenation, model-based, transformation-based) with named algorithms and tools, useful as a reference for positioning new methods. It consolidates tool lists and application examples across cancer and neurodegeneration that can inform benchmark selection or motivation sections.",
+    "limitations": "This is a narrative review, not a benchmarking study—no head-to-head comparison of integration methods on shared datasets is provided. The discussion of challenges (class imbalance, curse of dimensionality, interpretability, heterogeneity) is qualitative, and coverage of large-scale foundation models or self-supervised pretraining on omics data is absent.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 101086
+   }
+  },
+  {
+   "title": "Development and interpretation of a pathomics-based model for the prediction of microsatellite instability in Colorectal Cancer",
+   "authors": [
+    "Rui Cao",
+    "Fan Yang",
+    "Si-Cong Ma",
+    "Li Liu",
+    "Yu Shan Zhao",
+    "Yan Li",
+    "Dehua Wu",
+    "Tongxin Wang",
+    "Weijia Lu",
+    "Wei-Jing Cai",
+    "Hongbo Zhu",
+    "Xue‐Jun Guo"
+   ],
+   "authorCount": 20,
+   "venue": "Theranostics",
+   "preprint": false,
+   "date": "2020-01-01",
+   "doi": "10.7150/thno.49864",
+   "url": "https://doi.org/10.7150/thno.49864",
+   "abstract": "Microsatellite instability (MSI) has been approved as a pan-cancer biomarker for immune checkpoint blockade (ICB) therapy.However, current MSI identification methods are not available for all patients.We proposed an ensemble multiple instance deep learning model to predict microsatellite status based on histopathology images, and interpreted the pathomics-based model with multi-omics correlation.Methods: Two cohorts of patients were collected, including 429 from The Cancer Genome Atlas (TCGA-COAD) and 785 from an Asian colorectal cancer (CRC) cohort (Asian-CRC).We established the pathomics model, named Ensembled Patch Likelihood Aggregation (EPLA), based on two consecutive stages: patch-level prediction and WSI-level prediction.The initial model was developed and validated in TCGA-COAD, and then generalized in Asian-CRC through transfer learning.The pathological signatures extracted from the model were analyzed with genomic and transcriptomic profiles for model interpretation.Results: The EPLA model achieved an area-under-the-curve (AUC) of 0.8848 (95% CI: 0.8185-0.9512) in the TCGA-COAD test set and an AUC of 0.8504 (95% CI: 0.7591-0.9323) in the external validation set Asian-CRC after transfer learning.Notably, EPLA captured the relationship between pathological phenotype of poor differentiation and MSI (P < 0.001).Furthermore, the five pathological imaging signatures identified from the EPLA model were associated with mutation burden and DNA damage repair related genotype in the genomic profiles, and antitumor immunity activated pathway in the transcriptomic profiles.Conclusions: Our pathomics-based deep learning model can effectively predict MSI from histopathology images and is transferable to a new patient cohort.The interpretability of our model by association with pathological, genomic and transcriptomic phenotypes lays the foundation for prospective clinical trials of the application of this artificial intelligence (AI) platform in ICB therapy.",
+   "reasons": [
+    "deep learning",
+    "AI",
+    "transcriptomics",
+    "multiomics",
+    "genomics",
+    "generalizes"
+   ],
+   "score": 23.83328101467656,
+   "classic": true,
+   "citations": 261,
+   "year": 2020,
+   "summary": {
+    "tldr": "EPLA, an ensemble multiple-instance-learning model, predicts microsatellite instability from colorectal cancer H&E whole-slide images at AUC 0.85-0.88 across two cohorts, with the image-derived features linked to DNA repair mutations and immune transcriptomic programs.",
+    "background": "MSI/dMMR is an FDA-approved pan-cancer biomarker for immune checkpoint blockade, but current testing requires extra PCR or immunohistochemistry assays that are not done for all patients. Predicting MSI from routine histopathology would scale testing, but tumor heterogeneity and cohort/staining differences complicate generalization.",
+    "approach": "EPLA (Ensemble Patch Likelihood Aggregation) is a two-stage MIL pipeline: pathologist-annotated tumor ROIs from 20x WSIs are tiled into patches, a ResNet-18 scores each patch, and patch likelihoods are aggregated either as a histogram into XGBoost (PALHI) or as TF-IDF features into Naive Bayes (BoW), then ensembled. Training used TCGA-COAD (429 frozen slides: 358 MSS, 71 MSI, 7:3 split); transfer learning fine-tuned it on an Asian-CRC FFPE cohort (785 slides: 621 MSS/MSI-L, 164 MSI-H) from three Chinese centers. The top 5 image signatures were then correlated with TCGA somatic mutation data and WGCNA transcriptomic modules.",
+    "findings": [
+     "On the TCGA-COAD test set EPLA reached AUC 0.8848 (95% CI 0.8185-0.9512), beating a deep-learning majority-voting baseline (AUC 0.8457) by combining BoW's specificity (89.5%) with PALHI's sensitivity (86.4%).",
+     "Without adaptation the TCGA model scored only AUC 0.6497 on the Asian FFPE cohort; fine-tuning on 10% of local cases raised it to 0.8504, and 70% fine-tuning data pushed it to 0.9264.",
+     "Predictions tracked morphology: tumors with high MSIsensor scores or MSI predictions showed more poor differentiation (P < 0.001).",
+     "Genomically, the MSI-associated signatures (FEA#188/197/198/200) mapped to deficient MMR/DDR/HRD pathways, high TMB and INDEL load, and POLE/BRCA1/2 mutations, while FEA#001 marked MSS tumors with intact repair.",
+     "Transcriptomically, 7 of 18 annotated WGCNA modules correlated with the signatures, enriched for T cell activation and IFN-gamma-JAK-STAT1 signaling, and tracked cytolytic activity (GZMA/PRF1) and a CD8+ T-effector gene set."
+    ],
+    "why": "For a multiomics researcher, this is a concrete template for grounding image-derived pathomic features in genomic readouts (TMB, INDEL load, repair-pathway deficiency) and transcriptomic readouts (WGCNA modules, CYT score, IFN-gamma response), i.e., interpretability by cross-modal correlation. It also quantifies a practical domain shift, frozen versus FFPE slides dropping AUC from 0.88 to 0.65, and shows ~10% labeled local data restores performance.",
+    "limitations": "The design is retrospective with modest MSI case counts (71 in TCGA, 164 in the Asian cohort), and both transfer learning and the omics interpretation require matched labels that many centers lack; prospective validation is still pending.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 31559
+   }
+  }
+ ],
+ "candidates": 385
+}
