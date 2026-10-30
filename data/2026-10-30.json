@@ -1,0 +1,192 @@
+{
+ "date": "2026-10-30",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "An open structure-guided RNA foundation model for generalizable prediction",
+  "authors": [
+   "Zhu, H.",
+   "Li, R.",
+   "Chang, A.",
+   "Chen, H.",
+   "Zhang, F.",
+   "Tang, F.",
+   "Ye, T.",
+   "Li, X.",
+   "Gu, Y.",
+   "Xiong, P.",
+   "Zhou, S. K."
+  ],
+  "authorCount": 11,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-29",
+  "doi": "10.1101/2025.08.06.668731",
+  "url": "https://doi.org/10.1101/2025.08.06.668731",
+  "abstract": "RNA language models have achieved strong performance across diverse downstream tasks by leveraging large-scale sequence data. However, RNA function is fundamentally shaped by hierarchical structure, making structural information important for pre-training. Existing approaches often depend on noisy annotations or task-specific objectives that can limit generalizability. Here we present structRFM, a structure-guided RNA foundation model pre-trained on 21 million RNA sequence--structure pairs by integrating base-pairing interactions into masked language modelling through a pair-matching operation. We also introduce MUSES, a multi-source ensemble of secondary structures designed to mitigate predictor bias, and a dynamic masking ratio that balances structure-guided and nucleotide-level masking. structRFM learns joint sequence and structure representations as sequence-level, nucleotide-level and pairwise features for broad downstream adaptation. It ranks among the leading models in zero-shot homology classification and establishes new benchmarks for secondary-structure prediction. Its tertiary-structure adaptation, Zfold, consistently improves both three-dimensional predictions and their extracted secondary structures, with performance comparable to AlphaFold3 across CASP15-natural, CASP16 and RNA-Puzzles. structRFM also improves performance on function-prediction tasks and generalizes to newly released RNA families and long non-coding RNAs. Together, these results demonstrate the effectiveness of structure-guided pre-training and highlight multimodal RNA language models for robust structural and functional inference. The complete 21-million-pair dataset, model weights and source code are openly available to support multimodal RNA foundation-model development.",
+  "reasons": [
+   "foundation model",
+   "language model",
+   "zero-shot",
+   "proteins",
+   "scale",
+   "generalizes"
+  ],
+  "score": 19,
+  "tldr": "structRFM is a fully open RNA foundation model pre-trained on 21 million sequence-structure pairs with structure-guided masked language modeling (SgMLM), delivering state-of-the-art RNA secondary structure prediction, AlphaFold3-comparable 3D structure prediction via its Zfold adaptation, and strong transfer to function-prediction tasks.",
+  "why": "For transcriptomics and multiomics researchers, this is an openly released RNA encoder whose pairwise features can be dropped into existing structure pipelines (e.g., trRosettaRNA) and whose sequence embeddings support standard fine-tuning for splice, IRES, and ncRNA-classification tasks. The 21M annotated dataset, MUSES ensembling recipe, and SgMLM objective are modular and could be ported to other RNA or multimodal nucleic-acid models.",
+  "summary": {
+   "tldr": "structRFM is a fully open RNA foundation model pre-trained on 21 million sequence-structure pairs with structure-guided masked language modeling (SgMLM), delivering state-of-the-art RNA secondary structure prediction, AlphaFold3-comparable 3D structure prediction via its Zfold adaptation, and strong transfer to function-prediction tasks.",
+   "background": "RNA language models are typically trained on sequence alone, while structure-aware variants rely on noisy single-predictor annotations (e.g., ViennaRNA) or task-specific supervised objectives that compromise generality. The challenge is injecting base-pairing information into task-agnostic pre-training without inheriting a single predictor's bias or biasing the model toward one downstream task.",
+   "approach": "The authors pre-train structRFM, a 12-layer, 12-head transformer with a 512-nt input limit, on 21M RNA sequence-structure pairs from RNAcentral v24.0, where structures are annotated by MUSES, an ensemble of ViennaRNA, CONTRAfold, and BPfold that averages out individual-predictor bias. SgMLM masks tokens at canonical base pairs within local structural contexts, with a dynamic ratio shifting from nucleotide-level to structure-guided masking over training. The model outputs sequence-level, nucleotide-level, and pairwise (attention-derived) features; for 3D prediction, Zfold plugs structRFM pairwise features into trRosettaRNA in place of SPOT-RNA contact maps and is fine-tuned on 3,633 PDB chains.",
+   "findings": [
+    "Zero-shot homology classification: top-4 of 17 DNA/RNA/protein language models, with overlap ratios of 0.10 (Rfam) and 0.45 (ArchiveII600), despite AIDO.RNA having ~10x more parameters.",
+    "Secondary structure: fine-tuned INF of 0.890 on ArchiveII600 and 0.669 on bpRNA-TS0, beating RiNALMo-Mega (0.858/0.638), MXfold2 (0.768/0.558), and ContextFold (0.842/0.546); the no-structure ablation loses 4.5-6.2% INF.",
+    "Tertiary structure (Zfold): mean TM-scores of 0.45/0.33/0.58 and eRMSD of 1.26/1.49/1.26 on CASP15-natural/CASP16/RNA-Puzzles, comparable to AlphaFold3 (all-atom RMSD 9.97 vs 15.7 A on CASP15-natural); pairwise features raise secondary-structure INF over trRosettaRNA by 16.7%, 5.3%, and 10.8%.",
+    "Function transfer: splice-site top-k accuracy 0.42 (SpliceBERT 0.45), IRES F1 0.701 (IRESfinder 0.475), nRC ncRNA classification F1 0.979 (RNAErnie 0.964).",
+    "Generalization: INF 0.65-0.70 on 436 sequences from post-training Rfam v15.0 families, and F1 0.959/0.946 for human/mouse lncRNA classification using 50%-overlapping 512-nt windows."
+   ],
+   "why": "For transcriptomics and multiomics researchers, this is an openly released RNA encoder whose pairwise features can be dropped into existing structure pipelines (e.g., trRosettaRNA) and whose sequence embeddings support standard fine-tuning for splice, IRES, and ncRNA-classification tasks. The 21M annotated dataset, MUSES ensembling recipe, and SgMLM objective are modular and could be ported to other RNA or multimodal nucleic-acid models.",
+   "limitations": "The 512-nt context limit forces windowing that misses long-range interactions (23S rRNA and long synthetic CASP targets perform worst), MUSES only annotates canonical base pairs, and rRNA makes up 66.3% of pre-training data. The work is also a non-peer-reviewed preprint, and SgMLM's pre-training efficiency and scalability are not yet evaluated.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 123466
+  }
+ },
+ "also": [
+  {
+   "title": "Lineage-mixed neurodevelopmental programs in pediatric sarcomas nominate tumor-selective surface antigen pairs.",
+   "authors": [
+    "Davini, A.",
+    "Liu, X.",
+    "Norrie, J. L.",
+    "Hwang, J.",
+    "Pagala, V.",
+    "Byrum, S. D.",
+    "High, A.",
+    "Dyer, M. A.",
+    "Sheppard, H.",
+    "Patel, A. G.",
+    "Geeleher, P."
+   ],
+   "authorCount": 11,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-29",
+   "doi": "10.64898/2026.10.28.762504",
+   "url": "https://doi.org/10.64898/2026.10.28.762504",
+   "abstract": "Pediatric solid tumors have low mutational burden, frequent oncogenic gene fusions, and developmental origins in arrested progenitor cells. Single-cell RNA-seq (scRNA-seq) could represent an ideal tool to assess whether these convergent biological features yield shared therapeutic vulnerabilities. However, while existing tools can extract gene expression programs for pan-tumor single-cell data, interpreting them requires domain expertise across many disciplines and diseases. Here, we analyzed a pan-pediatric scRNA-seq atlas of 266 patient- and xenograft-derived samples across 22 pediatric solid tumor types. To address the bottleneck between gene program identification and interpretation, we developed an AI agent framework built on off-the-shelf large language models (e.g., Gemini 2.5) to interpret gene expression programs at the level of human experts, but at much greater scale and speed. Our agent identified ectopic expression of neuronal marker genes as a unique feature of several fusion-driven sarcomas. This gene expression pattern resulted in tumor-specific co-expression of mixed mesenchymal/neuronal surface markers, providing a plausible therapeutic window to target these tumor types using emerging AND-gated therapeutic strategies, such as bispecific antibody-drug conjugates (ADCs) and bispecific CAR-T cells. As proof of principle, we nominated and validated STEAP1/NPTXR as a Ewing sarcoma candidate cell surface target pair. Together, this work delivers a pan-pediatric solid tumor scRNA-seq atlas, establishes a generalizable and accessible AI-based framework that complements existing single-cell methods by automating interpretation of pan-disease single-cell atlases, and nominates new bispecific ADC/CAR-T targets for catastrophic pediatric cancers.",
+   "reasons": [
+    "language model",
+    "AI",
+    "AI agents",
+    "single-cell",
+    "cell atlas",
+    "RNA-seq"
+   ],
+   "score": 19,
+   "summary": {
+    "tldr": "An off-the-shelf Gemini 2.5 agent annotates 134 gene expression programs from a 266-sample pediatric solid tumor single-cell atlas at near-expert quality, and its detection of mixed neuronal/mesenchymal programs in fusion-driven sarcomas yielded a validated STEAP1/NPTXR bispecific target pair for Ewing sarcoma.",
+    "background": "Pediatric solid tumors are low-mutation, fusion-driven, developmentally arrested cancers, so pan-tumor scRNA-seq may reveal shared vulnerabilities. But methods like NMF or scGPT output dozens of unannotated gene programs whose interpretation demands cross-disciplinary human expertise — a growing bottleneck as atlases scale.",
+    "approach": "The authors assembled PedSTAR: 266 patient and orthotopic PDX samples across 22 pediatric solid tumor types (351 datasets; 109 fresh scRNA-seq, 242 single-nucleus). Their NMF tool CSI-GEP extracted 134 gene expression programs (GEPs); Gaussian mixture models assigned per-cell activity and Numbat flagged malignant cells. A structured-prompting agent built on off-the-shelf Gemini 2.5 — no training or fine-tuning, run via API — consumed gene loadings, GO/KEGG enrichments, SingleR scores, malignancy probabilities, and clinical metadata to label each GEP, then performed a second pass reasoning across all annotations.",
+    "findings": [
+     "Benchmarked on 41 expert-annotated neuroblastoma GEPs (GOSH dataset), Gemini 2.5 recovered the exact human label 60% of the time vs ~2% for GPT-5 across 100 repeats; in de novo annotation it disagreed with experts on only 6/41 programs, mostly naming style.",
+     "On PedSTAR, the agent high-confidently annotated 129/134 GEPs (96.3%) and grouped them into 11 biological categories, including 33 neurodevelopmental programs.",
+     "It flagged 11 neurodevelopmental GEPs in fusion-driven sarcomas (Ewing, DSRCT, CIC-rearranged HGS, alveolar RMS) marked by ectopic neuronal genes (e.g., GEP16: midbrain serotonergic enrichment, OR 25.49); cells retained mesenchymal markers, and nearly all malignant EWS/DSRCT cells expressed such programs (>75% in ARMS/CIC), preserved in O-PDXs.",
+     "Neuronal TF usage was idiosyncratic rather than a coherent module like neuroblastoma's HAND2/PHOX2B, pointing to fusion-driven dysregulation rather than true differentiation.",
+     "Cross-referencing GTEx nominated STEAP1+NPTXR as an EWS surface pair, confirmed in DepMap, PeCan bulk RNA-seq (n=35 EWS vs n=689 other pediatric tumors), surface biotinylation/mass spectrometry of TC32 cells, and dual-IHC tissue microarrays: 70% (14/20) of Ewing tumors dual-positive vs 18.2% (2/11) DSRCT, rare in four other tumor types."
+    ],
+    "why": "For AI-for-omics researchers, the useful pattern is the LLM as an interpretation layer over structured outputs of standard tools (NMF programs, cell-type scores, CNV-based malignancy calls), not over raw counts — agnostic to the upstream method and requiring no fine-tuning. The two-tier design (per-GEP annotation plus atlas-level meta-annotation) is a reusable template for converting foundation-model or factorization outputs into biological and therapeutic hypotheses.",
+    "limitations": "Benchmarks are small (41 GEPs) and the sarcoma-neuronal link was partly known from single-disease literature; LLM confidence is self-reported, and STEAP1/NPTXR is validated only at the expression level, with no functional bispecific ADC/CAR-T data yet.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 91923
+   }
+  },
+  {
+   "title": "Ground-truth evaluation of sparse autoencoder features on spatial, single-cell and language-model embeddings",
+   "authors": [
+    "Shahsavand, A.",
+    "Forghani, S.",
+    "Akbarzadeh, S.",
+    "Mahdavi Sabet, F."
+   ],
+   "authorCount": 4,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-29",
+   "doi": "10.64898/2026.10.27.762296",
+   "url": "https://doi.org/10.64898/2026.10.27.762296",
+   "abstract": "Sparse autoencoders (SAEs) are increasingly used to extract interpretable features from the embeddings of biological foundation models. Because SAEs trained with different random seeds learn different features, reproducibility across seeds has become a common test of whether these features can be trusted. We asked whether reproducible features are also meaningful, using embeddings whose concepts are known: five spatial transcriptomics embeddings of two colorectal cancer sections and Geneformer embeddings of single-cell RNA profiles, with cell lineages as concepts; synthetic data with planted cell states; and the residual stream of a small language model, with token classes as concepts. Varimax rotations of the same embeddings were almost perfectly reproducible, yet rotation features (PCA, varimax and ICA) covered at most three of seven lineages and three of eight token classes. Single SAE fits showed the opposite profile: they covered most concepts with purer gene programs but reproduced only 27-46% of their features. A consensus over five SAE fits combined the two strengths. It was reproducible (78-98% across sources) and as pure as single fits: 11-40% of its features carried marker genes of another lineage, against 44-70% for varimax. Against the strongest baseline, varimax sparsified to the SAE's sparsity, the consensus covered as many concepts on PCA and Geneformer embeddings and more on learned spatial and text embeddings. The consensus also had costs. It covered fewer lineages than single fits and, like all SAEs, missed weak planted states that rotations recovered; neither a longer single fit nor a second SAE trained on the consensus residual recovered what it discarded. Reproducibility alone therefore ranks features poorly: SAE features should be reported with the number of known concepts they cover and the purity of their gene programs, against a rotation of the same embedding sparsified to the SAE's sparsity.",
+   "reasons": [
+    "foundation model",
+    "language model",
+    "single-cell",
+    "transcriptomics",
+    "spatial omics",
+    "scale"
+   ],
+   "score": 21,
+   "summary": {
+    "tldr": "This evaluates whether reproducible sparse-autoencoder features from single-cell, spatial, and text embeddings match known biology and concepts.",
+    "background": "SAEs extract interpretable features from biological foundation-model embeddings. Cross-seed reproducibility is often treated as evidence, but reproducible axes need not be biologically meaningful.",
+    "approach": "They trained BatchTopK SAEs on five spatial embeddings from two colorectal cancer CosMx sections (50k cells each, 2k genes, 7 lineages), Geneformer V2 embeddings from 12,881 CRC cells, synthetic planted programs (28), and Pythia-70m residual-stream activations on one million WikiText-103 tokens. They compared single SAE fits, a five-seed consensus (keeping matches in at least 3 fits), and PCA/varimax/ICA rotations. Metrics: reproducibility, concept coverage, chimeric gene programs.",
+    "findings": [
+     "Varimax reproduced 99-100% of features but covered at most 2/7 spatial lineages, 3/7 Geneformer lineages, and 3/8 token classes.",
+     "Single SAE fits reproduced 27-46%; the five-seed consensus reproduced 78-98%, including 92-98% spatial, 85% Geneformer, and 78% on tokens.",
+     "Consensus coverage reached 2-5 spatial lineages, 7/7 Geneformer, and 8/8 token classes, with chimeric gene programs 11-40% spatial and 9% Geneformer versus 44-70% and 47% for varimax.",
+     "Sparse varimax matched consensus coverage on PCA and Geneformer, but learned CellCharter/CadaST and text embeddings favored SAEs; Geneformer needed a capped dictionary, with reproducibility 0.85 at 256 latents and lower at larger dictionaries.",
+     "Consensus lost coverage versus single fits and missed weak planted states: at depth 500, it recovered 1.00 strong, 0.67 mid, 0.28 weak versus varimax 1.00, 0.94, 0.61; longer fits and residual SAEs did not fix this."
+    ],
+    "why": "Reproducibility alone should not rank SAE features; report concept coverage and purity against a sparsified rotation. SAE dictionaries may overrepresent dominant lineages and miss weak states, so absence from features is not proof of absence.",
+    "limitations": "Ground truth is narrow: lineages, planted programs, and token classes; only two CRC sections, small models, and two SAE variants, so conclusions may not generalize.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "qwen3.8-flash",
+    "chars": 49788
+   }
+  },
+  {
+   "title": "MultiFlow: coupled flow matching for predicting single-cell multiomic perturbation responses in unseen cellular contexts",
+   "authors": [
+    "Wang, H.",
+    "Zhang, C.",
+    "Zhang, M.",
+    "Nie, X.",
+    "Liu, Q."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-28",
+   "doi": "10.64898/2026.08.20.746112",
+   "url": "https://doi.org/10.64898/2026.08.20.746112",
+   "abstract": "Predicting cellular responses to perturbation requires resolving coordinated changes across molecular layers, yet most single-cell perturbation models focus on transcriptional responses alone. Here we present MultiFlow, a coupled flow-matching framework that unifies generation and perturbation prediction of paired gene expression and chromatin accessibility. Through bidirectional information exchange between RNA and ATAC generative flows, MultiFlow learns how their joint distribution depends on cellular context and perturbation identity. Across multiomic generation benchmarks, MultiFlow accurately reproduced paired RNA-ATAC states and their population distributions. In multiome perturbation benchmarks, MultiFlow achieved the strongest overall performance in predicting both gene-expression and chromatin-accessibility perturbation responses, outperforming modality-specific perturbation-prediction methods in cell types whose perturbed states were withheld from training. Joint multiomic modeling further preserved perturbation-induced coordination between modalities, including concordant peak-gene effects and cross-modal cellular neighborhood structure. These results establish MultiFlow as a unified generative framework for modeling paired molecular states and predicting their coordinated perturbation responses across cellular contexts. Code and tutorial of MultiFlow are available at https://github.com/liuq-lab/MultiFlow.",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "multiomics",
+    "perturbation",
+    "epigenomics",
+    "code released"
+   ],
+   "score": 18,
+   "summary": {
+    "tldr": "MultiFlow is a coupled flow-matching framework that jointly generates and predicts paired single-cell RNA and ATAC responses to transcription-factor perturbations, outperforming RNA-only and modality-specific baselines in leave-one-cell-type-out benchmarks on Perturb-multiome.",
+    "background": "Perturbation responses are highly context-dependent, and the combinatorial space of perturbations and cell types far exceeds what can be measured, so predicting responses in unseen contexts is a central open problem. Prior perturbation-prediction methods (trVAE, CellOT, inVAE) model gene expression alone, and models that jointly handle paired RNA-ATAC perturbation data were lacking.",
+    "approach": "MultiFlow uses modality-specific autoencoders to compress RNA and ATAC into 128-dim latents, then learns two flow-matching trajectories from a shared Gaussian whose velocity fields exchange information via bidirectional cross-attention modules (Cross Flow Modules, 512 hidden units, 64 attention dims). The flows are conditioned on a cell-type embedding (generation) or a control-derived mean latent context (perturbation prediction, enabling transfer to unseen contexts) plus a learned perturbation embedding, followed by perturbation-specific debiasing estimated from training contexts. Generation and perturbation prediction are the same framework with the perturbation channel on or off.",
+    "findings": [
+     "Generation on OpenProblems (69,249 cells, 22 cell types, 13,431 genes, 36,553 peaks): MultiFlow achieved iLISI 0.898 (RNA) and 0.917 (ATAC) with ATAC MMD 0.011, beating scDiffusion-X, CFGen, and MultiVI; cell-type mean-profile correlations reached 0.9960 (RNA) and 0.9897 (ATAC) for CD4+ T cells.",
+     "On PBMC10k (12,012 cells), it had the highest iLISI for both modalities (0.683 RNA, 0.650 ATAC), an 18.83% relative ATAC improvement over the best baseline, showing mean-profile correlations do not guarantee faithful single-cell distributions.",
+     "In leave-one-cell-type-out perturbation prediction on Perturb-multiome (133,022 cells, 10 hematopoietic cell types, 19 TF knockouts), RNA top-100-gene iLISI improved from 0.716 (best baseline) to 0.867 (+21.1% relative) and MMD dropped 2.7-fold (0.093 to 0.034); ATAC composite score was 0.839 vs 0.660, with 0.934 directional accuracy and 0.672 change correlation at significant peaks.",
+     "Cross-modal coordination was preserved: peak-gene neighborhood-effect score 0.31 vs 0.15 for the strongest baseline, and RNA-ATAC neighborhood-coupling correlation 0.765 vs 0.288; ablations showed ATAC information improves RNA prediction more than vice versa.",
+     "Gradient attribution on the cross-attention maps recovered known biology: attributed peaks enriched at promoters (2.1-3.4x) and H3K27ac regions (1.5-2.0x), perturbation-only peaks overlapped ChIP-seq binding sites of the knocked-out factor in 43 contexts (59% for GATA1), and element-defined gene modules were enriched for STRING/TRRUST pairs in 18/20 and 20/20 perturbation-context combinations."
+    ],
+    "why": "For someone working on AI for transcriptomics and multiomics, this demonstrates that jointly modeling paired modalities improves context generalization beyond RNA-only perturbation models, with a concrete architecture (coupled flows with cross-attention) and a strong benchmark protocol. The interpretable cross-attention also connects perturbation prediction to regulatory-network hypothesis generation (peak-gene links, TF-binding-site recovery), a direction relevant to mechanistic multiomics modeling.",
+    "limitations": "Perturbation prediction was validated almost entirely on the single Perturb-multiome resource, so cross-platform generalization is untested, and the architecture handles exactly two paired modalities. The recovered RNA-ATAC relationships are associative (data-driven attention), not causal regulatory mechanisms.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 108800
+   }
+  }
+ ],
+ "candidates": 348
+}
