@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-10-31",
+   "title": "A multispecies foundation model for genome function prediction, gene annotation and sequence design",
+   "venue": "bioRxiv",
+   "key": "10.64898/2025.12.22.695963",
+   "also": [
+    "10.1038/s41467-026-77908-z",
+    "10.64898/2026.10.22.760550",
+    "10.1038/s41587-026-03348-1"
+   ]
+  },
+  {
    "date": "2026-10-30",
    "title": "An open structure-guided RNA foundation model for generalizable prediction",
    "venue": "bioRxiv",
