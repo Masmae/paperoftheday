@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-01",
+   "title": "Single-cell foundation models transfer across deep evolutionary distances",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.28.762457",
+   "also": [
+    "10.64898/2026.10.23.760875",
+    "10.64898/2026.10.26.762100",
+    "10.64898/2026.10.28.762655"
+   ]
+  },
+  {
    "date": "2026-10-31",
    "title": "A multispecies foundation model for genome function prediction, gene annotation and sequence design",
    "venue": "bioRxiv",

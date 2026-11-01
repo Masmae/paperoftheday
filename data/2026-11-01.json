@@ -1,0 +1,180 @@
+{
+ "date": "2026-11-01",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Single-cell foundation models transfer across deep evolutionary distances",
+  "authors": [
+   "Trnovec, L.",
+   "Katoh-Kurasawa, M.",
+   "Arey, R. N.",
+   "Shaulsky, G.",
+   "Zupan, B."
+  ],
+  "authorCount": 5,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-10-31",
+  "doi": "10.64898/2026.10.28.762457",
+  "url": "https://doi.org/10.64898/2026.10.28.762457",
+  "abstract": "Single-cell foundation models are trained mostly on human and other vertebrate cells, yet are proposed as general-purpose models. Whether they transfer far beyond their training species is unknown. We evaluated zero-shot embeddings from Geneformer, scGPT and UCE against PCA and scVI in developmental atlases of Dictyostelium discoideum and Caenorhabditis elegans, separated from humans by 1.2 billion and 600 million years. Without retraining, the models recovered developmental order and preserved organism-specific cell identities. UCE encodes genes by protein sequence and could use 97% of measured genes, whereas Geneformer and scGPT, after ortholog mapping, used under one-fifth. UCE performed most consistently, often exceeding species-native baselines. Restricted to ortholog-mappable genes, it still scored above vocabulary-based models on five of six annotation tasks, some narrowly. Foundation models can thus yield informative cell embeddings across more than a billion years of evolution, and protein-sequence gene representations make these embeddings more complete and often more accurate.",
+  "reasons": [
+   "foundation model",
+   "zero-shot",
+   "single-cell",
+   "scale",
+   "generalizes"
+  ],
+  "score": 17,
+  "tldr": "Zero-shot embeddings from vertebrate-trained single-cell foundation models remain informative in a social amoeba and a nematode, but how genes are represented — protein sequence (UCE) vs a fixed human vocabulary (Geneformer, scGPT) — determines both gene coverage and accuracy.",
+  "why": "For anyone applying foundation models to non-model organisms, gene accessibility is a distinct, quantifiable performance axis that benchmarks should report alongside downstream scores, and protein-sequence gene representations largely solve coverage at deep evolutionary distances. However, species-native PCA and scVI baselines remain competitive, and rankings shift with preprocessing and checkpoint choices.",
+  "summary": {
+   "tldr": "Zero-shot embeddings from vertebrate-trained single-cell foundation models remain informative in a social amoeba and a nematode, but how genes are represented — protein sequence (UCE) vs a fixed human vocabulary (Geneformer, scGPT) — determines both gene coverage and accuracy.",
+   "background": "Single-cell foundation models are trained mostly on human and vertebrate data yet proposed as general-purpose, and their transfer to organisms 600M–1.2B years from humans was untested. Fixed human vocabularies require ortholog mapping that discards most genes in distant species, conflating representation quality with input accessibility.",
+   "approach": "The authors benchmarked zero-shot embeddings from Geneformer (gf-12L-95M-i4096), scGPT, and UCE against PCA and scVI, with no retraining, fine-tuning, or label supervision, on two developmental atlases: D. discoideum (48,983 cells, 12,883 genes, sampled every 4 h over 20 h post-starvation) and C. elegans embryos from the Packer et al. atlas (89,701 cells, 20,222 genes). Endpoints were diffusion pseudotime recovery (root-averaged Spearman and consensus Lin's CCC) and annotation preservation (avgBIO, the mean of NMI, ARI, and label ASW) on three curated marker panels per organism, plus a coverage-aligned control restricting UCE-4L to ortholog-mappable genes.",
+   "findings": [
+    "After a multi-resource ortholog pipeline (OrthoFinder, OrthoDB, OMA, curated sources), Geneformer and scGPT could use only ~17–18% of measured genes (2,297 and 2,289 in D. discoideum; 3,506 and 3,517 in C. elegans), while UCE's ESM-2 protein-sequence encoding covered 97.4–97.5%.",
+    "Only 2 of 83 curated D. discoideum cell-type markers survived ortholog mapping; all 83 were eligible for UCE.",
+    "UCE-4L ranked first on five of six annotation panels (e.g., D. discoideum cell type avgBIO 0.618 vs 0.457 for Geneformer; C. elegans cell/tissue 0.699 vs 0.657 for PCA) and had the best C. elegans pseudotime (Spearman 0.868, CCC 0.734 vs 0.579 for scGPT); D. discoideum pseudotime was strong for all methods (0.869–0.911) with no significant separation.",
+    "Restricting UCE-4L to ortholog-mappable genes erased its D. discoideum cell-type advantage (0.618 to 0.342, below Geneformer) but it still beat vocabulary models on the other panels, so coverage explains some, not all, of its gain.",
+    "Conventional PCA preprocessing (2,000 HVGs, normalization, log1p, scaling) beat UCE-4L on three of six panels, and the deeper UCE-33L checkpoint underperformed UCE-4L in D. discoideum (cell type 0.252 vs 0.618, partially rescued to 0.591 by protein-space calibration)."
+   ],
+   "why": "For anyone applying foundation models to non-model organisms, gene accessibility is a distinct, quantifiable performance axis that benchmarks should report alongside downstream scores, and protein-sequence gene representations largely solve coverage at deep evolutionary distances. However, species-native PCA and scVI baselines remain competitive, and rankings shift with preprocessing and checkpoint choices.",
+   "limitations": "The benchmark uses only two developmental atlases with no closely related reference, so performance decay with evolutionary distance cannot be estimated, and marker labels were derived from the same expression matrices being embedded (avgBIO values are descriptive point estimates). Results are also specific to the tested checkpoints and ortholog-mapping tiers.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 92509
+  }
+ },
+ "also": [
+  {
+   "title": "Probabilistic uncertainty in virtual spatial transcriptomics from histology is largely redundant with the predicted mean",
+   "authors": [
+    "Batique, T.",
+    "Nonchev, K.",
+    "Koelzer, V. H.",
+    "Ratsch, G."
+   ],
+   "authorCount": 4,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-24",
+   "doi": "10.64898/2026.10.23.760875",
+   "url": "https://doi.org/10.64898/2026.10.23.760875",
+   "abstract": "Deep learning has enabled virtual spatial transcriptomics from histology, offering a scalable approach to molecular profiling of routinely archived tissue without molecular assays. However, reliable uncertainty estimates are essential for identifying potentially inaccurate predictions, and it remains unclear whether existing methods provide useful information about prediction reliability. Here, we present a systematic benchmark of uncertainty estimation for virtual spatial transcriptomics across three cancer cohorts spanning melanoma, lung, and kidney tumors. We evaluate aleatoric and epistemic uncertainty using probabilistic likelihoods and approximate Bayesian methods alongside histology-free and training-free baselines, assessing both calibration and error informativeness. Across cohorts and methods, uncertainty is associated with prediction error, but the predicted mean largely explains this association. After accounting for the mean, uncertainty provides only weak information about larger errors. Moreover, good calibration does not imply informative uncertainty, with simple distributions fitted without histology achieving comparable calibration. We therefore distinguish calibrated from informative uncertainty and argue that uncertainty should provide information about prediction error beyond the predicted mean. This benchmark provides a framework for systematic uncertainty evaluation in virtual spatial transcriptomics. Code availability: https://github.com/ratschlab/uncertainty-vst-2026",
+   "reasons": [
+    "deep learning",
+    "transcriptomics",
+    "spatial omics",
+    "code released"
+   ],
+   "score": 14,
+   "summary": {
+    "tldr": "In virtual spatial transcriptomics from H&E, predicted uncertainty is well calibrated but largely mirrors the predicted mean, so it barely identifies which spot-gene predictions are actually wrong.",
+    "background": "Deep learning models predict spatial gene expression from histology, but individual predictions can be unreliable and it was unknown whether the uncertainty estimates these models output flag errors. The difficulty is that expression counts are overdispersed with variance increasing with the mean, so any uncertainty-error association may reflect a shared dependence on expression level rather than per-prediction reliability.",
+    "approach": "The authors built a benchmark for predictive uncertainty in H&E-to-expression regression. A shared MLP maps frozen Midnight-12k patch embeddings to gene-specific distribution parameters (heteroscedastic/homoscedastic Gaussian, Poisson, negative binomial likelihoods), with epistemic uncertainty from deep ensembles, MC dropout, and last-layer Laplace, plus no-histology marginal, training-free neighborhood, and reproduced STimage baselines. Data are three Visium cohorts—metastatic melanoma (Tumor Profiler, 18 slides/7 donors), kidney/lung TLS (6 slides/6 donors), and NSCLC (36 slides/8 donors), each with 3,000 highly variable genes—evaluated by leave-one-patient-out cross-validation. Calibration used the probability integral transform; informativeness used Spearman and partial Spearman correlations controlling for the predicted mean, plus oracle-based sparsification.",
+    "findings": [
+     "Probabilistic readouts preserve mean-prediction accuracy, which is modest: slide-aware Pearson for the top 50 genes is 0.55 (melanoma), 0.26 (kidney/lung), 0.24 (NSCLC).",
+     "Across genes within a spot, uncontrolled uncertainty-error Spearman correlation reaches ~0.8 (negative binomial on melanoma: +0.79), but drops to +0.05 after controlling for the predicted mean; all controlled correlations lie between −0.07 and +0.22.",
+     "A marginal baseline fitted without histology reproduces the calibration ranking (negative binomial best, then Poisson, then Gaussian), showing that good calibration does not imply informative uncertainty.",
+     "Epistemic, neighborhood, and STimage signals add nothing stronger; uncertainty recovers at most 30% of the oracle sparsification gain at fixed predicted mean (epistemic ≤7%), and withholding half of predictions lowers mean error by at most 16%.",
+     "Measured expression shows a mean-variance Spearman ≥0.95 and predicted variance tracks the predicted mean at 0.90–0.95, explaining the apparent uncertainty-error association."
+    ],
+    "why": "For anyone building or using histology-to-transcriptomics models, this shows that calibration and raw uncertainty-error correlations overstate reliability; uncertainty should be judged by error informativeness beyond the predicted mean. The benchmark and released code provide a concrete protocol for that evaluation.",
+    "limitations": "Evaluation is in-distribution with only synthetic image artifacts (no real batch, scanner, or staining shifts), and without replicate ST measurements technical variability cannot be separated from model error. A single frozen image encoder and a trunk tuned once for mean prediction also limit epistemic uncertainty and achievable accuracy.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 29070
+   }
+  },
+  {
+   "title": "Bioactivity foundation model for hit identification and hit-to-lead optimization from sequence data",
+   "authors": [
+    "Koh, H. Y.",
+    "Koh, H. J. W.",
+    "Zheng, Y.",
+    "Naranbhai, V.",
+    "Schmidt, D. F.",
+    "Barthelemy, J.",
+    "Chen, Y.-J.",
+    "Nguyen, A. T. N.",
+    "Pan, S.",
+    "May, L. T.",
+    "Webb, G. I."
+   ],
+   "authorCount": 11,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-31",
+   "doi": "10.64898/2026.10.26.762100",
+   "url": "https://doi.org/10.64898/2026.10.26.762100",
+   "abstract": "Learning from large-scale bioactivity archives is complicated by heterogeneous assay readouts and differences in data reliability. Here we show that a model that predicts probability distributions over binding affinities from sequence data opens model training to vast and diverse troves of heterogeneous bioactivity data. We develop PSICHIC+, a bioactivity foundation model trained on approximately 82 million protein-ligand records using a distributional objective that preserves quantitative resolution while incorporating variation in data reliability. Given a protein sequence and ligand SMILES, PSICHIC+ predicts binding affinity in milliseconds. In zero-shot virtual-screening benchmarks without target-specific training data, it improves enrichment over regression- and classification-based approaches and performs competitively with leading structure-based methods. In lab-in-the-loop campaigns, distribution-guided acquisition improves recovery of high-activity compounds under fixed screening budgets. Combining PSICHIC+ with Boltz-2 improves hit-to-lead affinity prediction over Boltz-2 alone, with mean correlation approaching that of FEP+ on the evaluated benchmarks, without requiring high-resolution protein structures. These results support distributional learning as a scalable approach to using heterogeneous bioactivity data for hit identification and hit-to-lead optimization.",
+   "reasons": [
+    "foundation model",
+    "zero-shot",
+    "proteins",
+    "scale",
+    "generalizes"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "PSICHIC+ is a sequence-only protein-ligand bioactivity foundation model trained with a beta-distributional objective on ~82M heterogeneous records, enabling millisecond zero-shot virtual screening and hit-to-lead affinity prediction that approaches FEP+ accuracy when ensembled with Boltz-2.",
+    "background": "Drug discovery needs binding-affinity prediction from enormous but heterogeneous bioactivity archives that mix assay types, units, and reliability levels. Regression pipelines must stringently curate data (discarding most of it), while classification pipelines binarize labels and lose the quantitative resolution needed to rank close analogs.",
+    "approach": "They extend the PSICHIC sequence model with a beta-distribution output head over normalized bioactivity (pK values mapped to [0,1] using pKmax = 12): exact pK labels are trained by likelihood, binary/HTS labels by cross-entropy on the beta-CDF threshold-exceedance probability, and per-source concentration regularization down-weights unreliable sources. The beta mean gives the point prediction and concentration (kappa = alpha + beta) gives calibrated uncertainty. The model was trained on ~82M records curated from Papyrus (4,900 proteins, ~6.1M ligands), including generated decoys, and runs at 1.34 ms per pair on a single GPU.",
+    "findings": [
+     "Zero-shot virtual screening: on DUD-E (102 targets) PSICHIC+ achieved EF5% = 13.3 and BEDROC = 0.51 versus 5.6/0.10 for regression and 10.8/0.34 for classification, outperforming all 22 structure-based methods; on DEKOIS 2.0 (81 targets) it matched the best structural methods (EF5% 8.0 vs 8.1-8.2).",
+     "Zero-shot affinity on JACS/Merck FEP benchmarks (16 targets): mean Pearson r = 0.52 versus 0.60 for Boltz-2 and 0.74 for FEP+; concentration tracked prediction error (r = 0.52, n = 461), and a concentration-modulated PSICHIC+-Boltz-2 ensemble reached r = 0.68 at ~20 s per pair.",
+     "Speed: PSICHIC+ alone is ~15,000x faster than Boltz-2 (1.34 ms vs ~20 s), and the ensemble is ~4,000x faster than FEP+ (~20 s vs ~1 day per pair); fine-tuning needs <10 GB GPU memory.",
+     "Few-shot adaptation with 1-6 target-specific labels beat MAML, ProtoNet, TransferQSAR, and ActFound baselines, with UCB-based compound selection adding further gains.",
+     "Lab-in-the-loop active learning (360-label budget, batch sizes 30-120) on Mpro, USP7, D2R, and TYK2 recovered more top-1% compounds than random forest, MLP, and GP baselines; on USP7 it recovered 64.4% of top hits versus 35.6% for static zero-shot ranking."
+    ],
+    "why": "For a multiomics researcher, the transferable idea is the source-aware distributional objective: it lets a single model train jointly on continuous, thresholded, and weakly labeled data at full corpus scale without binarizing or discarding noisy measurements, while retaining quantitative resolution. The concentration parameter then doubles as a reliability estimate and an active-learning acquisition signal, a pattern directly relevant to integrating heterogeneous, noisy omics readouts under label budgets.",
+    "limitations": "Results are retrospective benchmarks from a non-peer-reviewed preprint; functional potency still conflates affinity with efficacy, the Boltz-2 screening comparison was not retrained under the same target-exclusion protocol, and the accuracy-speed claims rely on published runtimes for the slower methods.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 82795
+   }
+  },
+  {
+   "title": "EMBER: Contextualized gene representations enable compositional prediction across cellular perturbations",
+   "authors": [
+    "Ho, N.",
+    "Xing, E. P.",
+    "Ma, J."
+   ],
+   "authorCount": 3,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-10-31",
+   "doi": "10.64898/2026.10.28.762655",
+   "url": "https://doi.org/10.64898/2026.10.28.762655",
+   "abstract": "Predicting the effects of individual and combined perturbations is central to identifying context-specific vulnerabilities and designing targeted interventions. Yet learning gene representations that integrate functional relationships with cellular state and transfer across perturbation tasks remains challenging. Here, we present EMBER, a gene-centric foundation model that learns context-dependent functional representations of genes. EMBER combines interaction-guided contrastive learning with masked expression reconstruction during pretraining on a single-cell corpus curated for diversity and balanced sampling across cell types and experimental batches. EMBER decouples gene representation learning from task-specific prediction through a composable embedding framework: the pretrained encoder remains frozen, while lightweight probes combine contextualized gene embeddings to predict individual and combined perturbation effects. The same pretrained representations support single-gene perturbation-response prediction, digenic interaction prediction, and multi-target drug-response prediction. EMBER improves cross-context perturbation-response prediction and genetic-interaction ranking relative to evaluated baselines. EMBER also prioritized SCFD1, a mediator of autophagosome-lysosome fusion, as a candidate dependency during mTOR inhibition. Together, these results establish contextualized gene embeddings as reusable building blocks for modeling genetic and pharmacological perturbations, supporting the prioritization of genetic interactions and context-specific interventions for experimental testing.",
+   "reasons": [
+    "foundation model",
+    "representation learning",
+    "single-cell",
+    "perturbation",
+    "scale",
+    "generalizes"
+   ],
+   "score": 19,
+   "summary": {
+    "tldr": "EMBER is a frozen gene-centric transformer model that learns contextualized single-cell gene embeddings and composes them with small probes to predict gene perturbation, genetic interaction, and drug response across contexts.",
+    "background": "Predicting how perturbations alter gene expression requires gene representations that capture functional relationships and cell state, but existing static network or LLM embeddings and single-cell foundation models transfer poorly. The challenge is to reuse one gene representation across single-gene, paired-gene, and multi-target tasks without retraining the encoder.",
+    "approach": "EMBER pretrains a 6-layer transformer (128 dimensions, 1,280-gene tokens) on a CellxGene corpus of 250,283 balanced cells across 345 cell types, plus control cells from K562, Jurkat, HepG2, and RPE1. It combines STRING-based cell subgraph contrastive learning (167,855 high-confidence edges) with masked expression reconstruction to learn gene embeddings conditioned on cellular state. For downstream tasks, the encoder is frozen and lightweight probes compose matched-context embeddings: perturbed gene + readout gene, two co-perturbed genes, or drug target set + readout gene.",
+    "findings": [
+     "On CRISPRi Perturb-seq across four cell lines, EMBER-PERT averaged AUPRC 0.425 for unseen cell lines and unseen perturbations, beating static embeddings (0.387), mismatched-context embeddings (0.385), STRING-GNN (0.383), and STATE (0.389).",
+     "For genetic interactions on HAP1, EMBER-GI reached AUPRC 0.181 over chance 0.089 and STRING-GNN 0.156, and its genome-wide imputed map over 16,408 genes recovered known synthetic lethals in the top 0.013%.",
+     "EMBER-GI prioritized SCFD1 as an mTOR-inhibition dependency; two retrospective CRISPR screens showed stronger SCFD1 depletion with Torin1 (mouse EPP2: log2FC -1.89 vs -1.47, p=0.0046; HAP1: -3.69 vs -2.21, p=0.062).",
+     "EMBER-DRUG had best average rank for held-out drug transcriptional prediction, with perturbed-reference Pearson about 0.15 on LINCS L1000 and 0.05 on Tahoe-100M, and an A549 disease-reversal screen achieved AUROC 0.668 on PRISM viability for 399 drugs, ranking capmatinib, tepotinib, and brigatinib top.",
+     "Ablations show CSCL drives GO functional organization (ARI 0.20, NMI 0.27) while reconstruction captures context-responsive information; centroid distance correlated with perturbation responsiveness (rho 0.522 matched vs 0.298 mismatched)."
+    ],
+    "why": "For transcriptomics and multiomics work, EMBER provides a reusable gene embedding interface that can integrate single-cell expression context with perturbation and drug annotation without full model retraining.",
+    "limitations": "It relies on transcriptomic context and incomplete STRING annotations, uses retrospective labels and viability data, and has not yet shown prospective higher-order interaction or therapeutic validation; gains remain task and metric dependent.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "qwen3.8-flash",
+    "chars": 173830
+   }
+  }
+ ],
+ "candidates": 351
+}
