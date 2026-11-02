@@ -1,6 +1,18 @@
 {
  "days": [
   {
+   "date": "2026-11-02",
+   "title": "Mapping single-cell data to reference atlases by transfer learning",
+   "venue": "Nature Biotechnology",
+   "key": "10.1038/s41587-021-01001-7",
+   "also": [
+    "10.1073/pnas.2023070118",
+    "10.1093/nsr/nwaf028",
+    "10.1016/j.csbj.2024.09.031"
+   ],
+   "classic": true
+  },
+  {
    "date": "2026-11-01",
    "title": "Single-cell foundation models transfer across deep evolutionary distances",
    "venue": "bioRxiv",

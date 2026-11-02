@@ -1,0 +1,196 @@
+{
+ "date": "2026-11-02",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Mapping single-cell data to reference atlases by transfer learning",
+  "authors": [
+   "Mohammad Lotfollahi",
+   "Mohsen Naghipourfar",
+   "Malte D. Luecken",
+   "Matin Khajavi",
+   "Maren Büttner",
+   "Marco Wagenstetter",
+   "Žiga Avsec",
+   "Adam Gayoso",
+   "Nir Yosef",
+   "Marta Interlandi",
+   "Sergei Rybakov",
+   "Alexander V. Misharin"
+  ],
+  "authorCount": 13,
+  "venue": "Nature Biotechnology",
+  "preprint": false,
+  "date": "2021-08-30",
+  "doi": "10.1038/s41587-021-01001-7",
+  "url": "https://doi.org/10.1038/s41587-021-01001-7",
+  "abstract": "Large single-cell atlases are now routinely generated to serve as references for analysis of smaller-scale studies. Yet learning from reference data is complicated by batch effects between datasets, limited availability of computational resources and sharing restrictions on raw data. Here we introduce a deep learning strategy for mapping query datasets on top of a reference called single-cell architectural surgery (scArches). scArches uses transfer learning and parameter optimization to enable efficient, decentralized, iterative reference building and contextualization of new datasets with existing references without sharing raw data. Using examples from mouse brain, pancreas, immune and whole-organism atlases, we show that scArches preserves biological state information while removing batch effects, despite using four orders of magnitude fewer parameters than de novo integration. scArches generalizes to multimodal reference mapping, allowing imputation of missing modalities. Finally, scArches retains coronavirus disease 2019 (COVID-19) disease variation when mapping to a healthy reference, enabling the discovery of disease-specific cell states. scArches will facilitate collaborative projects by enabling iterative construction, updating, sharing and efficient use of reference atlases.",
+  "reasons": [
+   "deep learning",
+   "single-cell",
+   "cell atlas",
+   "generalizes"
+  ],
+  "score": 19.553402367976823,
+  "classic": true,
+  "citations": 598,
+  "year": 2021,
+  "tldr": "scArches is a transfer-learning method ('architectural surgery') that maps new single-cell query datasets onto pre-trained reference atlas models by adding small trainable 'adaptor' weights for each query study, enabling decentralized atlas building without sharing raw data.",
+  "why": "For anyone building or consuming atlas-scale references, scArches makes query-to-reference mapping cheap (no hyperparameter re-optimization, no full retraining) and decentralized (share model weights, not cells). It prefigures the adapter/pretrained-checkpoint workflow now standard in multiomics, and the totalVI variant is an early template for cross-modality imputation onto shared references.",
+  "summary": {
+   "tldr": "scArches is a transfer-learning method ('architectural surgery') that maps new single-cell query datasets onto pre-trained reference atlas models by adding small trainable 'adaptor' weights for each query study, enabling decentralized atlas building without sharing raw data.",
+   "background": "Reference atlases with millions of cells are meant to serve as substrates for annotating and contextualizing smaller query datasets, but query and reference typically come from different labs and protocols, so batch effects must be removed. Standard integration requires access to all raw data, full retraining for every new dataset, and tends to remove any widespread difference, including real biological effects like disease.",
+   "approach": "They take a conditional autoencoder trained on reference data (base models: trVAE, scVI, scANVI, totalVI, an NB-CVAE) and, for each query study, add new one-hot condition inputs with randomly initialized weights ('adaptors') in the first layer of encoder and decoder. All pre-trained weights are frozen and only adaptors are fine-tuned, embedding the query into the reference latent space while preserving unseen states. Reference models are shared as weights (e.g., via Zenodo) and can be updated iteratively by successive users.",
+   "findings": [
+    "Fine-tuning only adaptors reduces trainable parameters by four to five orders of magnitude versus full retraining while matching integration quality on ten batch-correction/bio-conservation metrics; on a 250,000-cell mouse brain reference, adaptor-only tuning was competitive with or better than input-layer or full-network tuning.",
+    "Reference quality matters: on immune data (20,522 cells) accuracy required at least ~50% (~10,000 cells) as reference; scArches matched de novo integration on immune, pancreas (15,681) and brain (332,129) datasets, with ~5x (scVI) and ~8x (scANVI) speedups and 1 million query cells mapped in under 1 hour.",
+    "Label transfer: mapping Tabula Muris (90,120 cells, 24 tissues) onto a Tabula Senis reference (264,287 cells, 155 cell types) gave ~84% accuracy, and the unseen trachea tissue (9,330 cells) received high uncertainty and was flagged as unknown.",
+    "Multimodal: scArches-totalVI built a CITE-seq PBMC reference (10,849 cells), mapped an RNA-only query (10,315 cells), and imputed surface proteins (CD3/CD4/CD8/CD19/CD14) resolving T cells, B cells and monocytes.",
+    "COVID-19: mapping BALF data (62,469 cells) onto a 154,723-cell healthy reference preserved disease states - monocyte-derived macrophages (MoAMs) stayed distinct near monocytes, activated TRAMs (IFI27/CXCL10+) separated from healthy TRAMs, and interferon-high CD8+ T cells (ISG15, MX1) remained distinguishable."
+   ],
+   "why": "For anyone building or consuming atlas-scale references, scArches makes query-to-reference mapping cheap (no hyperparameter re-optimization, no full retraining) and decentralized (share model weights, not cells). It prefigures the adapter/pretrained-checkpoint workflow now standard in multiomics, and the totalVI variant is an early template for cross-modality imputation onto shared references.",
+   "limitations": "It inherits base-model limits: the output is a latent embedding rather than corrected counts, and it needs a large, diverse reference (multiple studies, roughly half the batches) to work well. It will not remove batch effects stronger than those seen in training, struggles with cell types below ~0.5% abundance, and performs best when query protocols and cell types resemble the reference.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 88916
+  }
+ },
+ "also": [
+  {
+   "title": "BABEL enables cross-modality translation between multiomic profiles at single-cell resolution",
+   "authors": [
+    "Kevin Wu",
+    "Kathryn E. Yost",
+    "Howard Y. Chang",
+    "James Zou"
+   ],
+   "authorCount": 4,
+   "venue": "Proceedings of the National Academy of Sciences",
+   "preprint": false,
+   "date": "2021-04-07",
+   "doi": "10.1073/pnas.2023070118",
+   "url": "https://doi.org/10.1073/pnas.2023070118",
+   "abstract": "Simultaneous profiling of multiomic modalities within a single cell is a grand challenge for single-cell biology. While there have been impressive technical innovations demonstrating feasibility-for example, generating paired measurements of single-cell transcriptome (single-cell RNA sequencing [scRNA-seq]) and chromatin accessibility (single-cell assay for transposase-accessible chromatin using sequencing [scATAC-seq])-widespread application of joint profiling is challenging due to its experimental complexity, noise, and cost. Here, we introduce BABEL, a deep learning method that translates between the transcriptome and chromatin profiles of a single cell. Leveraging an interoperable neural network model, BABEL can predict single-cell expression directly from a cell's scATAC-seq and vice versa after training on relevant data. This makes it possible to computationally synthesize paired multiomic measurements when only one modality is experimentally available. Across several paired single-cell ATAC and gene expression datasets in human and mouse, we validate that BABEL accurately translates between these modalities for individual cells. BABEL also generalizes well to cell types within new biological contexts not seen during training. Starting from scATAC-seq of patient-derived basal cell carcinoma (BCC), BABEL generated single-cell expression that enabled fine-grained classification of complex cell states, despite having never seen BCC data. These predictions are comparable to analyses of experimental BCC scRNA-seq data for diverse cell types related to BABEL's training data. We further show that BABEL can incorporate additional single-cell data modalities, such as protein epitope profiling, thus enabling translation across chromatin, RNA, and protein. BABEL offers a powerful approach for data exploration and hypothesis generation.",
+   "reasons": [
+    "deep learning",
+    "single-cell",
+    "transcriptomics",
+    "multiomics",
+    "epigenomics",
+    "RNA-seq"
+   ],
+   "score": 20.434967888427813,
+   "classic": true,
+   "citations": 165,
+   "year": 2021,
+   "summary": {
+    "tldr": "BABEL is a neural network that translates between single-cell RNA expression and ATAC chromatin accessibility profiles of the same cell, enabling paired multiomic analysis from a single measured modality.",
+    "background": "Joint scRNA-seq/scATAC-seq profiling (10x Multiome, SNARE-seq, sci-CAR) is technically complex, noisy, and expensive, so most single-cell datasets capture only one modality. Prior computational work focused on integrating already-measured unpaired modalities (Seurat, ArchR, MAESTRO) rather than inferring a missing modality for individual cells.",
+    "approach": "BABEL uses two encoders and two decoders: fully connected networks for 34,861-gene RNA profiles and chromosome-blocked networks for 223,897 binarized ATAC peaks, all projecting into and out of a shared 16-dimensional latent space. All four encoder-decoder paths are trained jointly on paired data (negative binomial loss for RNA, binary cross-entropy for ATAC), forcing the encoders to be interchangeable with either decoder. The human model was trained on 28,408 cells (PBMCs plus two colorectal cancer cell lines) from 10x Multiome, with cluster-based train/test splits and the GM12878 cell line held out entirely.",
+    "findings": [
+     "On the human test cluster, BABEL reaches Pearson 0.62 (Spearman 0.35) for ATAC-to-RNA and AUROC 0.92 for RNA-to-ATAC; across cross-validation folds: Pearson 0.62-0.82 (median 0.80) and AUROC 0.87-0.92.",
+     "On held-out GM12878 cells, ATAC-to-RNA Pearson is 0.59 versus 0.15 for ArchR and 0.19 for MAESTRO gene activity scores, and 0.27 for a KNN baseline; RNA-to-ATAC AUROC is 0.65.",
+     "Mouse models trained on SNARE-seq cortex (Pearson 0.55, AUROC 0.80) and SHARE-seq skin (0.53, 0.80) show the approach works across species and protocols.",
+     "On 37,818 basal cell carcinoma cells profiled only by scATAC-seq, predicted pseudobulk expression correlates r = 0.70 with tissue-matched scRNA-seq versus 0.27 for Cicero gene activity scores, and recovers CTLA4/PAK2/FAS overexpression in Tfh-like cells.",
+     "An auxiliary decoder trained on 33,287 CITE-seq bone marrow cells adds protein epitope prediction, including chained ATAC-to-RNA-to-protein translation."
+    ],
+    "why": "For someone working on multiomic AI, this is an early demonstration that a compact shared-latent autoencoder (16-dim bottleneck, ~30k paired training cells) can generalize to new tissues, protocols, and species. The interoperable encoder/decoder design anticipates later modality-chaining approaches, and the paper offers a practical sanity check: correlate pseudobulk predictions against independent scRNA-seq before trusting imputations.",
+    "limitations": "Performance degrades on cell types absent from training: BABEL fails to recover KRT14 in malignant BCC cells where Cicero's heuristic scores succeed. Predictions are also bounded by the true mutual information between accessibility and expression, since chromatin changes do not always track transcriptomic changes.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 64743
+   }
+  },
+  {
+   "title": "Foundation models in bioinformatics",
+   "authors": [
+    "Fei Guo",
+    "Renchu Guan",
+    "Yaohang Li",
+    "Qi Liu",
+    "Xiaowo Wang",
+    "Can Yang",
+    "Jianxin Wang"
+   ],
+   "authorCount": 7,
+   "venue": "National Science Review",
+   "preprint": false,
+   "date": "2025-01-25",
+   "doi": "10.1093/nsr/nwaf028",
+   "url": "https://doi.org/10.1093/nsr/nwaf028",
+   "abstract": "With the adoption of foundation models (FMs), artificial intelligence (AI) has become increasingly significant in bioinformatics and has successfully addressed many historical challenges, such as pre-training frameworks, model evaluation and interpretability. FMs demonstrate notable proficiency in managing large-scale, unlabeled datasets, because experimental procedures are costly and labor intensive. In various downstream tasks, FMs have consistently achieved noteworthy results, demonstrating high levels of accuracy in representing biological entities. A new era in computational biology has been ushered in by the application of FMs, focusing on both general and specific biological issues. In this review, we introduce recent advancements in bioinformatics FMs employed in a variety of downstream tasks, including genomics, transcriptomics, proteomics, drug discovery and single-cell analysis. Our aim is to assist scientists in selecting appropriate FMs in bioinformatics, according to four model types: language FMs, vision FMs, graph FMs and multimodal FMs. In addition to understanding molecular landscapes, AI technology can establish the theoretical and practical foundation for continued innovation in molecular biology.",
+   "reasons": [
+    "foundation model",
+    "AI",
+    "single-cell",
+    "transcriptomics",
+    "proteomics",
+    "genomics"
+   ],
+   "score": 23.08278537031645,
+   "classic": true,
+   "citations": 110,
+   "year": 2025,
+   "summary": {
+    "tldr": "A review paper that catalogues bioinformatics foundation models by four architecture types (language, vision, graph, multimodal) across five tasks (genomics, transcriptomics, proteomics, drug discovery, single-cell), tabulating each model's architecture, parameter count, training strategy, and applications.",
+    "background": "Biological data is large but mostly unlabeled and expensive to generate, motivating pre-trained models that learn general representations and transfer to downstream tasks. However, the literature is fragmented across model families and data types, making it hard for researchers to pick the right architecture for a given problem.",
+    "approach": "The authors organize dozens of models along two axes: model type (language, vision, graph, multimodal) and biological task. They trace an evolution from task-specific models through BERT-style pre-training on sequences (DNABERT), transfer-learning era models (AlphaFold series), to multimodal integration. Tables report for each model its architecture, whether it uses pre-train+fine-tune or not, parameter count, and target applications.",
+    "findings": [
+     "Genomics: DNA language models span HyenaDNA (1.6M parameters, long context), DNABERT-2 (117M, BPE tokenization), and Evo (7B, StripedHyena); Enformer (228M, CNN+Transformer) predicts gene expression and enhancer-promoter interactions; GPN (65M) predicts genome-wide variant effects; ccsmeth handles nanopore/PacBio methylation calling.",
+     "Transcriptomics: RNA-FM (23M) and SpliceBERT (19.4M) cover RNA structure and splicing; RNA-MSM uses homologous sequences from RNAcmap; GenerRNA (decoder-only) and RfamGen (VAE+covariance model) generate RNA; Bert2Ome (110M) predicts 2'-O-methylation sites.",
+     "Proteomics: ESM2 (15B parameters) with ESMFold reaches near alignment-based structure-prediction accuracy at much higher speed; ProtTrans scales to 11B; generative models ProtGPT2 (738M), ProGen (1.2B), and ZymCTRL (700M, EC-conditioned) design sequences; EVOLVEpro improved properties of six proteins up to 100-fold using few-shot active learning.",
+     "Drug discovery: SMILES-BERT and X-MOL for molecular property prediction; graph models MolCLR and KPGT (100M); Pocket2Mol generates molecules for 3D binding pockets; ADMETlab 2.0 indexes 288,967 entries and predicts 31 ADMET endpoints.",
+     "AlphaFold3 replaces AlphaFold2's EvoFormer-heavy design with a diffusion module for atomic coordinates and only four MSA-interaction blocks, predicting protein-nucleic-acid, ligand, and antibody-antigen complexes with reduced MSA dependence."
+    ],
+    "why": "For someone building AI models on transcriptomic or multiomics data, this is a practical index of which architectures and model scales have been validated per data type, plus the relevant benchmarks (TAPE, CASP). It frames multiomics integration as multimodal foundation-model pre-training, which is the context in which transcriptomics models will connect to genome and protein models.",
+    "limitations": "It is a survey, not a benchmark: no head-to-head comparison on shared datasets, and all reported numbers come from the original papers. The single-cell section is absent from the provided text, so its coverage there cannot be verified.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 89948
+   }
+  },
+  {
+   "title": "Large language models and their applications in bioinformatics",
+   "authors": [
+    "Oluwafemi Abimbola Sarumi",
+    "Dominik Heider"
+   ],
+   "authorCount": 2,
+   "venue": "Computational and Structural Biotechnology Journal",
+   "preprint": false,
+   "date": "2024-10-04",
+   "doi": "10.1016/j.csbj.2024.09.031",
+   "url": "https://doi.org/10.1016/j.csbj.2024.09.031",
+   "abstract": "Recent advancements in Natural Language Processing (NLP) have been significantly driven by the development of Large Language Models (LLMs), representing a substantial leap in language-based technology capabilities. These models, built on sophisticated deep learning architectures, typically transformers, are characterized by billions of parameters and extensive training data, enabling them to achieve high accuracy across various tasks. The transformer architecture of LLMs allows them to effectively handle context and sequential information, which is crucial for understanding and generating human language. Beyond traditional NLP applications, LLMs have shown significant promise in bioinformatics, transforming the field by addressing challenges associated with large and complex biological datasets. In genomics, proteomics, and personalized medicine, LLMs facilitate identifying patterns, predicting protein structures, or understanding genetic variations. This capability is crucial, e.g., for advancing drug discovery, where accurate prediction of molecular interactions is essential. This review discusses the current trends in LLMs research and their potential to revolutionize the field of bioinformatics and accelerate novel discoveries in the life sciences.",
+   "reasons": [
+    "language model",
+    "transformer",
+    "deep learning",
+    "proteomics",
+    "proteins",
+    "genomics"
+   ],
+   "score": 22.898780013289826,
+   "classic": true,
+   "citations": 89,
+   "year": 2024,
+   "summary": {
+    "tldr": "A 2024 narrative review (Sarumi & Heider, Comput. Struct. Biotechnol. J.) that catalogues transformer-based LLM tools for bioinformatics across five task areas — protein structure, sequence analysis, drug discovery, gene expression, and pathway analysis — without running any experiments itself.",
+    "background": "Biological data (DNA/RNA/protein sequences, expression matrices, SMILES strings, biomedical text) is large, heterogeneous, and context-dependent, so hand-crafted features transfer poorly across tasks. Transformers pre-trained on biological 'language' (k-mers, amino acids, molecules, literature) can be fine-tuned per task, but the resulting model landscape is scattered and hard to track.",
+    "approach": "The authors organize roughly 30 tools from 2013–2024 (Table 1) by application area and base architecture, describing each model's pretraining data and intended use case. BERT/RoBERTa-style bidirectional encoders dominate classification-style tasks, while GPT-style autoregressive decoders (ProtGPT2, MolGPT, DNAGPT) handle sequence/molecule generation. A closing section discusses interpretability, data bias, hallucination, and privacy as open challenges.",
+    "findings": [
+     "The taxonomy covers protein LMs (ESM-1b/1v, ESMFold, ProtTrans, ProtGPT2, ProteinBERT), DNA/RNA LMs (DNABERT, DNABERT-2/-S, HyenaDNA, RNABERT, TCR-BERT, MetaBERTa), chemistry LMs (ChemBERTa, SMILES-BERT, MolGPT, TransDTI, PharmBERT), and text-mining models (BioBERT, ClinicalBERT, PathNER).",
+     "For transcriptomics specifically, the relevant entries are scBERT (BERT pre-trained on large single-cell datasets for cell-type annotation), GeneBERT (RoBERTa predicting differential expression from histone-modification data), DeepGene Transformer (lung cancer subtype classification from bulk expression), iEnhancer-BERT (DNABERT-based enhancer identification), MuLan-Methyl (multi-transformer methylation-site prediction), and Lomics (2024, LLaMA-3-based generation of pathways and gene sets from transcriptomic data).",
+     "HyenaDNA is highlighted as handling long genomic contexts at single-nucleotide resolution via linear attention and dynamic convolutions, addressing the quadratic cost of standard transformers.",
+     "The paper presents no benchmarks of its own: no accuracy figures, dataset sizes, or parameter counts are reported; claims that models outperform baselines are cited qualitatively from the original papers.",
+     "It calls for domain-specific pretraining, expert validation of LLM outputs, and interdisciplinary guidelines for responsible use."
+    ],
+    "why": "For someone working on AI for transcriptomics/multiomics, the main value is as a curated index of which LLM exists per modality, particularly the gene-expression and pathway-analysis sections (scBERT, GeneBERT, Lomics). It also usefully shows that sequence-based LLMs are far more mature than expression/multiomics counterparts.",
+    "limitations": "It is a qualitative survey with no head-to-head comparisons, training-scale details, or discussion of multiomics integration. It also omits key transcriptomics foundation models a specialist would expect (e.g., Geneformer, scGPT), so coverage of the reader's own area is thin and partly dated.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 40302
+   }
+  }
+ ],
+ "candidates": 363
+}
