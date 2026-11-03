@@ -1,0 +1,190 @@
+{
+ "date": "2026-11-03",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "A single-cell multimodal foundation model enables cross modality analysis between transcriptome and chromatin",
+  "authors": [
+   "Bao, X.",
+   "Zhu, J.",
+   "Song, X.",
+   "Zhang, X.",
+   "Zeng, H.",
+   "Vu, H. T. H.",
+   "Zhang, H.",
+   "Zhang, Z.",
+   "Yao, M.",
+   "Liang, M.",
+   "Liu, K.",
+   "Parker, S. C."
+  ],
+  "authorCount": 14,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-02",
+  "doi": "10.64898/2026.10.28.762297",
+  "url": "https://doi.org/10.64898/2026.10.28.762297",
+  "abstract": "Most single-cell studies measure either gene expression or chromatin accessibility, and connecting the two usually requires fitting a model to each study. Here we present MUTUAL (MUltiome Transfer in a Unified Aligned Latent space), which keeps the single-cell foundation models scFoundation and EpiAgent frozen, combines their embeddings with linear summaries of each modality and learns a shared RNA--ATAC space from 3.0 million paired cells of 400 public multiome datasets. Applied without refitting to ten datasets not used for training, MUTUAL matched cells' RNA and ATAC profiles more accurately than methods fitted on other donors of the same dataset, annotated ATAC-only cells more accurately and transferred transcription-factor motif activity to RNA-only cells beyond what cell-type assignment provides. In a maturation series of stem-cell-derived islets, motif activity predicted from RNA largely reproduced the measured stage-wise changes when other libraries of the series served as the reference. MUTUAL makes public multiome data directly usable by single-modality studies.",
+  "reasons": [
+   "foundation model",
+   "AI agents",
+   "single-cell",
+   "transcriptomics",
+   "epigenomics",
+   "scale"
+  ],
+  "score": 19,
+  "tldr": "MUTUAL learns a shared RNA-ATAC embedding once from 3.0M paired cells, so new RNA-only or ATAC-only samples can be matched across modalities, annotated, and given chromatin motif activity without refitting.",
+  "why": "For work on AI for transcriptomics and multiomics, this demonstrates that frozen unimodal single-cell foundation models can be repurposed as encoders for a reusable cross-modality bridge, replacing tissue-matched multiome reference mapping. It also calibrates expectations: simple linear summaries carry most of the signal, with foundation-model embeddings contributing a small but consistent gain.",
+  "summary": {
+   "tldr": "MUTUAL learns a shared RNA-ATAC embedding once from 3.0M paired cells, so new RNA-only or ATAC-only samples can be matched across modalities, annotated, and given chromatin motif activity without refitting.",
+   "background": "Most single-cell data measure either RNA or chromatin, and connecting them usually means fitting an integration model per study, using scarce paired multiome data from the same tissue as a bridge. Public multiome data are limited (a few million cells), so most methods' learned RNA-ATAC correspondence stays within one study and may not generalize.",
+   "approach": "MUTUAL keeps two unimodal foundation models frozen (scFoundation, trained on ~50M transcriptomes, for RNA; EpiAgent, ~5M ATAC profiles, for ATAC) and concatenates their embeddings with linear summaries (PCA / LSI) plus a raw view of 4,000 genes or 10,000 cCREs. Small MLPs (9.8M parameters, 6.2M at inference) map each modality into a 256-dim shared space, trained with a contrastive objective plus a cell-type term on 3.01M paired human cells from 400 public 10x Multiome datasets across 14 tissue groups. Training takes 49 minutes on one H200; the fixed model then embeds any new single-modality sample.",
+   "findings": [
+    "On 10 held-out multiome datasets (342,608 cells, 76 donors), cross-modal matching error (FOSCTTM) was 0.104/0.087 (RNA-to-ATAC/ATAC-to-RNA) vs 0.122/0.132 for GLUE, 0.117/0.115 for MultiVI, and 0.223/0.212 for SCARF; on new donors of training tissues its error was 23-45% of the baselines fitted on other donors.",
+    "Transferring chromVAR TF-motif activity from ATAC references to RNA-only cells gave the highest agreement of methods tested (0.372-0.437 across reference sizes vs 0.317-0.408 for GLUE/MultiVI/SCARF, and 0.045-0.057 above CelLink).",
+    "Annotating ATAC-only cells from labeled RNA references reached balanced accuracy 0.755 vs 0.692 for Seurat bridge, 0.686 for GLUE, and 0.631 for MultiVI; keeping only the 70% most confident labels raised this to 0.808.",
+    "In a 14-library stem-cell-derived islet series (97,247 cells), motif activity predicted from RNA with the series' other libraries as reference tracked measured stage changes (median per-motif r = 0.74; 39/40 primary-vs-baseline directions matched), while the 3.0M-cell training corpus as reference was weaker (r = 0.53) and missed stage-specific motifs.",
+    "Ablations show foundation-model inputs add modestly: adding them lowered matching error on 3 of 8 held-out tissues and never hurt, whereas random projections of the same width were worse on 4 of 8."
+   ],
+   "why": "For work on AI for transcriptomics and multiomics, this demonstrates that frozen unimodal single-cell foundation models can be repurposed as encoders for a reusable cross-modality bridge, replacing tissue-matched multiome reference mapping. It also calibrates expectations: simple linear summaries carry most of the signal, with foundation-model embeddings contributing a small but consistent gain.",
+   "limitations": "Performance is bounded by public multiome coverage (human, mostly blood/lung/brain, one droplet assay), and motif-transfer accuracy is dominated by cell-type structure (a cell-type-only control reaches r = 0.30-0.37 vs 0.37-0.44 for MUTUAL). The shared space does not resolve which distal elements regulate which gene, and paired data only validate recovery of a cell's own profile, not downstream biological conclusions.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 102438
+  }
+ },
+ "also": [
+  {
+   "title": "From WSIs to Bulk, Spatial and Single-Cell Transcriptomics via Multi-Scale Graph Neural Networks",
+   "authors": [
+    "Miguel Andrade",
+    "José Almeida",
+    "Carlos Santiago",
+    "Catarina Barata"
+   ],
+   "authorCount": 4,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-10-30",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2610.41692v1",
+   "abstract": "Understanding the spatial distribution of gene expression is key to studying complex diseases like cancer. While Spatial Transcriptomics (ST) and Single-Cell Transcriptomics (scT) provide high-resolution insights, they remain expensive and scarce. In contrast, standard histopathology Whole-Slide Images (WSIs) paired with bulk RNA sequencing are widely available. This work introduces a Multi-Scale Graph Neural Network (GNN) capable of simultaneously predicting bulk, spatial, and single-cell transcriptomics directly from WSIs. By extracting morphological features using a Pathology Foundation Model (PFM) (UNI2-h) and constructing spatial graphs at both patch and cell levels, the model learns the hierarchical relationships within the tissue. The network is trained on a combined dataset of The Cancer Genome Atlas Program (TCGA), Visium, and Xenium samples across lung, kidney, and breast tissues. A hybrid training strategy is employed, leveraging direct supervision alongside weakly supervised consistency losses to ensure predictions align across biological scales. Results show the model accurately predicts gene expression at the slide level and moderately at the patch level (strongest on Xenium), and achieves moderate correlation at the challenging single-cell level. Furthermore, downstream tasks explore the clinical relevance of these predictions, demonstrating their utility in survival analysis, spatial hazard mapping, and tumor classification via molecular signatures.",
+   "reasons": [
+    "foundation model",
+    "deep learning",
+    "graph neural network",
+    "single-cell",
+    "transcriptomics",
+    "spatial omics"
+   ],
+   "score": 22,
+   "summary": {
+    "tldr": "A multi-scale graph neural network predicts bulk, spot-level, and single-cell gene expression (17,038 genes) directly from H&E whole-slide images, trained jointly on TCGA, Visium, and Xenium data from lung, kidney, and breast.",
+    "background": "Spatial and single-cell transcriptomics are expensive and scarce, while H&E WSIs paired with bulk RNA-seq are abundant, motivating models that infer high-resolution expression from morphology. The difficulty is that spatial and single-cell ground truth are limited, TCGA bulk data has no spatial alignment, and single-cell counts are very sparse, so training must combine heterogeneous supervision levels without one scale corrupting another.",
+    "approach": "They build a GNN with graph-attention backbones at two scales: nodes are cells (segmented by Classpose, embedded with UNI2-h from 64px crops) and 224px patches, connected by k-NN spatial graphs (k=6-8), plus a patch-attention slide head and a feature-reconstruction head. Data: 2,027 TCGA slides with bulk RNA-seq (1,724 evaluated; 268 with cell segmentation for weak supervision), 105 Visium slides, and 47 Xenium slides (subcellular, 300-600 gene panels) from HEST-1k, across three organs; five-fold slide-level cross-validation. Training mixes direct supervision (Pearson-MSE loss, delta=0.3) with weakly supervised cell-to-patch and patch-to-slide consistency losses, uncertainty-weighted task balancing, and multi-scale aggregation in raw-count space to respect CP10k normalization.",
+    "findings": [
+     "Bulk prediction is strong: PCC 0.881 (TCGA), 0.774 (Visium), 0.797 (Xenium), with 72.6% of TCGA bulk genes significantly predicted.",
+     "Spot-level PCC is 0.509 on Visium and 0.786 on Xenium (AUROC 0.554 and 0.703); cell-level PCC on Xenium is 0.396 (AUROC 0.649), highest for neoplastic cells (0.456).",
+     "Compared to DeepSpot2Cell, the model is worse at spot level (AUROC 0.554 vs 0.590 Visium; 0.703 vs 0.764 Xenium) but better at cell level (PCC 0.396 vs 0.349; AUROC 0.649 vs 0.523) and on cell-level signature maps (e.g., angiogenesis 0.299 vs 0.118).",
+     "Cox survival on predicted bulk loses C-index versus real bulk (KIRC 0.748 to 0.665, BRCA 0.639 to 0.610, LUAD 0.544 to 0.497), while predicted signatures localize tumors (AUROC up to 0.810 for proliferation in BRCA) and classify patches (KIRC AUROC 0.932 using 50 Hallmark signatures vs 0.912 full transcriptome; raw UNI2-h embeddings reach 0.942).",
+     "Ablations show consistency losses are essential (cell-to-patch consistency collapses 0.896 to 0.222 without them), and dropping TCGA improves spatial bulk PCC (Visium 0.774 to 0.875) but hurts feature reconstruction."
+    ],
+    "why": "This is one of the first unified models to output bulk, spot, and single-cell expression from a single WSI, showing how abundant bulk data can weakly supervise finer scales - directly relevant to morphology-to-expression multimodal modeling. The downstream results (spatial hazard maps, signature-based tumor classification) demonstrate a practical route from images to interpretable molecular readouts.",
+    "limitations": "Cell-level evaluation is restricted to the 300-600 gene Xenium panels, TCGA spatial predictions lack ground truth, and batch effects plus small cohorts (e.g., 7 breast Visium slides) remain; baseline comparisons are confounded by differing supervision. Information flows only bottom-up (cells to patches to slide), and removing TCGA improved spatial bulk PCC, suggesting cohort effects are not fully resolved.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 94934
+   }
+  },
+  {
+   "title": "Learning inhibitor interactions from protein deep mutational scanning data and deep learning models",
+   "authors": [
+    "Zou, Z.",
+    "Hazelwood, I.",
+    "Estevam, G.",
+    "Rao, J.",
+    "Chrispens, K.",
+    "Howard, M. K.",
+    "Coyote-Maestas, W.",
+    "Fraser, J. S."
+   ],
+   "authorCount": 8,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-03",
+   "doi": "10.64898/2026.11.01.763444",
+   "url": "https://doi.org/10.64898/2026.11.01.763444",
+   "abstract": "Recent advances in protein language models, geometric deep learning, and structure prediction frameworks have the potential to accelerate computational drug discovery. However, it remains unclear how well these methods generalize beyond their training sets. Mutation-dependent drug responses present a challenge to these methods because there are often large effects from relatively small perturbations. Here, we systematically benchmark diverse mutational effect and drug-target affinity prediction models using deep mutational scanning datasets spanning 11 inhibitor conditions for the MET kinase domain. Across both mutational effect prediction and drug-target affinity tasks, current AI models produce largely ligand-invariant predictions despite experimentally distinct inhibitor-dependent fitness landscapes. Ligand-aware geometric models, including LigandMPNN and LASErMPNN, partially recover experimentally validated resistance-associated hotspots, highlighting the importance of explicitly modeling protein-ligand interactions and local structural flexibility. In contrast, deep learning affinity prediction models underestimate mutation-induced changes in binding affinity. This deficiency likely reflects mutation-invariant structural priors derived from co-folded structure prediction frameworks and the absence of mutation-conditioned supervision in current affinity datasets. Finally, we further extended our analysis to several kinase-inhibitor deep mutational scanning datasets and confirm the overall trends. Our findings suggest that a primary limitation in improving performance on this task lies in the scarcity of mutation-conditioned protein-ligand training data rather than model architecture alone.",
+   "reasons": [
+    "language model",
+    "deep learning",
+    "AI",
+    "perturbation",
+    "proteins",
+    "drug discovery"
+   ],
+   "score": 21,
+   "summary": {
+    "tldr": "On kinase deep mutational scanning (DMS) benchmarks, current protein language models, geometric models, and drug-target affinity predictors produce largely ligand-invariant predictions, and the authors argue the bottleneck is scarce mutation-conditioned protein-ligand training data rather than model architecture.",
+    "background": "Predicting how a single amino acid substitution changes fitness under a specific inhibitor is a hard generalization test for protein AI models: small sequence perturbations can have large, ligand-specific functional effects. It is unclear whether models trained mostly on unliganded or wild-type-centric data generalize beyond their training sets.",
+    "approach": "The authors benchmarked roughly 20 models on a DMS of the MET kinase domain measured under 11 inhibitors (types I, I½, II, III) plus a DMSO control, using ligand-dependent fitness changes as a proxy for affinity effects. Model classes included zero-shot mutational effect predictors (ESM2-650M, ESM C, SaProt, ProteinMPNN, ThermoMPNN, ProteinEBM), ligand-aware models (LigandMPNN, LASErMPNN, ProtLigand), and structure-based affinity models (Boltz-2, TankBind, FLOWR.root, FlowDock, AutoDock-GPU docking, PremPLI, MutDTA). Input structures came from AlphaFold3, Boltz-2, and Chai-1 co-folding predictions. They repeated the analysis on external kinase-inhibitor DMS datasets for FGFR, EGFR, SRC, and CDK.",
+    "findings": [
+     "ESM2 reached Spearman ρ ≈ 0.50 on the DMSO control but dropped ~53% under inhibitor conditions; ProteinMPNN dropped ~54%, and structure-aware pLMs produced predictions correlated >0.9 across inhibitors even though experimental landscapes correlate only 0.3-0.8 pairwise.",
+     "Ligand-aware models improved control-condition accuracy by <0.05 Spearman over ESM2-650M, but LigandMPNN/LASErMPNN partially recovered validated resistance hotspots (G1163 solvent front, Y1230, L1140) that protein-only models called neutral.",
+     "Affinity models correctly ranked tivantinib (type III) as the weakest binder and gave broader affinity distributions for pocket mutations (within 5 Å) than distal ones, but all systematically underestimated mutation-induced affinity changes.",
+     "Predicted affinity changes correlated poorly with experimental fitness changes overall (Spearman ρ < 0.2), performing better for pocket-localized resistance mutations than for sensitizing mutations.",
+     "A multi-model consensus recovered established resistance sites (G1163, Y1230, M1211, gatekeeper L1157, hinge Y1159/M1160 for cabozantinib) but missed others such as F1134 and G1242, and the trends held across the external kinase datasets."
+    ],
+    "why": "For someone working on multiomics, this is a concrete caution that strong baseline fitness prediction does not transfer to perturbation-context changes — analogous to models ignoring covariates in transcriptomic perturbation prediction. The actionable claim is that the fix is data, not architecture: densely matched, mutation-conditioned protein-ligand measurements are the scarce resource, and DMS panels like MET's are a template for generating them.",
+    "limitations": "All structural inputs are predicted rather than experimental mutant-inhibitor complexes, and DMS fitness is only a proxy for binding affinity. Recovered hotspots are mostly pocket-proximal, so distal, allosteric, and sensitizing effects remain largely unmodeled.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 146771
+   }
+  },
+  {
+   "title": "scAnyOmics: Foundation-Model Distillation for Any-to-Any Completion of Multi-omics Virtual Cells",
+   "authors": [
+    "Zhaoqi Song",
+    "Ye Du",
+    "Yusuke Iwasawa",
+    "Yutaka Matsuo",
+    "Qian Niu"
+   ],
+   "authorCount": 5,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-10-30",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2610.41399v1",
+   "abstract": "Recent advances in single-cell technologies have enabled the profiling of multiple molecular modalities, including transcriptomics, proteomics, and chromatin accessibility, providing a more comprehensive understanding of cellular states. However, integrating heterogeneous modalities and predicting missing molecular information remain challenging, particularly when paired measurements are limited. Here, we introduce scAnyOmics, a generative framework that distills knowledge from a frozen single-cell foundation model into a multimodal student model. scAnyOmics integrates scRNA-seq, protein-marker measurements, and scATAC-seq into a shared representation, enabling cross-modal prediction and reconstruction of missing modalities. We assembled 690,880 cells from six publicly available studies, covering both paired and partially paired multi-omics measurements, to systematically evaluate its predictive performance. We further evaluated scAnyOmics on held-out donor data, where it outperformed baseline methods across multiple evaluation metrics. Beyond cross-modal reconstruction, we explored its applications in cell-type annotation, perturbation-response prediction, and biological age estimation. Overall, scAnyOmics provides a unified framework for integrating incomplete single-cell multi-omics data and transferring pretrained biological knowledge, supporting the development of virtual cell models across diverse cellular contexts and experimental platforms.",
+   "reasons": [
+    "foundation model",
+    "generative model",
+    "single-cell",
+    "transcriptomics",
+    "multiomics",
+    "perturbation"
+   ],
+   "score": 20,
+   "summary": {
+    "tldr": "scAnyOmics trains a multimodal student model (RNA + surface protein + ATAC) via knowledge distillation from frozen single-cell foundation models to impute missing modalities, showing UCE distillation yields moderate but consistent gains over teacher-free students and simple baselines on ~691k blood cells.",
+    "background": "Single-cell multi-omics datasets (TEA-seq, DOGMA-seq, CITE-seq) rarely contain fully paired RNA, protein, and chromatin measurements, and prior integration methods (totalVI, MultiVI, scVAEIT) do not leverage pretrained foundation models. The problem is hard because modalities are heterogeneous, partially observed, platform-specific, and evaluation can be inflated by donor/sample leakage.",
+    "approach": "They assembled 690,880 cells from six GEO series of human peripheral blood/PBMCs (309,724 trimodal; 353,018 RNA+ADT; 26,094 RNA+ATAC) and train a student with per-modality encoders, reliability-weighted Gaussian fusion, a sample-context Transformer, and modality-specific decoders (negative-binomial RNA, NB-mixture ADT, Bernoulli ATAC) over 2,000 HVGs, 166 antibodies, and 8,000 10-kb bins. Frozen teachers—UCE for RNA (PCA to 256-dim targets), scLinguist for ADT, Atacformer for ATAC—supply distillation targets via masked-modality reconstruction plus cell- and group-level distillation losses, evaluated on 28,239 held-out trimodal cells against ridge regression and 15-NN baselines. Note: the reported training runs only enabled the UCE teacher branch despite the three-teacher design.",
+    "findings": [
+     "The UCE-distilled student beat simple baselines in all six RNA/ADT-target tasks by ~0.05–0.12 median Spearman; largest gains were ATAC→ADT (0.22 vs 0.10) and ATAC→RNA (0.25 vs 0.16); best RNA prediction was 0.31 with ADT+ATAC input.",
+     "The teacher-free student scored 0.07–0.14 lower than the UCE-distilled model across those tasks and lost to simple baselines in four, so distillation—not architecture—drives the improvement.",
+     "Per-antibody RNA→ADT prediction: scAnyOmics beat ridge for 125/166 antibodies (75.3%), median ρ 0.25 vs 0.19; lineage markers were strong (CD19 0.81, CD3 0.79, CD14 0.79) but both methods failed on CX3CR1 (−0.26), and gains concentrated in intermediate-difficulty markers with population-level rather than within-population resolution.",
+     "ATAC reconstruction was weak: median AUROC 0.53–0.56 depending on input (best RNA→ATAC 0.56), roughly matching baselines; self-distillation reportedly improved RNA→ATAC to AUROC 0.62 from 0.54 teacher-free.",
+     "Ablations: UCE alone improved all six RNA/ADT tasks by +0.07–0.14, scLinguist alone gave no gain, Atacformer alone added +0.06 AUROC to RNA→ATAC."
+    ],
+    "why": "For researchers building multiomics models, this quantifies how much pretrained single-cell embeddings actually add to missing-modality imputation: modest but consistent gains over ridge/NN baselines, driven mainly by transcriptomic (UCE) representations. It is also a useful example of careful sample-held-out evaluation and explicit separation of distillation effects from architectural effects.",
+    "limitations": "Despite the abstract's claims, donor identity was known for only two of six series, one donor overlaps train and test, and the authors themselves characterize results as sample-held-out prediction tests rather than donor-generalization; the abstract's downstream tasks (annotation, perturbation response, age estimation) are not backed by results in the provided text, the scLinguist/Atacformer branches and self-distillation were not enabled in the reported runs, and training used a single seed.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 68515
+   }
+  }
+ ],
+ "candidates": 311
+}

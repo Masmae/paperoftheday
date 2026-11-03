@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-03",
+   "title": "A single-cell multimodal foundation model enables cross modality analysis between transcriptome and chromatin",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.10.28.762297",
+   "also": [
+    "https://arxiv.org/abs/2610.41692v1",
+    "10.64898/2026.11.01.763444",
+    "https://arxiv.org/abs/2610.41399v1"
+   ]
+  },
+  {
    "date": "2026-11-02",
    "title": "Mapping single-cell data to reference atlases by transfer learning",
    "venue": "Nature Biotechnology",
