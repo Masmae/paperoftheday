@@ -1,0 +1,197 @@
+{
+ "date": "2026-11-04",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Universal cell embedding provides a foundation model for cell biology",
+  "authors": [
+   "Yanay Rosen",
+   "Yusuf Roohani",
+   "Ayush Agrawal",
+   "Leon Samotorcan",
+   "Stephen R. Quake",
+   "Jure Leskovec"
+  ],
+  "authorCount": 6,
+  "venue": "Nature",
+  "preprint": false,
+  "date": "2026-07-08",
+  "doi": "10.1038/s41586-026-10689-z",
+  "url": "https://doi.org/10.1038/s41586-026-10689-z",
+  "abstract": "Developing a universal representation space for cells that encompasses the tremendous molecular diversity of cell types across species would be transformative for cell biology. Recent work using single-cell transcriptomic approaches to create molecular definitions of cell types in the form of cell atlases has provided the necessary data for such an endeavour1–3. Here we present the universal cell embedding (UCE) foundation model. UCE was trained on a large corpus of cell data using self-supervision, creating a unified biological latent space that can represent cells across diverse tissues and species. This latent space captures important biological variation despite the presence of experimental noise. UCE’s universality means that new cells can be embedded with no data labelling, model training or fine-tuning. We used UCE to create the Integrated Mega-scale Atlas, embedding 36 million cells, with more than 1,000 uniquely named cell types, from hundreds of experiments, dozens of tissues and eight species. We gain insights into the organization of cell types and tissues within the space. UCE’s embedding space exhibits emergent behaviour, identifying biology that it was never trained for, such as identifying developmental lineages and embedding data from species that were not included in the training set. Overall, by enabling a universal representation for every cell state and type, UCE is a valuable tool for analysis, annotation and hypothesis generation over single-cell data. The universal cell embedding foundation model learns to capture the organization and variation of cells by training on 36 million cells from hundreds of experiments, dozens of tissues and eight species.",
+  "reasons": [
+   "foundation model",
+   "single-cell",
+   "transcriptomics",
+   "cell atlas",
+   "scale"
+  ],
+  "score": 26.660827546698382,
+  "classic": true,
+  "citations": 214,
+  "year": 2026,
+  "tldr": "Trained by self-supervision on tens of millions of cells from eight species, UCE produces a unified latent space in which new cells from any tissue or species can be embedded without fine-tuning, enabling a 36M-cell integrated atlas, cross-species cell-type alignment, and emergent recovery of biology like developmental lineages.",
+  "why": "UCE is a genuine foundation-model moment for single-cell biology: a universal embedding space trained on 36M cells that works zero-shot across tissues, labs, and even species it never saw, turning cell annotation and atlas integration into a no-training, no-labeling operation. For someone working in transcriptomics and multiomics, this is the kind of reusable infrastructure that reshapes everyday analysis workflows. The caQTL resource and GENESIS are strong runner-ups, but UCE's generality and 'embed anything' capability give it AlphaFold-style reach.",
+  "summary": {
+   "tldr": "UCE is a 650M-parameter transformer that maps any single-cell RNA-seq dataset—any tissue or species—into one shared 1,280-dim embedding space with no fine-tuning, by tokenizing genes as protein-language-model embeddings instead of gene names.",
+   "background": "Single-cell atlases are large but hard to combine: datasets have different gene sets and batch effects, so existing integration methods need per-dataset retraining and labels. Prior transformer foundation models (Geneformer, scGPT) treat genes as text tokens, which limits generalization to unseen datasets and species.",
+   "approach": "UCE treats a cell as a 'bag of RNA': it samples 1,024 genes with replacement weighted by expression, represents each gene by its ESM2-15B protein embedding (5,120-dim), orders tokens by chromosomal location within chromosome groups, and reads out a cell embedding from a CLS token. Training is fully self-supervised: mask genes and predict whether each was expressed via binary cross-entropy. The 33-layer model was trained on 36M cells from >300 datasets (mostly CellXGene Census), 8 species, for 40 days on 24 A100 80GB GPUs; outputs populate the Integrated Mega-scale Atlas (IMA) with >1,000 cell types. Because genes are tokenized by amino acid sequence, no homology mapping is needed for new species.",
+   "findings": [
+    "Zero-shot on held-out Tabula Sapiens v2 (581,430 cells, 162 types, 167 batches), UCE beats Geneformer by 13.9% overall, 16.2% biological conservation, and 10.1% batch correction on the scIB integration benchmark, and slightly outperforms fine-tuned scVI and scArches.",
+    "UCE embeds three unseen species zero-shot (green monkey, naked mole rat, chicken—no bird was in training); 13/17 green monkey cell-type centroids matched the correct cross-species type (17/17 within top-3), beating supervised SATURN and SAMap on 3 of 4 datasets.",
+    "Emergent developmental structure: 90/97 mesoderm-, 46/56 endoderm-, and 22/30 ectoderm-derived cell-type centroids sit nearest centroids from the same germ layer, and a classifier predicts germ layer of held-out types at >80% accuracy.",
+    "Mapping Tabula Sapiens v2 into the IMA gives exact finest-label alignment for 41% of cell types—65% better than raw expression space (92% better using the single nearest centroid).",
+    "A logistic Norn-cell classifier trained on one mouse kidney dataset transfers across the 36M-cell IMA, finding Norn-like cells in lung and heart, including in IPF/COPD patients with distinct collagen and Egln1 expression patterns."
+   ],
+   "why": "For anyone building models on transcriptomics or multiomics, the protein-embedding tokenization is the central methodological contribution—it removes the fixed gene vocabulary that constrains Geneformer/scGPT and yields species-agnostic representations. The resulting workflow (zero-shot embed, then train a simple logistic classifier on the frozen embeddings) is a practical alternative to per-dataset integration pipelines and enables annotation transfer across the full atlas.",
+   "limitations": "Benchmarks mostly measure recovery of expert cell-type labels rather than perturbation responses or cross-modality transfer, and training data are skewed toward human/mouse and brain tissue. Expression-weighted gene sampling and the 1,024-token cap discard fine quantitative variation, and UCE does not replace dedicated batch-correction methods for known confounders.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 70309
+  }
+ },
+ "also": [
+  {
+   "title": "Single-cell perturbation prediction near experimental reproducibility with GENESIS",
+   "authors": [
+    "Conci, R.",
+    "D'Ascenzo, D.",
+    "Cultrera di Montesano, S.",
+    "Raghavan, S.",
+    "Winter, P. S.",
+    "Van Allen, E. M.",
+    "Crawford, L.",
+    "Lotter, W."
+   ],
+   "authorCount": 8,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-01",
+   "doi": "10.64898/2026.10.30.763081",
+   "url": "https://doi.org/10.64898/2026.10.30.763081",
+   "abstract": "Single-cell perturbation atlases now measure cellular responses across millions of cells, but the number of possible combinations of biological contexts, perturbations, doses and other experimental variables make exhaustive measurements infeasible. Here, we present GENESIS (Generative ENErgy-based Single-cell Intervention Simulator), a generative framework that predicts single-cell response distributions directly from the covariates defining an experimental condition. GENESIS uses a lightweight neural network trained with the energy score, a strictly proper scoring rule for distributions. We introduce an experiment-calibrated evaluation framework in which prediction error is interpreted relative to the reproducibility of repeated measurements of the same condition. Across the Tahoe-100M small-molecule atlas and a large PBMC cytokine atlas, GENESIS significantly outperforms existing generative models and statistical baselines and approaches experimental reproducibility on independently repeated conditions. Importantly, GENESIS remains accurate when trained on only a fraction of the available experimental conditions or cells, and generated profiles recover experimentally observed context-dependent transcriptional programs. At comparable training-cell budgets, GENESIS achieves more accurate predictions when measurements span more experimental conditions rather than profiling fewer conditions more deeply. Together, these findings suggest a complementary strategy for perturbation studies: broader, lower-depth measurements can expand experimental coverage, while GENESIS augments sparsely sampled populations and predicts responses in unmeasured conditions.",
+   "reasons": [
+    "deep learning",
+    "generative model",
+    "single-cell",
+    "perturbation",
+    "scale"
+   ],
+   "score": 15,
+   "summary": {
+    "tldr": "GENESIS is a lightweight covariate-conditioned generative model trained with the energy score that predicts single-cell perturbation responses approaching experimental reproducibility on Tahoe-100M and a PBMC cytokine atlas.",
+    "background": "Single-cell perturbation atlases (Tahoe-100M: 100.6M cells across ~65k drug-cell line-dose conditions; PBMC cytokine atlas: 9.7M cells, 12 donors, 90 cytokines) cover only a tiny fraction of the combinatorial space of context, perturbation, and dose. Because control and perturbed cells are unpaired and batch variation is large, it has been unclear how close model predictions come to the agreement achievable between repeated experiments.",
+    "approach": "GENESIS embeds each experimental covariate (cell line/donor, cell type, compound/cytokine, dose, plate/well) as a 256-d learned embedding, concatenates it with noise, and passes it through a small MLP (hidden widths 4,096 and 8,192) that outputs one cell's log1p expression; repeated noise draws generate populations, and no measured control cells are needed at inference. Training minimizes the energy score, a strictly proper scoring rule with attraction and repulsion terms, plus a variogram term for gene-gene dependencies, on 2,000 HVGs. They also introduce experiment-calibrated evaluation using independent plate replicates and split-half reproducibility as reference points, benchmarking against PerturbDiff, STATE, CellFlow, and statistical baselines.",
+    "findings": [
+     "On 530 repeated Tahoe plate pairs, GENESIS statistically matches experimental reproducibility on Pearson delta (0.430 vs 0.432, p=0.56) and energy distance (0.158 vs 0.154), and falls 3.4% short on top-100 DEG overlap (0.289 vs 0.299); all other methods differ significantly on every metric.",
+     "Across all held-out conditions, top-100 DEG overlap increases from 30.7 (STATE) to 51.3 on Tahoe-100M (4,211 conditions, +67%) and from 37.3 to 41.7 on the PBMC atlas (4,268 conditions, +12%), also winning Pearson delta and energy distance on both.",
+     "Trained on only 5% of perturbed cells (4.6M of 89.5M), GENESIS still beats all full-data baselines (~+50% DEG overlap and +30% Pearson delta vs STATE, ~60% lower energy distance); at matched cell budgets, more conditions with fewer cells outperforms fewer conditions profiled deeply.",
+     "With at most 25 cells per perturbed condition (~1.3M cells), augmenting with generated cells recovers near-reproducibility DEG overlap and Pearson delta; 15 training perturbations per cell line capture roughly half the gain of all 164.",
+     "PROGENy analysis (14 pathways, 55 compounds, 5 held-out lines) shows predicted pathway responses correlate with measured at 0.402 vs 0.455 between experimental repeats, recovering shared MAPK/EGFR suppression by trametinib and RMC-6236 and divergent JAK-STAT/TNFalpha responses between KRAS-mutant HOP62 and Hs 766T."
+    ],
+    "why": "For researchers building perturbation-response models, this shows a simple direct-conditional generator with a proper scoring rule can outperform transformer, diffusion, and flow-matching baselines while training in ~43 hours on one H100. The breadth-over-depth result is directly actionable for experimental design: profile many conditions at low depth and use the model to augment sparse populations and impute unmeasured conditions.",
+    "limitations": "Generalization is purely compositional: GENESIS cannot predict responses to a fully unseen compound or unseen cell line/donor, since it uses no chemical structure or genotype information, and unrecorded variables (timing, media, environment) remain unmodeled. The PBMC atlas lacks true independent replicates (donor and plate are confounded), so reproducibility comparisons there rely on the optimistic split-half benchmark.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 147153
+   }
+  },
+  {
+   "title": "Do Language Models Know What Compelling Scientific Evidence Looks Like?",
+   "authors": [
+    "Conor Igoe",
+    "Gabriel Grand",
+    "Zane Koch",
+    "Albert Bou",
+    "Eli Moss",
+    "Michaela M. Hinks",
+    "Samuel G. Rodriques",
+    "Andrew White",
+    "Siddharth Narayanan"
+   ],
+   "authorCount": 9,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-10-29",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2610.41015v1",
+   "abstract": "Expert scientists excel at weighing empirical findings from multiple sources that vary in both statistical reliability and epistemic relevance. To what extent are language models, which are increasingly driving autonomous discovery systems, capable of such evidence deliberation? We introduce EDB-Bio, a scientific reasoning benchmark curated from real-world data in three biological domains: drug-perturbation transcriptomics, CRISPR screens, and human genome-wide association studies (GWAS). Each of EDB-Bio's 96k episodes presents a sequence of experimental results from published studies and asks the model to predict the probability that a target hypothesis is true. Out-of-the-box, open-weight and frontier models alike demonstrate systematic underconfidence and attain Brier scores comparable to a trivial base-rate forecaster. Post-training against strictly proper scoring rules significantly improves both calibration and discrimination. This calibration pays off downstream: in a sequential experiment selection task, our Ibis0 model is 2.5 times more efficient than the best frontier model. Throughout, quantifying evidence weights as Bayes factors reveals how models update their beliefs over time, whether they agree with expert biologists on relevance, and where they exhibit inconsistencies and biases. Our work extends calibration training and uncertainty analysis to a realistic scientific forecasting setting with applications to human cancer biology. We release all code, data, and trained models.",
+   "reasons": [
+    "language model",
+    "transcriptomics",
+    "perturbation",
+    "CRISPR",
+    "genomics",
+    "wet-lab validated"
+   ],
+   "score": 16,
+   "summary": {
+    "tldr": "This paper introduces EDB-Bio, a 96k-episode benchmark showing that LLMs (including frontier models) discriminate biological evidence well but are badly calibrated when stating how likely a hypothesis is true, and that post-training Qwen3-30B-A3B on proper scoring rules (the Ibis0 models) fixes calibration and enables 2.5x more information-efficient experiment selection.",
+    "background": "Autonomous discovery agents must judge whether experimental results make a hypothesis more or less likely, weighing statistical strength and epistemic relevance like an expert biologist. Prior LLM calibration work covered math and factual QA, not scientific evidence, and no controlled benchmark existed with graded, ground-truth evidence for real biological hypotheses.",
+    "approach": "EDB-Bio instantiates evidence deliberation in three domains: drug-perturbation transcriptomics (Tahoe-100M RNA-seq, DESeq2 log2 fold-change and adjusted p-value stubs), DepMap CRISPR gene-dependency screens, and GWAS Catalog associations. Each of 96k episodes (32k train / 2k test per domain) has a target hypothesis (e.g., 'drug D downregulates gene G in cell line C') with a binary, 50:50-balanced support label and a pool of up to 16 evidence stubs from related experiments. They post-train Qwen3-30B-A3B against strictly proper scoring rules (GRPO with negative-Brier reward; plus a BCE-trained scalar-head classifier), yielding Ibis0, and compare against Claude Opus 5 and GPT-5.6-Sol. Belief updates are quantified as log Bayes factors (decibans), and a sequential Bayesian experimental design task uses a new factored expected-information-gain (EIG) estimator with a fine-tuned outcome simulator.",
+    "findings": [
+     "Zero-shot models rank hypotheses but are systematically underconfident: Opus 5 AUROC 0.752 and GPT-5.6-sol 0.737, yet Brier scores no better than a constant 0.5 forecaster (0.25 baseline).",
+     "Ibis0 (classifier) reaches Brier 0.177 and AUROC 0.820; the RL variants are best calibrated (sMECE 0.032 vs 0.066 for the classifier).",
+     "All models overreact to individual evidence: update-slope beta is 0.13 for untrained Qwen3 (~8x larger updates than justified) and 0.89 for Ibis0 non-thinking; models also under-weight same-mechanism-of-action drug evidence, over-weight genome-wide aggregates, and show primacy/ordering biases.",
+     "In sequential experiment selection, EIG with Ibis0 extracts 0.155 bits (simulated) or 0.131 bits (exemplar) from the first experiment versus 0.062 for the best prompted frontier model and 0.023 for random - about 2.5x, reaching target beliefs 30-40% faster.",
+     "Cross-domain transfer: calibration transfers across the three domains but discrimination largely does not (Brier retention 70.0% on Tahoe, 26.3% on GWAS)."
+    ],
+    "why": "For anyone combining LLMs with transcriptomic or multiomic perturbation data, the actionable point is that frontier models' verbalized probabilities about biological hypotheses are unreliable for decisions despite good ranking, and inexpensive post-training on real Tahoe/DepMap/GWAS data fixes this while directly improving active experiment selection. Benchmark, Ibis0 weights, simulator, and evaluation logs are fully released, and the data types overlap with common multiomics workflows.",
+    "limitations": "Evidence is structured stubs rather than free-text papers; hypotheses are binary and artificially balanced at 50:50, which may explain why calibration transfers across domains; only one model family (Qwen3-30B-A3B) at one scale was post-trained; the EIG estimator costs more inference than naive prompting; and 'Opus 5'/'GPT-5.6-Sol' naming and results come from the authors' own evaluations.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 206502
+   }
+  },
+  {
+   "title": "HistoTx: Early fusion of H&amp;E images and spatial transcriptomics at varying spatial transcriptomics resolution with self-supervised learning",
+   "authors": [
+    "Alice Driessen",
+    "Emil Malmsten",
+    "Steffen Wolf",
+    "Bernd Illing",
+    "Isinsu Katircioglu",
+    "Adriano Martinelli",
+    "Rolf Stahel",
+    "Solange Peters",
+    "Enriqueta Felip",
+    "Sanjay Popat",
+    "Krisztian Homicsko",
+    "Raphael Gottardo"
+   ],
+   "authorCount": 14,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-02",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.02681v1",
+   "abstract": "Spatial transcriptomics maps gene expression across tissue sections and, when integrated with whole slide images, jointly captures both morphological architecture and molecular activity to provide a rich, multimodal view of tissue biology. ML approaches combining spatial transcriptomics and WSIs typically learn a mapping from morphological features to molecular profiles via contrastive alignment or supervised fine-tuning of pathology foundation models. In both cases, transcriptomics serves as a training signal rather than a true input modality, leaving inference fundamentally image-driven. We propose an early-fusion vision transformer architecture in which transcript tokens are constructed at arbitrary spatial resolution, merged with image patch tokens, and jointly processed through a shared transformer stack for deep cross-modal interaction. Starting from a pretrained vision-only pathology foundation model, we train HistoTx by continuing self-supervised pretraining on paired image and spatial transcriptomics data and demonstrate that: 1) at inference with image only, performance remains on par with the baseline on most tasks while improving on tasks that inherently benefit from molecular knowledge, such as gene expression prediction; 2) when both modalities are available at inference, jointly providing image and transcript inputs outperforms either modality alone.",
+   "reasons": [
+    "foundation model",
+    "transformer",
+    "representation learning",
+    "transcriptomics",
+    "spatial omics",
+    "scale"
+   ],
+   "score": 20,
+   "summary": {
+    "tldr": "HistoTx is an early-fusion ViT that tokenizes spatial transcriptomics (Visium spots or Xenium molecules) alongside H&E patches and trains via continued DINOv2 self-supervised pretraining, making transcriptomics a true input modality rather than only a supervision signal.",
+    "background": "Existing histology-plus-ST models (contrastive alignment like SEAL, or supervised expression prediction) use transcriptomics only as a training signal, so inference stays image-only and fusion is shallow concatenation. Handling both spot-based (Visium) and molecule-resolution (Xenium) data in one model is hard because their granularity and formats differ.",
+    "approach": "They extend an early-fusion multimodal transformer (building on Martinelli et al.) warm-started from an internal 'Midnight' ViT-B/14 DINOv2 pathology checkpoint. Transcript count vectors are encoded by a frozen Geneformer (gf-6L-10M-i2048) and become 1-256 tokens per 224x224 patch (aggregation windows T=14-256), concatenated with image patch tokens and processed by one shared ViT stack. Cross-modal learning comes from a DINOv2 trick: transcripts are given only to global views while local crops are image-only, so the local-crop loss distills molecular information into the image encoder. Training mixes HEST-1k (1,229 WSIs, 26 organs: 65 Xenium, 1,164 spot-based), 7,924 image-only TCGA slides, and 163 paired H&E/Xenium mesothelioma samples (ETOP BEAT-meso, 122 train/41 test), ~640k samples/epoch, up to 200 epochs.",
+    "findings": [
+     "Gene expression prediction improves most: HEST-Bench Pearson goes 0.31 to 0.38 image-only (beating SEAL-CONCH at 0.35), and HEST-Expr goes 0.26 to 0.30 image-only, rising to 0.36 when 1,000 input genes are provided at inference.",
+     "On BEAT (predicting 100 held-out Xenium genes in mesothelioma), image-only improves 0.53 to 0.58 and reaches 0.66 with the 380-gene panel as input; a task-specific supervised baseline still wins at 0.82.",
+     "When both modalities are available at inference, joint image+transcript input outperforms either modality alone.",
+     "Image-only performance is mostly preserved or improved: Camelyon16 0.79 to 0.87, PANDA-Radboud 0.61 to 0.67, segmentation gains of 0.01-0.06 Dice, but breast subtype tasks drop (BACH 0.88 to 0.82, BreakHis 0.82 to 0.73, BRACS 0.64 to 0.60, Gleason TMA 0.77 to 0.69).",
+     "Token granularity matters little: 16 vs 256 transcript tokens per patch give near-identical results (avg benchmark score 0.66 vs 0.67), suggesting coarse transcript tokens suffice."
+    ],
+    "why": "It demonstrates a practical recipe for injecting molecular priors into a pathology foundation model via continued SSL while keeping image-only performance largely intact, and shows early fusion beats contrastive alignment when transcripts exist at inference. For multiomics researchers, the resolution-flexible transcript tokenization is the key enabler, letting one backbone train on mixed Visium and Xenium data across the full HEST-1k.",
+    "limitations": "Drops on fine-grained breast cancer subtype classification suggest a trade-off between molecularly aligned features and subtle morphological detail, and some gains may partly reflect extra HEST image exposure during continued pretraining. Task-specific supervised training still substantially outperforms the general multimodal model when labeled data exist (0.82 vs 0.66 on BEAT).",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 55816
+   }
+  }
+ ],
+ "candidates": 368
+}

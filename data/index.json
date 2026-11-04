@@ -1,6 +1,18 @@
 {
  "days": [
   {
+   "date": "2026-11-04",
+   "title": "Universal cell embedding provides a foundation model for cell biology",
+   "venue": "Nature",
+   "key": "10.1038/s41586-026-10689-z",
+   "also": [
+    "10.64898/2026.10.30.763081",
+    "https://arxiv.org/abs/2610.41015v1",
+    "https://arxiv.org/abs/2611.02681v1"
+   ],
+   "classic": true
+  },
+  {
    "date": "2026-11-03",
    "title": "A single-cell multimodal foundation model enables cross modality analysis between transcriptome and chromatin",
    "venue": "bioRxiv",
