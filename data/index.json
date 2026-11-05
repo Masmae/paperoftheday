@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-05",
+   "title": "Where single-cell foundation models help: a benchmark of annotation, perturbation and regulatory inference against simple baselines",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.11.03.763968",
+   "also": [
+    "10.1101/2025.11.13.688364",
+    "10.64898/2026.11.03.764043",
+    "https://arxiv.org/abs/2611.05103v1"
+   ]
+  },
+  {
    "date": "2026-11-04",
    "title": "Universal cell embedding provides a foundation model for cell biology",
    "venue": "Nature",

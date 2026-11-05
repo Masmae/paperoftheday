@@ -1,0 +1,180 @@
+{
+ "date": "2026-11-05",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Where single-cell foundation models help: a benchmark of annotation, perturbation and regulatory inference against simple baselines",
+  "authors": [
+   "Cupaioli, F. A.",
+   "Merelli, I."
+  ],
+  "authorCount": 2,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-04",
+  "doi": "10.64898/2026.11.03.763968",
+  "url": "https://doi.org/10.64898/2026.11.03.763968",
+  "abstract": "Single-cell foundation models (FMs) are proposed as general tools for cell-type annotation, in silico perturbation and gene-regulatory-network (GRN) inference. To identify where they add value, we benchmarked five FMs (scGPT, Geneformer V1 and V2, Nicheformer, scFoundation), CellOracle, supervised perturbation models including STATE, and task-matched simple baselines on the same data, from K562 Perturb-seq screens and primary cells to healthy-donor and isogenic leukodystrophy brain organoids, a public organoid CRISPR screen and lung cancer biopsies. FMs were most useful when labels had to be transferred across species: from human to mouse lung, Nicheformer reached 0.98 accuracy and Geneformer V2 and scFoundation about 0.90, against 0.68 for the best baseline. Zero-shot in silico perturbations captured the direction of real responses in K562, with up to 75% of perturbations shifted in the expected direction (scFoundation, p < 1e-8), and Geneformer V2 networks recovered patient-level tumour differential expression better than co-expression (fold enrichment 2.9 versus 2.0). Within a species, FM embeddings annotated cells as accurately as principal components. In organoids, predicted knockout effects were largely explained by where the target is expressed, and an expression-matched control test isolated the gene-specific part, 12 to 35% of the effects. Isogenic Canavan and Krabbe organoids and 4H patient organoids, with one library per line and time point, did not yet separate methods from differences between clones and donors, which defines the replication needed for future validation. Fine-tuning changed classification accuracy but not knockout rankings. We release the benchmark, baselines, pipeline checks and the isogenic reference task as the fmaudit package, so that new models can be evaluated on the tasks where FMs already help.",
+  "reasons": [
+   "foundation model",
+   "zero-shot",
+   "single-cell",
+   "perturbation",
+   "CRISPR",
+   "scale"
+  ],
+  "score": 22,
+  "tldr": "A systematic benchmark of five single-cell foundation models (scGPT, Geneformer V1/V2, Nicheformer, scFoundation) plus CellOracle, GEARS, CPA and STATE against task-matched simple baselines finds FMs clearly help only for cross-species label transfer and perturbation-response direction, while matching PCA for within-species annotation and failing to predict real knockout effects or beat co-expression for GRN inference.",
+  "why": "For researchers building or applying models on single-cell and multiomics data, this paper maps exactly where FMs add value (cross-species transfer, response direction) versus where PCA, CellTypist or a mean baseline already suffices, and shows that method agreement often just reflects shared dependence on target expression. The expression-matched null, negative contrasts and pipeline checks in fmaudit are directly reusable controls for anyone validating perturbation or GRN models.",
+  "summary": {
+   "tldr": "A systematic benchmark of five single-cell foundation models (scGPT, Geneformer V1/V2, Nicheformer, scFoundation) plus CellOracle, GEARS, CPA and STATE against task-matched simple baselines finds FMs clearly help only for cross-species label transfer and perturbation-response direction, while matching PCA for within-species annotation and failing to predict real knockout effects or beat co-expression for GRN inference.",
+   "background": "Single-cell FMs are marketed as general tools for cell-type annotation, in silico perturbation and gene-regulatory-network inference, but prior evaluations mostly covered single tasks in cell lines. It is unclear whether their conclusions extend to organoids and patient tissue, and whether apparent wins survive properly matched baselines and pipeline controls.",
+   "approach": "The authors ran every method on identical data splits and metrics across three complexity levels: K562 Perturb-seq screens (Norman CRISPRa, 91,205 cells; Adamson CRISPRi, 68,603 cells), brain organoids (5 healthy donors, 35,257 cells; isogenic ASPA-knockout Canavan and GALC-knockout/knock-in Krabbe lines; 4H leukodystrophy POLR3A patients; the public CHOOSE mosaic screen with 28,344 cells and 36 genes), and EGFR-mutant NSCLC biopsies (23,261 cells, 7 naive and 8 residual-disease patients). They added genotype-based identity checks, fixed model inputs, negative contrasts, and an expression-matched control test comparing each target deletion to 20 matched control-gene deletions, all released in the fmaudit package.",
+   "findings": [
+    "Cross-species annotation was the clear FM win: human-to-mouse lung accuracy of 0.98 (Nicheformer), 0.91 (Geneformer V2) and 0.90 (scFoundation) versus 0.68 for the best baseline (CellTypist); within species, FM embeddings matched PCA (immune atlas: scFoundation 0.949 vs PCA 0.945) and PCA beat all FMs on Tabula Muris lung (0.945 vs 0.839-0.902).",
+    "Zero-shot perturbation magnitude was uncorrelated with real effect size in K562 (Spearman rho -0.08 to 0.06), but direction was correct for up to 75% of Norman perturbations (scFoundation, p < 1e-8); supervised models did not beat the training-mean baseline (GEARS 0.543 and scGPT-FT 0.568 vs 0.557 on Norman; STATE 0.26/0.07 vs 0.66/0.81 on Norman/Adamson).",
+    "Organoid knockout predictions mostly restated target expression (rho 0.76-0.97 per method); only 12-35% of gene-by-cell-type pairs showed a gene-specific excess shift over expression-matched controls, and no model correlated with real isogenic ASPA, GALC or POLR3A knockout effects beyond negative contrasts (lowest Fisher p = 0.30).",
+    "FM-derived GRNs recovered knockdown and ChIP-seq targets at near chance (best FE@50 1.32 vs 1.61 for co-expression on Adamson), with one exception: Geneformer V2 against patient-level pseudobulk tumor DEG in lung cancer (2.9 vs 2.04 for co-expression).",
+    "Fine-tuning rescaled predicted knockout effects roughly threefold without changing their ranking and never improved isogenic agreement, and Geneformer V2's larger scale improved annotation only (e.g., 0.950 vs 0.887 on immune cells) while leaving perturbation unchanged."
+   ],
+   "why": "For researchers building or applying models on single-cell and multiomics data, this paper maps exactly where FMs add value (cross-species transfer, response direction) versus where PCA, CellTypist or a mean baseline already suffices, and shows that method agreement often just reflects shared dependence on target expression. The expression-matched null, negative contrasts and pipeline checks in fmaudit are directly reusable controls for anyone validating perturbation or GRN models.",
+   "limitations": "The isogenic organoids had one library per line and time point, so true knockout effects could not be separated from clone and donor differences, and ASPA was detected in under 1% of parental cells, imposing a structural limit on the test. In silico deletion is cell-autonomous only, cannot represent missense variants, and newer models may behave differently.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 61852
+  }
+ },
+ "also": [
+  {
+   "title": "Accelerating antibiotic discovery from Earth's isolated habitats through protein language models and microfluidics",
+   "authors": [
+    "Kang, Z.",
+    "Zhou, Q.",
+    "Zhang, H.",
+    "Liu, J.",
+    "Liu, K.",
+    "Zhou, K.",
+    "Zhang, Y.",
+    "Wang, Y.",
+    "Chen, P.",
+    "Liu, B.-F.",
+    "Ning, K."
+   ],
+   "authorCount": 11,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-04",
+   "doi": "10.1101/2025.11.13.688364",
+   "url": "https://doi.org/10.1101/2025.11.13.688364",
+   "abstract": "The antibiotic potential of Earth's isolated habitat microbiomes remains largely unexplored. Accessing this resource requires reliable prioritization across divergent peptide sequences and efficient experimental validation. Here we present MicroSPEAR, an end-to-end framework for antimicrobial peptide (AMP) discovery integrating SPEAR, a sequence-structure-aware ensemble predictor, with MicroGrad, a microfluidic testing platform. SPEAR generalized to low-homology peptides and prioritized potent candidates despite training on binary activity labels. MicroGrad simplified liquid handling and shortened susceptibility testing from approximately 18 h to 4 h. Applied to a catalogue derived from 4,480 metagenomes spanning 15 isolated habitat types, SPEAR identified 383,027 non-redundant candidate AMPs, 63.1% of which lacked detectable homologues in reference databases. Of 85 synthesized candidates, 79 exhibited antibacterial activity at [&le;]64 M;. Mechanistic analyses revealed distinct modes of membrane disruption. Four broad-spectrum candidates with low toxicity significantly reduced bacterial burdens in a mouse thigh infection model. MicroSPEAR connects underexplored microbial diversity with experimentally validated antibiotic leads and provides a foundation for lab-in-the-loop discovery.",
+   "reasons": [
+    "language model",
+    "proteins",
+    "genomics",
+    "generalizes",
+    "wet-lab validated"
+   ],
+   "score": 15,
+   "summary": {
+    "tldr": "This paper presents MicroSPEAR, an end-to-end framework combining a protein language model-based predictor (SPEAR) with a microfluidic testing platform (MicroGrad) to discover antimicrobial peptides from metagenomes of Earth's isolated habitats, yielding hundreds of thousands of candidate AMPs with experimental validation.",
+    "background": "Antimicrobial resistance demands new antibiotic agents, and antimicrobial peptides (AMPs) from uncultivated environmental microbiomes represent a largely untapped resource. The challenge is twofold: existing ML predictors fail to generalize to divergent, low-homology peptide sequences, and experimental validation by conventional broth microdilution is slow (~18 h per assay), creating a bottleneck between computational prediction and confirmed activity.",
+    "approach": "The authors built SPEAR, a classifier that concatenates mean-pooled ESM2 sequence embeddings with SaProt structure-aware embeddings (derived from ESMFold-predicted structures converted to Foldseek 3Di sequences), feeding the fused representation into an ensemble of random forest and histogram-based gradient boosting classifiers whose probabilities are averaged. SPEAR was trained on 13,652 peptides (6,169 AMPs, 7,483 non-AMPs, 10-50 AA) compiled from DBAASP, DRAMP, UniProt, and experimental studies. They applied it to GIHMsC, a smORF catalog built from 153,243 MAGs across 4,480 metagenomes and 2,428 sampling locations spanning 15 isolated habitat types, containing 6,224,518 smORFs. For experimental validation, they developed MicroGrad, a centrifugal microfluidic chip that automates twofold dilution series (64-4 μM) with WST-8 colorimetric readout in ~4 h instead of ~18 h.",
+    "findings": [
+     "SPEAR identified 383,027 non-redundant candidate AMPs from GIHMsC, 63.1% encoded by database-novel smORFs, spanning 159 bacterial and 23 archaeal phyla.",
+     "On an external test set of 333 AMP-like peptides, SPEAR improved MCC by 6.8% and reduced Brier score by 19.0% relative to HMD-AMP (the SOTA baseline), with F1 = 0.734 and MCC = 0.501.",
+     "Under progressively stricter train-test sequence-identity cutoffs (90%-15%), SPEAR's Spec@R90 declined only from 0.733 to 0.708, outperforming all baselines on out-of-distribution generalization.",
+     "SPEAR scores correlated with antimicrobial potency (Spearman ρ = -0.416 with SAPI ranking; Pearson r up to 0.460 for P. aeruginosa) despite training only on binary labels.",
+     "Of 85 synthesized candidates tested against eight bacterial strains (six species including resistant E. coli and VRE), 79 (92.9%) showed activity at MIC ≤64 μM; four broad-spectrum, low-toxicity candidates reduced mouse thigh bacterial burdens by 2-4 orders of magnitude."
+    ],
+    "why": "For researchers in AI for transcriptomics and multiomics, this paper demonstrates a practical lab-in-the-loop pipeline that couples pLM-based representation learning (ESM2 + SaProt fusion) with microfluidic automation to close the prediction-validation cycle. It also provides a large new genomic resource (GIHMsC) of habitat-partitioned smORFs enriched for database-novel sequences, relevant to anyone mining functional peptides from metagenomic space.",
+    "limitations": "The structure-aware component relies on ESMFold predictions not conditioned on solution or membrane environments relevant to peptide activity, and the authors note this needs further interpretation. MicroGrad currently requires manual alignment and bonding of its five chip layers, limiting manufacturing scale, and the framework was deployed sequentially rather than as a true iterative closed loop in this study.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 114203
+   }
+  },
+  {
+   "title": "CloneVI: A deep generative model for deciphering the relationships between cell state and mitochondrial genotype",
+   "authors": [
+    "Hibi, T.",
+    "Kojima, Y.",
+    "Hayashi, S.",
+    "Hisose, H.",
+    "Mizukoshi, C.",
+    "Shimamura, T."
+   ],
+   "authorCount": 6,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-04",
+   "doi": "10.64898/2026.11.03.764043",
+   "url": "https://doi.org/10.64898/2026.11.03.764043",
+   "abstract": "Cellular diversity arises from both genetic lineages and non-genetic regulation of cell states, and knowing which cell states are tied to lineages is central to understanding how clones shape disease. Single-cell multi-omics technologies measure mitochondrial DNA mutations together with gene expression or chromatin accessibility in the same cells, but clones are usually inferred from mutations alone, making such clones difficult to identify. We developed CloneVI, a deep generative model that infers clonal structure from a latent cell state derived from gene expression or chromatin accessibility. It estimates the clonal probability of each cell from this cell state, together with the allele frequency of each clone by reconstructing the observed mutation counts. In simulated data, CloneVI recovered the ground-truth clonal structure in both single-clone and mixed-clone cell populations. In clonal hematopoiesis single-cell RNA-seq data with enriched mitochondrial transcripts, the inferred clones were associated with specific mitochondrial DNA mutations, and some of them showed high expression of a T-cell receptor variable-region gene. In chronic lymphocytic leukemia mitochondrial single-cell ATAC-seq data, CloneVI separated populations with different heteroplasmy levels and identified increased PAX9 accessibility. In a multi-donor ovarian tumor cohort, CloneVI captured mutant-cell populations enriched in particular cell states, and a differential test weighted by the clonal probability revealed the transcription factor activity of the cell state in which the mutant cells concentrated. CloneVI thus identifies populations defined by mitochondrial DNA mutations and associated with cell states in single-cell RNA-seq and ATAC-seq data. CloneVI is available at https://github.com/TaichiHIBI/cloneVI.",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "multiomics",
+    "epigenomics",
+    "RNA-seq",
+    "code released"
+   ],
+   "score": 16,
+   "summary": {
+    "tldr": "CloneVI is a variational autoencoder that infers mitochondrial-DNA-defined clonal probabilities from latent cell states derived from scRNA-seq or scATAC-seq, so that clones are identified by where mutant cells sit in expression/chromatin space rather than from mutations alone.",
+    "background": "Single-cell multi-omics assays can measure mtDNA mutations together with gene expression or chromatin accessibility in the same cells, but existing tools (Cardelino, CloneTracer) define clones from genotypes first and only then attach cell states, which obscures clones whose cells are spread across states. The hard part is deciding which cell states are tied to which lineages without forcing ambiguous cells into one clone.",
+    "approach": "CloneVI encodes expression or accessibility counts into a latent cell state with a VAE (negative binomial decoder), then a second decoder maps that state to per-cell clonal probabilities over K clones and clone-specific allele frequencies, fitting mtDNA mutation counts with a binomial mixture likelihood; donor/sample is given as a covariate. Clones whose probabilities are never expressed are pruned with a group-lasso penalty, and allele frequencies can be decomposed into shared and clone-specific components. It was validated on simulated PBMC3k data with two clones, then applied to three real datasets.",
+    "findings": [
+     "In simulated two-clone PBMC3k data, estimated clone proportions matched ground truth (36.5% vs 36.1% for one clone) and clonal probabilities were correctly split in mixed clusters.",
+     "On MAESTER clonal hematopoiesis scRNA-seq (26 mtDNA variants), CloneVI inferred 6 clones; reconstructed VAF beat a cell-type-mean baseline for 21/26 variants (mean Pearson r 0.17 vs 0.05), and clones 1, 3, 5 were captured with AUCs of 0.86-1.00, with capture best explained by cell-state enrichment (partial Spearman +0.55).",
+     "On CLL mtscATAC-seq (18 variants, 9 clones), it separated two populations carrying the same 5140 mutation by heteroplasmy and linked clone 4 (variant 1260) to increased PAX9 accessibility.",
+     "On an ovarian tumor cohort of 108,260 cells from 5 donors with 64 variants, it inferred 17 clones (10/17 donor-restricted at >90% probability); AUC tracked cell-state enrichment (partial rho +0.75) while prevalence and heteroplasmy had small negative partial correlations.",
+     "A clonal-probability-weighted chromVAR test on 2,077 CD8+ T cells for clone 11 found 131 significant motifs versus 75 for a mutation-based test (58 shared, effect-size correlation 0.93), reproducing an NFAT-high/AP-1-low T-cell exhaustion signature plus NR4A2."
+    ],
+    "why": "For anyone building multiomics models, this reverses the usual pipeline: genotype is used as the prediction target and cell state as the predictor, so the model specifically recovers clones that correlate with transcriptional or chromatin states. It works on both scRNA-seq and scATAC-seq inputs and offers a soft, probability-weighted differential testing scheme that could generalize beyond mtDNA to sparse nuclear somatic variants.",
+    "limitations": "By design it misses clones not enriched in any cell state, so it complements rather than replaces genotype-first methods, and the pi-weighted differential test characterizes the clone's state rather than testing causal effects of the mutation. The real-data evaluations rest on small numbers of mtDNA variants (15-64) with correlated tests, and the work is a non-peer-reviewed preprint.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 102955
+   }
+  },
+  {
+   "title": "Molecular Prior Networks",
+   "authors": [
+    "Pawel Gomoluch",
+    "Anthony Bradley"
+   ],
+   "authorCount": 2,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-03",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.05103v1",
+   "abstract": "Predicting affinity between small molecules and their protein targets remains one of the central problems in drug discovery. Due to the substantial cost of wet-lab experiments, machine learning models of drug-target affinity are usually trained on relatively small datasets, ranging from tens to hundreds of molecules. Given the inherent difficulty of generalization between different targets and chemical series, existing datasets of protein-ligand affinities are typically not used for new projects. At the same time, tabular foundation models, including Prior-data Fitted Networks, have recently shown how transformers can be used to solve machine learning problems in a single forward pass of the network, after being trained over a large corpus of, typically, synthetic datasets. Inspired by that line of work, we propose a novel affinity modelling approach, in which the labels of the query molecules are predicted from the labelled support molecules in a single forward pass of a transformer model. The model is trained on thousands of existing affinity datasets, enabling it to capture the general patterns of molecular activity across different targets, chemical series and dataset sizes. For the smallest support sets, our model matches the state of the art on the regression variant of the FS-Mol benchmark, while being faster than existing methods, thanks to the lack of task-specific training. A comparison against a reduced variant of our architecture, which amounts to kernel regression in a meta-learned feature space, shows that the predictive performance of the transformer model is only partially explained by simple molecular similarity.",
+   "reasons": [
+    "foundation model",
+    "transformer",
+    "AI",
+    "drug discovery",
+    "scale",
+    "generalizes"
+   ],
+   "score": 19,
+   "summary": {
+    "tldr": "A TabPFN-style transformer meta-trained on thousands of existing affinity datasets predicts drug-target affinity from small labeled support sets in a single forward pass, matching the few-shot regression state of the art at 16 shots.",
+    "background": "Predicting small-molecule-protein affinity usually relies on tiny datasets (tens to hundreds of assay measurements) because wet-lab experiments are expensive, and models generalize poorly across targets and chemical series, so existing affinity data typically goes unused. The paper ports Prior-data Fitted Networks (TabPFN), which solve new tabular tasks in one forward pass after pretraining, to this few-shot molecular setting.",
+    "approach": "The Molecular Prior Network (MPN) represents each molecule as one token (2048-bit Morgan fingerprint, radius 2); labeled 'support' and unlabeled 'query' tokens pass through transformer layers with asymmetric attention so evidence flows only from labeled molecules, and support labels are re-injected into attention values at every layer. It is meta-trained on 4,938 FS-Mol tasks (pIC50 regression) with support sizes sampled from 16-256, then predicts all query labels in one forward pass with no task-specific fitting. A reduced 'kernel MPN' variant - softmax-weighted averaging of support labels under a meta-learned linear projection, i.e., kernel regression in a meta-learned feature space - tests how much performance is just molecular similarity.",
+    "findings": [
+     "On FS-Mol regression (111 test tasks, Kendall's tau averaged over 10 splits), 4- and 16-layer MPNs score 0.299/0.298 with 16 support molecules, matching ADKF-IFT (0.298), the prior few-shot regression SOTA.",
+     "ADKF-IFT stays ahead at larger support sizes (0.456 vs MPN 0.411 at 256), but MPN still beats random forest (0.354), Tanimoto-kernel GP (0.358), TabPFN (0.322), and TabICL (0.358) at 256.",
+     "The kernel MPN is surprisingly strong (0.233 at 16; beats RF and GP at every size) yet trails the full transformer, so similarity in a meta-learned space explains only part of the performance.",
+     "Lacking per-task fitting, MPNs are fast: inference over thousands of molecules takes seconds (transformer) or hundredths of a second (kernel); the 16-layer model trains in ~4 days on one NVIDIA A10G, while ADKF-IFT hits GPU-memory limits beyond ~1000 samples."
+    ],
+    "why": "For small-data omics prediction, this shows that a domain-specific meta-training corpus can beat generic tabular foundation models (TabPFN, TabICL) in the same in-context regime. The no-fine-tuning, single-forward-pass design suits settings with many related small tasks, such as rapidly scoring new assays or perturbation subsets.",
+    "limitations": "Evaluation is restricted to FS-Mol regression with fingerprint inputs; ADKF-IFT remains better beyond 16 shots, and uncertainty quantification, GNN encoders, and broader property types are left for future work.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 23474
+   }
+  }
+ ],
+ "candidates": 373
+}
