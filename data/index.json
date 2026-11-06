@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-06",
+   "title": "Towards a foundation model for raw nanopore signal through discrete tokenization",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.11.05.764536",
+   "also": [
+    "10.64898/2026.11.04.764463",
+    "10.64898/2026.11.04.764373",
+    "https://arxiv.org/abs/2611.08086v1"
+   ]
+  },
+  {
    "date": "2026-11-05",
    "title": "Where single-cell foundation models help: a benchmark of annotation, perturbation and regulatory inference against simple baselines",
    "venue": "bioRxiv",

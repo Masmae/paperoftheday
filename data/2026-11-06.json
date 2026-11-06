@@ -1,0 +1,181 @@
+{
+ "date": "2026-11-06",
+ "pickedBy": "qwen3.8-flash",
+ "paper": {
+  "title": "Towards a foundation model for raw nanopore signal through discrete tokenization",
+  "authors": [
+   "Cheng, G.",
+   "Pitkänen, E."
+  ],
+  "authorCount": 2,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-06",
+  "doi": "10.64898/2026.11.05.764536",
+  "url": "https://doi.org/10.64898/2026.11.05.764536",
+  "abstract": "Nanopore sequencing reads nucleic acids as changes in ionic current that carry information beyond the base sequence. Self-supervised pretrained models have advanced genomic sequence modeling and single-cell analysis, but remain underexplored for raw nanopore signals, which are continuous and lack a native token vocabulary. Here we present Brieno, an approach combining reconstruction-based tokenization through residual vector quantization with a Transformer for contextual representation learning. We pretrain the Transformer using masked-token prediction on raw nanopore signals from 118 million reads. With frozen or fine-tuned features, the model identifies species without requiring reference genomes. It complements Dorado by accurately classifying reads left unclassified in native-barcode demultiplexing, approaches Dorado's basecalling performance across six genomes, and exceeds Dorado's specialized 5-methylcytosine model as well as a dedicated 6-methyladenine caller. Brieno also supports accurate CpG methylation detection with limited labeled data. Across tasks, pretrained contextual representations improve downstream performance over non-pretrained baselines and generalize across sequencing runs. Together, these findings support self-supervised pretraining as a basis for transferable representations of raw nanopore signals.",
+  "reasons": [
+   "foundation model",
+   "transformer",
+   "representation learning",
+   "single-cell",
+   "genomics",
+   "scale"
+  ],
+  "score": 20,
+  "tldr": "They built a self-supervised foundation model for raw nanopore signals via residual vector quantization and showed it improves species classification, basecalling, and methylation detection across large-scale sequencing runs.",
+  "why": "Brieno turns raw nanopore current changes into tokenized sequences and pretrains a transformer on them, creating a reusable model for sequencing data. It can identify species without a reference genome, match strong basecallers, and detect methylation, showing that useful biological representation learning can happen directly from signal.",
+  "summary": {
+   "tldr": "Brieno is a self-supervised model for raw nanopore ionic-current signals that pairs a residual-vector-quantization tokenizer with a masked-token Transformer, pretrained on 118 million reads, yielding transferable representations for species ID, barcode demultiplexing, basecalling, and DNA methylation detection.",
+   "background": "Nanopore sequencers produce continuous current signals carrying information beyond the base sequence (modifications, native barcodes, translocation dynamics), but existing tools are task-specific, and raw signals lack a native token vocabulary, making foundation-model-style pretraining hard. Self-supervised pretraining has transformed text, speech, and single-cell analysis but was largely unexplored for raw nanopore signals.",
+   "approach": "Two self-supervised stages: first, an EnCodec-style tokenizer (conv encoder with 8x downsampling, residual vector quantization with four 1,024-entry codebooks, 5 bits/sample, ~3.2x compression) converts signals to discrete tokens via L1 reconstruction plus commitment loss. Second, an 8-layer, 61.4M-parameter Transformer (768-dim, 12 heads, 2,048-frame context) is pretrained with BERT-style span-masked token prediction (15% masking). Pretraining used 16 public ONT R9.4.1 datasets (118M reads: bacteria, fungi, plants, human, synthetic oligos, mock communities; 3 devices, 5 kits, 5mC/6mA/8-oxo-dG) with no basecalls, alignments, or labels; task heads are then trained on frozen features or fine-tuned.",
+   "findings": [
+    "Species classification on held-out ZymoBIOMICS runs: fine-tuned Brieno reached 0.9887/0.9965 accuracy vs RawHash2's 0.9564/0.9891, without reference genomes; unseen-species detection AUROC was 0.72 (0.54-0.88 across species).",
+    "Native-barcode demultiplexing (24 barcodes, ~2.0M test reads): fine-tuned Brieno 0.9879 vs Dorado sup + alignment 0.9763 and retrained Deepbinner 0.9753; a cascade using Brieno only on Dorado's unclassified reads reached 0.9978, correctly assigning 91.7% of the 46,910 leftovers.",
+    "Basecalling with a CTC-CRF head approaches Dorado sup (0.9546 vs 0.9557 on lambda; 0.9446 vs 0.9456 on E. coli) and exceeds Dorado hac on all eight test groups.",
+    "5mC CpG detection on HG002: read-level AUROC 0.978 vs Dorado's dedicated 5mCG model at 0.975; with only 1% of training labels (~29k chunks) frozen features still reached 0.942 vs 0.872 from scratch. 6mA: 0.991/0.990 vs NEMO's 0.947/0.917.",
+    "Ablations: frozen pretrained Transformer features beat discrete tokens (e.g., +10.31 pp species classification) and continuous latents on all tasks except basecalling; pretrained vs identically-architected random-init Transformer gave 0.978 vs 0.921 methylation AUROC."
+   ],
+   "why": "For a multiomics model builder, this is the raw-signal analogue of HuBERT-style pretraining: it shows discrete tokenization plus masked prediction works on continuous biomedical measurements, enables label-efficient adaptation (near-full methylation AUROC with 1% of labels), and supports reference-free read classification. It suggests nanopore signal could become a fourth modality alongside sequence and expression data, with a fixed codebook as a shared reference across chemistries.",
+   "limitations": "Quantization does lose information (species classification drops 6.06 pp vs continuous latents) and the paper does not establish discrete inputs beat continuous ones; results are R9.4.1-specific with only preliminary R10.4.1 adaptation, methylation is evaluated read-level rather than site-level, and cross-motif 6mA transfer was limited.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 86457
+  }
+ },
+ "also": [
+  {
+   "title": "DisCell: Separating Spillover from Niche Response in Spatial Transcriptomics",
+   "authors": [
+    "Molen, R.",
+    "Toosi, H.",
+    "Ferreira, P. F.",
+    "Lagergren, J."
+   ],
+   "authorCount": 4,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-06",
+   "doi": "10.64898/2026.11.04.764463",
+   "url": "https://doi.org/10.64898/2026.11.04.764463",
+   "abstract": "Spatial transcriptomics at single-cell resolution measures every cell in its place in the tissue, but diffusion and segmentation errors also add transcripts of neighboring cells to a cell's counts. This spillover makes a cell resemble its neighbors, and a response to the niche makes cells in the same niche resemble each other. Both tie a cell's expression to its surroundings. The count data alone cannot tell the two apart. Findings from single-cell transcriptomes, such as a gene program that is higher in one niche than in another or signaling genes that change depending on the neighborhood, may therefore be artifacts of spillover. Current models describe a cell by its intrinsic state together with either its niche response or spillover, but none models all three. We present DisCell, the first method that models all three components jointly and measures how robust each finding is to spillover. DisCell is a generative model that describes single-cell gene expression profiles in terms of two latent variables, an intrinsic state and a response to the niche, and adds spillover from its neighbors as a separate term. DisCell fits the model at increasing levels of spillover and recomputes each finding on the spillover-free expression to see how much spillover it withstands. DisCell also estimates the most spillover a section can contain, and a finding that holds even at that amount is not explained by spillover. In simulated tissue, DisCell recovers each cell's intrinsic state and response and tells findings created by spillover apart from genuine responses. On five sections of ovarian and lung tissue, the intrinsic state keeps more of each cell's own properties, measured by its cell-cycle phase, than any competing method that holds as little of its neighborhood. Within each cell type, the model partitions the variation of each gene into intrinsic state, niche response and spillover. Using DisCell, we rank findings about niches by their robustness to spillover and confirm that a previously reported finding withstands spillover, that esophageal cancer cells in niches infiltrated by immune or stromal cells express more of an epithelial-mesenchymal transition program. DisCell also predicts what the gene expression of a cell type would be in another niche, with its spillover part separated, at lower error on most tasks than the competing method built for this purpose. Training the model takes under ten minutes on one consumer GPU for sections of up to 400,000 cells.",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "transcriptomics",
+    "spatial omics",
+    "new method"
+   ],
+   "score": 15,
+   "summary": {
+    "tldr": "DisCell is a generative model for spatial single-cell transcriptomics that jointly separates a cell's intrinsic state, niche response, and transcript spillover, then tests whether findings survive increasing assumed spillover.",
+    "background": "In Xenium-like spatial single-cell data, a cell's counts mix its own transcripts with transcripts from neighbors because diffusion and segmentation errors create spillover. Spillover and a true response to the local niche both make a cell resemble its neighbors, so count data alone cannot tell a biological neighborhood effect from a technical artifact.",
+    "approach": "DisCell fits one section, modeling each cell with latent intrinsic state, latent niche response, and a spillover term adding a shared fraction kappa of neighbors' clean expression. The niche descriptor uses masked morphology-image context from KRONOS and an attention summary of neighbor cell types. An adversarial loss encourages the intrinsic state to carry no within-cell-type niche information. DisCell refits over kappa = 0 to 0.4 and recomputes findings on spillover-free expression to get a breakdown point, compared with each section's estimated maximum spillover.",
+    "findings": [
+     "On four Xenium 5K panels (ovarian FFPE, lung FFPE, ovarian FF, pediatric lung TMA) with 69,000-1.16 million cells, DisCell's intrinsic state retains more cell-cycle variation and less neighborhood information than resolVI, SIMVI, MintFlow, and Cellina; resolVI has 2-5x more neighborhood information on whole-slide sections.",
+     "Within cell types, it assigns gene variation: CTHRC1 in ovarian fibroblasts is 76% niche response near tumors, while POSTN in ovarian-FF macrophages is 32% spillover and 28% response at kappa 0.1, rising to 76% spillover at kappa 0.4, below the section bound 0.49.",
+     "Most tested niche findings survive above section bounds: on ovarian FFPE all three hold beyond kappa 0.4 against bound ~0.18, but tumor-axis and signaling lean break at kappa 0.2 on ovarian FF, below bound 0.49, flagging possible artifacts.",
+     "In esophageal cancer, the EMT-in-immune/stromal-niche finding holds beyond kappa 0.4 in both patients against bounds 0.27-0.40, and for relocation DisCell lowers prediction error versus published Cellina on 8/9 tasks while taking under 10 minutes for 400,000 cells on a consumer GPU."
+    ],
+    "why": "For AI transcriptomics/multiomics work, it gives a practical robustness check for spatial niche claims, separating artifact from learned response and scaling to large Xenium sections with modest compute.",
+    "limitations": "Spillover is modeled as one shared fraction per section over one neighbor ring, so only modeled spillover is ruled out, and spatially structured intrinsic variation like subclones may be read as niche response.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "qwen3.8-flash",
+    "chars": 59796
+   }
+  },
+  {
+   "title": "Protify: A Benchmarking Platform Revealing Task Dependence and Homology Leakage in Protein Language Model Evaluation",
+   "authors": [
+    "Rafailidis, N.",
+    "Hallee, L. P.",
+    "Peleg, T.",
+    "Horger, C.",
+    "Haviland, L.",
+    "Gleghorn, J. P."
+   ],
+   "authorCount": 6,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-05",
+   "doi": "10.64898/2026.11.04.764373",
+   "url": "https://doi.org/10.64898/2026.11.04.764373",
+   "abstract": "Protein Language Models (pLMs) have become essential tools for computational protein analysis, and the rapid proliferation of architectures, training objectives, and pretraining corpora has produced a diverse and expanding model landscape. Evaluation practices, however, remain fragmented: studies use different datasets, preprocessing pipelines, and reporting conventions, so results rarely transfer between publications. Here we introduce Protify, an open-source platform that standardizes pLM benchmarking across zero-shot, supervised, and transferlearning settings through a unified, low-code interface. Protify currently supports 35 pretrained models and 61 curated datasets and it is easy to add custom versions of each. Leveraging Protify's high throughput pipelines, we benchmarked 23 models on ProteinGym, discovering that DPLM3B is currently the top-performing self-supervised encoder. Another large-scale supervised evaluation across 32 diverse tasks, spanning enzyme classification, gene ontology annotation, protein-protein interaction, subcellular localization, and other functional properties, found that no single pLM dominated: 14 different models took the top score on at least one dataset, and the margins between the best and second-best models fell within run-to-run variability. On enzyme optimal pH prediction, a general-purpose probe pipeline matched or exceeded EpHod, a specialized model selected from 11,550 training runs, after 50 hyperparameter trials (R2 = 0.482 versus 0.425). Under a homology-controlled split of the same data, every pooled-embedding probe collapsed to near-zero R2, and only a transformer probe over full residue embeddings recovered appreciable signal (R2 = 0.248). Model rankings therefore depend as much on evaluation design as on the models themselves. Protify makes those design choices explicit, controlled, and replayable, and is freely available at https://github.com/Gleghorn-Lab/Protify.",
+   "reasons": [
+    "language model",
+    "transformer",
+    "representation learning",
+    "zero-shot",
+    "proteins",
+    "code released"
+   ],
+   "score": 21,
+   "summary": {
+    "tldr": "Protify is an open-source, low-code platform that standardizes benchmarking of protein language models (pLMs) and shows that model rankings are highly dependent on task and split design, with homology leakage inflating much of the reported performance in the literature.",
+    "background": "pLM evaluation is fragmented: studies use different datasets, preprocessing, metrics, and splits, so results rarely transfer between publications, and no existing framework combines frozen-embedding probes, fine-tuning, built-in negative controls, and experiment replay. This makes it hard to know whether a 'better' model is actually better or just favored by a particular evaluation setup.",
+    "approach": "The authors built Protify, a plugin-based platform with a GUI, CLI, and YAML interface that automates embedding extraction (35 pretrained pLMs, e.g., ESM2, ESMC, ProtBert/T5, ANKH, DPLM/DPLM2, AMPLIFY, E1, CaLM), probe training, evaluation, figure generation, and full experiment replay across 61 curated datasets. They ran three case studies: zero-shot variant effect prediction on ProteinGym (23 models, 217 DMS assays, masked-marginal scoring), a supervised 'vector benchmark' of 32 protein annotation tasks (EC, GO, kcat, PPI, subcellular localization, taxonomy, expression) using MLP probes on frozen mean-variance pooled embeddings across 3 seeds, and enzyme optimal pH prediction compared against the specialized EpHod model.",
+    "findings": [
+     "On ProteinGym substitutions, the diffusion-based DPLM3B was the top self-supervised encoder (average Spearman 0.421), beating ESM2-3B, and Protify reproduced prior leaderboard values within 0.007; E1 models outperformed size-matched ESM2s, while a random-transformer control scored -0.040.",
+     "Across the 32 supervised tasks no single pLM dominated: 14 different models took the top spot on at least one dataset, and the best-vs-second-best margin was never statistically significant (p > 0.05 across 3 seeds), with DPLM3B best on 6 of 32 and ANKH400M on 4.",
+     "For enzyme optimal pH prediction, a general-purpose transformer probe on DPLM2-3B residue embeddings reached R^2 = 0.482 on the standard test set (n=1,971) after only 50 Bayesian hyperparameter trials, beating EpHod, a specialized model selected from 11,550 training runs (R^2 = 0.425).",
+     "On a new homology-controlled split (MMseqs2 clusters at 30% sequence identity, 8,015/430/439 train/val/test), every pooled-embedding MLP probe collapsed to near-zero R^2 (best 0.039) and only the full-residue transformer probe retained signal (R^2 = 0.248); the original EpHod split also contained 24 duplicate sequences across splits, some with conflicting labels.",
+     "Split design strongly drove apparent performance: cluster-based C3 splits (e.g., Bernett PPI, KSMoFinder) gave low, variable scores while naive splits gave uniformly high ones, and results for the same model disagreed across leaderboards (e.g., DSM650M ranked 4th on the vector benchmark at 0.534 but scored only 0.246 on ProteinGym)."
+    ],
+    "why": "For anyone building multimodal or transcriptomics-adjacent ML pipelines, the paper is a concrete demonstration that evaluation design, especially sequence-similarity/homology leakage between splits, can dominate measured model performance, so benchmark conclusions and model rankings should not be trusted across frameworks without controlled splits. It also shows that general-purpose frozen embeddings plus a simple tuned probe can match heavily engineered task-specific models, which matters when deciding whether to invest in specialized pipelines or reuse a shared representation backbone.",
+    "limitations": "Only 3 random seeds limit statistical power for the supervised comparisons, the work is a non-peer-reviewed preprint, and the authors hold equity in Synthyra (which provides model infrastructure); additionally, EpHod was not evaluated on the new rigor split, so a direct comparison under strict homology control remains open.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 118181
+   }
+  },
+  {
+   "title": "MUSS: A Multi-scale and Sequence-based Model for Single-cell Gene Regulation",
+   "authors": [
+    "Kangjie Zheng",
+    "Amirhossein Vahidi",
+    "Liying Jin",
+    "Joseph Clarke",
+    "Vijaya Baskar MS",
+    "Connor Rogerson",
+    "Mengji Zhang",
+    "Muzlifah Haniffa",
+    "Anshul Kundaje",
+    "Mo Lotfollahi"
+   ],
+   "authorCount": 10,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-05",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.08086v1",
+   "abstract": "Modeling gene regulation in single cells requires jointly representing DNA sequence, chromatin accessibility, and gene expression across regulatory scales. Sequence-based models capture DNA-level regulatory grammar but often lack cell-level resolution, whereas many single-cell omics models represent genes and peaks as fixed-vocabulary tokens without their underlying sequence. Here, we present MUSS, a sequence-based multi-scale model for single-cell gene regulation that preserves both DNA-level and cell-level resolution. MUSS derives peak- and gene-level representations from DNA using a frozen pre-trained sequence encoder and integrates them through peak-peak self-attention and distance-biased peak-gene interactions. Peak masked language modeling followed by training on paired scATAC-seq and scRNA-seq aligns these representations with cell-specific regulatory states. Across gene expression prediction, enhancer-gene linking, motif-guided regulatory prioritization, and zero-shot cell clustering, MUSS achieves strong performance against sequence-based and single-cell omics baselines. It further predicts expression for genes and peaks unseen during task training. These results support sequence-grounded, multi-scale representations for decoding cell-type-specific regulatory programs. Code, datasets, and model checkpoints are available at https://github.com/Lotfollahi-lab/MUSS_neurips26.",
+   "reasons": [
+    "language model",
+    "zero-shot",
+    "single-cell",
+    "epigenomics",
+    "RNA-seq",
+    "code released"
+   ],
+   "score": 20,
+   "summary": {
+    "tldr": "MUSS is a sequence-grounded, multi-scale transformer that turns each accessible peak and gene into a DNA-derived embedding and combines it with per-cell scATAC-seq accessibility to predict gene expression and regulatory links, including for genomic regions never seen during training.",
+    "background": "Predicting gene regulation from single cells requires jointly modeling DNA sequence, chromatin accessibility, and expression, but existing tools split the problem: sequence-to-function models (Borzoi, AlphaGenome, scooby) lack cell-level resolution, while single-cell omics models (scGPT-style, ChromFound, EpiAgent) treat genes/peaks as fixed-vocabulary tokens with no underlying sequence, so they cannot represent unseen regions. Bridging both scales in one model is the open challenge.",
+    "approach": "MUSS encodes every peak and gene from reference DNA using a frozen AlphaGenome encoder (3072-dim, 128-bp bins, average-pooled), then processes them with a small trainable encoder (2048-dim, 16 heads, one peak self-attention layer with RoPE, two cross-scale blocks) where peak-gene cross-attention is biased by genomic distance via Gaussian RBFs over log-distance plus a learnable distance-decay penalty. Training is two-stage: peak masked language modeling (15% masking) on ~169K PBMC scATAC-seq cells (~45 hours on 4x H200), then Poisson-loss gene expression prediction on paired scATAC/scRNA data. Since embeddings come from sequence, held-out genes and peaks can be encoded and scored at test time.",
+    "findings": [
+     "On four paired scATAC-scRNA datasets (PBMC10K, BMMC, Openproblem, Bone), MUSS achieves best or tied-best pseudobulk PCC in all seen-sequence settings (e.g., 0.983 BMMC, 0.996 Openproblem) and 6 of 8 unseen-sequence settings (e.g., 0.748 BMMC), beating Borzoi, AlphaGenome, scooby, GET, and EpiBERT; single-cell unseen-sequence PCCs are 0.38-0.54.",
+     "Generalization to unseen regions is sequence- and interaction-driven: 1,161 of 5,257 held-out genes are predicted from DNA alone, and ablating cross-scale interactions collapses BMMC unseen-sequence PCC from 0.745 to 0.009.",
+     "Zero-shot clustering on the held-out PBMC169K batch reaches ARI 0.5377 versus 0.4835 for ChromFound and 0.1032 for AlphaGenome.",
+     "For enhancer-gene linking on GeneHancer, MUSS beats all baselines across distance bins with per-gene retrieval micro-AUPRC 0.1271 versus 0.0834 for Borzoi; motif-guided prioritization gives pairwise AUROC 0.641 versus 0.519 for distance alone at 50-100 kb (conservative setting).",
+     "The approach is data-efficient and encoder-agnostic: ~0.5 PCC with one paired cell (saturating after a few hundred), and swapping in frozen Borzoi embeddings works comparably while NT-v3 is much worse on unseen sequence."
+    ],
+    "why": "For multiomics model builders, MUSS demonstrates a practical recipe for fixing the main weakness of fixed-vocabulary single-cell foundation models: grounding gene/peak tokens in frozen sequence-model embeddings so representations transfer to unseen regions and cell types. The modular design (frozen large encoder + small trainable interaction layers) is also computationally cheap to adapt.",
+    "limitations": "Peak self-attention is quadratic in peak count (up to 10,000 per cell) and inference is slower than lightweight baselines; enhancer-gene evaluation is restricted to the training vocabulary, a PCA+Ridge baseline nearly matches on seen genes (0.900-0.972 PCC), and scooby wins some metrics (e.g., unseen-sequence CCC on Bone).",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 94986
+   }
+  }
+ ],
+ "candidates": 388
+}
