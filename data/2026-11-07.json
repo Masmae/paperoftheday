@@ -1,0 +1,175 @@
+{
+ "date": "2026-11-07",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "An agent-built, verified atlas of public spatial transcriptomics shows that breadth across studies drives transfer and reproducibility",
+  "authors": [
+   "Ji, J.-H.",
+   "Zou, Q.",
+   "Cheng, J.",
+   "She, Z.",
+   "Hao, Y.",
+   "Liu, W.",
+   "Zhang, D.",
+   "Wang, Z.",
+   "Yu, J.-T.",
+   "Yuan, Z."
+  ],
+  "authorCount": 10,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-01",
+  "doi": "10.64898/2026.05.27.727615",
+  "url": "https://doi.org/10.64898/2026.05.27.727615",
+  "abstract": "Public spatial transcriptomics data are deposited study by study, in formats that differ from one laboratory to the next, and no resource has yet indexed or verified them as a whole. Here we present SpatialDataAgent-DB, an atlas built from the Gene Expression Omnibus (GEO) by SpatialDataAgent, a workflow in which language-model agents do the work and every output is checked rather than trusted. An assay index covering all 298,179 GEO series identifies 2,411 spatial series, which gives public spatial data an explicit denominator. For each series, an agent writes conversion code instead of editing the data directly, and a frozen, rule-based scorer recomputes every released value from the source files. In a held-out test, the scorer rejected all 1,231 corrupted copies. We also visually reviewed every released sample, including the 4,386 H&E-registered Visium samples of our earlier HESRT release. SpatialDataAgent-DB contains 12,163 samples from 12 platforms and 42 species in a single format, each with its provenance and defect flags. Its 8,211 image-paired samples are 5.9 times as many as in the next image-paired resource, and at least 71% of all samples are absent from five existing catalogues. Without batch correction, sequencing-based samples group by organ more than by platform: with platforms balanced, organ explains 32% of the variance of human pseudobulk profiles and platform 13% (mouse, 47% and 18%). We then used the atlas in two applications. Image-to-expression models trained on it transfer to unseen studies, and their accuracy rises steadily with training data and, at a fixed number of patches, with the number of training studies over the range tested (for H&E, Pearson r gains 0.0056 per doubling of training patches up to 524,288); 11 of 13 forecasts locked in advance were confirmed. Adding studies helps more than adding patches from the same studies, because each study leaves a fingerprint in its images. Intent-based search over the same index assembled 70 single-cell dementia studies, and the replication of disease signatures in held-out studies rose steadily with the number of studies (direction agreement averaged over 28 held-out studies, 63% with one study and 77% with 16). In both applications, performance kept rising with the number of independent studies, which a complete and verified atlas is built to provide.",
+  "reasons": [
+   "AI agents",
+   "single-cell",
+   "transcriptomics",
+   "spatial omics",
+   "generalizes"
+  ],
+  "score": 15,
+  "tldr": "An LLM-agent pipeline with rule-based verification builds the largest verified public spatial transcriptomics atlas from all of GEO, and shows that adding independent studies—more than adding patches from the same studies—drives transfer and replication for image-to-expression models and disease meta-analyses.",
+  "why": "For anyone training image-to-expression or spatial foundation models, this is the largest verified training corpus, and it demonstrates that study diversity—only obtainable from comprehensive public atlases—matters more than raw patch count for transfer to new studies. The verify-not-trust agent design (agent writes code, frozen scorer recomputes everything) is a reusable template for curating other omics data types with LLM agents.",
+  "summary": {
+   "tldr": "An LLM-agent pipeline with rule-based verification builds the largest verified public spatial transcriptomics atlas from all of GEO, and shows that adding independent studies—more than adding patches from the same studies—drives transfer and replication for image-to-expression models and disease meta-analyses.",
+   "background": "Public spatial transcriptomics data sit in GEO in heterogeneous per-lab formats with no complete index or verification; existing catalogues cover only hundreds to a few thousand samples. Spatial data are hard to process automatically because spot positions, units, and image alignment live in supplementary files, and agent errors (flipped axes, wrong scales, wrong sample matrices) can fail silently.",
+   "approach": "SpatialDataAgent indexes all 298,179 GEO series using 18 yes/no assay questions per series, identifying 2,411 spatial series (~1 in 124). For each, an LLM agent writes conversion code run against read-only sources; a frozen rule-based scorer re-executes it and applies 19 checks, and every released sample gets visual review. The result, SpatialDataAgent-DB, holds 12,163 verified samples (635M spots/cells), 12 platforms, 42 species, 8,211 with registered images, including 4,386 H&E-registered Visium samples from the prior HESRT pipeline.",
+   "findings": [
+    "The verification gate worked: 91% of 12,326 agent conversions passed after automated repair, and a held-out test using 19 corruption types rejected all 1,231 corrupted copies while passing all 66 clean ones.",
+    "The atlas is 5.9x the next image-paired resource, covers 89-100% of the GEO-rebuildable data in five existing catalogues, and 71% of its samples (8,622) appear in none of them; without batch correction, organ explains 32% of pseudobulk PCA variance vs 13% for platform in human (47% vs 18% in mouse).",
+    "Image-to-expression models (frozen UNI2-h + ridge on H&E, 403 genes, 266 Visium studies; ConvNeXt-nano on DAPI, 200 genes, 86 Xenium studies) transferred to unseen studies, with accuracy rising 0.0056 (H&E) and 0.0117 (DAPI) per doubling of training patches; 11 of 13 forecasts locked before blind evaluation held.",
+    "Study breadth beat patch count: at fixed patches per slide, going from 12 to 190 studies added 0.0030 r per doubling with no decline, while 27x more patches from the same 48 studies gained less; a study can be identified from image features alone 86% of the time (chance 2%), and Macenko/Reinhard stain normalization failed to remove this fingerprint and lowered accuracy.",
+    "Intent-based search over the index returned 1,110 H&E-paired series (97% precision, 96% recall) at US$12.4 per query, and assembled 70 single-cell dementia studies (13.4M cells) where held-out direction agreement rose from 63% (1 study) to 77% (16 studies); transfer is also capped by count noise (gene-agnostic ceiling r = 0.449 for Visium, 0.692 for Xenium)."
+   ],
+   "why": "For anyone training image-to-expression or spatial foundation models, this is the largest verified training corpus, and it demonstrates that study diversity—only obtainable from comprehensive public atlases—matters more than raw patch count for transfer to new studies. The verify-not-trust agent design (agent writes code, frozen scorer recomputes everything) is a reusable template for curating other omics data types with LLM agents.",
+   "limitations": "The atlas standardizes deposited processed files rather than re-quantifying raw reads, 2,752 samples lack verified micrometre units, and scaling trends are empirical over the tested ranges only (the functional form is unidentifiable). One locked DAPI breadth prediction failed, and the H&E plateau may reflect either the frozen encoder or the fixed study set.",
+   "source": "bioRxiv full text",
+   "model": "glm-5.3-flash",
+   "chars": 66827
+  }
+ },
+ "also": [
+  {
+   "title": "scCont: Interpretable Contrastive Learning for Functional Characterization of Cellular State Transitions",
+   "authors": [
+    "Kewalramani, N.",
+    "Wuchty, S.",
+    "Crovella, M.",
+    "Paul, I.",
+    "Emili, A."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-06",
+   "doi": "10.64898/2026.11.05.764599",
+   "url": "https://doi.org/10.64898/2026.11.05.764599",
+   "abstract": "Timecourse single-cell RNA (scRNA) datasets have become indispensable biological tools for studying and uncovering the underlying regulatory processes driving continuous cell-state transitions such as the epithelial-to-mesenchymal transition. However, these highly fluid, non-linear gene program dynamics remain difficult to disentangle. While deep neural network models can effectively map complex topologies, they are biological black boxes, lacking the gene-level interpretability required by experimental practitioners. Here, we introduce scCont, a fully unsupervised contrastive learning framework for extracting interpretable functional transition units from scRNA-seq data. Rather than relying on explicit temporal labels or clustering priors, scCont uses an unsupervised k-nearest neighbors approach to project local transcriptomic neighborhoods into a low-dimensional embedding. During post-training analysis, scCont employs Shapley network attribution to determine gene-latent relationships, mapping latent dimensions directly into functional gene programs. We quantitatively and qualitatively validate this representation by demonstrating that scCont captures biologically interpretable dynamics more effectively than baseline methods such as LDVAE. Evaluated across 13 diverse EMT timecourse datasets and four simulated datasets, scCont exposes interpretable functional dynamics and effectively maps context-dependent functional groups, helping to bridge the gap between deep learning representation and translational biological utility. scCont is an open source software available on GitHub (https://github.com/nramani611/scCont).",
+   "reasons": [
+    "deep learning",
+    "representation learning",
+    "single-cell",
+    "transcriptomics",
+    "RNA-seq",
+    "code released"
+   ],
+   "score": 18,
+   "summary": {
+    "tldr": "scCont is a fully unsupervised contrastive learning method for timecourse scRNA-seq that uses k-NN-defined positive pairs plus post-hoc SHAP attribution to turn a 32-dimensional latent space into interpretable, temporally-aware gene programs (FTUs), evaluated on 4 simulated and 13 EMT datasets against LDVAE, scVI, NMF, and PCA.",
+    "background": "Timecourse scRNA datasets capture continuous state transitions like EMT, but linear methods (PCA, NMF) force fluid, asynchronous gene programs into discrete static clusters, while nonlinear deep models (e.g., scVI, scGen) capture the topology yet offer no gene-level interpretability. The problem is compounded because EMT is non-binary (hybrid E/M states) and highly context-dependent across cell lines and inducers.",
+    "approach": "scCont builds a k-NN graph on normalized, PCA-denoised expression to select positive pairs purely from local geometry — no temporal labels, clustering priors, or data augmentation — then trains a 4-layer MLP encoder (3000→2048→1024→64→32) with a 2-layer projector using InfoNCE loss (τ=0.2, 20,000 batches of 256, Adam lr 1e-4). Post-training, DeepSHAP attributes genes to each latent (threshold z>2.57, p<0.01) with GO enrichment (adj. p<0.05) defining functional transition units; FTUs co-localized in PCA space are hierarchically clustered into modular transition units. k=3 was used for all EMT data and k=10 in simulations; all baselines were run at 32 latent dimensions.",
+    "findings": [
+     "On a SERGIO bifurcation simulation (800 program genes in 16 programs plus 2,200 permuted background genes), scCont reached program-recovery AUPRC 0.26, kept background genes to 7.0% of the top-100 attributed genes per latent (~10-fold below the 73.3% chance level), separated lineages at Cliff's δ 0.94, and supported pseudotime recovery by an MLP probe at R²=0.84 vs 0.60 for 32-component PCA.",
+     "Against LDVAE, scVI, NMF, and PCA, scCont was a top performer on program recovery (LDVAE slightly better only on the bifurcation simulation, with the ranking flipping across conditions) and the best on noise reduction and temporal recovery; on real MCF10A TGFB1 data, LDVAE lagged on GO-coherent latents while NMF lost temporal structure, and scCont produced the most consistent EMT-enriched FTUs across five random seeds.",
+     "Applied to MCF10A+TGFB1 (8 daily timepoints, GSE200981, 3,000 HVGs), scCont's spatial clustering yielded three modules (11, 10, and 11 FTUs): a coherent migratory program (focal adhesion, cell motility), background processes, and a bifurcating module whose branch retains retinoic-acid/ELF3 epithelial identity alongside migratory machinery, with concurrent CDH1/CDH2 expression indicating a hybrid E/M state.",
+     "Across 12 Cook et al. datasets (A549, DU145, MCF7, OVCA420 × EGF, TGFB1, TNF, with inducer withdrawal), scCont aligned conserved modules (cytoskeletal contractility, keratin regulation, microtubule dynamics) while resolving inducer-specific rewiring: TGFB1 drives complete EMT (KRT8/18 down; KRT81, TUBA1C, CCT2 up), EGF a partial EMT with a cell-cycle FTU, and TNF adds inflammation/proteasome modules."
+    ],
+    "why": "For researchers building representation-learning pipelines on single-cell omics, this demonstrates a concrete recipe for coupling nonlinear contrastive encoders with post-hoc attribution to obtain gene-level interpretability without trajectory labels — a persistent pain point with scVI-style models. The k-NN positive-pair selection is also a transferable trick for other unsupervised neural methods on timecourse or continuous-state data.",
+    "limitations": "Performance depends on the initial k-NN graph faithfully capturing biological progression, and the method needs GPU acceleration while SHAP scales linearly at ~170 ms/cell, making atlas-scale runs costly. The program-recovery advantage over LDVAE is condition-dependent, real-data validation lacks ground truth, and this is a non-peer-reviewed preprint.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 71145
+   }
+  },
+  {
+   "title": "Joint protein-DNA language modeling enables prediction and engineering of DNA recognition specificity",
+   "authors": [
+    "Xiong, Y.",
+    "Ren, J.",
+    "Wei, X.",
+    "Li, X.",
+    "Li, J.",
+    "Wei, W."
+   ],
+   "authorCount": 6,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-06",
+   "doi": "10.64898/2026.11.05.763984",
+   "url": "https://doi.org/10.64898/2026.11.05.763984",
+   "abstract": "Protein-DNA recognition specificity underlies transcriptional regulation, DNA replication, chromatin remodeling and genome editing. Protein-DNA recognition depends on both interacting sequences, yet language models that learn this cross-molecular dependence explicitly during pretraining remain limited. Here, we developed the Protein-DNA Language Models (PDLMs), interaction-aware language models that jointly represent protein and DNA sequences. PDLMs were built by continued pretraining from ESM2 with masked language modeling on paired protein-DNA sequences. A shared encoder places amino acids and nucleotides in the same molecular context, enabling conditional sequence scoring and transferable pair representations. We further introduced a domain-aware masking strategy that increased masking probability within DNA-binding domains to strengthen learning of interaction-relevant regions. Across downstream tasks, PDLMs improved protein-DNA pair classification relative to independent-encoder baselines and supported prediction of mutation-associated binding changes. Zero-shot scoring recovered known changes in DNA-recognition specificity and prioritized variants with higher editing activity. Learned representations also supported cross-study prediction of base editor activity. After fine-tuning on transcription factor binding data, PDLMs predicted DNA motifs directly from protein sequences. Together, PDLMs provide a framework for interaction-aware biomolecular language modeling, with potential applications in protein engineering and genome editing.",
+   "reasons": [
+    "language model",
+    "zero-shot",
+    "epigenomics",
+    "proteins",
+    "genomics",
+    "generalizes"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "This paper builds PDLMs, ESM2-derived language models pretrained on ~51k paired protein-DNA sequences with a shared encoder, and shows joint pretraining improves protein-DNA binding prediction, mutation-effect prediction, and zero-shot scoring that guided experimental engineering of MutH nickase specificity.",
+    "background": "DNA recognition specificity is determined jointly by the protein and its DNA target, but existing protein language models only model the protein side, and multimodal models like LucaOne or OmniBioTE do not pretrain explicitly on cognate interacting pairs. The bottleneck is that experimentally characterized protein-DNA pairs are scarce (~51k here) compared to protein-only data and are unevenly distributed across families and assay types.",
+    "approach": "The authors curated 51,329 protein-DNA pairs (proteins 50-1000 aa, DNA 3-50 nt) from BioLiP2, REBASE, CIS-BP and AptaDB, split 46,224/2,547/2,558 train/validation/test. They continued pretraining from ESM2 (35M and 150M backbones) with masked language modeling on concatenated protein-DNA inputs, using modality-specific segment embeddings and MLM heads, plus a domain-aware masking scheme (30% masking in Pfam-annotated DNA-binding domains vs 10% elsewhere; DNA masked at 20%). This yielded four variants (PDLM-35M/150M, base/domain masking), evaluated via zero-shot conditional likelihoods, frozen pair representations, or fine-tuning, against dual-encoder baselines (ESM2 + DNABERT-2 or DNA-6M).",
+    "findings": [
+     "On protein-DNA pair classification with constructed negatives, PDLM-150M-domain reached AUROC 0.940 / AUPRC 0.903 vs 0.823 / 0.683 for the strongest dual-encoder baseline (ESM2-150M + DNABERT-2); the advantage was specific to pair-compatibility negatives, not protein-level DNA-binding propensity.",
+     "For mutation-induced binding free-energy changes (ProNAB; 1,409 protein and 223 DNA mutant pairs), PDLM-35M-domain gave Pearson r of 0.416 (protein mutations) and 0.523 (DNA mutations) vs 0.409 and 0.459 for the best baseline.",
+     "Zero-shot DNA scoring recovered the known MutH E91A/F94A specificity expansion from GATC to GATN; scoring 4,123 further substitutions prioritized 82 variants, of which six showed significantly improved editing at GACA in mitoBE assays. Protein-side scoring correlated with measured GATA editing activity (SCC 0.58 for PDLM-150M-domain vs 0.20 for ESM2), and 5 of 11 consensus-prioritized variants improved activity over the parent.",
+     "Cross-dataset TadA base-editor activity prediction: SCC 0.87-0.90 in internal cross-validation on Xiao et al. (n=840; PDLM-150M-base 0.90) and 0.56-0.62 on the independent Chen et al. set (n=561) where dual-encoder baselines gave negative correlations; zero-shot off-target scoring across 16 TadA variants correlated with R-loop assay measurements (SCC 0.66).",
+     "Fine-tuning the last third of the encoder on CIS-BP protein-PWM pairs (7,129 train) enabled TF motif prediction from protein sequence alone, raising median PWM Pearson correlation from 0.40 (frozen) to 0.64, and partially recovered a mutation-induced specificity shift in FOXA1."
+    ],
+    "why": "For someone working on multiomics AI, this is a concrete demonstration that conditioning pretraining on the interacting partner — rather than encoding modalities independently and fusing later — measurably improves interaction-specific prediction, a design principle transferable to paired-modality problems like TF-regulome or regulatory-variant modeling. The TF motif prediction from protein sequence and transferable base-editor activity models are directly usable starting points for regulatory genomics and genome-editing applications.",
+    "limitations": "Paired training data are small and family-biased, so generalization to distant homologs and unseen families is untested; several effects are modest (ΔΔG correlations ~0.4-0.5, only a modest association with AF3-predicted structural compatibility), and the best model variant varies by task, so no single configuration dominates. Quantitative protein-by-DNA specificity matrices would be needed to properly train partner-conditional specificity models.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 71404
+   }
+  },
+  {
+   "title": "Genetic variants shape single-cell chromatin accessibility and disease risk.",
+   "authors": [
+    "Xue",
+    "Fan",
+    "Dong",
+    "Huang",
+    "Chen",
+    "Allen",
+    "Spenceley",
+    "Sagi-Zsigmond",
+    "Bowen",
+    "Henry",
+    "Cuomo",
+    "Tanudisastro"
+   ],
+   "authorCount": 31,
+   "venue": "Nature",
+   "preprint": false,
+   "date": "2026-10-29",
+   "doi": "10.1038/s41586-026-11173-4",
+   "url": "https://doi.org/10.1038/s41586-026-11173-4",
+   "abstract": "Understanding how genetic variation shapes gene regulation at single-cell resolution is crucial for elucidating complex disease mechanisms1, but has been limited by the lack of large-scale single-cell multi-omics data2-4. Here we present single-cell assay for transposase-accessible chromatin with sequencing of 3.5 million peripheral blood mononuclear cells from 1,042 donors with matched whole-genome sequencing. Across 28 immune cell types, we tested 440,996 chromatin accessibility peaks and identified 243,225 chromatin accessibility quantitative trait loci (caQTLs) at 100,483 peaks, 60% of them cell-type specific. Rare variant analysis identified 38,161 associated peaks, with predicted transcription factor-binding disruption implicated at individual loci. Colocalization with expression QTLs (eQTLs) from single-cell RNA sequencing data (5.4 million peripheral blood mononuclear cells)5 defined 28,834 candidate cis-regulatory elements. Across genome-wide association studies for 16 diseases and 44 blood traits, caQTLs colocalized 4.5-22.6% more signals than eQTLs alone. Cell-type-specific and tissue-specific context, distal effects and multi-causal-variant models raised genome-wide association study-eQTL concordance from approximately 16% to approximately 65%. Cell state further modulates genetic effects, with 27% of over 200,000 caQTL-cell-state interactions lacking a main effect. At the inflammatory bowel disease risk gene ADCY7, accessibility effects varied with genotype and G protein-mediated pathway activity in CD4+ T cells. A graph neural network trained on both eQTL and caQTL layers inferred peak-gene links in unpaired multiome data with up to 17.2% higher accuracy than QTL-agnostic data, uncovering 128 additional transcription factor-target pairs (22% increase). Together, these results show that genetic variants shape chromatin accessibility in a cell-type-specific and cell-state-specific manner, influencing immune function and disease risk.",
+   "reasons": [
+    "deep learning",
+    "graph neural network",
+    "single-cell",
+    "multiomics",
+    "epigenomics",
+    "genomics"
+   ],
+   "score": 22
+  }
+ ],
+ "candidates": 393
+}
