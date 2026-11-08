@@ -1,0 +1,180 @@
+{
+ "date": "2026-11-08",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Biologically informed deep learning to query gene programs in single-cell atlases",
+  "authors": [
+   "Mohammad Lotfollahi",
+   "Sergei Rybakov",
+   "Karin Hrovatin",
+   "Soroor Hediyeh-zadeh",
+   "Carlos N. Talavera-López",
+   "Alexander V. Misharin",
+   "Fabian Joachim Theis"
+  ],
+  "authorCount": 7,
+  "venue": "Nature Cell Biology",
+  "preprint": false,
+  "date": "2023-02-02",
+  "doi": "10.1038/s41556-022-01072-x",
+  "url": "https://doi.org/10.1038/s41556-022-01072-x",
+  "abstract": "Abstract The increasing availability of large-scale single-cell datasets has enabled the detailed description of cell states across multiple biological conditions and perturbations. In parallel, recent advances in unsupervised machine learning, particularly in transfer learning, have enabled fast and scalable mapping of these new single-cell datasets onto reference atlases. The resulting large-scale machine learning models however often have millions of parameters, rendering interpretation of the newly mapped datasets challenging. Here, we propose expiMap, a deep learning model that enables interpretable reference mapping using biologically understandable entities, such as curated sets of genes and gene programs. The key concept is the substitution of the uninterpretable nodes in an autoencoder’s bottleneck by labeled nodes mapping to interpretable lists of genes, such as gene ontologies, biological pathways, or curated gene sets, for which activities are learned as constraints during reconstruction. This is enabled by the incorporation of predefined gene programs into the reference model, and at the same time allowing the model to learn de novo new programs and refine existing programs during reference mapping. We show that the model retains similar integration performance as existing methods while providing a biologically interpretable framework for understanding cellular behavior. We demonstrate the capabilities of expiMap by applying it to 15 datasets encompassing five different tissues and species. The interpretable nature of the mapping revealed unreported associations between interferon signaling via the RIG-I/MDA5 and GPCRs pathways, with differential behavior in CD8 + T cells and CD14 + monocytes in severe COVID-19, as well as the role of annexins in the cellular communications between lymphoid and myeloid compartments for explaining patient response to the applied drugs. Finally, expiMap enabled the direct comparison of a diverse set of pancreatic beta cells from multiple studies where we observed a strong, previously unreported correlation between the unfolded protein response and asparagine N-linked glycosylation. Altogether, expiMap enables the interpretable mapping of single cell transcriptome data sets across cohorts, disease states and other perturbations.",
+  "reasons": [
+   "deep learning",
+   "AI",
+   "single-cell",
+   "transcriptomics",
+   "perturbation",
+   "cell atlas"
+  ],
+  "score": 21,
+  "classic": true,
+  "citations": 100,
+  "year": 2023,
+  "tldr": "The authors built a deep learning model that maps new single-cell datasets onto reference atlases using labeled gene programs as interpretable bottleneck nodes, matching state-of-the-art integration accuracy while uncovering unreported pathway associations in COVID-19 immune cells and pancreatic beta cells.",
+  "why": "expiMap tackles the biggest weakness of single-cell foundation models—interpretability—by replacing black-box latent nodes with curated, biologically meaningful gene programs, without sacrificing integration performance. It is validated broadly (15 datasets, five tissues, multiple species) and yields genuinely new biology, from COVID-19 immune signaling to beta-cell stress pathways. For someone applying AI to transcriptomics and multiomics, it is both a reusable tool and a template for building interpretable models.",
+  "summary": {
+   "tldr": "expiMap is an interpretable conditional VAE for single-cell reference mapping whose latent dimensions are wired to curated gene programs, matching unconstrained models' integration quality while enabling direct program-level interpretation of query data.",
+   "background": "Reference-mapping methods (scArches/scVI, Seurat v4, Symphony) embed new query data into atlas latent spaces, but those dimensions are uninterpretable, so biology must be recovered afterwards via differential expression and gene set enrichment on integrated atlases, which is statistically unreliable due to nonlinear batch effects. Prior interpretable VAEs (VEGA, scETM, pmVAE) inject gene-set priors but cannot learn new programs or scale to atlas-level reference mapping.",
+   "approach": "expiMap ('explainable programmable mapper') is a scArches-based conditional VAE where each latent dimension is constrained to a gene program from a binary membership matrix (Reactome pathways, PanglaoDB markers, or custom lists), with a linear decoder so each node reconstructs only its program's genes. A group-lasso layer prunes irrelevant programs and L1 'soft membership' lets genes outside a program join it, compensating for incomplete databases. During query mapping via architecture surgery, new latent nodes are added—either constrained to known programs or unconstrained de novo—with an HSIC penalty enforcing independence, and program activity is tested with Bayesian Bayes factors (significant at |log BF| >= 2.3).",
+   "findings": [
+    "On an IFN-beta perturbation benchmark (13,576-cell query from 8 patients mapped to a 32,484-cell PBMC reference from 4 studies), expiMap achieved 0.68 vs 0.47 average batch-correction score for scArches+scVI, while keeping stimulated cells separate; removing the top 5 IFN programs from the model abolished this separation.",
+    "Across five-tissue reference building (PBMCs 161,764 cells/8 batches, heart 18,641/4, lung 65,662/19, colon 34,772/12, liver 113,063/14), the gene-program-constrained model matched or outperformed scVI and LDVAE on nine scIB metrics, showing prior constraints cost no expressiveness.",
+    "When IFN and B-cell programs plus B cells were withheld from the reference, a new constrained node recovered the BCR program (66 of 84 active genes) plus 9 new markers, and unconstrained nodes learned myeloid and IFN de novo programs with at most 24% gene overlap with existing Reactome terms.",
+    "Mapping two tocilizumab-treated COVID-19 patients (18,752 cells) revealed differential RIG-I/MDA5 and GPCR programs in CD8+ T cells and CD14+ monocytes, plus annexin ligand-receptor circuits between lymphoid and myeloid compartments that reconfigure between severe and remission stages.",
+    "Pancreas integration (45,178 reference + 36,899 query cells, mouse) showed a 0.93 correlation between unfolded protein response and asparagine N-linked glycosylation program scores in beta cells, previously unreported."
+   ],
+   "why": "For researchers building atlas-scale integrative models, this demonstrates that embedding prior gene-set knowledge into the architecture costs no integration performance and replaces the fragile DE-plus-GSEA post-hoc pipeline with direct program-level Bayesian testing. The transfer-learning recipe (frozen reference plus added interpretable nodes for query-specific variation) is directly reusable for disease-atlas querying and cross-cohort comparisons.",
+   "limitations": "Results depend on which knowledge is injected—withholding IFN programs degraded mapping of perturbed cells—and newly learned programs require expert validation rather than being self-evident. The model uses flat gene programs without hierarchical structure (pathway-to-process) and, like other deep models, needs substantial training data.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 103022
+  }
+ },
+ "also": [
+  {
+   "title": "Digital profiling of gene expression from histology images with linearized attention",
+   "authors": [
+    "Marija Pizurica",
+    "Yuanning Zheng",
+    "Francisco Carrillo‐Pérez",
+    "Humaira Noor",
+    "Wei Yao",
+    "Christian Wohlfart",
+    "Antoaneta Vladimirova",
+    "Kathleen Marchal D",
+    "Olivier Gevaert"
+   ],
+   "authorCount": 9,
+   "venue": "Nature Communications",
+   "preprint": false,
+   "date": "2024-11-14",
+   "doi": "10.1038/s41467-024-54182-5",
+   "url": "https://doi.org/10.1038/s41467-024-54182-5",
+   "abstract": "Abstract Cancer is a heterogeneous disease that demands precise molecular profiling for better understanding and management. Recently, deep learning has demonstrated potentials for cost-efficient prediction of molecular alterations from histology images. While transformer-based deep learning architectures have enabled significant progress in non-medical domains, their application to histology images remains limited due to small dataset sizes coupled with the explosion of trainable parameters. Here, we develop SEQUOIA , a transformer model to predict cancer transcriptomes from whole-slide histology images. To enable the full potential of transformers, we first pre-train the model using data from 1,802 normal tissues. Then, we fine-tune and evaluate the model in 4,331 tumor samples across nine cancer types. The prediction performance is assessed at individual gene levels and pathway levels through Pearson correlation analysis and root mean square error. The generalization capacity is validated across two independent cohorts comprising 1,305 tumors. In predicting the expression levels of 25,749 genes, the highest performance is observed in cancers from breast, kidney and lung, where SEQUOIA accurately predicts the expression of 11,069, 10,086 and 8,759 genes, respectively. The accurately predicted genes are associated with the regulation of inflammatory response, cell cycles and metabolisms. While the model is trained at the tissue level, we showcase its potential in predicting spatial gene expression patterns using spatial transcriptomics datasets. Leveraging the prediction performance, we develop a digital gene expression signature that predicts the risk of recurrence in breast cancer. SEQUOIA deciphers clinically relevant gene expression patterns from histology images, opening avenues for improved cancer management and personalized therapies.",
+   "reasons": [
+    "transformer",
+    "deep learning",
+    "transcriptomics",
+    "spatial omics",
+    "generalizes",
+    "validated"
+   ],
+   "score": 20.8169700377573,
+   "classic": true,
+   "citations": 81,
+   "year": 2024,
+   "summary": {
+    "tldr": "SEQUOIA is a slide-level transformer with linearized attention that predicts the full tumor transcriptome (~21k genes) from H&E whole-slide images, outperforming MLP and standard transformer aggregation across 16 TCGA cancer types and generalizing to CPTAC, Tempus, and spatial transcriptomics cohorts.",
+    "background": "Predicting bulk RNA-seq from WSIs is attractive because sequencing is costly while H&E slides are routine, but WSIs must be split into thousands of tiles with only one bulk expression label per slide. Standard transformers overfit on the small matched cohorts (roughly 200-1,100 slides per cancer type), and prior tile aggregators ignore inter-tile context.",
+    "approach": "Each WSI is sampled to at most 4,000 tiles of 256x256 pixels at 20x, encoded with the UNI pathology foundation model (vs a ResNet-50 baseline), k-means clustered into 100 cluster-mean feature vectors, and aggregated by a 6-block, 16-head transformer in which self-attention is linearized (a summary vector passed to each token, linear instead of quadratic complexity). One model per cancer type is trained with MSE loss on log2(FPKM-UQ+1) values for 20,820 genes (protein-coding, miRNA, lncRNA) on 7,584 TCGA tumors with 5-fold cross-validation, benchmarked against HE2RNA-style MLP and tRNAsformer-style transformer aggregation.",
+    "findings": [
+     "On average 15,344 of 20,820 genes are significantly well-predicted across the 16 cancer types; best in BRCA (18,878 genes, 1,130 slides) and worst in PAAD (9,535 genes, 202 slides), tracking cohort size.",
+     "UNI features and linearized attention each add large gains: with UNI, median per-gene Pearson correlation rises from 0.428 (MLP) and 0.419 (transformer) to 0.504 (linearized), and linearization helps most when data are scarce (PAAD +160% well-predicted genes vs BRCA +10%).",
+     "On CPTAC external validation (7 cancer types), SEQUOIA wins 6 of 7 with average PCC 0.503 vs 0.463 for the runner-up and 7,159 genes reproducing from TCGA (+145% over second best); a Tempus LUAD set (287 slides) confirms 5,851 genes across all three cohorts.",
+     "A 272-gene LASSO Cox recurrence signature built from well-predicted genes stratifies breast cancer patients in TCGA (909), SCANB (5,034) and METABRIC (1,933) (SCANB HR 7.86, P=1.5e-18); applied to image-predicted expression it still stratifies TCGA test patients (log-rank P=0.04), whereas direct image-to-survival prediction fails (P=0.43).",
+     "A stride-1 sliding window yields tile-level spatial predictions: on GBM spatial transcriptomics (18 patients, 54,000 spots) average EMD is 0.15 and median PCC 0.255 vs 0.138 for HE2RNA; on breast (92 slides) PCC 0.168 vs 0.154; predicted GBM meta-gene modules (cell cycle, mesenchymal-like, astrocyte-like) co-localize spatially."
+    ],
+    "why": "For anyone building image-to-omics models, this shows the current recipe is pathology foundation-model features plus compute-cheap linearized attention, with the biggest payoff in small cohorts. The image-derived signature also demonstrates a practical route from predicted expression to clinical endpoints without direct survival modeling.",
+    "limitations": "Training is weakly supervised (one bulk profile per slide), models are cancer-type-specific, and spatial correlations are modest on lower-quality H&E. Note also that the abstract's cohort numbers (pretraining on 1,802 normal tissues, 4,331 tumors across 9 types) contradict the main text (7,584 tumors, 16 types, no normal-tissue pretraining described), so check the supplement before quoting.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 70203
+   }
+  },
+  {
+   "title": "Multimodal contrastive learning for spatial gene expression prediction using histology images",
+   "authors": [
+    "Wenwen Min",
+    "Zhiceng Shi",
+    "Jun Zhang",
+    "Jun Wan",
+    "Changmiao Wang"
+   ],
+   "authorCount": 5,
+   "venue": "Briefings in Bioinformatics",
+   "preprint": false,
+   "date": "2024-09-23",
+   "doi": "10.1093/bib/bbae551",
+   "url": "https://doi.org/10.1093/bib/bbae551",
+   "abstract": "In recent years, the advent of spatial transcriptomics (ST) technology has unlocked unprecedented opportunities for delving into the complexities of gene expression patterns within intricate biological systems. Despite its transformative potential, the prohibitive cost of ST technology remains a significant barrier to its widespread adoption in large-scale studies. An alternative, more cost-effective strategy involves employing artificial intelligence to predict gene expression levels using readily accessible whole-slide images stained with Hematoxylin and Eosin (H&E). However, existing methods have yet to fully capitalize on multimodal information provided by H&E images and ST data with spatial location. In this paper, we propose mclSTExp, a multimodal contrastive learning with Transformer and Densenet-121 encoder for Spatial Transcriptomics Expression prediction. We conceptualize each spot as a \"word\", integrating its intrinsic features with spatial context through the self-attention mechanism of a Transformer encoder. This integration is further enriched by incorporating image features via contrastive learning, thereby enhancing the predictive capability of our model. We conducted an extensive evaluation of highly variable genes in two breast cancer datasets and a skin squamous cell carcinoma dataset, and the results demonstrate that mclSTExp exhibits superior performance in predicting spatial gene expression. Moreover, mclSTExp has shown promise in interpreting cancer-specific overexpressed genes, elucidating immune-related genes, and identifying specialized spatial domains annotated by pathologists. Our source code is available at https://github.com/shizhiceng/mclSTExp.",
+   "reasons": [
+    "transformer",
+    "representation learning",
+    "AI",
+    "transcriptomics",
+    "spatial omics",
+    "code released"
+   ],
+   "score": 22.93696589710787,
+   "classic": true,
+   "citations": 93,
+   "year": 2024,
+   "summary": {
+    "tldr": "mclSTExp predicts spatial gene expression from H&E histology images by fusing a Transformer over spot sequences with DenseNet-121 image features via CLIP-style contrastive learning.",
+    "background": "Spatial transcriptomics (ST) is expensive, so predicting spot-level gene expression from cheap, routinely acquired H&E whole-slide images is an attractive alternative. Prior methods (STnet, HisToGene, His2ST, THItoGene, BLEEP) do not jointly use H&E image features, spot expression, and spot spatial coordinates.",
+    "approach": "Each ST spot is treated as a 'word': its gene expression plus learnable x/y positional encodings are fused by a 2-layer Transformer (8 heads, 64-dim each). Each 224x224 pixel patch centered on a spot is encoded with pretrained DenseNet-121. A CLIP-style contrastive loss (256-dim shared embedding, temperature 1) pulls matched patch-spot pairs together and pushes mismatched pairs apart; at test time a patch's embedding retrieves the top-k most similar spots, and their true expression vectors are softmax-weighted to form the prediction.",
+    "findings": [
+     "Trained with leave-one-slide-out cross-validation on three public datasets: HER2+ breast cancer (32 sections, 7 patients, 11,548 spots x 785 genes, 100 um/spot), cSCC (12 sections, 8,671 spots x 171 genes), and Alex+10x breast cancer (9 slices, 25,914 spots x 685 genes), predicting highly variable genes.",
+     "Mean PCC over all considered genes was 0.230 (HER2+), 0.324 (cSCC), and 0.195 (Alex+10x), 23-32% above the runner-up BLEEP; for the top-50 highly expressed genes, PCC was 0.387, 0.426, and 0.361, 28-36% above BLEEP.",
+     "Per-gene spot-level PCC on HER2+ reached 0.844 (HLA-B), 0.840 (GNAS), 0.833 (HLA-DRA), and 0.815 (FN1), and predicted top genes were enriched for cancer and immune-related genes.",
+     "K-means clustering of predictions on 6 pathologist-annotated HER2+ slices gave the best ARI and NMI, exceeding His2ST by 60.7% (ARI) and 36.6% (NMI) on average.",
+     "mclSTExp had the best PCC on 26/32 HER2+ slices, all cSCC slices, and 7/9 Alex+10x slices, with generally lower MSE/MAE than baselines."
+    ],
+    "why": "For someone building AI for transcriptomics/multiomics, this shows that contrastive image-gene alignment plus a lightweight Transformer over spatial spot sequences is a strong, simple recipe for morphology-to-expression prediction. The code (github.com/shizhiceng/mclSTExp), three datasets, and consistent baselines make it a practical reference point for multimodal histology-omics models.",
+    "limitations": "Absolute all-gene correlations remain modest (PCC ~0.19-0.32), evaluation covers only three cancer datasets, and the predictor is retrieval-based weighted aggregation of training spots rather than direct regression; performance also degrades on a few slices with weak morphology-expression coupling.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 41024
+   }
+  },
+  {
+   "title": "Disentanglement of single-cell data with biolord",
+   "authors": [
+    "Zoe Piran",
+    "Niv Cohen",
+    "Yedid Hoshen",
+    "Mor Nitzan"
+   ],
+   "authorCount": 4,
+   "venue": "Nature Biotechnology",
+   "preprint": false,
+   "date": "2024-01-15",
+   "doi": "10.1038/s41587-023-02079-x",
+   "url": "https://doi.org/10.1038/s41587-023-02079-x",
+   "abstract": "Abstract Biolord is a deep generative method for disentangling single-cell multi-omic data to known and unknown attributes, including spatial, temporal and disease states, used to reveal the decoupled biological signatures over diverse single-cell modalities and biological systems. By virtually shifting cells across states, biolord generates experimentally inaccessible samples, outperforming state-of-the-art methods in predictions of cellular response to unseen drugs and genetic perturbations. Biolord is available at https://github.com/nitzanlab/biolord .",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "multiomics",
+    "perturbation",
+    "code released"
+   ],
+   "score": 19.848558572123764,
+   "classic": true,
+   "citations": 84,
+   "year": 2024
+  }
+ ],
+ "candidates": 383
+}
