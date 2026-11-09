@@ -1,0 +1,177 @@
+{
+ "date": "2026-11-09",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Autonomous generalizability auditing of scientific foundation models",
+  "authors": [
+   "Ektefaie, Y.",
+   "Jain, S.",
+   "Sabeti, P."
+  ],
+  "authorCount": 3,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-04",
+  "doi": "10.64898/2026.11.03.763979",
+  "url": "https://doi.org/10.64898/2026.11.03.763979",
+  "abstract": "Determining where scientific foundation models generalize beyond their development data is essential for reliable use, but aggregate benchmarks obscure performance limits and rigorous audits are difficult to conduct routinely. Here, we introduce AutoSPECTRA, a coding-agent protocol for systematic generalizability auditing. To inform its design, we reviewed 38 studies across five biological domains and evaluated coding agents, which generated hypotheses and empirical analyses but applied inconsistent standards for judging evidence. We then structured AutoSPECTRA around measurable generalization axes, prespecified analyses, controlled comparisons and independent confirmation. Across four biological foundation models, audits linked performance to protein sequence composition and relatedness to pretraining data (ESMFold2), representation of perturbations in training (STATE), effective spatial resolution (CONCH), and residue-level genomic, evolutionary and structural context (AlphaMissense). Agents also evaluated alternative explanations and rejected unsupported hypotheses. AutoSPECTRA provides a systematic approach to discovering and testing the limits of scientific foundation models.",
+  "reasons": [
+   "foundation model",
+   "AI agents",
+   "perturbation",
+   "proteins",
+   "genomics",
+   "scale"
+  ],
+  "score": 19,
+  "tldr": "The authors built an agent-based auditing protocol that automatically designs and executes controlled generalizability tests for scientific foundation models, and used it to map where and why four biological foundation models succeed or fail beyond their training data.",
+  "why": "AutoSPECTRA tackles a pain point everyone building or using biological foundation models shares: aggregate benchmarks don't tell you where a model will actually generalize. It turns coding agents into disciplined auditors that run prespecified, controlled generalization experiments, and it convincingly audited four major models (ESMFold2, STATE, CONCH, AlphaMissense), finding interpretable limits tied to pretraining data, perturbation representation, and context windows. As a general-AI (agentic) capability with direct biological payoff, it edges out this year's excellent spatial-omics integration papers, and its protocol is reusable by anyone.",
+  "summary": {
+   "tldr": "AutoSPECTRA uses coding agents to audit where biological foundation models lose accuracy by defining, testing, and confirming input-based generalization axes.",
+   "background": "Foundation models are often evaluated by aggregate benchmarks that hide where performance fails, especially across protein, single-cell, pathology, and variant data. Rigorous audits require choosing informative biological variation, assembling data, and applying consistent evidence standards.",
+   "approach": "The authors reviewed 38 generalizability studies across five biological domains and tested coding agents in 24 runs across three agent harnesses, finding agents could generate hypotheses but used inconsistent evidence standards. AutoSPECTRA is a protocol with stages for proposing axes, retrieving data, measuring performance across train/pretraining similarity levels, reference-method comparisons, and independent confirmation. They ran audits on ESMFold2, STATE, CONCH, and AlphaMissense, plus repeated audits with different LLM harnesses.",
+   "findings": [
+    "ESMFold2 CA-lDDT fell from 0.901 to 0.787 from low to high cysteine across 95 PDB sequences, with viral envelope proteins 0.396 versus 0.803.",
+    "STATE single-cell model overlap@N declined from 0.272 to 0.176 for HVG expression and from 0.219 to 0.134 for learned embeddings when queried genes had low Reactome pathway support, and unseen perturbations had correlation reductions of 0.045-0.152.",
+    "CONCH tumor recall dropped from 0.779 to 0.114 for atypical appearance in 7,180 H&E tiles; resolution loss caused a 65.6% top-1 decline for CONCH versus 29.1% for ResNet-50, confirmed on 3,600 tiles.",
+    "AlphaMissense Spearman correlation with DMS effects fell from 0.515 to 0.395 as alignment occupancy decreased across 72 assays, with low occupancy also hurting BLOSUM62, indicating shared difficulty.",
+    "Independent audits converged on related axes: three of six ESMFold2 audits linked accuracy to protein novelty or relatedness to pretraining data."
+   ],
+   "why": "AutoSPECTRA gives transcriptomics and multiomics researchers a way to find failure modes before deployment, not just average scores, by turning ad hoc model debugging into auditable evidence with reference controls. For cell-perturbation models especially, training representation of a perturbation may matter more than chemical similarity.",
+   "limitations": "Audits are case studies, not sensitivity/specificity benchmarks, and agents can rely on hidden prior knowledge because training histories cannot be reconstructed.",
+   "source": "bioRxiv full text",
+   "model": "qwen3.8-flash",
+   "chars": 40252
+  }
+ },
+ "also": [
+  {
+   "title": "Simple baselines rival protein language models in dense combinatorial protein landscapes",
+   "authors": [
+    "Talpir, I.",
+    "Fleishman, S. J."
+   ],
+   "authorCount": 2,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-05",
+   "doi": "10.64898/2026.05.01.722313",
+   "url": "https://doi.org/10.64898/2026.05.01.722313",
+   "abstract": "Computational protein design demands generally applicable models that reliably predict or generate new variants with superior functional properties. A central test of this capability is whether models can extrapolate beyond the mutational regimes represented in their training data. Recent benchmarks have begun to address this question, but the performance of protein language models (pLM) remains less well characterized in densely sampled combinatorial landscapes of protein function that are commonly explored in protein engineering and design. Here, we evaluate zero-shot scoring and supervised prediction across mutational orders, comparing widely used pLMs with simple mutation-identity and evolutionary baselines. We find no consistent advantage associated with pLM architecture or scale, and that pLMs do not consistently outperform conventional baselines. We examined pLM representations and found that much of their variation could be recovered from mutation-identity encoding alone, helping explain the strong performance of such encodings without pretraining. We further found little correspondence between pLM sensitivity to sequence background and experimentally measured functional epistasis. In combinatorial library selection, pLMs likewise showed no consistent advantage over evolutionary scoring. Together, these results indicate that greater pLM complexity does not necessarily improve prediction or experimental prioritization in combinatorial protein design.",
+   "reasons": [
+    "language model",
+    "zero-shot",
+    "proteins",
+    "generalizes"
+   ],
+   "score": 14,
+   "summary": {
+    "tldr": "Across densely sampled combinatorial protein fitness landscapes, pretrained protein language models (pLMs) show no consistent advantage over simple one-hot mutation-identity and PSSM evolutionary baselines in zero-shot scoring, supervised extrapolation to higher-order mutants, or model-guided library selection.",
+    "background": "pLMs are widely proposed as general tools for protein design, but design requires extrapolating to high-order mutant combinations rarely seen in evolution or standard benchmarks like ProteinGym, whose ~250 assays and 2M+ sequences are dominated by single and double mutants. Whether pLM pretraining adds value in mutation-dense combinatorial settings—common in directed evolution and design—was untested.",
+    "approach": "The Fleishman lab (Weizmann) built a controlled-extrapolation benchmark from FuncLib/htFuncLib landscapes (GFP, PTE, NMT; GFP alone has thousands of validated variants with up to 8 substitutions) plus dense ProteinGym datasets (LOV, PARD3, GCN4, HIS(2), HIS(5)), spanning 10-38 varied positions and tens to thousands of measured sequences each, with strong sign epistasis. They compared 8 pretrained pLMs (ESM2-8M through 3B, ProtBert-420M, ProGen2-small/medium 170M/700M) plus structure-aware SaProt-650M against a one-hot encoding (OHE) + MLP and PSSMs, across zero-shot scoring, train-on-low/test-on-high-order supervised prediction, random splits, and simulated combinatorial sub-library selection.",
+    "findings": [
+     "Zero-shot pLM performance was modest (average ROC AUC ~0.6, Spearman ρ ~0.2), and even the best pLM per dataset did not significantly outperform a PSSM (Kruskal-Wallis, NS).",
+     "The difference between contextual and additive pLM scores—background sensitivity—correlated near zero with experimentally measured pairwise epistasis.",
+     "In supervised transfer learning, pLM identity was statistically insignificant in ~93% of comparisons, while training-regime (mutational-order) coverage drove performance; ESM2-8M matched or beat ESM2-3B despite a ~375x parameter gap.",
+     "OHE+MLP matched or beat the best-performing pLM in nearly all controlled-extrapolation and random-split settings, and LoRA fine-tuning did not change this.",
+     "pLM embeddings were largely redundant with mutation identity: pairwise-distance correlations of 0.4-0.8, linear reconstruction R² of 0.6-0.99 both directions, and only minor inconsistent gains from concatenating pLM features; PSSM-nominated combinatorial libraries matched pLM-nominated ones."
+    ],
+    "why": "For anyone applying foundation models to combinatorial biological spaces (e.g., perturbation combinations, variant effects), this shows pretrained representations can be nearly linearly recoverable from trivial encodings, and that train/test regime—not model scale or architecture—dominates performance under distribution shift. It makes a strong case for mandatory simple baselines and controlled extrapolation splits before investing in large-model inference or training.",
+    "limitations": "Conclusions apply to sequence-based pLMs on single-protein landscapes with a fixed set of varied positions; the authors note homolog-conditioned and multimodal pLMs were not tested, and pLMs may retain advantages on cross-family tasks (citing Li et al.). A modest scaling benefit appeared only on TrpB and AlphaAmyl, which lack dense combinatorial sampling, so scope of the negative result is landscape-dependent.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 97841
+   }
+  },
+  {
+   "title": "Unlocking biological insight from single-cell data with an interpretable dual-stream foundation model.",
+   "authors": [
+    "Guo",
+    "Cui",
+    "Zhang",
+    "Chen",
+    "Zheng",
+    "Cai",
+    "Wang",
+    "Wang"
+   ],
+   "authorCount": 8,
+   "venue": "Genome Biol",
+   "preprint": false,
+   "date": "2026-11-06",
+   "doi": "10.1186/s13059-026-04193-w",
+   "url": "https://doi.org/10.1186/s13059-026-04193-w",
+   "abstract": "Deep learning foundation models are revolutionizing single-cell biology, yet learning holistic and discriminative representations from complex, high-dimensional data remains a central challenge. Although transformer-based single-cell language models have shown significant progress, they typically rely on a single input-encoding scheme, a practice that results in the loss of critical gene expression information and hinders the effective learning of global cellular representations. To address these challenges, we propose scDMC, an innovative single-cell pre-training framework. At the input encoding level, scDMC employs a 'dual-stream' architecture by processing a rank-based sequence and an absolute expression-aware sequence in parallel to overcome the information loss inherent in single-encoding schemes. Building upon this, our framework synergistically optimizes local gene context and global cellular representation by combining masked language modeling at the gene level with momentum contrastive learning at the cell level. Pre-trained on only 2 million cells far fewer than the datasets used by mainstream models, scDMC sets a new state-of-the-art in multiple benchmark tasks, including cell annotation, clustering, and data integration. More importantly, we demonstrate that scDMC can uncover functional gene modules, infer cell-type-specific regulatory networks in a data-driven manner, and provides attention-guided biological insights. scDMC provides a powerful and extensible foundation model framework for single-cell biology. By reconciling relative gene importance with absolute expression magnitude, it enhances representation fidelity. Its robust performance and biologically meaningful interpretations offer a new paradigm for data-driven discovery, facilitating deeper insights into cellular heterogeneity and gene regulatory mechanisms across diverse biological contexts.",
+   "reasons": [
+    "foundation model",
+    "language model",
+    "transformer",
+    "deep learning",
+    "representation learning",
+    "single-cell"
+   ],
+   "score": 22,
+   "summary": {
+    "tldr": "scDMC is a single-cell transformer pretrained on 2 million blood cells that tokenizes each cell in two parallel ways — rank-based and expression-aware — and combines masked language modeling with momentum contrastive learning, matching or beating models pretrained on far more data (scGPT, Geneformer, scFoundation, LangCell) on annotation, clustering, and integration benchmarks.",
+    "background": "Single-cell language models must convert non-sequential expression vectors into token sequences, and every current scheme loses information: rank-based encoding (Geneformer) discards absolute expression magnitudes, while expression binning (scGPT, scBERT) reduces resolution and depends on bin choice. Most also rely on a single MLM objective, which provides weak supervision for learning discriminative global cell states.",
+    "approach": "scDMC (dual-stream MLM + contrastive framework) runs two input streams per cell through an encoder: a ranked gene sequence (Geneformer-style, CP10k normalization plus gene-baseline scaling) and an expression-aware sequence that preserves original gene order with an expression-weighted MLM loss. The two [CLS] embeddings of the same cell form a natural positive pair for momentum contrastive learning at the cell level. It uses FlashAttention and ALiBi positional encoding, a 60,534-token vocabulary (Ensembl IDs), and produces 512-dim cell embeddings. Pretraining used 2 million healthy human blood cells from CELLxGENE Census with no QC or feature selection — versus 30M+ cells for mainstream models.",
+    "findings": [
+     "Cell annotation: Macro F1 improvements over the next-best model of 2.15% (Zheng68K, 86.60% accuracy, F1 0.767), 0.20% (PBMC10k), 5.18% (BMMC), 2.21% (MS), and 4.91% (Pancreas).",
+     "Cross-organ transfer despite blood-only pretraining: on the Pancreas atlas (>16,000 cells, 9 batches) it reached 98.11% accuracy and Macro F1 0.9404 versus scFoundation 0.8913, Geneformer 0.7748, scGPT 0.7024; on the brain-derived MS dataset, 87.92% accuracy and F1 0.8278.",
+     "Unsupervised clustering: highest average ARI and NMI across all six benchmarks using Leiden on raw 512-dim embeddings, cleanly separating rare types like megakaryocytes and dendritic cells on PBMC10k.",
+     "Data integration: best scIB overall score on BMMC (12 donor batches) and Immune (10 technology batches), with better batch mixing and biological conservation than scGPT, scFoundation, Geneformer, and LangCell.",
+     "Gene-level biology: within-pathway cosine similarity of gene embeddings exceeds Pearson co-expression consistency across 235 KEGG pathways; attention concentrates on known markers (e.g., NKG7, SPIB), and inferred GRNs nominate hub genes such as SPX3/SLC37A3 in CD8+ T cells and CCDC144A in HSCs; ablations (RankOnly, EPEOnly, Dual, full) show every component contributes."
+    ],
+    "why": "The paper argues that encoding design plus a second contrastive objective can substitute for pretraining scale — 2M curated cells outperforming 30M+ cell models is directly relevant for compute-limited foundation-model work. The dual-stream scheme (two tokenizations of the same cell as a contrastive positive pair) is a transferable recipe the authors themselves propose for adding CITE-seq or ATAC-seq streams.",
+    "limitations": "Attention-based interpretability is correlational rather than causal and needs perturbation validation, and the encoder-only, discriminative design is not suited for expression imputation or generative tasks. Pretraining is blood-only and transcriptome-only, and some margins are thin (0.20% on PBMC10k).",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 91274
+   }
+  },
+  {
+   "title": "RAPTORGraph: graph-based pathway modeling for causal discovery in single-cell perturbations",
+   "authors": [
+    "Adhisantoso, Y. G.",
+    "Schröder, S. K.",
+    "Gress, M.",
+    "Hernaez, M.",
+    "Voges, J."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-04",
+   "doi": "10.64898/2026.11.03.763980",
+   "url": "https://doi.org/10.64898/2026.11.03.763980",
+   "abstract": "Experiments involving the perturbation of individual cells are central to understanding cellular mechanisms and can accelerate drug discovery. Causal representation learning allows us to uncover the latent factors that regulate biological systems and predict the impact of novel perturbations. Unfortunately, existing methods fail to address intervention spillover in a closed-world setting where intervention targets are known a priori, such as in Perturb-seq experiments, due to their reliance on dense encoders. Furthermore, incorporating curated biological pathways into the model imposes a confirmatory bias, forcing it to explain the data through preexisting pathways and reducing the set of hypotheses the model can explore, while discarding novel signals that lie outside the annotated pathways. In this work, we introduce RAPTORGraph, a {beta}-variational autoencoder with a GraphPathway encoder that explicitly models complex gene-to-gene interactions within learned pathways. Moreover, our model's preconditioning isolates the influence of perturbed genes, yielding clean, single-node latent interventions required for identifiable causal discovery and eliminating spillover. Finally, we train the model on data preprocessed with optimal-transport alignment, which guarantees a well-defined mapping between control and perturbed samples and further stabilizes the learned latent representations. We demonstrate that RAPTORGraph improves state-of-the-art performance on downstream analyses of unseen perturbations, such as non-additive interactions, while performing competitively on objective metrics, such as mean squared error and maximum mean discrepancy. The source code is available at https://github.com/sXperfect/RAPTORGraph.",
+   "reasons": [
+    "representation learning",
+    "single-cell",
+    "perturbation",
+    "drug discovery",
+    "code released",
+    "generalizes"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "RAPTORGraph is a β-variational autoencoder with a sparse 'GraphPathway' encoder, a DAGMA-learned latent causal DAG, and optimal-transport pairing of control/perturbed cells, built to predict Perturb-seq outcomes while satisfying causal-identifiability assumptions.",
+    "background": "Predicting transcriptional responses to gene perturbations is hard because strong predictors (GEARS, scGPT) are black boxes, while causal representation learning methods (dVAE, SENA) assume a single-gene intervention hits exactly one latent node — which dense MLP encoders violate, a problem the authors call 'intervention spillover'. Separately, scRNA-seq never measures the same cell before and after perturbation, and random control–perturbed pairing pushes models toward the population mean ('mean collapse').",
+    "approach": "RAPTORGraph uses a preconditioned block-structured encoder: each of the k perturbed genes maps one-to-one onto one of d learned latent 'meta-pathways' (d = 1.04×k), with a zero block preventing perturbed genes from influencing other latents, so interventions are clean single-node shifts. A DAGMA module then learns a directed acyclic graph among latents, and control–perturbed cells are paired offline via Wasserstein optimal transport instead of random pairing. Training combines MSE reconstruction, KL, MMD on perturbed distributions, and DAGMA acyclicity losses (β≈0.4 optimal; 100 epochs, batch 256, single GPU; three seeds).",
+    "findings": [
+     "On Norman-CPA (K562 Perturb-seq: 105 perturbed genes, 284 conditions, ~108,000 cells; trained on single perturbations, tested on 131 double combinations), RAPTORGraph was best or second-best on control MSE and perturbation MMD against SENA, scGPT, and dVAE (GEARS excluded as incompatible with the evaluation).",
+     "OT preprocessing was a key driver of non-additive interaction prediction (especially redundancy and epistasis), adding only ~2.2% training time versus random pairing.",
+     "Ablations showed β≥0.8 causes posterior collapse (latent variance 10^-4 vs 10^-3 at the optimum), while β=0.1 destabilizes training.",
+     "In reverse perturbation on 20 transcription factors, exact-match hit rates were modest for all models, but RAPTORGraph consistently ranked top on gene-overlap Hit Rate@K.",
+     "GSEA against MSigDB Hallmark sets showed biologically coherent latents: EGR1- and JUN-linked factors were negatively enriched for E2F Targets and G2M Checkpoint (differentiation/stress-induced cell-cycle arrest), and a TP73-linked factor for G2M, consistent with known K562 biology."
+    ],
+    "why": "For researchers building perturbation-response models, it offers a concrete architectural fix — a sparse, preconditioned encoder — that makes Perturb-seq data conform to the atomic-intervention assumptions underlying causal identifiability theory, plus cheap OT pairing to avoid mean collapse. It also avoids SENA-style confirmatory bias by learning pathways rather than using curated annotations, and explicitly separates architectural constraints from proven identifiability.",
+    "limitations": "The full baseline comparison is only on the Norman dataset; the Replogle2020 CRISPRi evaluation (~22,740 cells, 82 perturbations) is limited to a comparison with scGPT. The single-node intervention mapping is an imposed architectural constraint rather than verified biology, so identifiability guarantees do not automatically transfer, and exact combinatorial prediction remains an open problem for all methods.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 45988
+   }
+  }
+ ],
+ "candidates": 348
+}

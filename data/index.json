@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-09",
+   "title": "Autonomous generalizability auditing of scientific foundation models",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.11.03.763979",
+   "also": [
+    "10.64898/2026.05.01.722313",
+    "10.1186/s13059-026-04193-w",
+    "10.64898/2026.11.03.763980"
+   ]
+  },
+  {
    "date": "2026-11-08",
    "title": "Biologically informed deep learning to query gene programs in single-cell atlases",
    "venue": "Nature Cell Biology",
