@@ -1,0 +1,182 @@
+{
+ "date": "2026-11-10",
+ "pickedBy": "qwen3.8-flash",
+ "paper": {
+  "title": "π-SPECFormer: A Mass Spectrometry-based Foundation Model for Decoding the Dark Proteome",
+  "authors": [
+   "Ling, T.",
+   "Liu, T.",
+   "Xu, F.",
+   "Zhang, Y.",
+   "Xia, J.",
+   "Huang, X.",
+   "Chen, S.",
+   "Xie, L.",
+   "Xu, R.",
+   "Yang, T.",
+   "Li, K.",
+   "Wang, G."
+  ],
+  "authorCount": 18,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-09",
+  "doi": "10.64898/2026.11.06.764812",
+  "url": "https://doi.org/10.64898/2026.11.06.764812",
+  "abstract": "In mass-spectrometry-based proteomics, a substantial proportion of acquired spectra remain unidentified, concealing a vast reservoir of biological variations commonly termed the \"dark proteome\", potentially obscuring sequence mutations, non-canonical peptides and post-translational modifications. Existing deep-learning methods largely rely on supervised training with peptide-spectrum matches (PSMs), limiting their ability to learn from the much larger pool of unannotated spectra. Here we introduce {pi}-SPECFormer, a mass-spectrometry foundation model pre-trained on 291 million spectra through a two-stage framework that combines self-supervised and PSMs-guided representation learning. {pi}-SPECFormer transfers effectively to de novo peptide sequencing, spectrum clustering and modification detection, consistently outperforming task-specific baselines. When applied to proteomic profiles from 103 individuals with lung adenocarcinoma, the model identified nine high-confidence mutated peptides, including six that were absent from the reference databases. {pi}-SPECFormer thus enables unbiased decoding of molecular complexity beyond the boundaries of the canonical proteome.",
+  "reasons": [
+   "foundation model",
+   "representation learning",
+   "proteomics",
+   "scale"
+  ],
+  "score": 14,
+  "tldr": "A foundation model for tandem mass spectrometry that pretrains on 291M spectra (mostly unlabeled) via two-stage contrastive learning, beats task-specific baselines on sequencing, clustering and PTM detection, and mines mutation peptides in lung cancer proteomes.",
+  "why": "For researchers building foundation models on transcriptomics or multiomics, this is the proteomics counterpart of pretraining on the unlabeled majority of data: the same pretrained backbone transfers across three quite different tasks without task-specific pretraining. It also shows concretely that unassigned spectra carry clinically meaningful proteogenomic variation, providing protein-level evidence that complements genomics and RNA-based variant calling.",
+  "summary": {
+   "tldr": "A foundation model for tandem mass spectrometry that pretrains on 291M spectra (mostly unlabeled) via two-stage contrastive learning, beats task-specific baselines on sequencing, clustering and PTM detection, and mines mutation peptides in lung cancer proteomes.",
+   "background": "In shotgun proteomics, fewer than half of acquired MS/MS spectra get peptide assignments; reanalysis of the 10 largest π-MSNet datasets shows identification rates of only ~20-30%, leaving a 'dark proteome' of mutations, non-canonical peptides and PTMs. Supervised deep-learning tools (de novo sequencers, PTM classifiers) train only on peptide-spectrum matches, so their knowledge is bounded by reference-database search spaces and cannot exploit the much larger unlabeled spectrum pool.",
+   "approach": "π-SPECFormer is a Transformer spectrum encoder (sinusoidal m/z peak embeddings plus intensity embeddings). Stage 1 pretrains with MoCo-style contrastive learning (InfoNCE, momentum encoder, random peak masking) on ~178M unidentified spectra; Stage 2 adds PSM-guided contrastive learning on ~114M identified spectra, using spectra sharing a precursor as positive pairs. The frozen encoder then transfers to de novo sequencing (with an autoregressive peptide decoder), hierarchical spectrum clustering, and fine-tuned PTM classification.",
+   "findings": [
+    "De novo sequencing on the nine-species DeepNovo benchmark: Stage 1 had the best peptide precision on 8/9 species and Stage 2 on all 9, beating PEAKS, DeepNovo, PointNovo and Casanovo; up to +7.6 points over Casanovo (49.0%→52.7% in S. cerevisiae) and a 12.1% relative gain (33.0%→37.0%) over the best baseline in one species.",
+    "Spectrum clustering: at 50% clustered-spectrum proportion, Stage 2 cut the incorrectly-clustered-spectrum rate by 99.4-99.5% relative to GLEAMS on HeLa, cerebellum and nine-species data.",
+    "Phosphorylation/PTM detection vs. AHLF: +7.7 F1 and +8.4 accuracy on a synthetic phosphopeptide set; +23.6 F1 and +24.3 accuracy on a LUAD phosphoproteomic dataset.",
+    "Applied to 103 lung adenocarcinoma patients (CNHPP-LUAD, paired tumor/normal), the workflow yielded 5,103 candidate single-amino-acid substitutions across 1,712 proteins, 77.3% absent from dbSNP, GDC, COSMIC and PubMed; nine were high-confidence after synthetic-peptide validation, six of them unreported.",
+    "PYGL p.A303S was prioritized because mutant and wild-type forms had opposite overall-survival associations, and in H1975/PC-9 cells WT PYGL overexpression accelerated proliferation while the mutant suppressed it; an AlphaFold3/FoldX screen of 14,474 mutant-drug-target pairs further flagged 34 interface-remodeled complexes."
+   ],
+   "why": "For researchers building foundation models on transcriptomics or multiomics, this is the proteomics counterpart of pretraining on the unlabeled majority of data: the same pretrained backbone transfers across three quite different tasks without task-specific pretraining. It also shows concretely that unassigned spectra carry clinically meaningful proteogenomic variation, providing protein-level evidence that complements genomics and RNA-based variant calling.",
+   "limitations": "Pretraining data are mostly DDA from limited species (no DIA), so generalization is untested; the cancer findings rest largely on computational evidence (FDR control, AF3/FoldX modeling) with only synthetic-peptide spectra and one proliferation assay as validation, so binding and functional claims need co-IP and in vivo follow-up.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 93734
+  }
+ },
+ "also": [
+  {
+   "title": "CytoWave: Perturbation-Centric Pretraining for Single-Cell Response Prediction",
+   "authors": [
+    "Yuwei Miao",
+    "Jingquan Yan",
+    "Hehuan Ma",
+    "Thao M. Dang",
+    "Lin Xu",
+    "Siyuan Zhang",
+    "Junzhou Huang"
+   ],
+   "authorCount": 7,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-02",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.02311v1",
+   "abstract": "Predicting gene expression under perturbations from single-cell data is a fundamental task for modeling cellular responses, with applications in discovering gene function and designing therapeutics. However, existing methods often struggle to generalize across datasets due to differences in experimental protocols, biological contexts, and species. We present \\textbf{CytoWave}, a perturbation-centric pretraining framework for single-cell genetic perturbation response prediction. We leverage large-scale cross-species perturbation datasets unified via orthology and train CytoWave in a two-stage manner. In the first stage, we learn reference control cell states via masked gene expression recovery on unperturbed cells. In the second stage, we pretrain the model to predict perturbed gene expression given control states and perturbation signals, together with a contrastive objective that aligns latent representations of perturbation responses with perturbation signals. We perform strict dataset-held-out evaluation across multiple condition combinations and case studies of pathway activity changes, demonstrating consistent and effective performance of CytoWave in predicting single-cell genetic perturbation responses.",
+   "reasons": [
+    "representation learning",
+    "single-cell",
+    "perturbation",
+    "scale",
+    "generalizes"
+   ],
+   "score": 15,
+   "summary": {
+    "tldr": "CytoWave is a perturbation-centric pretraining framework that unifies 24.7M single-cell perturbation profiles from 19 studies (human and mouse) via orthology alignment and, with a two-stage Transformer trained to predict post-perturbation expression, outperforms CPA, GEARS, scGPT, Geneformer, and other baselines under strict dataset-held-out evaluation.",
+    "background": "Predicting how gene expression changes after genetic perturbation from single-cell data is key for gene-function discovery and therapeutic design, but most existing models are trained and evaluated within a single dataset (e.g., CPA, GEARS), while pretrained single-cell foundation models learn from unperturbed data and only add perturbations at finetuning time. Generalizing across datasets is hard because of differing protocols, cellular contexts, gene identifier schemes, and species.",
+    "approach": "The authors curated 42 datasets from 19 studies spanning human and mouse (~24.7M cells), mapping all genes and perturbation targets to shared orthology identifiers (Ensembl Compara rel. 115) with standardized metadata tokens. CytoWave is a Transformer encoder–operator–decoder with FiLM-conditioned gene embeddings over sparse (expressed-genes-only) tokens, no positional encodings, a mean-pooled latent cell state, and a query-based decoder. Stage 1 pretrains on control cells via masked expression recovery; Stage 2 learns a perturbation operator that additively transforms the control latent state given a perturbation embedding, trained with an MSE expression-prediction loss plus an in-batch InfoNCE loss aligning predicted state changes (Δz) with masked perturbation embeddings. Five datasets (DatlingerBock2017 unstim/stim, PapalexiSatija2021, GasperiniShendure2019, SantinhaPlatt2023) are held out entirely from pretraining; models are finetuned on their training splits and evaluated over 3 seeds.",
+    "findings": [
+     "CytoWave-S2 achieves the best MAE on all five held-out datasets, e.g., 0.791 on PapalexiSatija2021 vs. 0.997 for CPA and 1.014 for scLDM, and 1.133 on the genome-scale GasperiniShendure2019 vs. 1.332 for CPA.",
+     "On ΔPCC, CytoWave-S2 reaches 0.189–0.279 across datasets (best on 4 of 5), while GEARS, GenePert, scouter, scGPT, and Geneformer mostly score near zero or negative.",
+     "ΔPCC20 (top-20% responsive genes) is 0.251–0.330 for CytoWave-S2, edging CPA on most datasets (e.g., 0.330 vs. 0.328 on stimulated DatlingerBock2017; 0.305 vs. 0.304 on PapalexiSatija2021).",
+     "Ablations show Stage 1 alone (control-cell pretraining) is already strong, Stage 2 adds consistent gains, and removing metadata tokens modestly hurts performance.",
+     "An AUCell-based pathway case study on MSigDB Hallmark 50 sets shows predicted responses recover ground-truth pathway activation/repression patterns across datasets."
+    ],
+    "why": "This is a direct test of whether putting perturbation data into pretraining (rather than only finetuning) improves response prediction, a question central to current single-cell foundation-model work. The orthology-aligned 24.7M-cell corpus and held-out benchmark protocol are reusable resources for anyone building or evaluating perturbation predictors.",
+    "limitations": "Coverage is only two species (mouse/human) linked by one-to-many orthology assumptions, genes without ortholog assignments are dropped, and all models (including CytoWave) are still finetuned on each downstream dataset's training split rather than evaluated fully zero-shot. The authors also note deterministic population-level baselines may be disadvantaged under their cell-level ΔPCC protocol, and code/data are promised only upon acceptance.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 95421
+   }
+  },
+  {
+   "title": "HyPLM Technical Report",
+   "authors": [
+    "Haowei Lin",
+    "Cai Zhou",
+    "Xiangxin Zhou"
+   ],
+   "authorCount": 3,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-09",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.12000v1",
+   "abstract": "Protein language models (PLMs) are standard tools for variant-effect prediction, protein annotation and design, but the compute needed to train and serve them keeps growing. We present HyPLM-Flash, an efficient and open PLM trained by Hyra 2.0, the research agent developed by our team. HyPLM-Flash is a 650-million-parameter masked language model trained on 726 billion tokens, 0.73 times the data of ESM-2 650M and a fifth to an eighth of the data of E1-600M and ESM C 600M. It runs on an inference engine with fused kernels and INT8 matrix multiplication, embedding about 130,000 residues per second on a single NVIDIA H20 GPU, 1.9 to 2.7 times faster than other 600M-class encoders. In a matched evaluation against 28 public checkpoints on 32 tasks, HyPLM-Flash reaches a ProteinGym zero-shot Spearman correlation of 0.409, statistically tied with ESM-2 650M, ESM C 600M and E1-600M, and the highest organismal-fitness score among self-supervised single-sequence models. It gives the best long-range contact precision of all models evaluated, including ESM-2 15B and ESM C 6B, and a lower masked-residue loss than ESM-2 650M, ESM C 600M and E1-600M on held-out sequences and on recently released PDB chains. Matching state-of-the-art accuracy at a fraction of the training and inference cost, HyPLM-Flash sets a new Pareto frontier for protein language models. We have released the model weights and the inference engine at https://github.com/Tencent-Hunyuan/hyra-results/tree/main.",
+   "reasons": [
+    "language model",
+    "representation learning",
+    "AI agents",
+    "zero-shot",
+    "proteins",
+    "code released"
+   ],
+   "score": 19,
+   "summary": {
+    "tldr": "HyPLM-Flash, trained by the Hyra agent, is a 650M-parameter protein language model that matches leading same-size PLMs while using less training data and running faster on GPUs.",
+    "background": "Protein language models are increasingly used for variant effects, annotation, and design, but current 600M encoders are expensive to train and slow to embed whole proteomes. This matters for multiomics work because PLM features are often combined with transcriptomic or single-cell assays at large scale.",
+    "approach": "The team built HyPLM-Flash, a 32-layer, 1,280-wide bidirectional Transformer trained with masked language modeling on 726 billion tokens. It uses ESM-2-style input and modern components: RMSNorm, rotary embeddings, query-key normalization, SwiGLU, and Muon. Training combined UniRef90/50, MGnify90, UniParc, JGI IMG proteomes, and a short second pass with auxiliary structure heads. They also wrote an INT8 inference engine with fused kernels and padding-free batching for NVIDIA H20 GPUs.",
+    "findings": [
+     "In a matched evaluation against 28 checkpoints on 32 tasks, HyPLM-Flash scored 0.409 Spearman on ProteinGym zero-shot variant effect prediction, statistically tied with ESM-2 650M, ESM C 600M, and E1-600M.",
+     "It trained on only 726 billion tokens, versus 1.0 trillion for ESM-2 650M and 4.0-6.2 trillion for E1-600M and ESM C 600M.",
+     "The INT8 engine embedded about 130,000 residues per second on one H20, 1.9 to 2.7 times faster than comparable 600M reference models.",
+     "It gave the best long-range contact precision at L/5, 0.650 on ProteinNet and 0.556/0.574 on CASP14/CASP15.",
+     "It had lower masked-residue likelihood than ESM-2 650M, ESM C 600M, and E1-600M on held-out UniRef and recent PDB chains."
+    ],
+    "why": "For AI for transcriptomics and multiomics, this gives a drop-in protein encoder with ESM-2-compatible interface that can score or embed large protein variant sets and proteome-wide features much cheaper. It is especially useful when protein representations are added to cell atlas, perturbation, or variant-effect pipelines.",
+    "limitations": "The report is primarily a protein-only model and does not address joint transcriptome multiomic training; some results are tied rather than uniformly better, and supervised tasks may favor BF16 over the fast INT8 path.",
+    "source": "arXiv full text",
+    "model": "qwen3.8-flash",
+    "chars": 46388
+   }
+  },
+  {
+   "title": "Learning Biological Hierarchies in Single-Cell Foundation Models",
+   "authors": [
+    "Xiangyu Guo",
+    "Ricardo Henao"
+   ],
+   "authorCount": 2,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-07",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.10838v1",
+   "abstract": "Cell types are organized by taxonomic relationships that define lineages in the so-called cell ontology. However, most existing foundation models typically ignore cell-type lineages encoded in this cell ontology. We introduce a biologically informed foundation model called scOntoFM, which embeds hierarchical cell ontology into representation learning. Using Lowest Common Ancestor (LCA) distances from the ontology graph, our framework pairs efficient offline triplet sampling with hierarchical cell-ontology learning. This approach jointly preserves local neighborhoods and shapes the global embedding geometry to reflect the ontology structure. Across diverse cell- and gene-level benchmarks, the model consistently improves performance, with especially strong gains in zero-shot settings. Our model also balances batch integration with biological structure preservation, providing complementary perspectives to existing embedding evaluation frameworks and supporting scalable biological discovery.",
+   "reasons": [
+    "foundation model",
+    "representation learning",
+    "zero-shot",
+    "single-cell",
+    "scale",
+    "generalizes"
+   ],
+   "score": 19,
+   "summary": {
+    "tldr": "scOntoFM is a BERT-style single-cell foundation model that injects Cell Ontology hierarchy into pretraining via LCA-distance-guided triplet sampling and two ontology-aware losses, beating Geneformer, scGPT, scCello, SCimilarity, and CellPLM mainly on ontology-structure and zero-shot benchmarks.",
+    "background": "Single-cell foundation models either ignore the cell-type ontology or use it only as local contrastive supervision (SCimilarity, scCello), and online triplet sampling scales poorly to atlas-sized data. Local alignment also fails to preserve the global lineage hierarchy in embedding geometry, leading to biologically misleading embeddings (the 'drifting islands' problem) that standard scIB metrics do not catch.",
+    "approach": "They pretrain a Geneformer-style 6-layer transformer (256 hidden units, 4 heads, rank-value encoding of the top 2,000 genes) on ~27.5M human cells from 234 CZI datasets (210 tissues, 566 cell types, 58 diseases, 10X only), taking ~30 hours on 6 H200 GPUs. On top of MLM they add a dynamic-margin triplet loss, where the margin depends on normalized lowest-common-ancestor (LCA) distance and ontology depth of the anchor, and a rank-order alignment loss that matches batch-wise embedding distance rankings to ontology LCA rankings via differentiable soft Spearman correlation. A 'Cell-Dataset Index Map' enables O(1) offline sampling of cross-dataset positives and semi-hard negatives from the 50 closest non-lineage cell types.",
+    "findings": [
+     "Ontology distance tracks transcriptomic distance: mean cell-type centroid distance in PCA space rises monotonically over the first 10 LCA levels (Pearson r=0.91, Spearman rho=1 on Tabula Sapiens v2; per-dataset r=0.31-0.58).",
+     "Zero-shot clustering on 9 tissues (30k-348k cells each): mean scIB 0.7958, essentially tied with SCimilarity (0.7960), but substantially higher scGraph-LCA and scGraph-RWR ontology-preservation scores across most tissues.",
+     "Fine-tuned annotation: 91.5% accuracy / 0.771 macro-F1 on HIHA and 99.2% / 0.969 on pancreas (best accuracy among all baselines and hierarchical cross-entropy classifiers); at 50% injected label noise the model falls back to predicting parent categories.",
+     "Novel cell-type identification over 99 unseen types (774k cells from 212 unseen datasets): 28.59% macro-accuracy and best average rank 2.85 vs 3.24 for runner-up scCello (13.65% better).",
+     "Gene function prediction: best Micro/Macro-F1 of 0.917/0.916 (AP 0.921 slightly behind Geneformer/scGPT at 0.922); spatial gene imputation is best on lung (Pearson 0.319) and breast (0.388) and second only to spatially-trained CellPLM on SEA-AD brain."
+    ],
+    "why": "For anyone training or evaluating transcriptomics/multiomics foundation models, this shows the Cell Ontology is a cheap structural prior that improves zero-shot generalization and unseen-type handling without a bigger architecture. It also argues for reporting scGraph-style ontology metrics alongside scIB, since scIB-optimal embeddings can be biologically misleading, and demonstrates that offline triplet sampling makes ontology-aware contrastive learning feasible at tens of millions of cells.",
+    "limitations": "Performance depends on Cell Ontology coverage and annotation quality, and triplet sampling uses ontology alone, ignoring tissue-, disease-, or developmental context where close ontology relatives can be transcriptionally distinct. The index map's storage also grows with corpus size, and gains on standard scIB metrics over SCimilarity are marginal.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 178890
+   }
+  }
+ ],
+ "candidates": 354
+}

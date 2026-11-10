@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-10",
+   "title": "π-SPECFormer: A Mass Spectrometry-based Foundation Model for Decoding the Dark Proteome",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.11.06.764812",
+   "also": [
+    "https://arxiv.org/abs/2611.02311v1",
+    "https://arxiv.org/abs/2611.12000v1",
+    "https://arxiv.org/abs/2611.10838v1"
+   ]
+  },
+  {
    "date": "2026-11-09",
    "title": "Autonomous generalizability auditing of scientific foundation models",
    "venue": "bioRxiv",
