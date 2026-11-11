@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-11",
+   "title": "Cross-state representation learning enables prospective discovery of dynamic protein allosteric sites",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.11.09.765238",
+   "also": [
+    "10.64898/2026.02.11.705358",
+    "10.64898/2026.11.08.765157",
+    "10.64898/2026.10.24.761590"
+   ]
+  },
+  {
    "date": "2026-11-10",
    "title": "π-SPECFormer: A Mass Spectrometry-based Foundation Model for Decoding the Dark Proteome",
    "venue": "bioRxiv",

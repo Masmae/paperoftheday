@@ -1,0 +1,192 @@
+{
+ "date": "2026-11-11",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Cross-state representation learning enables prospective discovery of dynamic protein allosteric sites",
+  "authors": [
+   "Ren, Q.",
+   "Wu, L.",
+   "Zha, J.",
+   "Li, M.",
+   "Feng, W.",
+   "Zhang, H.",
+   "Yang, H.",
+   "Li, R.",
+   "Liu, X.",
+   "He, J.",
+   "Zhou, W.",
+   "Song, Y."
+  ],
+  "authorCount": 18,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-10",
+  "doi": "10.64898/2026.11.09.765238",
+  "url": "https://doi.org/10.64898/2026.11.09.765238",
+  "abstract": "Allosteric regulation offers multifunctional induction in therapeutic interventions, yet conformational plasticity hinders computational identification of allosteric sites. Machine learning models rely on static holo (ligand-bound) structures, generalizing poorly to apo or substrate-bound states where binding pockets are transient or cryptic. We present AsBench2, a cross-state site-recognition benchmark, and AllositeUltra, a deep learning framework integrating multimodal protein representations (combining structure-aware language models with physical dynamics) and residue-guided candidate supplementation, effectively decoupling site detection from static pocket geometry. AllositeUltra demonstrates superior generalization, achieving Top-3 site recovery rates of 65.2% and 70.6% on apo and substrate-bound structures, respectively, representing relative improvements of 36.4% and approximately 50% over the best-performing baselines. Prospective application to MAGI2 identifies a previously unrecognized interdomain allosteric pocket, validated at atomic resolution through small-molecule screening and X-ray crystallography. Proteome-wide application yields a high-confidence atlas of targetable allosteric sites, bridging the gap between structural representation learning and prospective AI-driven drug discovery.",
+  "reasons": [
+   "language model",
+   "deep learning",
+   "representation learning",
+   "AI",
+   "proteomics",
+   "drug discovery"
+  ],
+  "score": 20,
+  "tldr": "A multimodal deep learning framework predicts allosteric sites across protein conformational states, with a prospectively identified and crystallographically validated new allosteric pocket and a proteome-wide targetable-site atlas.",
+  "why": "AllositeUltra couples multimodal protein representations with cross-state allosteric site prediction, closing a real gap where models trained on static holo structures fail on apo and substrate-bound states. It stands out with rigorous benchmarking (AsBench2), large relative gains over baselines, and a prospectively discovered allosteric pocket on MAGI2 validated by small-molecule screening and crystallography — rare experimental grounding for an AI drug-discovery paper. The proteome-wide allosteric atlas could change how targets are prioritized.",
+  "summary": {
+   "tldr": "A new model (AllositeUltra) and benchmark (AsBench2) for finding allosteric sites on protein structures even when the pocket is closed or hidden in apo/substrate-bound conformations, validated prospectively with a crystal structure.",
+   "background": "Allosteric site prediction tools are trained and evaluated mostly on ligand-bound (holo) structures, but in drug discovery you typically only have apo or substrate-bound structures, where pockets may be contracted or cryptic. The paper shows existing methods (DeepAllo, AllositePro, PASSERRANK) lose 26-94% of their Top-3 success when moving from holo to apo/substrate-bound structures, and 45-90% of apo/substrate-bound systems have no valid candidate pocket at all from geometric detectors.",
+   "approach": "They built AsBench2, a curated cross-state benchmark with 536 experimentally validated allosteric sites on 446 proteins (Core-set), linked via sequence/structure alignment to 387 apo and 275 substrate-bound structures — about 2.3x larger than AsBench1. AllositeUltra scores candidate pockets with three branches: a deep-learning branch using SaProt-650M structure-aware protein language model embeddings plus B-factor, hydrophobicity, SASA, and ESSA dynamic-response features; an XGBoost branch on SaProt attention sums over pocket residues; and a logistic-regression branch with AllositePro geometric descriptors, combined by weighted sum (0.30/0.35/0.35). A residue-guided supplementation step clusters residues with predicted allosteric probability >0.5 (K-means) to create extra candidate pockets beyond what Fpocket finds, so detection is not limited to preformed cavities.",
+   "findings": [
+    "AllositeUltra reaches Top-3 site recovery of 85.7% on the holo Core-set (best baseline +11.4 pp), 65.2% on apo and 70.6% on substrate-bound structures — relative improvements of 36.4% and ~50% over the strongest baselines.",
+    "For structures with large pocket RMSD changes, AllositeUltra's success rate was 4x the best baseline, and residue-guided supplementation doubled its success in that group.",
+    "Predicted pockets improved downstream docking/co-folding (Vina, Glide, DiffDock, Chai, Boltz): median ligand-centre distance dropped 45.5-94.5%, and pose recovery (RMSD <2 Å) rose 2-9x.",
+    "Prospective application to MAGI2 (PDZ0-GK supramodule) found an interdomain pocket, guided fragment screening to MDL-6-H6 (Kd 25.9 µM by MST), and a 2.24 Å crystal structure (PDB 26PA) confirmed the predicted site (pocket-ligand centre 1.50 Å apart, 80% residue coverage).",
+    "Proteome-wide application over AlphaFold DB and PDB structures yielded 26,366 candidate pockets across 12,252 human proteins; only 26.2% of those proteins have drug annotations, and pocket residues are enriched in disease variants (Humsavar, AlphaMissense)."
+   ],
+   "why": "For anyone doing structure-based ML on proteins, the key point is a rigorous demonstration that benchmark performance on holo structures does not transfer to the apo/substrate states you actually have at discovery time — a generalization problem relevant beyond allostery. The fix (language-model residue representations decoupled from pocket geometry, plus residue-guided candidate generation) is a transferable design pattern for binding-site and interface prediction.",
+   "limitations": "Apo and substrate-bound recovery (65-71%) still lags holo performance, and the test sets are small (35/23/17 entries). Validation is single-structure-based; the authors note that combining site recognition with conformational sampling remains open future work.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 110472
+  }
+ },
+ "also": [
+  {
+   "title": "Simple models outperform single-cell foundation models on downstream benchmarks",
+   "authors": [
+    "Souza, H.",
+    "Mehta, P."
+   ],
+   "authorCount": 2,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-10",
+   "doi": "10.64898/2026.02.11.705358",
+   "url": "https://doi.org/10.64898/2026.02.11.705358",
+   "abstract": "Single-cell RNA sequencing (scRNA-seq) data exhibit strong and reproducible statistical structure. This has motivated the development of large-scale foundation models, such as TranscriptFormer, that use transformer-based architectures to learn a generative model for gene expression by embedding genes into a latent vector space. These embeddings have been used to obtain state-of-the-art (SOTA) performance on downstream tasks such as cell-type classification, disease-state prediction, and cross-species learning. Here, we ask whether similar performance can be achieved without utilizing computationally intensive deep learning-based representations. Using simple, interpretable pipelines that rely on careful normalization and linear methods, we obtain SOTA or near SOTA performance across multiple benchmarks commonly used to evaluate single-cell foundation models, including outperforming foundation models on out-of-distribution tasks involving novel cell types and organisms absent from the training data. Our findings highlight the need for rigorous benchmarking and suggest that the biology of cell identity can be captured by simple linear representations of single cell gene expression data.",
+   "reasons": [
+    "foundation model",
+    "transformer",
+    "deep learning",
+    "generative model",
+    "single-cell",
+    "RNA-seq"
+   ],
+   "score": 21,
+   "summary": {
+    "tldr": "Simple, mostly linear scRNA-seq pipelines (scTOP plus normalization, ANOVA, PCA, logistic regression) match or beat single-cell foundation models like TranscriptFormer on standard downstream benchmarks, suggesting the data are nearly linear and current benchmarks are largely saturated.",
+    "background": "Foundation models like TranscriptFormer (trained on 100+ million cells on 1000 H100 GPUs) reportedly achieve SOTA on cell-type classification, cross-species annotation, and disease-state prediction, and this is taken as evidence they learn deep biological structure. It is unclear whether these models capture anything beyond what is already in properly normalized scRNA-seq data, especially given dropout, batch effects, and sparsity.",
+    "approach": "The authors re-ran TranscriptFormer's published benchmarks using simple pipelines: scTOP (parameter-free, cells as rank-normalized gene-expression vectors projected onto pseudo-bulk cell-type bases, with ortholog mapping for cross-species), and for Tabula Sapiens a pipeline of per-cell normalization, ANOVA gene selection (top 20,000 genes), PCA (220 components), and logistic regression; for SARS-CoV-2 infection classification they added Leiden clustering (~15 clusters) with local per-cluster logistic regression classifiers. TF-gene regulatory associations were computed directly from conditional co-expression statistics (PMI-based enrichment with FDR correction).",
+    "findings": [
+     "Cross-species testis cell-type annotation across 8 mammals (spermatogenesis dataset, ~14,000 orthologs): scTOP achieves higher macro F1 than TF-Exemplar and TF-Metazoa on nearly all species pairs, including human→platypus transfers where foundation models score below 0.5.",
+     "Species-level cosine similarity from scTOP correlates strongly with evolutionary distance (Spearman R = −0.876), a stronger signal than TranscriptFormer embeddings.",
+     "Tabula Sapiens 2.0 cell-type classification: macro F1 > 0.8 in 24 of 31 tissues; mean macro F1 of 0.899 vs 0.910 and 0.907 for the two TranscriptFormer variants on the five tissues benchmarked via CZI.",
+     "SARS-CoV-2 infected-vs-uninfected cell classification: local cluster-wise logistic regression achieves macro F1 of 0.862 across all donors, exceeding foundation models.",
+     "Isomap vs PCA geodesic/Euclidean distance correlation >0.9 on the spermatogenesis dataset, evidence that the biologically realized cell-type manifold is approximately linear.",
+     "TF-gene associations computed from normalized expression data alone are significantly enriched for STRING-validated protein-protein interactions."
+    ],
+    "why": "For anyone building or evaluating multiomics foundation models, this is a key negative result: current single-cell benchmarks mostly measure denoising and linear structure, so model expressivity adds little. It argues benchmarks need harder out-of-distribution tasks and that cheap, interpretable baselines must be included before attributing performance to learned representations.",
+    "limitations": "Results are limited to existing scRNA-seq atlases and benchmarks; harder tasks or multimodal data may genuinely require foundation models. The geometric linearity argument is drawn mainly from one high-quality dataset, and the Tabula Sapiens gap (~0.01 F1) is attributed to a few hard transcriptionally similar cell types.",
+    "source": "bioRxiv full text (v1)",
+    "model": "glm-5.3-flash",
+    "chars": 38254
+   }
+  },
+  {
+   "title": "LingoCell interprets gene perturbations through natural language and tissue niches",
+   "authors": [
+    "Yang, Y.",
+    "Xu, W.",
+    "Zhang, Z.",
+    "Cui, Y.",
+    "Yu, X.",
+    "Gu, W.",
+    "Wang, J.",
+    "Nakai, K."
+   ],
+   "authorCount": 8,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-10",
+   "doi": "10.64898/2026.11.08.765157",
+   "url": "https://doi.org/10.64898/2026.11.08.765157",
+   "abstract": "Single-cell foundation models are general tools for resolving cell identities and disease states, but struggle to interpret changes in expression magnitude in biological language, to transfer to sparse spatial measurements, and to explain cellular niches. We introduce LingoCell, a foundation model connecting single-cell and spatial transcriptomics. It aligns cell representations with language while keeping gene expression editable, supporting cell annotation, cross-batch integration, description generation, and disease-language readouts of single-gene and combinatorial in silico perturbations. Extended to tissues, it annotates cells without single-cell references, learns identity-conditioned niche embeddings, and performs spatial in silico perturbation by replacing and editing neighbor expression. In lung adenocarcinoma, LingoCell revealed synergistic disease responses to jointly weakening alveolar differentiation programs and strengthening malignant programs. In colorectal cancer, it revealed different programs conveyed by the same fibroblast state to T cells, macrophages, and tumor cells. LingoCell provides a unified framework for prioritizing target combinations and stromal intervention programs.",
+   "reasons": [
+    "foundation model",
+    "single-cell",
+    "transcriptomics",
+    "spatial omics",
+    "perturbation",
+    "scale"
+   ],
+   "score": 20,
+   "summary": {
+    "tldr": "LingoCell is a language-aligned single-cell + spatial transcriptomics foundation model that keeps expression magnitude editable so gene and neighbor-program perturbations can be read out as semantic shifts along disease-text directions.",
+    "background": "Existing single-cell foundation models either preserve expression magnitude (scGPT, CellFM) but lack language alignment, or align cells with text (LangCell, CellWhisperer) but use rank-based encodings that can't edit expression levels. Spatial models additionally struggle with sparse capture depth, need matched single-cell references for annotation, and define niches without conditioning on the observing cell's identity.",
+    "approach": "LingoCell pretrains a 12-layer Transformer (hidden dim 512) on >11M cells from CELLxGENE with paired descriptions, jointly encoding gene identity plus 51 discretized expression levels, aligned to PubMedBERT text embeddings via contrastive learning with cell-type prototypes over 785 types, and a TinyLlama decoder generates cell descriptions. A 'measurement adaptation' stage simulates spatial sparsity on single-cell data before spatial pretraining on Visium HD sections (with H&E features from frozen MUSK), producing per-cell identity and identity-conditioned niche embeddings. In silico perturbation works by editing expression (single-gene or combinatorial) and measuring embedding shift (ΔF) along disease-text directions, or by replacing/editing neighbor states and measuring niche-embedding shift (ΔI) for a fixed observer cell.",
+    "findings": [
+     "Best mean clustering ARI (0.584) and NMI (0.742) across PBMC10K, Pancreas, Human Immune, and Tabula Sapiens vs. scGPT, Geneformer, CellFM, LangCell, CellWhisperer, PCA, HVG; biological conservation 0.853 in integration, matching scVI without batch labels.",
+     "Zero-shot text-query annotation on Tabula Sapiens reached 51.1% Top-1 and 84.1% Top-5 accuracy, more than doubling LangCell and CellWhisperer on Top-1.",
+     "Description generation slightly beat Cell2Text (RoBERTa-BERTScore 96.60% vs 96.28%; cell-type F1 78.72%), and correctly resolved hepatocyte zonation states.",
+     "In LUAD, co-downregulating alveolar genes (e.g., NAPSA–SFTPB) and co-upregulating malignancy genes (e.g., SEC61G–S100A10) showed synergistic non-additive shifts toward the LUAD description, while malignancy–immune co-upregulation showed buffering.",
+     "On Visium HD, it annotated 20–27 cell types per tissue reference-free (88.0% agreement with RCTD in CRC P5, 97.6% in homogeneous regions), and spatial perturbation of fibroblasts revealed observer-dependent programs: a CCL19-associated reticular ECM–complement program for T cells (q = 3.16e-4 downreg / 8.60e-6 upreg), a CXCL12/CFD-augmented variant for macrophages, and a distinct angiogenic/collagen program (COL4A1, CXCL14, LOXL2) for tumor cells (both directions P < 1e-38)."
+    ],
+    "why": "For multiomics researchers, it offers a single framework where expression is editable and interpretable through interchangeable disease descriptions, and where niche analysis is observer-conditioned rather than a generic environment summary — useful for target-combination and stromal-intervention prioritization. It demonstrates a practical path to transfer single-cell pretrained knowledge to sparse spatial data via measurement adaptation.",
+    "limitations": "The work is a non-peer-reviewed bioRxiv preprint; results are mostly in silico with semantic readouts validated by literature concordance rather than Perturb-seq or functional experiments. Fine-grained state resolution in spatial cells is bounded by sparse transcript coverage, and pretraining spans limited tissues/platforms/text richness.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 104068
+   }
+  },
+  {
+   "title": "scRM: A single-cell foundation model trained on scRNA-seq reads",
+   "authors": [
+    "He, D.",
+    "Patro, R.",
+    "Nassar, M.",
+    "Wu, H.",
+    "Yan, Q.",
+    "Xu, G.",
+    "Torkenczy, K.",
+    "Liu, J.",
+    "Tyanova, S."
+   ],
+   "authorCount": 9,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-02",
+   "doi": "10.64898/2026.10.24.761590",
+   "url": "https://doi.org/10.64898/2026.10.24.761590",
+   "abstract": "To our knowledge, scRM is the first single-cell foundation model trained on sequencing reads, demonstrating that raw data pretraining is not only feasible but competitive at a fraction of the computational cost. We anticipate that scaling this framework and exploring alternative architectures will unlock biological information inaccessible to count models and extend the dataset-specific pretraining it already makes possible. The source code is available at https://github.com/altos-labs/scRM.",
+   "reasons": [
+    "foundation model",
+    "single-cell",
+    "RNA-seq",
+    "code released",
+    "scale"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "Altos Labs introduce scRM, a 1.2M-parameter single-cell foundation model trained directly on raw scRNA-seq sequencing reads (not count matrices), which matches much larger count-based foundation models zero-shot and beats them on splicing-related perturbation detection.",
+    "background": "All existing single-cell foundation models consume gene count matrices, which are sparse, species-specific, and discard sequence-level information like splicing, 3' UTR/polyA usage, and allele origin; cross-species transfer is also blocked by gene-vocabulary mismatches. Training directly on reads is hard because reads are error-prone fragments requiring barcode correction, UMI deduplication, and assembly without alignment, and prior work assumed such raw data was too large and low-information-density for model training.",
+    "approach": "A Rust pipeline (building on alevin-fry) corrects cell barcodes, deduplicates UMIs via a directed graph, and assembles each UMI's reads into contigs using a k=19 de Bruijn graph with Phred/DADA2-based branch resolution, producing a compact corpus over just 7 tokens (A, C, G, T, N, tab, newline) usable for any species. scRM is a hierarchical architecture (inspired by Byte Latent Transformer) with two transformers (4-layer byte-level, 6-layer molecule-level, width 96, attention confined to contigs at byte level) connected by four attention pools spanning bytes→contigs→molecules→windows→cells. Training is a JEPA-style objective combining masked-base reconstruction, student-predicts-teacher at molecule and cell levels (EMA teacher, DINO-style), and LeJEPA's SIGReg anti-collapse term. The reported model was trained on 3,000 mouse neuron cells (from a 30,571-cell / 36.8B-token mouse corpus) in one hour on one H100.",
+    "findings": [
+     "The 1.2M-parameter scRM matches count-based foundation models 43–550× its size (Geneformer 104M/104M cells, scGPT 51M/33M, UCE 650M/36M, GeneJEPA 200M/100M) across five zero-shot tasks: cell-line identity (0.983 accuracy), cell-type annotation in five species (mouse 0.842), gene detection (0.832 AUROC), pathway activity (Pearson 0.500), and perturbation response (0.599 macro AUROC).",
+     "Cross-species transfer is graceful: going from human to fly, accuracy drops 0.195 for scVI and 0.036 for scGPT, but only 0.008 for UCE and +0.003 for scRM, since neither relies on a gene vocabulary.",
+     "On a 26-knockdown Perturb-seq in A549 cells, scRM leads on targets altering transcript structure—MORF4L1 (0.629 AUROC, exon exclusion) and SRPK1 (0.605, exon inclusion)—demonstrating it learned sequence-level signal invisible to count models.",
+     "On transcriptional-rate perturbations (ELOF1, CTNNB1) scRM falls within the range of count models, but all models fail near chance on translation-level perturbations (PAIP2, EIF4EBP1), which no RNA representation can capture.",
+     "Dataset-specific pretraining becomes feasible: an scRM trained on 3,000 sc_mixology cells scores 0.902 gene-detection AUROC versus 0.889 for the mouse-trained model, tying the count-based models that see the labels directly."
+    ],
+    "why": "This establishes 'single-cell raw data pretraining' as a viable, extremely cheap alternative to count-matrix pretraining, with species-agnostic inputs that retain splicing, UTR, and allelic information counts discard. For multiomics researchers, the framework explicitly extends to scATAC-seq, long-read scRNA-seq, and paired multimodal training, and enables per-dataset foundation models for rare species and tissues.",
+    "limitations": "The showcase model is tiny and trained on only 3,000 cells from a single protocol (10x 3'), so it consistently trails (not beats) the best count models on most tasks, and evaluation labels are mostly derived from count matrices, disadvantaging it. The authors note no evaluation yet directly demonstrates read-level learning beyond the two splicing perturbations, and scaling/alternative architectures remain open.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 57600
+   }
+  }
+ ],
+ "candidates": 369
+}
