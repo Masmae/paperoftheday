@@ -1,0 +1,194 @@
+{
+ "date": "2026-11-12",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Deep-learning-based gene perturbation effect prediction does not yet outperform simple linear baselines",
+  "authors": [
+   "Constantin Ahlmann-Eltze",
+   "Wolfgang K. Huber",
+   "Simon Anders"
+  ],
+  "authorCount": 3,
+  "venue": "Nature Methods",
+  "preprint": false,
+  "date": "2025-08-01",
+  "doi": "10.1038/s41592-025-02772-6",
+  "url": "https://doi.org/10.1038/s41592-025-02772-6",
+  "abstract": "Abstract Recent research in deep-learning-based foundation models promises to learn representations of single-cell data that enable prediction of the effects of genetic perturbations. Here we compared five foundation models and two other deep learning models against deliberately simple baselines for predicting transcriptome changes after single or double perturbations. None outperformed the baselines, which highlights the importance of critical benchmarking in directing and evaluating method development.",
+  "reasons": [
+   "foundation model",
+   "deep learning",
+   "single-cell",
+   "transcriptomics",
+   "perturbation",
+   "scale"
+  ],
+  "score": 25.141085879763793,
+  "classic": true,
+  "citations": 372,
+  "year": 2025,
+  "tldr": "The authors benchmarked five foundation models and two deep learning models against simple linear baselines for predicting transcriptomic effects of single and double genetic perturbations, finding that none of the deep models outperformed the baselines.",
+  "why": "A rigorous, field-defining benchmark showing that five single-cell foundation models fail to beat deliberately simple linear baselines for perturbation prediction. This directly challenges the foundation-model hype in transcriptomics and will change how the community evaluates and develops these models.",
+  "summary": {
+   "tldr": "A Nature Methods benchmark showing that five single-cell foundation models and two other deep-learning models fail to beat deliberately simple baselines ('no change', 'additive', 'mean', and a linear factor model) when predicting transcriptomic responses to genetic perturbations.",
+   "background": "Perturbation-seq studies measure how single-gene or combinatorial CRISPR perturbations reshape the transcriptome, and several foundation models (scGPT, scFoundation, Geneformer, etc.) claim to have learned gene representations that can predict these responses, including for unseen perturbations. Whether these learned representations genuinely generalize to predicting expression changes from perturbations alone is hard to establish because published evaluations often used favorable data splits, weak comparators, or metrics that don't penalize overconfident or flat predictions.",
+   "approach": "The authors ran two benchmark suites. (1) Double perturbations: on the Norman et al. K562 CRISPRa dataset (100 single perturbations, 124 double perturbations, 19,264 genes), they fine-tuned scGPT, scFoundation, GEARS, CPA, Geneformer, UCE, and scBERT on all 100 singles plus 62 of the 124 doubles, testing on the held-out 62 doubles across five random splits. Models were scored by L2 distance on the 1,000 most highly expressed genes (plus Pearson delta and other gene subsets), and by their ability to detect non-additive genetic interactions relative to a ground-truth set of 5,035 interactions at FDR 5%. (2) Single unseen perturbations: on Adamson (K562) and Replogle (K562, RPE1) CRISPRi datasets, they tested prediction for 134, 210, and 24 unseen perturbations against two baselines: a 'mean' predictor and a bilinear ridge regression (expression ~ G * W * P^T + b) fit purely from training data, optionally equipped with pretrained embeddings extracted from scGPT, scFoundation, or GEARS. The original model authors were invited to review the benchmark code.",
+   "findings": [
+    "On double perturbations, every deep-learning model had higher L2 error on the 1,000 most highly expressed genes than the 'additive' baseline (sum of single-perturbation log-fold-changes), which uses no double-perturbation data at all.",
+    "For genetic-interaction detection, no model beat the 'no change' baseline; models mostly predicted buffering interactions and rarely (and almost never correctly) predicted synergistic ones.",
+    "For unseen single perturbations, no deep-learning model consistently outperformed the 'mean' baseline or the simple linear model across the Adamson, Replogle K562, and Replogle RPE1 datasets.",
+    "A linear model equipped with gene embeddings from scGPT or scFoundation beat the mean baseline but did not consistently beat the linear model with embeddings derived from the training data itself; the only consistently best method was the linear model with perturbation embeddings pretrained on other Replogle perturbation-seq data (cross-cell-line transfer).",
+    "The authors note that prior evaluations behind GEARS, scGPT, and scFoundation apparently used easy comparisons (e.g., a linear baseline in scGPT's benchmark that effectively predicted no change for unseen perturbations), which may have overstated these models' advantages."
+   ],
+   "why": "For anyone working on transcriptomic or multiomic foundation models, this is a cautionary result: large-scale pretraining did not yield perturbation-response generalization beyond trivial linear baselines on these datasets, and positive results in the original papers appear to stem from benchmark design rather than genuine predictive power. It argues for rigorous benchmarking with strong simple baselines and honest splits before investing in deep perturbation-prediction architectures, and it suggests that what transfer there is comes from perturbation-seq pretraining rather than atlas-scale expression pretraining.",
+   "limitations": "The benchmark used only four datasets, all from cancer cell lines (K562, RPE1) with high mutational burden, and the authors did not re-do quality control to exclude perturbations that failed to perturb their target genes, leaving open whether foundation models would fare better on richer, cleaner, or more diverse perturbation data.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 31311
+  }
+ },
+ "also": [
+  {
+   "title": "Benchmarking foundation cell models for post-perturbation RNA-seq prediction",
+   "authors": [
+    "Gerold Csendes",
+    "Gema Sanz",
+    "Kristóf Z. Szalay",
+    "Bence Szalai"
+   ],
+   "authorCount": 4,
+   "venue": "BMC Genomics",
+   "preprint": false,
+   "date": "2025-04-23",
+   "doi": "10.1186/s12864-025-11600-2",
+   "url": "https://doi.org/10.1186/s12864-025-11600-2",
+   "abstract": "Accurately predicting cellular responses to perturbations is essential for understanding cell behaviour in both healthy and diseased states. While perturbation data is ideal for building such predictive models, its availability is considerably lower than baseline (non-perturbed) cellular data. To address this limitation, several foundation cell models have been developed using large-scale single-cell gene expression data. These models are fine-tuned after pre-training for specific tasks, such as predicting post-perturbation gene expression profiles, and are considered state-of-the-art for these problems. However, proper benchmarking of these models remains an unsolved challenge. In this study, we benchmarked two recently published foundation models, scGPT and scFoundation, against baseline models. Surprisingly, we found that even the simplest baseline model-taking the mean of training examples-outperformed scGPT and scFoundation. Furthermore, basic machine learning models that incorporate biologically meaningful features outperformed scGPT by a large margin. Additionally, we identified that the current Perturb-Seq benchmark datasets exhibit low perturbation-specific variance, making them suboptimal for evaluating such models. Our results highlight important limitations in current benchmarking approaches and provide insights into more effectively evaluating post-perturbation gene expression prediction models.",
+   "reasons": [
+    "foundation model",
+    "AI",
+    "single-cell",
+    "perturbation",
+    "RNA-seq",
+    "scale"
+   ],
+   "score": 21.827627704767433,
+   "classic": true,
+   "citations": 82,
+   "year": 2025,
+   "summary": {
+    "tldr": "A benchmarking study showing that transformer-based foundation models (scGPT, scFoundation) underperform simple baselines—including just predicting the training-set mean—at predicting post-perturbation RNA-seq profiles on Perturb-seq datasets.",
+    "background": "Predicting how cells respond to perturbations from transcriptomics is a key task, and foundation cell models like scGPT and scFoundation (pre-trained on >10M scRNA-seq profiles) have been claimed as state-of-the-art. Benchmarking them is difficult because test-set design, metric choice, and dataset variance can mask trivial or poor performance.",
+    "approach": "The authors fine-tuned scGPT and scFoundation per the original publications and compared them against baselines (Train Mean, Elastic Net, kNN, Random Forest with Gene Ontology, scELMO, or foundation-model embedding features) on four Perturb-seq datasets: Adamson (68,603 cells, 87 CRISPRi perturbations), Norman (91,205 cells, 284 CRISPRa perturbations including combos), and two Replogle genome-wide CRISPRi sets (K562: 162,751 cells, 1,093 perturbations; RPE1: 162,733 cells, 1,544 perturbations), using Perturbation-Exclusive splits and Pearson Delta (correlation of differential expression profiles) as the main metric.",
+    "findings": [
+     "In raw expression space all models scored Pearson >0.95, but in differential expression space even the trivial Train Mean beat both foundation models on all four datasets (Train Mean 0.711/0.557/0.373/0.628 vs scGPT 0.641/0.554/0.327/0.596 and scFoundation 0.552/0.459/0.269/0.471 for Adamson/Norman/K562/RPE1).",
+     "A Random Forest Regressor using Gene Ontology features clearly outperformed foundation models (Pearson Delta 0.739/0.586/0.480/0.648 across the four datasets).",
+     "Random Forests fed with pretrained scGPT embeddings (0.727/0.583/0.421/0.635) or scELMO embeddings outperformed fine-tuned foundation models themselves, suggesting the fine-tuning, not the embeddings, is the bottleneck.",
+     "The benchmark datasets have low perturbation-specific variance: median pairwise correlations of perturbation DE profiles were 0.662 (Adamson) and only 0.117 (Replogle K562), and the gap between the best model and Train Mean inversely tracked this median correlation.",
+     "scGPT's apparent advantage on top-20 DE genes was largely driven by trivially predicting the CRISPR target gene; removing target genes reduced its performance.",
+     "Gene embedding analysis showed GO and scELMO embeddings had higher within-pathway similarity (KEGG, REACTOME) than scGPT embeddings, though scGPT was better aligned with the CollecTRI gene regulatory network."
+    ],
+    "why": "For researchers building AI models on perturbation transcriptomics, this is a cautionary result: current Perturb-seq benchmarks (Adamson, Norman, Replogle) with few hundred to ~1,500 perturbations and low inter-perturbation variance cannot distinguish good models from trivial ones, and published foundation-model claims should be re-examined. It also argues that simple supervised models with prior-knowledge features (GO terms) on pseudo-bulked data are a stronger, cheaper starting point than fine-tuning foundation models.",
+    "limitations": "Only Perturbation-Exclusive setups in a single cell line per dataset were tested; cell-type generalization (CEX) was not evaluated, and the datasets are in vitro cell lines with limited heterogeneity. The conclusions concern scGPT and scFoundation specifically, though the authors suggest other foundation models on the same benchmarks face similar issues.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 30318
+   }
+  },
+  {
+   "title": "Zero-shot evaluation reveals limitations of single-cell foundation models",
+   "authors": [
+    "Kasia Z. Kedzierska",
+    "Lorin A. Crawford",
+    "Ava P. Amini",
+    "Alex Xijie Lu"
+   ],
+   "authorCount": 4,
+   "venue": "Genome biology",
+   "preprint": false,
+   "date": "2025-04-18",
+   "doi": "10.1186/s13059-025-03574-x",
+   "url": "https://doi.org/10.1186/s13059-025-03574-x",
+   "abstract": "Abstract Foundation models such as scGPT and Geneformer have not been rigorously evaluated in a setting where they are used without any further training (i.e., zero-shot). Understanding the performance of models in zero-shot settings is critical to applications that exclude the ability to fine-tune, such as discovery settings where labels are unknown. Our evaluation of the zero-shot performance of Geneformer and scGPT suggests that, in some cases, these models may face reliability challenges and could be outperformed by simpler methods. Our findings underscore the importance of zero-shot evaluations in development and deployment of foundation models in single-cell research.",
+   "reasons": [
+    "foundation model",
+    "zero-shot",
+    "single-cell",
+    "scale",
+    "generalizes"
+   ],
+   "score": 21.680888229680235,
+   "classic": true,
+   "citations": 219,
+   "year": 2025,
+   "summary": {
+    "tldr": "Zero-shot evaluation shows that scGPT and Geneformer often fail to beat simple baselines (HVG, scVI, Harmony) on cell-type clustering and batch integration, even on datasets partially seen in pretraining.",
+    "background": "Single-cell foundation models are usually evaluated after fine-tuning, but many real use cases (e.g., exploratory data with unknown cell labels) require zero-shot use of cell embeddings, which is rarely tested. It is hard to establish whether pretraining yields transferable biological knowledge versus task-specific gains, and pretraining data often overlap with benchmark datasets.",
+    "approach": "The authors evaluated Geneformer (BERT-like, 6 layers, 4 heads, pretrained on 27.4M human cells, ranking-based inputs) and scGPT (12 layers, 8 heads, binned expression, three variants pretrained on 814k kidney, 10.3M blood/bone-marrow, and 33M non-cancerous human cells) purely zero-shot. They compared against 2,000 highly variable genes (HVG), scVI, and Harmony on five human datasets (Pancreas, PBMC 12k, PBMC 95k, Immune atlas, Tabula Sapiens), using AvgBIO/ASW for cell-type separation and batch-silhouette/PCR scores for integration. They also tested reconstruction of the pretraining objective (gene expression bins for scGPT, expression rankings for Geneformer).",
+    "findings": [
+     "On cell-type clustering, both scGPT and Geneformer underperformed HVG, scVI, and Harmony on average AvgBIO scores across most datasets; HVG outperformed both models across all metrics.",
+     "The only dataset where scGPT clearly beat scVI and Harmony was PBMC 12k, a dataset not seen during pretraining; scGPT did not consistently win even on datasets it was pretrained on (Immune, Tabula Sapiens).",
+     "Scaling pretraining data gave only modest gains: scGPT-human (33M cells) slightly underperformed scGPT-blood (10.3M cells), suggesting benefits plateau.",
+     "On batch integration, Geneformer consistently ranked last across all metrics, and the best batch-mixing scores for all datasets came from plain HVG; scVI and Harmony beat scGPT on technical-only batch datasets (Pancreas, PBMC), while scGPT did better on mixed technical/biological batches.",
+     "On reconstruction, scGPT without cell embeddings predicted roughly the mean bin and underperformed a mean baseline; Geneformer's predicted rankings correlated only moderately with true rankings (median Pearson correlation 0.56, best 0.95)."
+    ],
+    "why": "For anyone building or applying multiomics foundation models, this shows that reported fine-tuning gains do not guarantee usable zero-shot embeddings, and that simple baselines (HVG, scVI, Harmony) remain competitive and should be mandatory in benchmarks. It also argues for held-out evaluation datasets that are never used for pretraining, and suggests masked language modeling may be a weak pretraining objective for learning cell representations.",
+    "limitations": "The study covers only two models and five transcriptomic datasets, and partial overlap between evaluation and pretraining data (Pancreas for Geneformer; Immune and Tabula Sapiens for scGPT) confounds some conclusions; scVI and Harmony also used batch labels during training while the foundation models did not.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 41989
+   }
+  },
+  {
+   "title": "Benchmarking DNA foundation models for genomic and genetic tasks",
+   "authors": [
+    "Haonan Feng",
+    "Lang Wu",
+    "Bingxin Zhao",
+    "Chad Daniel Huff",
+    "Jianjun J. Zhang",
+    "Jia Wu",
+    "Lifeng Lin",
+    "Peng Wei",
+    "Chong Wu"
+   ],
+   "authorCount": 9,
+   "venue": "Nature Communications",
+   "preprint": false,
+   "date": "2025-11-28",
+   "doi": "10.1038/s41467-025-65823-8",
+   "url": "https://doi.org/10.1038/s41467-025-65823-8",
+   "abstract": "The rapid evolution of DNA foundation models promises to revolutionize genomics, yet comprehensive evaluations are lacking. Here, we present a comprehensive, unbiased benchmark of five models (DNABERT-2, Nucleotide Transformer V2, HyenaDNA, Caduceus-Ph, and GROVER) across diverse genomic and genetic tasks including sequence classification, gene expression prediction, variant effect quantification, and topologically associating domain (TAD) region recognition, using zero-shot embeddings. Our analysis reveals that mean token embedding consistently and significantly improves sequence classification performance, outperforming other pooling strategies. Model performance varies among tasks and datasets; while general purpose DNA foundation models showed competitive performance in pathogenic variant identification, they were less effective in predicting gene expression and identifying putative causal QTLs compared to specialized models. Our findings offer a framework for model selection, highlighting the impact of architecture, pre-training data, and embedding strategies on performance in genomic and genetic tasks.",
+   "reasons": [
+    "foundation model",
+    "transformer",
+    "zero-shot",
+    "genomics",
+    "scale",
+    "generalizes"
+   ],
+   "score": 20.838156184752147,
+   "classic": true,
+   "citations": 83,
+   "year": 2025,
+   "summary": {
+    "tldr": "A systematic zero-shot benchmark of five DNA foundation models (DNABERT-2, NT-v2, HyenaDNA, Caduceus-Ph, GROVER) across 57 classification datasets plus gene expression prediction, variant effect quantification, and TAD recognition, showing mean token pooling is best and that specialized models beat general ones on QTL and expression tasks.",
+    "background": "DNA foundation models are proliferating, but most published evaluations are done after fine-tuning, which introduces bias via different fine-tuning strategies, layer choices, and hyperparameters. A fair, task-breadth comparison of the embeddings these frozen models produce—and of pooling strategies—was missing.",
+    "approach": "The authors generated zero-shot embeddings from five models on 57 classification datasets (human/multispecies genomic regions, human/multispecies epigenetic marks), pooled them three ways (summary token, mean, max), and trained a random forest per dataset, using AUROC with DeLong significance testing. They extended the benchmark to GTEx v8 gene expression prediction from sequence (random forest regression), pathogenic vs. common SNP discrimination and eQTL/sQTL/paQTL/ipaQTL classification (vs. Enformer, Sei, AlphaGenome), a controlled re-pretraining of HyenaDNA on DNABERT-2's 135-species corpus, TAD recognition via NT-v2 attention maps, and runtime scaling on a single A100.",
+    "findings": [
+     "Mean token pooling consistently beat summary-token and max pooling (significant in 35–42 of 52 binary datasets per model), with average AUC gains of 1.4% (GROVER) to 8.7% (HyenaDNA), and it shrank cross-model performance spread (range 0.708–0.799 to 0.795–0.822).",
+     "For human region classification, Caduceus-Ph was strongest overall (e.g., TFBS, promoters ~0.97–0.99 AUC); DNABERT-2 excelled at splice sites (donor 0.906, acceptor 0.897); foundation models generally beat a task-trained CNN on human tasks but underperformed it on multispecies tasks.",
+     "Gene expression prediction from sequence was weak: Pearson correlations between predicted and GTEx tissue expression were only 0.114–0.123 for 6 kb inputs (Enformer 0.129, HyenaDNA-450K 0.137), though a consistent subset of genes (e.g., CUTALP >0.89, DDX11) was well predicted.",
+     "Variant tasks split sharply: NT-v2 was the best pathogenic-SNP classifier (AUC 0.73, Cohen's d 0.88, beating Enformer's 0.69), but on QTL causality specialized models dominated (AlphaGenome AUC 0.80 sQTL, 0.86 ipaQTL; best foundation model Caduceus-Ph only 0.65 on eQTL vs Enformer 0.77).",
+     "Re-pretraining HyenaDNA on 135 multi-species genomes improved it on 14 of 49 datasets (e.g., human 5mC AUC 0.707→0.749), while NT-v2's attention showed no detectable TAD structure signal.",
+     "Runtime favored GROVER (fastest ≤2 kb), NT-v2 was slowest (500M params), and HyenaDNA scaled best to ~500 kb sequences."
+    ],
+    "why": "It offers a practical, bias-reduced model-selection guide (pooling choice, architecture, pre-training data) for anyone using DNA foundation model embeddings, and it clearly delineates where general-purpose sequence models fall short of specialized ones. For transcriptomics/multiomics researchers, the weak sequence-to-expression results and QTL findings are a useful reality check before adopting DNA foundation models for regulatory or eQTL applications.",
+    "limitations": "All evaluations use frozen zero-shot embeddings, so fine-tuned performance (where larger models like NT-v2 may gain more) remains untested, and datasets are curated short-window benchmarks rather than genome-wide assays. Small QTL datasets with chromosome-based splits made some foundation-model results unstable (AUCs below 0.5), and TAD/attention interpretability was only possible for one model.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 88965
+   }
+  }
+ ],
+ "candidates": 368
+}

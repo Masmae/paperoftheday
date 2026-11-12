@@ -1,6 +1,18 @@
 {
  "days": [
   {
+   "date": "2026-11-12",
+   "title": "Deep-learning-based gene perturbation effect prediction does not yet outperform simple linear baselines",
+   "venue": "Nature Methods",
+   "key": "10.1038/s41592-025-02772-6",
+   "also": [
+    "10.1186/s12864-025-11600-2",
+    "10.1186/s13059-025-03574-x",
+    "10.1038/s41467-025-65823-8"
+   ],
+   "classic": true
+  },
+  {
    "date": "2026-11-11",
    "title": "Cross-state representation learning enables prospective discovery of dynamic protein allosteric sites",
    "venue": "bioRxiv",
