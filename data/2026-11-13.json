@@ -1,0 +1,207 @@
+{
+ "date": "2026-11-13",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Spatial multi-omic profiling of non-autonomous transcriptomic and epigenomic responses to genetic perturbation",
+  "authors": [
+   "Ghaemmaghami, J.",
+   "Lee, K. H.",
+   "Jiang, S.",
+   "Zhao, Y.",
+   "Gadhvi, G.",
+   "Lu, L.",
+   "Wen, M.-C.",
+   "Wang, Y.",
+   "Liu, L.",
+   "Cable, D.",
+   "Welch, J. D."
+  ],
+  "authorCount": 11,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-13",
+  "doi": "10.64898/2026.11.12.766149",
+  "url": "https://doi.org/10.64898/2026.11.12.766149",
+  "abstract": "Multicellular organisms develop and maintain differentiated cell states through a combination of cell-autonomous and non-autonomous regulatory mechanisms, including signal transduction pathways mediated by ligands, receptors, and kinases. Genetic perturbation through CRISPR pooled screening is widely used to study cell-autonomous regulatory mechanisms, but the challenges of cellular-resolution in situ measurement have limited the study of non-autonomous regulatory mechanisms. We developed Perturb-Tags, a spatial multi-omic technique for pooled CRISPR screening that tags nuclei with spatial barcodes, allowing joint measurement of single-nucleus gene expression, CRISPR guide RNAs, chromatin accessibility, and spatial positions within intact tissue. Perturb-Tags achieves cellular-resolution, unbiased gene expression and multi-omic profiling, and higher sensitivity than previous spatial perturbation approaches. We used Perturb-Tags to systematically perturb ligands, receptors, and all expressed kinases in human embryoid bodies. These experiments revealed extensive non-autonomous gene expression changes after perturbation, including distance-dependent loss of signaling pathway activity upon ligand knockdown, compensatory upregulation of alternative signaling pathways, and responses to receptor and kinase knockdown that vary with cell microenvironment. We also identified changes in the spatial organization of cells with ligand and kinase knockdowns. Finally, we trained a graph neural network to model the combined effects of genetic perturbations on gene expression and chromatin accessibility across an entire tissue. Our work provides a powerful experimental and computational platform for mechanistic studies of non-autonomous regulatory mechanisms across healthy and diseased tissues.",
+  "reasons": [
+   "deep learning",
+   "graph neural network",
+   "transcriptomics",
+   "multiomics",
+   "perturbation",
+   "epigenomics"
+  ],
+  "score": 18,
+  "tldr": "They developed Perturb-Tags, a spatial multi-omic platform for pooled CRISPR screens in tissue that jointly measures expression, chromatin accessibility, guide identity and location, revealing widespread distance-dependent and context-dependent non-autonomous responses, and trained a graph neural network to model perturbation effects across whole tissue.",
+  "why": "Perturb-Tags is a genuine new experimental-plus-computational capability: pooled CRISPR screening with joint single-nucleus RNA, chromatin, guide detection and spatial position in intact tissue, enabling systematic study of non-autonomous (microenvironment-dependent) perturbation responses — something previously essentially unmeasurable at scale. It is broadly reusable across tissues and questions, backed by a systematic kinase/ligand/receptor screen and a GNN model, and sits squarely at the intersection of single-cell, spatial, multiomics and perturbation biology.",
+  "summary": {
+   "tldr": "Perturb-Tags is a spatial CRISPR-pooled-screening method that adds spatial barcodes to nuclei (via 10x Trekker) so guide identity, transcriptome-wide snRNA-seq, and optionally ATAC can be measured per nucleus with its position in intact tissue, revealing distance-dependent non-autonomous perturbation effects in human embryoid bodies.",
+   "background": "Pooled CRISPR screens like Perturb-seq measure only cell-autonomous effects because tissue dissociation destroys spatial context, and existing spatial perturbation methods are either targeted (imaging) or low-sensitivity (spot-based). Understanding non-autonomous signaling—how a ligand, receptor, or kinase knockdown in one cell changes its neighbors—requires joint measurement of perturbation, expression, chromatin, and position in the same cell.",
+   "approach": "They spatially barcode nuclei in situ with the Trekker assay, extract nuclei, and run them on 10x Chromium droplet-based single-nucleus sequencing, capturing spatial barcodes, transcripts, and sgRNAs per droplet; a modified 10x Multiome workflow adds chromatin accessibility via custom RT primers and splints. They apply this to human iPSC-derived embryoid bodies (EBs, dCas9-KRAB) with CRISPRi libraries: one screen of 26 developmental ligands/receptors (BMP, WNT, Notch, ephrin, semaphorin) and a larger library of ~5 sgRNAs per kinase covering all ~300 expressed kinases. Analysis includes distance-dependent DE tests, CytoSignal ligand-receptor scoring, Gaussian process spatial modeling, and a graph attention network (GAT) predicting RNA and ATAC states from guides, cell type, and spatial neighborhoods.",
+   "findings": [
+    "In the first ligand/receptor experiment they recovered 4,115 cells (median 4,084 UMIs, 2,600 genes/cell, 65.7% guide-positive), with transcripts per nucleus substantially higher than prior spatial perturbation methods.",
+    "Perturbed cells form spatially expanded clones (e.g., TTBK2, PTK2, MAPK8, ROCK2 in the kinase screen), and receiver cells near knockdown clusters show distance-dependent gene expression changes.",
+    "CytoSignal analysis found 34 direct and 25 compensatory ligand-receptor interactions with significant distance-dependent responses, mostly reduced direct signaling near knockdowns and increased compensatory signaling (e.g., DLK1-NOTCH1 rising near DLL3 KD).",
+    "The Multiome run (~26,000 nuclei, 46% guide-assigned, ~15,000 ATAC fragments/nucleus) showed distance-dependent chromatin accessibility and chromVAR motif changes near ligand KDs, plus differentiation shifts (e.g., Pluripotent cell fraction increasing with distance from WNT5A/EFNA3 KD cells, Early Ectoderm decreasing).",
+    "A spatial GAT with RNA/ATAC branches beat a non-spatial MLP on 10 held-out EBs (Pearson r = 0.652 for RNA counts; observed-vs-predicted guide-averaged profiles r = 0.801), and counterfactual guide swaps showed effects strongest proximal and decaying over ~150-250 µm.",
+    "Kinase perturbation effects depend on local signaling context: kinase-KD × ligand-receptor score interaction tests identified strongest effects for TTBK2 and PTK2, with examples like RYR2 responding to NODAL-ACVR signaling specifically in MAP3K15-KD cells."
+   ],
+   "why": "For multiomics researchers, this is a concrete recipe for adding spatial coordinates to pooled CRISPR perturbations with whole-transcriptome RNA plus ATAC, using only commercially available reagents (Trekker + 10x), so it is straightforward to adopt. The GAT model and counterfactual framework are an early template for learning how perturbations propagate spatially across tissues, a step beyond cell-autonomous Perturb-seq-style prediction.",
+   "limitations": "It is applied only to one in vitro model (embryoid bodies) with CRISPRi knockdowns, guide detection is incomplete (46-66% of cells), and clone-based distance analyses exploit clonal expansion patterns that may not generalize to other tissues; the GAT models predictive structure rather than identifying causal signaling mechanisms.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 116966
+  }
+ },
+ "also": [
+  {
+   "title": "Multimodal protein representations across human brain cell types",
+   "authors": [
+    "Dong, A.",
+    "Li, M. M.",
+    "Ding, K.",
+    "Nazeen, S.",
+    "Noori, A.",
+    "Huang, Y.",
+    "Gao, S.",
+    "Ritter, D.",
+    "Afroz, J.",
+    "Henderson, A. B. H.",
+    "Studer, L.",
+    "Luo, Y."
+   ],
+   "authorCount": 15,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-12",
+   "doi": "10.64898/2026.11.10.765762",
+   "url": "https://doi.org/10.64898/2026.11.10.765762",
+   "abstract": "The central nervous system (CNS) comprises diverse cell types whose molecular context shapes the roles of the proteins they express. Computational models offer a scalable way to study the roles of proteins across human brain cell types, with protein language models and interactome- or single-cell-based models capturing complementary information encoded in protein sequences and cellular network contexts. Human brain tissue is hard to access, so brain cell types make up a small fraction of the atlases single-cell models train on and of the benchmarks used for their evaluation. To capture these complementary sources of information in the CNS, we introduce SEMPER, a multimodal representation learning model that aligns protein language model representations with protein-protein interaction networks from 442 cell types of the adult human brain, giving each protein a sequence-informed representation in every cell type in which its gene is expressed. We show that SEMPER representations predict cell type-specific protein complexes and predict genes essential to the survival of dopaminergic neurons, measured in a genome-wide CRISPR screen. In zero-shot retrieval, SEMPER recovers clinically pursued drug targets for Parkinson's disease, Alzheimer's disease, multiple sclerosis, Huntington's disease and amyotrophic lateral sclerosis at higher rates than cell type-specific models. To further improve target recovery, we combine SEMPER with a large language model that reasons over protein functional annotations. The combination recovers more targets, with SEMPER providing experimentally derived cellular context that complements literature-based reasoning of the large language model.",
+   "reasons": [
+    "language model",
+    "representation learning",
+    "zero-shot",
+    "single-cell",
+    "proteins",
+    "CRISPR"
+   ],
+   "score": 23,
+   "summary": {
+    "tldr": "SEMPER is a multimodal model that aligns protein language model (ESM) sequence embeddings with cell type-specific protein-protein interaction networks across 442 adult human brain cell types, producing cell type-resolved protein representations that improve zero-shot prediction of protein complexes, essential-gene identification, and neurodegenerative drug-target recovery.",
+    "background": "The same protein can behave differently across CNS cell types, but protein language models are cell type-agnostic while network/single-cell models lose sequence information, and human brain cell types are underrepresented in single-cell atlases and benchmarks. No existing model jointly captures sequence-encoded properties and cell type-specific interaction context for the brain.",
+    "approach": "SEMPER builds 442 cell type-specific PPI networks by intersecting a single-nucleus atlas of ~3.37M cells from 112 brain regions (~1.25M protein nodes; 15,487 unique proteins, each in ~81 cell type networks) with a cell type-agnostic interactome, plus a metagraph of 2,316 edges over 599 cell types/tissues. A frozen ESM protein language model (backbones tested across ESM-2/3/C families) encodes sequences; a 1.3B-parameter hybrid graph transformer encodes cell type-specific network context; trainable adaptors align both in a shared latent space via a symmetric InfoNCE loss, giving each protein a distinct embedding per expressing cell type. They then evaluate complex prediction, zero-shot drug-target retrieval, and essential-gene prediction, including combinations with an LLM that re-scores SEMPER candidates using parametric knowledge or retrieved Gene Ontology annotations in a pairwise tournament.",
+    "findings": [
+     "SEMPER outperforms cell type-specific baselines (PINNACLE, ORCA-CT, PPI-GT) on 547 curated protein complexes under all four definitions (co-expression: 349 cell types, p<1e-58; structural: 328, p<1e-54; co-abundance: 213, p<1e-35; colocalization: 79, p<1e-12).",
+     "In zero-shot retrieval of clinically pursued targets (97-166 per disease), SEMPER beats all cell type-specific baselines in all five diseases; e.g., Huntington's mean Hits@10 = 7.0 vs ≤0.5 for baselines; cell type-agnostic ProTrek-Seq beats SEMPER on Hits@10 in Parkinson's (3.2 vs 2.2), Alzheimer's, and multiple sclerosis.",
+     "On a genome-wide CRISPR screen of essential genes in dopaminergic neurons, SEMPER beats an LLM at every threshold (Hits@25 1.8 vs 1.1; Hits@75 4.9 vs 4.1), and LLM re-ranking further raises Hits@75 to 5.94 (p=7.8e-5).",
+     "Across 50 disease-cell type pairs, SEMPER achieves mean Hits@25 of 8.3 vs 4.7 for the LLM alone; LLM re-ranking raises it to 9.2 (pure scoring) or 9.0 (GO-annotation tournament), with the biggest gains in Huntington's (18.2 to 19.7-21.9).",
+     "Embedding similarities correlate with independent brain protein co-abundance better than with 10 other tissues (median Spearman rho ≥ 0.082, p<0.001)."
+    ],
+    "why": "For multiomics researchers, this shows a practical recipe for fusing frozen sequence foundation models with cell type-resolved transcriptome-derived network context via contrastive alignment — analogous to transcriptomic context models like PINNACLE but adding sequence grounding. The finding that LLM re-ranking helps only where disease mechanisms are literature-specific, and that retrieved per-gene annotations fix failures in broad-mechanism diseases, is a useful lesson for hybrid retrieval+LLM pipelines.",
+    "limitations": "Coverage is limited to the 442 atlas-defined CNS cell types, so peripherally acting targets (e.g., MS immunomodulatory targets like S1PR1, BTK, MS4A1) are unreachable; the zero-shot benchmark measures recovery of already clinically pursued targets, and cell type-agnostic ProTrek-Seq beats SEMPER on mean Hits@10 in several diseases.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 175873
+   }
+  },
+  {
+   "title": "DeepRNAi: Predicting on- and off-target siRNA activity and establishing a benchmark",
+   "authors": [
+    "Masse, N. Y.",
+    "Lau, T. T. Y.",
+    "Wintersinger, J.",
+    "Slobodyanyuk, M.",
+    "Li, R.",
+    "Chu, V. S.",
+    "Zhu, H.",
+    "Kanuparthi, B.",
+    "La, J.",
+    "Fischbacher, B.",
+    "Arseneault, K.",
+    "Johnson, S."
+   ],
+   "authorCount": 21,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-13",
+   "doi": "10.64898/2026.11.12.766311",
+   "url": "https://doi.org/10.64898/2026.11.12.766311",
+   "abstract": "Small interfering RNAs (siRNAs) silence target genes through RISC-mediated hybridization and cleavage, but can silence unintended transcripts and cause toxicity or complicate regulatory approval. In drug development, empirical assessment by qPCR and RNA-seq is slow, forces early candidate prioritization, and is limited by available species- and genome-appropriate cell models. While extensive empirical screening remains standard practice, there is a significant opportunity for modern AI methods to change this paradigm. We introduce DeepRNAi, a deep learning model that accurately predicts on- and off-target knockdown from siRNA and mRNA sequence. Trained on 16 million siRNA-transcript pairs from 2,031 siRNAs designed to interrogate known siRNA failure modes, and incorporating transcript context from biological foundation models, DeepRNAi is the first in silico method that approaches experimental accuracy. It generalizes across cell models, transcripts, genomes and species, and in a small study distinguishes approved therapeutics from hepatotoxic candidates. The value of DeepRNAi for prioritizing better candidates up front improving likelihood of success later in development is evidenced by a genome-wide survey of 24.4 million siRNAs targeting 7,946 genes, which indicates that 90.1% of the 100 most potent siRNAs have at least some off-target concerns. To support the community, we are publishing a training and benchmark dataset containing 1.84 million siRNA-transcript pairs from 240 siRNAs.",
+   "reasons": [
+    "foundation model",
+    "deep learning",
+    "AI",
+    "RNA-seq",
+    "genomics",
+    "scale"
+   ],
+   "score": 18,
+   "summary": {
+    "tldr": "Deep Genomics built DeepRNAi, a deep learning model that predicts siRNA on-target and off-target transcriptome-wide knockdown from siRNA and mRNA sequence, approaching RNA-seq experimental reproducibility, plus a public benchmark dataset.",
+    "background": "siRNA therapeutics can silence unintended transcripts via near-perfect matches (NPMs) and seed matches, causing toxicity and regulatory problems, but current practice relies on slow qPCR/RNA-seq screening that prematurely narrows candidate pools. Predicting hybridization-dependent off-target repression is hard because activity depends on siRNA sequence, local binding thermodynamics, and transcript-level context, and only 4-8% of bioinformatic sequence matches are actually functional off-targets.",
+    "approach": "They generated fit-for-purpose differential expression RNA-seq data in HepG2 and Huh7 cells (2,271 siRNAs targeting 71 genes at 10 nM, 48h, yielding ~17M siRNA-mRNA pairs), designed to enrich for NPM failure modes. DeepRNAi takes the siRNA guide (21mer), the target mRNA sequence, and covariates (cell line, format, chemistry), integrates single-nucleotide-resolution embeddings from RNA biological foundation models (BioFM, including Enigma), and predicts log2 fold-change for any siRNA-mRNA pair after unsupervised preprocessing to remove indirect effects. It was trained on 16M pairs from 2,031 siRNAs targeting 62 genes, with a held-out set of 240 siRNAs targeting 9 genes released as a public benchmark (1.84M pairs).",
+    "findings": [
+     "On a transcript-held-out test set, DeepRNAi reached r = 0.73 for on-target knockdown and beat a random forest and TargetScan for NPMs and seed matches (p < 0.001); removing BioFM embeddings hurt accuracy (p < 0.001).",
+     "For 11 siRNAs screened in both HepG2 and Huh7, DeepRNAi achieved ~74% of the AP above chance that cross-cell-line RNA-seq reproducibility provides, and matched or beat RNA-seq screen-to-screen reproducibility for 15 same-cell-line siRNAs.",
+     "Zero-shot transfer to rat (primary hepatocytes and in vivo liver at 30 mg/kg) gave AP of 0.55/0.39 (in vitro NPM/seed) and 0.40 vs baseline 0.16 (in vivo NPM), matching in-vitro rat measurements at predicting in vivo outcomes (AP 0.41), and combining both gave AP 0.49.",
+     "An off-target burden metric computed from DeepRNAi predictions separated 7 hepatotoxic siRNAs from 5 FDA-approved ones with AUROC 0.89-0.91, and a PCSK9 retrospective analysis (model trained with PCSK9 excluded) ranked the approved drug Inclisiran among the top candidates.",
+     "A genome-wide survey of 24.4M siRNAs against 7,946 genes found only 9.9% of the 100 most potent siRNAs per gene had low off-target burden, and string-matching filters recovered only 0.02% of the predicted-clean siRNAs."
+    ],
+    "why": "It establishes the first broadly validated, transcriptome-wide predictive model for siRNA off-target effects and a public benchmark (240 siRNAs, 164 train / 76 test), enabling in silico prioritization before experimental screening. For readers in AI transcriptomics, it is a concrete example of RNA foundation model embeddings (including variant-aware context like IRF5 rs10954213 and alternative polyadenylation at PLG) improving downstream perturbation prediction, with log-linear scaling in training data suggesting further gains.",
+    "limitations": "The hepatotoxic vs. approved comparison is small (7 vs 5 siRNAs), training data is human liver cell lines at one dose/chemistry, and performance was verified on limited cross-species/in-vivo examples; prospective clinical validation remains untested.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 90714
+   }
+  },
+  {
+   "title": "AI for Biologists: The Knowledge Boundaries of Foundation Models in the Age of Agentic Systems",
+   "authors": [
+    "Tian Cai",
+    "Andrew Kleist",
+    "Jaimin Patel",
+    "Duccio Malinverni",
+    "Alexander K. Taylor",
+    "Malvika Sharan",
+    "Renato Umeton",
+    "M. Madan Babu"
+   ],
+   "authorCount": 8,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-12",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.17015v1",
+   "abstract": "Artificial intelligence (AI) is changing how biological research is done. Biological foundation models trained on millions of nucleotides, protein, and single-cell measurements predict protein structures, mutation effects, and cellular responses to genetic perturbations. Agentic systems, AI assistants built on large language models, can run multistep analyses from plain-language requests and increasingly call foundation models as tools. Yet it is often unclear when these models' outputs can be trusted. We frame this as a model's knowledge boundary: the range of inputs, tasks, and conditions over which its outputs are reliable. This review explains how foundation models are built and proposes that five design elements (data, architecture, training scheme, evaluation scheme, and post-analysis) define this boundary. We examine evidence on where current models succeed or fail and present standardized descriptions of model limits so that researchers, and the agents acting for them, can use these tools reliably.",
+   "reasons": [
+    "foundation model",
+    "language model",
+    "AI",
+    "AI agents",
+    "single-cell",
+    "perturbation"
+   ],
+   "score": 22,
+   "summary": {
+    "tldr": "A review arguing that biological foundation models (protein, DNA, single-cell) and LLM-based agentic systems have poorly characterized 'knowledge boundaries'—the range of inputs, tasks, and conditions over which their outputs are reliable—and that these boundaries are determined by five design elements (data, architecture, training scheme, evaluation scheme, post-analysis).",
+    "background": "Foundation models like ESM2, Evo 2, Geneformer, and scGPT, and agents like Biomni that call them as tools, are increasingly used by biologists, but it is often unclear when outputs can be trusted. The problem is hard because biological corpora are incomplete and biased (e.g., CZ CELLxGENE's 150M+ cells, UniRef's hundreds of millions of clustered sequences), the 'grammar' is unknown, and self-supervised objectives learn co-occurrence rather than causation, so benchmark scores can mask shortcut learning.",
+    "approach": "The authors (St. Jude) organize the biological foundation model landscape by inputs (DNA, RNA, single-cell, bulk/spatial, protein, multi-omics) and outputs (representation, prediction, generation), explain five design elements that set each model's limits, describe four ways agents interface with foundation models (as tool, as training data, as encoder, as verifier), and synthesize independent evaluations—including reassessments against simple baselines—of where models succeed and fail.",
+    "findings": [
+     "When text suffices, LLMs alone are strong (90% on disease-from-gene/pathway questions in BioReason), but for sequence-based variant classification the LLM alone reached 49% and adding Evo 2 embeddings raised it to 80% vs 61% for Nucleotide Transformer.",
+     "In genetic perturbation prediction, simple linear models and the training-data mean match or outperform foundation models (multiple studies cited); Geneformer and scGPT embeddings did not beat simple baselines without fine-tuning.",
+     "On ProteinGym (200+ deep mutational scanning assays), no single model wins across proteins, and larger protein language models do not consistently improve zero-shot fitness prediction.",
+     "Evaluation pitfalls are common: perturbation metrics are dominated by non-perturbation expression differences, AlphaMissense showed discordance with curated clinical evidence across 5,845 missense variants in 59 genes, and most of 21 RNA language models failed to beat one-hot encoding once near-duplicate sequences were removed.",
+     "Agents can reach correct conclusions via flawed reasoning: Paper2Agent named the correct gene (SORT1) at the 1p13 locus while contradicting AlphaGenome's own scores and the direction of experimentally observed expression change.",
+     "The authors recommend a portfolio of broad models plus specialized models fitted to boundary regions (e.g., GPN-MSA, ChromBPNet), coordinated by agents, and structured 'boundary statements' released with each model.",
+     "Concrete evidence of success remains real in proteins: ProGen generated active artificial lysozymes, ESM3 generated a distant fluorescent protein, and sparse autoencoders recover interpretable features (active sites, zinc fingers)."
+    ],
+    "why": "For someone building or evaluating transcriptomics/multi-omics models, this is a critical synthesis of independent evidence that current single-cell and perturbation foundation models often fail to beat simple baselines, and that benchmark design—not just model scale—is a major culprit. It also provides a practical framework (five design elements) for diagnosing why a model fails and argues agents should route tasks to models whose documented boundaries cover the question.",
+    "limitations": "As a review, it adds no new experiments, and independent evaluation is sparse—bulk transcriptomics lacks a dedicated benchmark, multi-omics and RNA models have few head-to-head comparisons, and it is unknown for most models whether correct predictions reflect mechanism or shortcuts. Some cited baselines-parity results may partly reflect metric choices rather than model incapacity.",
+    "source": "arXiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 88376
+   }
+  }
+ ],
+ "candidates": 353
+}

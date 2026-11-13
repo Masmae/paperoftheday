@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-13",
+   "title": "Spatial multi-omic profiling of non-autonomous transcriptomic and epigenomic responses to genetic perturbation",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.11.12.766149",
+   "also": [
+    "10.64898/2026.11.10.765762",
+    "10.64898/2026.11.12.766311",
+    "https://arxiv.org/abs/2611.17015v1"
+   ]
+  },
+  {
    "date": "2026-11-12",
    "title": "Deep-learning-based gene perturbation effect prediction does not yet outperform simple linear baselines",
    "venue": "Nature Methods",
