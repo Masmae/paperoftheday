@@ -1,0 +1,182 @@
+{
+ "date": "2026-11-14",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "ModBERT: a DNA modification and genetic variant-aware DNA large language model",
+  "authors": [
+   "Bolzan, D.",
+   "Davuluri, R. V.",
+   "Mahony, S.",
+   "AY, F."
+  ],
+  "authorCount": 4,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-13",
+  "doi": "10.64898/2026.11.12.766258",
+  "url": "https://doi.org/10.64898/2026.11.12.766258",
+  "abstract": "The development of foundation models that learn a general grammar of DNA (DNA language models) has accelerated in recent years. The vast majority of DNA large language models (LLMs), such as DNABERT-2 and Nucleotide Transformer, are pretrained almost exclusively on reference genomes. They therefore cannot represent the two sources of variation most directly tied to regulatory differences between people: genetic variants and DNA methylation. Long-read sequencing (Nanopore and PacBio) now measures both from the same native DNA molecules, but no model is designed to use this joint readout. With this in mind, we developed ModBERT, a DNA language model built on a five-letter probabilistic genome representation in which each position is a distribution over A, C, G, T, 5mC (represented with M). In pretraining, these distributions encode population allele frequencies and CpG methylation levels from 242 individuals in the 1000 Genomes Long-Read Sequencing Consortium, learned with a soft-target masked language modeling objective. We further propose probabilistic fine-tuning, in which the same representation encodes one individual's genotype and methylation. A fine-tuned model can then make person-specific predictions from a single assay. Under this novel fine-tuning framework, we show that ModBERT effectively utilizes methylation information to classify peaks from functional genomic assays, including histone mark (n=11 different marks) and transcription factor binding (n=69 TFs) ChIP-seq data, outperforming ab initio trained models and ModBERT pretrained on sequences without methylation. In silico methylation perturbations yield TF sensitivities that correlate with independent methylation-aware motif models. Using an evaluation design that separates generalization to new loci from generalization to new individuals, ModBERT predicts chromatin accessibility at held-out loci in held-out individuals (AUROC 0.88). Its predicted variant effects agree with likely causal caQTLs (Spearman correlation = 0.52) but not with variants associated only through linkage, a traditionally challenging task. Overall, ModBERT establishes a framework for personal-genome language modeling, in which a model reads each individual's genetic and epigenetic sequence rather than a shared reference. This enables in silico dissection of variant and methylation effects on gene regulation and principled prioritization of candidates for experimental validation as population-scale long-read cohorts (e.g., 1KGP and Human Pangenome Reference Consortium) grow.",
+  "reasons": [
+   "foundation model",
+   "language model",
+   "transformer",
+   "perturbation",
+   "epigenomics",
+   "genomics"
+  ],
+  "score": 23,
+  "tldr": "They built a methylation- and variant-aware DNA foundation model pretrained on 242 individuals' long-read genomes that predicts chromatin states, variant effects, and accessibility in held-out people, establishing a personal-genome language modeling framework.",
+  "why": "ModBERT is the first DNA language model to natively represent both genetic variation and methylation via a probabilistic five-letter alphabet built from 1000 Genomes long-read data, enabling genuinely person-specific genomic prediction rather than reference-genome modeling. It's a novel capability with strong validation (ChIP-seq across many marks/TFs, held-out individuals and loci, caQTL agreement), and the probabilistic fine-tuning framework is reusable by anyone with long-read personal genomes.",
+  "summary": {
+   "tldr": "ModBERT is a 12-layer BERT-style DNA language model pretrained on a five-letter probabilistic representation (A, C, G, T, 5mC as 'M') that encodes both population allele frequencies and DNA methylation from Oxford Nanopore sequencing of 242 individuals in the 1000 Genomes Long-Read Sequencing Consortium, enabling person-specific regulatory predictions via a novel 'probabilistic fine-tuning' scheme.",
+   "background": "Most DNA LLMs (DNABERT-2, Nucleotide Transformer, HyenaDNA) are pretrained on reference genomes and cannot represent genetic variants or DNA methylation — the two sources of inter-individual regulatory variation. Long-read sequencing (Nanopore) now measures both variant and methylation states on the same native DNA molecules, but no model has been designed to consume that joint readout, and representing probabilistic (rather than discrete) bases in a transformer is non-trivial.",
+   "approach": "Each nucleotide is encoded as a probability distribution over A, C, G, T, and M (5mC); pretraining uses a soft-target masked language modeling objective on 30 million 512-bp sequences overlaid with 1KGP-LRSC population allele frequencies and CpG methylation fractions (trained on a single NVIDIA GH200, 120k steps, batch 256). For fine-tuning, the same representation instead encodes one individual's zygosity and per-site methylation fraction, fed through the pretrained model into a linear classification head with full-parameter updates (architecture: 12 layers, hidden 768, 12 heads, RoPE, Flash Attention). Downstream tasks were binary ChIP-seq and ATAC-seq peak classification in GM12878 (11 histone marks, 69 TFs) and ATAC-seq in 27 LCL donors from Kumasaka et al.",
+   "findings": [
+    "Histone mark peak classification (GM12878): mean accuracy 86%, beating ab initio baselines (CNN/LSTM/GRU/RNN) and a methylation-ablated pretrained model; cross-mark transfer recapitulated chromatin-state groups (active promoters/enhancers, gene-body, repressive marks).",
+    "Methylation ablation at test time dropped accuracy most for active marks (H3K9ac/H3K27ac/H3K4me1-3: -0.30 to -0.35) and least for H4K20me1 (-0.10), and gains over the no-5mC model persisted with dinucleotide-matched negatives.",
+    "TF ChIP-seq (69 TFs): mean accuracy 86% vs 70-84% for ab initio models; all 69 TFs predicted to prefer unmethylated DNA (delta -0.92 to -0.02), directionally consistent with independent methylation-aware motif models (Grau et al.) on the 44 TFs compared.",
+    "ATAC-seq in held-out individuals at held-out loci (the stringent 'unseen samples and peaks' task): AUROC 0.88 vs 0.87 (no-5mC) and 0.85 (CNN); on seen loci in new individuals AUROC was 0.93 but a simple overlap baseline reached 0.97.",
+    "In silico mutagenesis of caQTLs: predicted accessibility effects correlated with experimental effect sizes for high-causal-probability variants (Spearman 0.52, signed accuracy 77.6%) but not LD-linked variants (rho 0.084, 53.7%)."
+   ],
+   "why": "For a transcriptomics/multiomics researcher, this establishes 'personal-genome language modeling' — a single model that reads an individual's genotype plus methylome rather than a shared reference, and can disentangle variant from methylation effects in silico. The probabilistic input representation and soft-target MLM are directly transferable ideas for anyone integrating epigenomic tracks into sequence models, and the caQTL stratification design (causal vs LD-only variants) is a useful evaluation template.",
+   "limitations": "Pretraining used only LCL methylation (242 individuals), so representations may not transfer to other cell types given cell-type-specific methylation; ONT phasing information is discarded, ignoring allele-specific methylation and haplotype effects. Gains from including 5mC in pretraining were modest, and the authors suggest larger receptive fields or additional modifications may be needed.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 55333
+  }
+ },
+ "also": [
+  {
+   "title": "Graph-guided flow matching enables biologically informed prediction at single-cell resolution",
+   "authors": [
+    "Liou, H.-Y.",
+    "Sprang, M.",
+    "Selby, D. A.",
+    "Grossmann, G.",
+    "Vollmer, S.",
+    "Riesgo-Ferreiro, P.",
+    "Gerbracht, J. V.",
+    "Schroers, B.",
+    "Strilic, B.",
+    "Kim, J."
+   ],
+   "authorCount": 10,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-13",
+   "doi": "10.64898/2026.11.12.766125",
+   "url": "https://doi.org/10.64898/2026.11.12.766125",
+   "abstract": "Perturb-seq enables systematic interrogation of massively parallel genetic perturbations at single-cell resolution, yet exhaustive characterization of the full perturbation space remains impractical. Here, we present Graph-guided Flow Matching (GFM), a generative framework that integrates biological knowledge graphs with latent flow matching to predict post-perturbation single-cell transcriptomes. Across multiple large-scale Perturb-seq datasets, GFM outperforms a strong linear baseline and current deep-learning models in predicting unseen single-gene perturbations, while training up to 30x faster and remaining robust with limited training data. GFM also demonstrates competitive performance in the two-gene perturbation prediction task when neither perturbed gene is observed during training. Ablation experiments show that combining flow matching with knowledge graphs enables accurate prediction of perturbation responses. Finally, GFM accurately calculates transcriptional consequences of HSP90AA1 inactivation and identifies target candidates unseen by the model in chronic myeloid leukemia. Our study establishes GFM as a biologically informed generative framework that predicts single-cell perturbation responses for prioritization of therapeutic targets.",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "transcriptomics",
+    "perturbation",
+    "scale"
+   ],
+   "score": 16,
+   "summary": {
+    "tldr": "Graph-guided Flow Matching (GFM) combines knowledge graphs with latent flow matching to predict single-cell transcriptomes after unseen genetic perturbations, outperforming GEARS, scGPT, and CellFlow while training up to 30x faster.",
+    "background": "Perturb-seq can only assay a small fraction of the possible single- and multi-gene perturbation space, so computational models that generalize to unseen perturbations are needed. The task is hard because scRNA-seq never pairs pre- and post-perturbation states of the same cell, and existing deep models (GEARS, scGPT, CellFlow) underperform even a simple linear baseline on mean-expression prediction.",
+    "approach": "GFM has three modules: a VAE encoding log-normalized expression into a latent space, a 2-layer graph attention network embedding perturbations using three concatenated graphs (Gene Ontology similarity from GEARS, STRING v12.0 PPI, and a cosine-similarity perturbation graph built from the Replogle K562 genome-wide CRISPRi dataset), and a neural ODE trained with conditional flow matching using precomputed per-condition optimal transport couplings between Gaussian noise and perturbed latents, with classifier-free guidance (gamma=1.5) at inference. It was benchmarked on CRISPRi Perturb-seq datasets from K562, RPE1, HepG2, and Jurkat (75/10/15% perturbation splits, 3 random splits each) and on the Norman K562 CRISPRa dataset (131 two-gene, 152 one-gene perturbations), evaluated on top-20 DEGs via Pearson, Pearson delta, MSE, 2-Wasserstein distance, and E-distance.",
+    "findings": [
+     "On unseen single-gene perturbations, GFM beat the linear baseline (which itself outperformed CellFlow, scGPT, and GEARS) on mean metrics and 2-WD, though no model beat random perturb-train sampling on E-distance (population dispersion is not captured).",
+     "GFM trained 1.5-30x faster than the deep-learning baselines and retained its lead when training data were reduced from 75% to 2.5%. On two-gene perturbations, GFM was best in the seen-0 (neither gene seen) subgroup, but a simple additive baseline won in the seen-2 subgroup.",
+     "Ablations showed removing OT flow matching or permuting graph edges each degraded performance; the perturbation-similarity graph was the main driver, while GO and PPI graphs alone had modest effects.",
+     "Prediction accuracy correlated strongly with similarity between a test perturbation's graph neighbors and training perturbations (e.g., PSMB2's nearest trained neighbor PSMB5, cosine similarity 0.965, was predicted well; HIST1H2BN's neighbor at 0.172 was not).",
+     "Trained on the genome-wide K562 CRISPRi screen, GFM correctly predicted HSP90AA1 knockdown effects (chaperone/telomere maintenance suppression) and ranked co-chaperone-related targets (PTGES3, DNAJB6, BAG2) among the top 15 most similar perturbations for CML. Code is at TRON-Bioinformatics/GFM (MIT license)."
+    ],
+    "why": "For someone working on perturbation/multiomics modeling, GFM is a concrete demonstration that graph-encoded biological priors plus a lightweight flow-matching generator can beat foundation-model-based approaches without large-scale pretraining, at much lower compute cost. The finding that a linear baseline still beats most deep models, and that predictive success depends on transcriptional similarity of graph neighbors, is directly relevant when choosing and evaluating perturbation-prediction methods.",
+    "limitations": "All benchmarks are cancer cell lines (K562, RPE1, HepG2, Jurkat) with CRISPRi/a perturbations only; two-gene effects appear largely additive, so the advantage of generative modeling over additive extrapolation remains untested for non-additive interactions. Performance degrades for perturbations lacking similar graph neighbors, and the E-distance results indicate the model does not fully reproduce population dispersion.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 76158
+   }
+  },
+  {
+   "title": "DynamicsPLM: A Dynamics-Enriched Small Protein Language Model for Protein Variant Effect Prediction",
+   "authors": [
+    "Dao, T. M.",
+    "Shehu, A.",
+    "Kabir, A."
+   ],
+   "authorCount": 3,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-13",
+   "doi": "10.64898/2026.11.11.765945",
+   "url": "https://doi.org/10.64898/2026.11.11.765945",
+   "abstract": "Predicting how mutations impact protein function and stability remains a key challenge in computational biology. Current state-of-the-art protein language models (PLMs) primarily scale parameter size on sequence corpora to capture evolutionary constraints but remain blind to the explicit physical dynamics of folded proteins. Conversely, models trained strictly on physical dynamics neglect critical evolutionary sequence statistics. In this paper, we bridge this gap by introducing DynamicsPLM, a highly parameter-efficient 35-million-parameter model that unifies evolutionary and biophysical representation learning. Utilizing a second-stage, multi-task continual pretraining strategy on over 60,000 proteins, we enrich a foundational sequence encoder with explicit residue-level and pairwise molecular dynamics heads while preserving its original evolutionary knowledge. At inference, DynamicsPLM computes zero-shot mutation effects from sequence alone by balancing an evolutionary plausibility score against a structural dynamics disruption score. Across the massive ProteinGym benchmark and natural variants of the Tsuboyama folding stability dataset, DynamicsPLM achieves state-of-the-art accuracy among all models under 100M parameters, and matches or outperforms several billion-scale sequence-based models of its size. Our findings demonstrate that explicit structural-dynamics supervision provides a parameter-efficient alternative to raw scale. Availability: All codes including data preparation scripts, training and validation recipes, and experimental configurations for LoMuS are available at: https://github.com/kabir-ai2bio-lab/DynamicsPLM.",
+   "reasons": [
+    "language model",
+    "representation learning",
+    "zero-shot",
+    "proteins",
+    "code released",
+    "generalizes"
+   ],
+   "score": 18,
+   "summary": {
+    "tldr": "DynamicsPLM is a 35M-parameter model that adds molecular-dynamics supervision to ESM-2 35M via second-stage multi-task continual pretraining on ~62k proteins, achieving the best zero-shot mutation-effect prediction among models under 100M parameters.",
+    "background": "Zero-shot variant effect prediction is dominated by ever-larger protein language models (ESM-2 up to 3B) that capture evolutionary constraints from sequence statistics but are blind to the physical dynamics of the folded protein. Structure-aware models need structures at inference, and dynamics-trained models lose evolutionary signal, so no compact sequence-only model combines both.",
+    "approach": "The authors take a pretrained ESM-2 35M encoder and continue pretraining it with a joint loss (λ_MLM=0.7, λ_dynamics=0.3) on ~61,959 proteins (58,832 train / 3,127 held out, split at 50% sequence identity) drawn from MD simulation and normal-mode datasets (mdCATH, ATLAS, GPCRmd, PED, IDRome, Proteinflow). Three heads are trained jointly: the original MLM head, a residue-level head predicting 50 features (RMSF, SASA, secondary structure, torsion angles), and a pairwise head predicting 13 residue-pair features (vdW, hydrogen bonds, salt bridges, hydrophobic contacts, motion correlations). At inference, zero-shot mutation scores combine a masked-marginal MLM plausibility score minus a dynamics-disruption score (z-normalized when ≥30 variants per protein), requiring only sequence input.",
+    "findings": [
+     "On ProteinGym DMS (201 proteins, 2,413,913 substitution variants), DynamicsPLM reaches mean Spearman ρ = 0.398 (median 0.414), ranking 1st among ≤100M-parameter models and 19th of 47 overall, beating Tranception L (700M, ρ=0.389), RITA XL (1.2B, ρ=0.387), and Progen3 (762M, ρ=0.380).",
+     "Its same-backbone baselines score ρ=0.330 (ESM2-35M) and 0.351 (ESMDance), so the dynamics enrichment adds ~0.05–0.07 at equal size.",
+     "On the 66 stability assays in ProteinGym it reaches ρ=0.528, 2nd overall behind only VespaG (3B, ρ=0.533) and ahead of ESM2-3B (0.509).",
+     "On Tsuboyama ΔΔG for 266 natural proteins (404,685 variants) it achieves ρ=0.489 (MAE 1.657), behind only ESM2-3B (0.544) and beating ESMDance (0.442); it outperforms ESM2-35M on 70% and ESMDance on 76% of proteins.",
+     "Weakness on viral proteins: ρ=0.268 vs ESMDance's 0.311, because the weak MLM component drags down the combined score when evolutionary signal is poor."
+    ],
+    "why": "For anyone building compact multiomics/sequence models, this is direct evidence that injecting physics-based supervision (MD-derived residue and pairwise features) during a second pretraining stage can substitute for parameter scaling — a 35M model matching 1B+ sequence models. The continual-pretraining-plus-multi-head recipe is reusable for adding any auxiliary modality to a pretrained encoder without destroying its original representation.",
+    "limitations": "Small leakage exists (11/201 ProteinGym and 6/412 Tsuboyama wild-type sequences overlap the training set), and the fixed score combination underperforms dynamics-only scoring when evolutionary signal is weak (viral proteins, de novo designs); the authors propose a learned mixing weight as future work. Results are also preprint-stage and caps input length at 1,022 residues.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 62211
+   }
+  },
+  {
+   "title": "DeePEn - A Depth sensitive benchmark for Protein Engineering",
+   "authors": [
+    "Schmirler, R.",
+    "Brenner, M.",
+    "Franz, S.",
+    "Heinzinger, M.",
+    "Rost, B."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-12",
+   "doi": "10.64898/2026.06.09.731073",
+   "url": "https://doi.org/10.64898/2026.06.09.731073",
+   "abstract": "Recent progress in modeling techniques and high-throughput screening has significantly enhanced the accessibility of protein engineering. Nevertheless, further progress gets hindered by the lack of robust benchmarks that capture the practical challenges for real-world protein engineering. Here, we introduced DeePEn, a Depth-sensitive benchmark for Protein Engineering that quantifies model generalization to held-out variants at increasing mutational distance from the wild type. We defined distance as the number of simultaneous point mutations, i.e., single amino acid variants (SAVs), moving from wild-type to mutant (edit distance in computer science jargon). DeePEn retrospectively evaluates prediction and prioritization using experimentally labelled variants from deep mutational scanning (DMS) datasets; it does not benchmark prospective sequence generation or goal-directed optimization. Specifically selecting four DMS datasets with sufficient multi-mutation data points from ProteinGym, we assessed recent predictive models, including general and biophysics-informed protein Language Models (pLMs), and a non-transformer neural network. Our results highlight how the performance of all models deteriorates with increasing mutational distance and that no single metric sufficiently captures the diverse requirements of protein engineering. To overcome these shortcomings, DeePEn provides a readily available resource for multi-metric benchmarking that focuses on variant-effect prediction of variants distant from the wild type.",
+   "reasons": [
+    "language model",
+    "transformer",
+    "deep learning",
+    "proteins",
+    "generalizes",
+    "wet-lab validated"
+   ],
+   "score": 18,
+   "summary": {
+    "tldr": "DeePEn is a protein-engineering benchmark that evaluates variant-effect predictors separately at increasing mutational distance (depth) from wild type, showing all supervised models degrade sharply for multi-mutant variants while standard single-metric evaluation hides this.",
+    "background": "Variant-effect prediction benchmarks like ProteinGym (217 DMS datasets) are dominated by single mutants: 148 of 217 datasets contain only single amino acid variants, and even the 69 multi-mutant datasets have most data at depth 1-2. Real protein engineering requires accumulating multiple compatible mutations, so extrapolation to higher mutational depth is the practical bottleneck, yet pooled evaluation over whole test sets obscures how poorly models generalize there.",
+    "approach": "From ProteinGym they selected the only four DMS datasets with sufficient multi-mutation data (AAV capsid, dehydratase His3, GFP, phototropin/CreiLOV; test sets ranging from ~21k to ~460k sequences, depths up to 28). Models are trained on variants of depth 1-3, validated at depth 4, and tested at depth 5+, with performance computed per-depth and binned into shallow (5-9) vs higher depth (10+). They compared LoRA-finetuned ProtT5 (regression vs lambda-ranking loss), frozen ProtT5 embeddings (with/without evo-tuning), MAVE-NN (additive and blackbox), METL-global 1D/3D, one-hot and similarity baselines, and zero-shot ESM2-650M and Tranception-L, using four metrics: AUCPR, Spearman on functional variants only, NDCG@10%functional, and TOP10%functional-recall, all normalized per depth subset.",
+    "findings": [
+     "All supervised models degrade with depth: e.g., the best model (PT5-LoRA_rank) drops from AUCPR 0.82/Spearmanfunc 0.54 at shallow depth (5-9) to 0.68/0.39 at depth 10+; the SBI baseline drops from 0.37 to 0.15 AUCPR.",
+     "Supervised models (PT5, MAVE-NN, METL) beat zero-shot ESM2-650M and Tranception-L overall, but the two zero-shot models were the only ones that did not (ESM2 even numerically improved) at higher depth.",
+     "Metrics computed over the whole test set track the shallow bin almost exactly, so pooled evaluation overestimates performance on deep mutants; dataset identity dominated performance variation (phototropin easiest, dehydratase hardest).",
+     "Training depth matters: adding triplets (training depth 1-3) to ProtT5 fine-tuning substantially improved prediction at higher depths versus training on singles or doubles only.",
+     "A lambda ranking loss beat MSE regression, evo-tuning and EVA initialization gave no benefit to fine-tuned models, and in simulated 96-well plate sampling models found some top-100 variants but almost all identified hits were shallow (depth 2-6), with zero hits for dehydratase."
+    ],
+    "why": "The paper shows that typical single-metric (Spearman) benchmarking can be misleading and that current predictive models become unreliable as oracles the farther variants get from wild type, which directly affects anyone chaining predictors into guided evolution or generative workflows. For multiomics readers it is a methodological caution: evaluation stratification by difficulty (here, edit distance) can reveal failure modes hidden by aggregate metrics.",
+    "limitations": "It is a retrospective benchmark on only four data-rich DMS datasets, so results may not transfer to low-data regimes or to prospective sequence generation/optimization campaigns; it also inherits ProteinGym's binarization thresholds and measures relative ranking, not absolute fitness calibration.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 75881
+   }
+  }
+ ],
+ "candidates": 351
+}

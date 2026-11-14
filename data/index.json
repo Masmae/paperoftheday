@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-14",
+   "title": "ModBERT: a DNA modification and genetic variant-aware DNA large language model",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.11.12.766258",
+   "also": [
+    "10.64898/2026.11.12.766125",
+    "10.64898/2026.11.11.765945",
+    "10.64898/2026.06.09.731073"
+   ]
+  },
+  {
    "date": "2026-11-13",
    "title": "Spatial multi-omic profiling of non-autonomous transcriptomic and epigenomic responses to genetic perturbation",
    "venue": "bioRxiv",
