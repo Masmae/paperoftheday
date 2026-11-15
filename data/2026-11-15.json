@@ -1,0 +1,178 @@
+{
+ "date": "2026-11-15",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Predicting transcriptional interactions with GrnPFN",
+  "authors": [
+   "Haihui Zhang"
+  ],
+  "authorCount": 1,
+  "venue": "arXiv",
+  "preprint": true,
+  "date": "2026-11-05",
+  "doi": null,
+  "url": "https://arxiv.org/abs/2611.14559v1",
+  "abstract": "Combinatorial therapies offer opportunities to improve treatment efficacy and overcome therapeutic resistance, but their rational design requires understanding how combined interventions interact beyond their individual effects. Combined genetic and chemical perturbations can elicit nonadditive transcriptional responses, yet the vast number of possible combinations limits experimental characterization. Predicting these interactions is particularly challenging when few or no combinations have been measured. Here we present GrnPFN, a prior-data fitted network that predicts nonadditive transcriptional responses to combinations from single-perturbation profiles. Pretrained on simulated screens generated from random gene-regulatory networks, GrnPFN incorporates measured combinations through in-context learning without retraining. We evaluated GrnPFN in single-cell screens spanning CRISPR activation, RNA knockdown and drug combinations, using separate cells to construct model inputs, training targets and test targets. Without measured combinations in the target screen, GrnPFN outperformed gradient boosting trained on other screens. With limited combination measurements, it outperformed kernel ridge regression fitted to the same measured pairs. These advantages extended to an additional screen combining CRISPR interference with a drug. Our results demonstrate that pretraining on simulated regulatory networks enables prediction of nonadditive transcriptional interactions across perturbation modalities when experimental measurements are scarce.",
+  "reasons": [
+   "zero-shot",
+   "single-cell",
+   "perturbation",
+   "gene regulation",
+   "CRISPR",
+   "scale"
+  ],
+  "score": 16,
+  "tldr": "They built a prior-data fitted network pretrained on simulated regulatory-network perturbation screens that predicts nonadditive single-cell transcriptional responses to unseen genetic and chemical combinations, outperforming baselines when combination data are scarce.",
+  "why": "GrnPFN tackles a genuinely hard and underexplored problem: predicting nonadditive transcriptional responses to combined perturbations without needing measured combinations, using a prior-fitted network pretrained purely on simulated gene-regulatory networks and adapting via in-context learning. That 'train on simulation, transfer zero-shot to real screens' recipe is a novel capability with broad reuse across CRISPR and drug-combination perturbomics. Runner-up DIRAC is equally practical but more of an incremental advance in a crowded spatial-integration field.",
+  "summary": {
+   "tldr": "GrnPFN is a prior-data fitted network pretrained on 140,000 simulated gene-regulatory-network screens that predicts nonadditive (interaction) components of transcriptional responses to genetic and drug perturbation combinations from single-perturbation profiles, with in-context adaptation to measured pairs.",
+   "background": "Combinatorial perturbations produce transcriptional responses that deviate from the sum of single effects (the interaction residual R_AB = Δ_AB − Δ_A − Δ_B), but the number of possible pairs grows quadratically, so most combinations are unmeasured. Predicting this residual is hard when no or few combinations have been measured in the target screen, and naive evaluation is inflated by shared sampling noise between inputs and targets.",
+   "approach": "The authors pretrained a small transformer PFN (347k parameters, 4 layers, no gene-identity embeddings) on 140,000 simulated screens from random GRNs (4–15 pathway nodes, 40–99 TFs, ~220–400 genes) covering CRISPR activation, knockdown, and drug perturbations, plus a hybrid screen-specific interaction prior. The model represents a screen as a population-by-gene grid, supports zero-shot prediction from single-perturbation profiles, and incorporates measured pairs via in-context learning without retraining. Evaluation used six single-cell screens: K562 CRISPRa pairs (131 pairs), THP-1 Cas13 knockdown (142), sci-Plex 4 drug combos with trametinib in A172/T98G/U87MG (82/84/81), and a held-out A375 CRISPRi + vemurafenib screen (142 pairs).",
+   "findings": [
+    "Zero-shot (no measured target-screen pairs), GrnPFN beat gradient boosting trained on the other screens with a pooled cosine-similarity difference of 0.049 (97.5% CI 0.038–0.060).",
+    "At 15% of training pairs measured, GrnPFN beat kernel ridge regression fitted to the same pairs by 0.069 (95% CI 0.048–0.090); the advantage shrank to zero at full budgets.",
+    "With all K562 training pairs available, mean cosine similarity was 0.603 (GrnPFN) vs 0.576 (kernel ridge), 0.472 (GEARS), 0.435 (CellFlow), 0.360 (CPA); e.g. CEBPA+CEBPE reached 0.94 cosine.",
+    "On the held-out A375 CRISPRi + vemurafenib screen (a design absent from pretraining), zero-shot cosine was 0.421 vs 0.319 for transferred gradient boosting (+0.102).",
+    "Predictive variance ranked accurate predictions well: the most confident third outperformed the least confident by 0.230 pooled cosine."
+   ],
+   "why": "This shows that pretraining on purely simulated GRN dynamics yields a transferable interaction prior across perturbation modalities — useful at the start of combination screens when few or no pairs are measured. For multiomics/perturbation-modeling researchers, it also demonstrates that gains over deep models like GEARS/CPA/CellFlow come specifically from predicting the nonadditive residual, with careful cross-fitted evaluation separating sampling noise.",
+   "limitations": "Evaluation relies on limited datasets (one partition used for development, reused cells; one drug in one cell line for the transfer test) and pair folds share members/compounds, so gains are mainly for unmeasured combinations of known perturbations. The advantage vanishes as screen-specific data accumulate, and transcriptional nonadditivity need not imply phenotypic synergy.",
+   "source": "arXiv full text",
+   "model": "glm-5.3-flash",
+   "chars": 55464
+  }
+ },
+ "also": [
+  {
+   "title": "MutAtlas: A PDB-Wide Energy-Guided Atlas of Protein Mutation Effects",
+   "authors": [
+    "Ruihan Guo",
+    "Chaoran Cheng",
+    "Zhanghan Ni",
+    "Neil He",
+    "Bangji Yang",
+    "Ge Liu"
+   ],
+   "authorCount": 6,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-12",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.16361v1",
+   "abstract": "Protein mutation effect prediction is fundamental to protein engineering and disease variant interpretation, yet experimentally measured mutation data remain accurate but extremely sparse. To provide scalable supplementary mutation signals, we construct a PDB-wide mutation augmentation dataset that exhaustively enumerates single-site substitutions on experimentally resolved protein structures and aligns mutation signals from physics-based energy models, protein language models, and inverse folding models. Large-scale analysis under a unified mutation preference representation reveals substantial differences in the consistency, concentration, and substitution patterns of mutation distributions across models, indicating that disagreement is pervasive and reflects conflicting inductive biases rather than random noise. Motivated by these observations, we propose an unsupervised multi-source mutation preference distillation framework that learns from relative mutation preferences while explicitly modeling cross-source disagreement. Without using any experimental mutation labels during training, our approach achieves the best overall performance among the evaluated zero-shot baselines and naive multi-source fusion strategies on ProteinGym. We release the dataset and evaluation pipeline to support reproducible studies of protein mutation effects.",
+   "reasons": [
+    "language model",
+    "zero-shot",
+    "proteins",
+    "scale",
+    "generalizes"
+   ],
+   "score": 16,
+   "summary": {
+    "tldr": "A PDB-wide, three-source (FoldX/ESM2/ESM-IF) mutation preference atlas plus an unsupervised disagreement-aware distillation method that beats zero-shot baselines on ProteinGym without any experimental labels.",
+    "background": "Predicting single-site mutation effects is key for protein engineering and variant interpretation, but experimental measurements (e.g., DMS) are sparse. Computational sources (physics energy functions, protein language models, inverse folding) can score any mutation, but their outputs are on incompatible scales and disagree systematically, so naive fusion is unreliable.",
+    "approach": "They exhaustively enumerate single-site substitutions on experimentally resolved PDB structures and run FoldX on all 19 substitutions per residue, aligning these energy signals with ESM2 and ESM-IF logits into a unified per-residue 20-dimensional mutation preference vector. This yields 15.9M residue positions across 86,479 protein chains (>300M mutation evaluations), about two orders of magnitude more chains than DMS collections. They analyze cross-source agreement (Top-1 agreement, Spearman correlations, entropy), then fine-tune an ESM2-650M student with a pairwise preference-distillation loss: agreement-weighted consensus across sources plus a regularization term penalizing overconfident student margins where sources disagree (best lambda = 0.2).",
+    "findings": [
+     "Cross-source disagreement is pervasive: ESM2 and ESM-IF strongly prefer the wild-type residue and correlate with each other, while FoldX promotes more non-WT substitutions with higher entropy and low rank correlation with the neural models, indicating conflicting inductive biases rather than noise.",
+     "On the 201 substitution-only ProteinGym datasets (<1000 aa), the disagreement-aware model achieves macro-averaged Spearman of 0.498 overall, best among all evaluated baselines, with best Binding (0.467), Expression (0.389), and Stability (0.625).",
+     "It outperforms ESM2-650M (0.446), ESM-IF (0.459), FoldX (0.424), VespaG (0.487), and GEMME (0.480), and improves monotonically from hard consensus (0.468) to soft consensus (0.475) to disagreement-aware (0.498).",
+     "Ablation shows FoldX supervision matters: an ESM-IF-only augmentation variant drops to ~0.48 overall, and removing disagreement regularization (lambda=0) falls to 0.475.",
+     "The dataset, code, and evaluation pipeline are released for reproducibility."
+    ],
+    "why": "It provides a scalable, structure-grounded alternative to sparse experimental mutation data and shows that explicitly modeling teacher disagreement—rather than forcing consensus—is an effective unsupervised multi-source integration recipe. For multiomics/ML researchers, it is a concrete example of heterogeneous-supervision distillation that may transfer to other modalities where multiple cheap predictors (omics-based scores) partially disagree.",
+    "limitations": "Supervision comes only from computational models (FoldX, ESM2, ESM-IF), so inherited biases of those sources are baked into the atlas; evaluation is limited to substitution-only, short (<1000 aa) ProteinGym datasets with macro-averaged Spearman, and gains over strong baselines like VespaG (0.487) are modest (0.498).",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 55688
+   }
+  },
+  {
+   "title": "Vermeer: Autoregressive generative modeling of microscopy predicts protein localization",
+   "authors": [
+    "Kambhampati, S.",
+    "Zimmermann, E.",
+    "Hayir, E.",
+    "Yang, K. K.",
+    "Chen, F.",
+    "Lu, A. X."
+   ],
+   "authorCount": 6,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-12",
+   "doi": "10.64898/2026.06.01.729395",
+   "url": "https://doi.org/10.64898/2026.06.01.729395",
+   "abstract": "Fluorescent microscopy provides a rich view into how proteins localize within cells, but it remains experimentally infeasible to image human proteins across all of the different factors that can impact localization. We introduce Vermeer, a channel-adaptive autoregressive generative model for in silico generation of microscopy images of protein localization. Vermeer conditions generations on protein sequences and landmark stains showing the morphology of cells, which enables it to generalize to unseen proteins and cell lines. We show that Vermeer, trained on the Human Protein Atlas, can generate images with substantially improved perceptual quality and biological fidelity over previous proposals. Additionally, Vermeer's autoregressive framework enables flexible generation using varying channel subsets and orderings, enabling zero-shot transfer to data collected under different imaging conditions and channel configurations than those used for training. These results position Vermeer to enable scalable modeling of protein localization and is a step towards generative foundation models that can operate over distinct microscopy datasets. Code is publicly accessible at https://github.com/microsoft/vermeer.git.",
+   "reasons": [
+    "foundation model",
+    "generative model",
+    "zero-shot",
+    "code released",
+    "scale",
+    "generalizes"
+   ],
+   "score": 14,
+   "summary": {
+    "tldr": "Vermeer is a channel-adaptive autoregressive transformer (Llama-style, 775M params) that generates fluorescence microscopy images of protein localization conditioned on ESM-C protein sequence embeddings and landmark stains, trained on the Human Protein Atlas, outperforming PUPS, CELL-E2, and CELL-Diff on perceptual and biological fidelity metrics.",
+    "background": "Protein subcellular localization drives function, but imaging all protein–cell line–perturbation combinations is infeasible—HPA has imaged only ~8% of protein×cell-line combinations (13,080 proteins, 40 cell lines, 95K 4-channel images). Existing generative models (PUPS, CELL-E2, CELL-Diff) produce blurry images that cannot resolve fine-grained localization cues and assume a fixed number of input channels.",
+    "approach": "Vermeer tokenizes each microscopy channel independently with a frozen pretrained LlamaGen VQ-VAE (256 tokens per channel, 16x16 grid, codebook 16,384), then trains a decoder-only transformer (LlamaGen backbone, 775M params) to autoregressively generate concatenated per-channel token sequences with channel delimiter tokens, 2D RoPE, and a prefix conditioning vector from mean- or attention-pooled ESM-C 600M residue embeddings (d=1152). A variant (Vermeer-CA) randomly permutes and drops out channels during training, enabling flexible channel subsets/orderings at inference. Evaluations use held-out unseen protein×cell-line pairs, fully unseen proteins, and fully unseen cell lines, scored via FID, MSE, nuclear/cytoplasmic PCC, and agreement of SubCellPortable (31-class localization oracle) predictions with real images and HPA ground truth.",
+    "findings": [
+     "Vermeer beats all prior methods (PUPS, CELL-E2, CELL-Diff) on nearly all metrics on the unseen protein×cell-line split (CELL-Diff slightly better on MSE only), and even outperforms them zero-shot at image resolutions unseen in training.",
+     "Generations do not rely on spectral bleedthrough, verified by prompting with proteins absent from the landmark stains, without the thresholding PUPS needed.",
+     "The model generalizes to entirely unseen proteins and unseen cell lines, though performance degrades for rare localization classes and correlates with sequence similarity to training proteins; seen-vs-unseen performance is comparable for the two most common classes (nuclear, cytoplasmic).",
+     "Attention-pooled residue weights are significantly higher on known Uniprot localization motifs (nuclear localization signals, ER signal peptides, mitochondrial transit peptides) than on other residues.",
+     "Vermeer-CA transfers zero-shot to OpenCell (live-cell, 2-channel, different staining) and significantly outperforms a naive blank-channel adaptation of CELL-Diff, though generations do not always match true OpenCell patterns due to biological covariate shift."
+    ],
+    "why": "For multiomics researchers, this shows protein language model embeddings (ESM-C) plus autoregressive visual generation can predict spatial cell biology with real biological fidelity, effectively modeling sequence-to-localization as a generative image task. The channel-adaptive design is directly relevant to anyone merging heterogeneous omics/imaging datasets with inconsistent modalities, and the framework could extend toward designing proteins with desired localization.",
+    "limitations": "Performance drops on rare and highly variable localization classes, and transfer to OpenCell is imperfect, suggesting the model doesn't fully capture biological heterogeneity or cross-dataset biological shift. Training data (HPA, ~95K images) is small by foundation-model standards, and evaluation relies on an oracle classifier rather than experimental validation.",
+    "source": "bioRxiv full text (v1)",
+    "model": "glm-5.3-flash",
+    "chars": 27718
+   }
+  },
+  {
+   "title": "Single-cell machine learning uncovers genetically anchored, cell-type specific programs of Alzheimer's disease.",
+   "authors": [
+    "Madduri",
+    "Ellis",
+    "Lakhani",
+    "Bennett",
+    "Patel"
+   ],
+   "authorCount": 5,
+   "venue": "Nat Commun",
+   "preprint": false,
+   "date": "2026-11-10",
+   "doi": "10.1038/s41467-026-77651-5",
+   "url": "https://doi.org/10.1038/s41467-026-77651-5",
+   "abstract": "Univariate differential expression analysis dominates single-cell transcriptomic studies of Alzheimer's disease, yet marginal testing alone cannot resolve multivariate disease-associated structure or distinguish clinical from neuropathological signatures. Here we introduce TriSCOPE, a framework integrating multivariate predictive modeling, donor-aware differential expression, and pseudotime inference, applied to six Alzheimer's disease snRNA-seq datasets comprising ~4.2 million nuclei from 627 donors. Across six major brain cell types and 41 subclusters, we identify cell-type-specific predictively expressed genes that are largely non-overlapping with differentially expressed genes, revealing disease-relevant signals invisible to univariate approaches. Conditional GWAS-eQTL colocalization anchors a subset of these predictively expressed genes to inherited Alzheimer's disease risk loci, including 27 genetically supported gene-cell type pairs (among them ARL17B, JAZF1) with no significant differential expression. Integration across all three analytical branches nominates high-confidence convergent programs including astrocytic stress markers (such as GFAP, MT2A), neuronal signaling genes (like RASGEF1B, LINGO1, NRG1), and microglial and oligodendrocyte regulators (including SYTL3, SPP1, APOD). Comparison of clinical and neuropathological models reveals cell-type-specific divergence between cognitive and pathological Alzheimer's disease signatures. Key predictively expressed genes including ARL17B, LINGO1, and APOE replicate across independent cohorts, with cross-cohort generalizability confirmed across all three analytical branches of TriSCOPE.",
+   "reasons": [
+    "AI",
+    "single-cell",
+    "transcriptomics",
+    "RNA-seq",
+    "generalizes",
+    "validated"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "TriSCOPE combines multivariate predictive modeling (gradient boosting), donor-aware differential expression, and pseudotime inference on ~4.2M snRNA-seq nuclei from 627 donors to find AD-associated, genetically anchored cell-type programs that univariate DE misses.",
+    "background": "Single-cell AD studies typically rely on univariate differential expression, which cannot resolve multivariate disease structure among correlated transcripts or separate clinical-diagnosis from neuropathology signatures. Genes whose signal only appears when modeled jointly with covariates (age, sex, APOE) are invisible to marginal tests, and their genetic anchoring to AD GWAS risk is rarely tested.",
+    "approach": "The authors apply TriSCOPE to six PFC/DLPFC snRNA-seq datasets (ROSMAP Mathys-48/427/48b, Lau-21, reprocessed Murphy-48, SEA-AD; ~4.19M nuclei, 627 donors) across 6 major cell types and 41 subclusters. Branch 1 trains AutoML classifiers (GBM, benchmarked vs LASSO, elastic net, random forest) to predict clinical AD or CERAD pathology from gene expression + APOE + demographics, with 5 cross-validation splits and donor-level permutation controls; branch 2 runs donor-aware Poisson GLMM differential expression; branch 3 performs diffusion pseudotime rooted in healthy (low CERAD, unimpaired) cells. GWAS–eQTL colocalization (PP.H4) anchors predictive genes to inherited AD risk loci.",
+    "findings": [
+     "Predictive models exceed demographics+APOE baselines (AUC 0.528 → 0.545 global; 0.62–0.70 per cell type with APOE+expression; best subcluster In5 at 0.77), and gene expression alone predicted AD status in 31/41 subclusters.",
+     "Only 3.9–24.6% of predictively expressed genes (PEGs) overlap DEGs, and PEG rank correlates weakly with |log2FC| (Spearman ρ ≈ 0.02–0.21), showing multivariate signals largely distinct from marginal DE.",
+     "Conditional colocalization found 105 PEG loci with strong GWAS–eQTL sharing (PP.H4 ≥ 0.8), including 27 gene–cell-type pairs that are predictive and genetically anchored but NOT differentially expressed (e.g., ARL17B, PP.H4 ≈ 0.99, in 5 cell types; JAZF1, SYK, RIN3 in microglia).",
+     "Clinical and neuropathological (CERAD) signatures diverge by cell type: strongest concordance in microglia (244 shared predictors, OR=106.7) and oligodendrocytes (238, OR=33.1); CLU predicts clinical but not pathological AD.",
+     "Findings replicate in SEA-AD (1.4M nuclei, 83 donors): significant PEG overlap in all six cell types (e.g., microglia 81 genes, OR=7.95), DEG overlap in all six, and key genes (ARL17B, LINGO1, APOE) recur; converged three-branch programs include GFAP/MT2A/MT3 (astrocytes), RASGEF1B/LINGO1/NRG1 (neurons), HS3ST4/SYTL3 (microglia), APOD/OLIG1/SPP1 (oligodendrocytes)."
+    ],
+    "why": "For multiomics/transcriptomics researchers, this demonstrates that multivariate ML feature importance plus eQTL colocalization surfaces a class of genetically supported disease genes (like ARL17B, JAZF1) that DE-based pipelines systematically miss, and that clinical vs pathological endpoints yield cell-type-specific molecular divergence. The framework is a template for combining prediction, differential expression, and trajectory inference as orthogonal evidence in single-cell disease studies.",
+    "limitations": "The data are cross-sectional post-mortem, so temporal ordering of signatures is unknown and predictive AUCs (which are modest) serve feature discovery rather than prognostics; colocalization does not prove causality, ARL17B's signal may reflect the 17q21.31 MAPT inversion haplotype, and analyses are limited to prefrontal cortex.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 114049
+   }
+  }
+ ],
+ "candidates": 343
+}

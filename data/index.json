@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-15",
+   "title": "Predicting transcriptional interactions with GrnPFN",
+   "venue": "arXiv",
+   "key": "https://arxiv.org/abs/2611.14559v1",
+   "also": [
+    "https://arxiv.org/abs/2611.16361v1",
+    "10.64898/2026.06.01.729395",
+    "10.1038/s41467-026-77651-5"
+   ]
+  },
+  {
    "date": "2026-11-14",
    "title": "ModBERT: a DNA modification and genetic variant-aware DNA large language model",
    "venue": "bioRxiv",
