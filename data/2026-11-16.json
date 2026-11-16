@@ -1,0 +1,211 @@
+{
+ "date": "2026-11-16",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Genome-wide prediction of disease variant effects with a deep protein language model",
+  "authors": [
+   "Nadav Brandes",
+   "Grant Goldman",
+   "Charlotte H. Wang",
+   "Chun Ye",
+   "Vasilis Ntranos"
+  ],
+  "authorCount": 5,
+  "venue": "Nature Genetics",
+  "preprint": false,
+  "date": "2023-08-10",
+  "doi": "10.1038/s41588-023-01465-0",
+  "url": "https://doi.org/10.1038/s41588-023-01465-0",
+  "abstract": "Predicting the effects of coding variants is a major challenge. While recent deep-learning models have improved variant effect prediction accuracy, they cannot analyze all coding variants due to dependency on close homologs or software limitations. Here we developed a workflow using ESM1b, a 650-million-parameter protein language model, to predict all ~450 million possible missense variant effects in the human genome, and made all predictions available on a web portal. ESM1b outperformed existing methods in classifying ~150,000 ClinVar/HGMD missense variants as pathogenic or benign and predicting measurements across 28 deep mutational scan datasets. We further annotated ~2 million variants as damaging only in specific protein isoforms, demonstrating the importance of considering all isoforms when predicting variant effects. Our approach also generalizes to more complex coding variants such as in-frame indels and stop-gains. Together, these results establish protein language models as an effective, accurate and general approach to predicting variant effects.",
+  "reasons": [
+   "language model",
+   "proteins",
+   "genomics",
+   "generalizes"
+  ],
+  "score": 18.270967493629826,
+  "classic": true,
+  "citations": 432,
+  "year": 2023,
+  "tldr": "Researchers used a 650M-parameter protein language model to predict pathogenicity for every possible human missense variant (~450 million), beating prior methods on clinical variant classification and DMS benchmarks and releasing all predictions publicly.",
+  "why": "This is a landmark demonstration that a protein language model (ESM1b) can comprehensively predict the effects of all ~450 million possible missense variants in the human genome, outperforming existing tools on ClinVar/HGMD classification and 28 deep mutational scanning datasets. It turns variant effect prediction from a case-by-case capability into a genome-wide, openly available resource, with novel insights like isoform-specific damaging variants. It combines novelty, scale, experimental validation, and broad utility that most candidates here cannot match.",
+  "summary": {
+   "tldr": "A protein language model (ESM1b) was used to predict the effects of all ~450 million possible human missense variants, outperforming existing methods on clinical and experimental benchmarks.",
+   "background": "Predicting whether coding variants are pathogenic or benign is a major bottleneck in human genetics, with most missense variants remaining variants of uncertain significance (VUS). Existing computational methods either depend on close homologs/MSA coverage (e.g., EVE) or are trained on labeled clinical data, limiting coverage and introducing potential evaluation bias.",
+   "approach": "The authors built a workflow around ESM1b, a 650-million-parameter transformer protein language model trained (masked language modeling) on ~250 million protein sequences from UniProt, requiring no homology or clinical labels. They extended it to proteins longer than 1,022 amino acids (the model's limit) using an overlapping sliding-window scheme with a weighted average, and computed log-likelihood-ratio (LLR) effect scores for every possible missense variant across all 42,336 human protein isoforms (~450 million variants), released via a web portal. They also derived pseudo-LLR scores for in-frame indels and stop-gain scores from the most damaging missense score in the lost region, and benchmarked against 45 other VEP methods.",
+   "findings": [
+    "On ClinVar, ESM1b achieved ROC-AUC 0.905 vs 0.885 for EVE; on HGMD/gnomAD, 0.897 vs 0.882, and it outperformed all 19 unbiased (non-clinically-trained, no allele-frequency) methods, with an LLR threshold of -7.5 giving 81% true-positive and 82% true-negative rates.",
+    "On 28 deep mutational scanning assays (15 human genes, 76,133 variants), ESM1b had the highest mean Spearman correlation with experimental measurements (0.426), ahead of DEOGEN2 (0.423), REVEL (0.419) and EVE (0.418).",
+    "Evaluating each variant in the context of each isoform identified ~1.8 million isoform-sensitive variants across ~9,000 genes (85% of alternatively spliced genes), including 3,477 ClinVar variants with highly variable effects across isoforms; examples include MEN1 and TGFB3.",
+    "For in-frame indels, absolute-value PLLR scored ROC-AUC 0.874 vs 0.835 for CADD (gap largest for delins: 0.887 vs 0.671); for stop-gains, ESM1b performed well only for variants not triggering nonsense-mediated decay (ROC-AUC 0.734 vs 0.565 for NMD-triggering ones).",
+    "A Gaussian-mixture analysis of ClinVar VUS effect scores estimated ~42% of missense VUS and ~52% of indel VUS are pathogenic."
+   ],
+   "why": "For anyone working on AI for transcriptomics/multiomics, this shows that pretrained unsupervised protein language models can serve as genome-wide, calibration-friendly variant effect predictors without homology or labeled clinical data, covering isoforms, indels, and MSA-unsupported regions. It also provides a fully released resource (~450M predictions) and a benchmarking protocol that explicitly handles training-data leakage, useful for integrating variant priors into multiomics or burden-testing pipelines.",
+   "limitations": "ESM1b models only amino-acid sequence effects, so it misses transcript-level consequences like nonsense-mediated decay and splicing effects, and lacks a per-prediction confidence metric. The sliding-window approach may miss interactions between residues separated by more than 1,022 amino acids, and isoform-sensitivity counts depend on chosen thresholds.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 63312
+  }
+ },
+ "also": [
+  {
+   "title": "Predicting transcriptional responses to novel chemical perturbations using deep generative model for drug discovery",
+   "authors": [
+    "Xiaoning Qi",
+    "Lianhe Zhao",
+    "Chenyu Tian",
+    "Yueyue Li",
+    "Zhen-Lin Chen",
+    "Peipei Huo",
+    "Runsheng Chen",
+    "Xiaodong Liu",
+    "Baoping Wan",
+    "Shengyong Yang",
+    "Yi Chen Zhao"
+   ],
+   "authorCount": 11,
+   "venue": "Nature Communications",
+   "preprint": false,
+   "date": "2024-10-26",
+   "doi": "10.1038/s41467-024-53457-1",
+   "url": "https://doi.org/10.1038/s41467-024-53457-1",
+   "abstract": "Understanding transcriptional responses to chemical perturbations is central to drug discovery, but exhaustive experimental screening of disease-compound combinations is unfeasible. To overcome this limitation, here we introduce PRnet, a perturbation-conditioned deep generative model that predicts transcriptional responses to novel chemical perturbations that have never experimentally perturbed at bulk and single-cell levels. Evaluations indicate that PRnet outperforms alternative methods in predicting responses across novel compounds, pathways, and cell lines. PRnet enables gene-level response interpretation and in-silico drug screening for diseases based on gene signatures. PRnet further identifies and experimentally validates novel compound candidates against small cell lung cancer and colorectal cancer. Lastly, PRnet generates a large-scale integration atlas of perturbation profiles, covering 88 cell lines, 52 tissues, and various compound libraries. PRnet provides a robust and scalable candidate recommendation workflow and successfully recommends drug candidates for 233 diseases. Overall, PRnet is an effective and valuable tool for gene-based therapeutics screening. Understanding transcriptional responses to chemical perturbations is crucial for drug discovery. Here, authors present PRnet, a deep generative model that predicts gene responses to novel chemical perturbations, enabling in-silico drug screening and the identification of candidate compounds for various diseases.",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "perturbation",
+    "drug discovery",
+    "scale",
+    "wet-lab validated"
+   ],
+   "score": 21.05876755537042,
+   "classic": true,
+   "citations": 107,
+   "year": 2024,
+   "summary": {
+    "tldr": "PRnet is a perturbation-conditioned deep generative model that predicts bulk and single-cell transcriptional responses to never-tested chemical compounds from SMILES structure and unperturbed profiles, enabling large-scale in-silico drug screening.",
+    "background": "Predicting how gene expression changes in response to chemical perturbations is central to drug discovery, but exhaustively screening all disease-compound combinations is experimentally infeasible. Prior methods (CPA, scGen, chemCPA, optimal-transport approaches) largely cannot generalize to completely novel compounds or lack cell-type specificity, and reverse-signature tools like DLEPS/OCTAD miss cellular heterogeneity.",
+    "approach": "PRnet is an encoder-decoder generative model with three components: a Perturb-adapter that encodes dosage-scaled RDKit FCFP fingerprints from SMILES strings, a Perturb-encoder that maps the chemical effect on the unperturbed state into a latent space, and a Perturb-decoder that outputs a distribution over perturbed expression. It was trained on ~883k bulk profiles (L1000; 175,549 compounds, 82 cell lines, 978 landmark genes) and ~291k single-cell profiles (sci-Plex3; 188 compounds, 3 cell lines, 5000 HVGs). Drug screening is done by predicting perturbed profiles across concentration gradients, ranking genes by fold-change, and scoring compounds with GSEA against disease signatures.",
+    "findings": [
+     "On bulk L1000 data with unseen compounds, PRnet reached a Pearson correlation of ~0.8 on mean log-fold-change and outperformed alternatives, with >0.3 PCC improvement for unseen cell lines and >2x better performance on cell-line-specific (cov_compound) metrics.",
+     "On single-cell sci-Plex3 data, PRnet achieved R2 of 0.969 (unseen compounds) and 0.97 (unseen pathways) for post-perturbation expression.",
+     "Experimental MTT validation confirmed activity (IC50 < 10 µmol/L) of SEL120-34A HCl and (+)-Fangchinoline against 6 SCLC cell lines, and 7-Methoxyrosmanol and Mulberrofuran Q against CRC cell lines.",
+     "The model generated an integration atlas of >25 million predicted perturbation profiles covering 88 cell lines, 52 tissues, and libraries of 935 FDA-approved drugs, 4158 active, 30,456 natural, and 29,670 drug-like compounds.",
+     "A drug-recommendation workflow applied to 935 FDA drugs against 233 diseases (CREEDS signatures) produced 577 candidate lists, with several top-ranked picks (e.g., mirabegron, rifaximin for NASH; ozanimod for Crohn's) supported by prior literature."
+    ],
+    "why": "For anyone modeling perturbation effects in transcriptomics, PRnet shows that structure-conditioned generative models trained on ~100M bulk observations can extrapolate to unseen compounds, doses, and cell lines while preserving cell-type-specific heterogeneity. It also provides a practical end-to-end recipe (prediction + GSEA ranking + atlas) for in-silico drug repurposing and screening that other multiomics groups could adapt.",
+    "limitations": "SMILES-based encoding misses 3D molecular geometry, and the reverse-signature GSEA paradigm assumes transcriptional reversal implies therapeutic efficacy, which fails for low-quality signatures or resistance mechanisms not visible in expression. Predictions are gene-level only, with no direct modeling of phenotypes like IC50 or AUC.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 92171
+   }
+  },
+  {
+   "title": "De novo analysis of bulk RNA-seq data at spatially resolved single-cell resolution",
+   "authors": [
+    "Jie Liao",
+    "Jingyang Qian",
+    "Fang Yin",
+    "Zhuo Chen",
+    "Xiang Zhuang",
+    "Ningyu Zhang",
+    "Xin Shao",
+    "Yining Hu",
+    "Penghui Yang",
+    "Junyun Cheng",
+    "Yang Hu",
+    "Lingqi Yu"
+   ],
+   "authorCount": 20,
+   "venue": "Nature Communications",
+   "preprint": false,
+   "date": "2022-10-30",
+   "doi": "10.1038/s41467-022-34271-z",
+   "url": "https://doi.org/10.1038/s41467-022-34271-z",
+   "abstract": "Uncovering the tissue molecular architecture at single-cell resolution could help better understand organisms' biological and pathological processes. However, bulk RNA-seq can only measure gene expression in cell mixtures, without revealing the transcriptional heterogeneity and spatial patterns of single cells. Herein, we introduce Bulk2Space ( https://github.com/ZJUFanLab/bulk2space ), a deep learning framework-based spatial deconvolution algorithm that can simultaneously disclose the spatial and cellular heterogeneity of bulk RNA-seq data using existing single-cell and spatial transcriptomics references. The use of bulk transcriptomics to validate Bulk2Space unveils, in particular, the spatial variance of immune cells in different tumor regions, the molecular and spatial heterogeneity of tissues during inflammation-induced tumorigenesis, and spatial patterns of novel genes in different cell types. Moreover, Bulk2Space is utilized to perform spatial deconvolution analysis on bulk transcriptome data from two different mouse brain regions derived from our in-house developed sequencing approach termed Spatial-seq. We have not only reconstructed the hierarchical structure of the mouse isocortex but also further annotated cell types that were not identified by original methods in the mouse hypothalamus.",
+   "reasons": [
+    "deep learning",
+    "single-cell",
+    "transcriptomics",
+    "spatial omics",
+    "RNA-seq",
+    "code released"
+   ],
+   "score": 19.898780013289826,
+   "classic": true,
+   "citations": 89,
+   "year": 2022,
+   "summary": {
+    "tldr": "Bulk2Space is a two-step deep learning method that converts bulk RNA-seq into spatially resolved, single-cell-resolution expression profiles using a scRNA-seq reference for deconvolution (β-VAE) and a spatial transcriptomics reference for cell-to-location mapping.",
+    "background": "Bulk RNA-seq measures gene expression from mixed cell populations, losing both cell-type composition and spatial information; existing tools (CIBERSORT, CPM, MuSiC) only estimate cell-type proportions without generating single-cell profiles or spatial coordinates. Spatial transcriptomics platforms either lack single-cell resolution (ST, Visium, Slide-seq) or only measure limited target gene panels (MERFISH, seqFISH), so achieving spatially resolved single-cell full-transcriptome data from the vast existing bulk RNA-seq resources (TCGA, ENCODE, ICGC) remains unsolved.",
+    "approach": "Step 1 deconvolves bulk data by solving least-squares for cell-type proportions against a scRNA-seq reference, then uses a beta-variational autoencoder (β-VAE) to generate the corresponding number of single-cell expression profiles within each cell type's clustering space (beating GAN and CGAN in benchmarks). Step 2 maps generated cells to coordinates: for spot-based references (ST/Visium/Slide-seq), a deep forest (gcForest) classifier assigns cells to spots while preserving inferred spot cell-type composition; for image-based references (MERFISH etc.), cells are matched to locations via expression similarity after empirical-Bayes batch correction.",
+    "findings": [
+     "On 30 paired simulated datasets (10 human/mouse tissues), β-VAE outperformed GAN and CGAN with higher Pearson/Spearman correlations and lower RMSE, and on 12 unpaired mouse pancreas simulations it beat GAN, CGAN, and bMIND.",
+     "For spatial mapping, Bulk2Space (deep forest) beat six ML baselines plus RCTD, SpatialDWLS, stereoscope, and SPOTlight across 50 paired and 60 unpaired simulations; on MERFISH hypothalamus data (150 genes, leave-one-out), predicted spatial expression reached average Pearson correlation >0.9 for both paired and unpaired scRNA-seq inputs.",
+     "Applied to PDAC bulk RNA-seq (TCGA-style adjacent vs tumor) with inDrop scRNA-seq and ST references, Bulk2Space correctly recovered two cancer clones, acinar cells, and ductal cells whose spatial distributions matched histological annotations and ST cluster maps.",
+     "Applied to bulk data from 13 mouse brain regions sequenced with the authors' LCM-based 'Spatial-seq', it reconstructed the layered cortical structure (Astro, L2/3 IT, L4, L5 IT, L5 PT, L6 CT, L6 IT layers) and, in the hypothalamus (~31,000-cell Drop-seq reference, MERFISH spatial reference), re-annotated ambiguous MERFISH cells and predicted spatial patterns of genes not measured by MERFISH.",
+     "On inflammation-induced prostate cancer (TCGA bulk + scRNA-seq + spatial barcoding references), it quantified region-specific shifts: CAFs dropped from 52.4% (normal) to 20.5% (inflammation)/27.5% (cancer), immune cells peaked in inflammation (13.4% vs 2.0% normal, 1.7% cancer), and cancer epithelial cells dominated tumor regions (53.0% vs 6.3%/4.3%)."
+    ],
+    "why": "For multiomics/transcriptomics researchers, Bulk2Space offers a way to retroactively add single-cell and spatial resolution to the huge legacy of bulk RNA-seq data (e.g., TCGA cohorts) without new experiments, complementing rather than replacing spot- or image-based spatial platforms. It uniquely outputs full-transcriptome, single-cell-resolution spatial data and can extend targeted spatial assays (e.g., MERFISH panels) to unmeasured genes and refine ambiguous cell annotations.",
+    "limitations": "The method depends on reference data quality and cross-platform batch correction, generates rather than measures single cells (β-VAE stochasticity, though shown robust over 100 repeats), and validation is largely on simulated data, two-slice melanoma/PDAC comparisons, and mouse brain rather than large-scale independent ground truth. Spot-based mapping cannot resolve within-spot structure beyond the classifier's assignments, and performance on tissues with cell types absent from the scRNA-seq reference is untested.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 99554
+   }
+  },
+  {
+   "title": "Real-world deployment of a fine-tuned pathology foundation model for lung cancer biomarker detection",
+   "authors": [
+    "Gabriele S. V. Campanella",
+    "Neeraj Kumar",
+    "Swaraj Nanda",
+    "Siddharth Singi",
+    "Eugene Fluder",
+    "Ricky Kwan",
+    "Silke Mühlstedt",
+    "Nicole Pfarr",
+    "Peter J. Schüffler",
+    "Ida Häggström",
+    "Noora Neittaanmäki",
+    "Levent M. Akyürek"
+   ],
+   "authorCount": 26,
+   "venue": "Nature Medicine",
+   "preprint": false,
+   "date": "2025-07-09",
+   "doi": "10.1038/s41591-025-03780-x",
+   "url": "https://doi.org/10.1038/s41591-025-03780-x",
+   "abstract": "Artificial intelligence models using digital histopathology slides stained with hematoxylin and eosin offer promising, tissue-preserving diagnostic tools for patients with cancer. Despite their advantages, their clinical utility in real-world settings remains unproven. Assessing EGFR mutations in lung adenocarcinoma demands rapid, accurate and cost-effective tests that preserve tissue for genomic sequencing. PCR-based assays provide rapid results but with reduced accuracy compared with next-generation sequencing and require additional tissue. Computational biomarkers leveraging modern foundation models can address these limitations. Here we assembled a large international clinical dataset of digital lung adenocarcinoma slides (N = 8,461) to develop a computational EGFR biomarker. Our model fine-tunes an open-source foundation model, improving task-specific performance with out-of-center generalization and clinical-grade accuracy on primary and metastatic specimens (mean area under the curve: internal 0.847, external 0.870). To evaluate real-world clinical translation, we conducted a prospective silent trial of the biomarker on primary samples, achieving an area under the curve of 0.890. The artificial-intelligence-assisted workflow reduced the number of rapid molecular tests needed by up to 43% while maintaining the current clinical standard performance. Our retrospective and prospective analyses demonstrate the real-world clinical utility of a computational pathology biomarker.",
+   "reasons": [
+    "foundation model",
+    "AI",
+    "genomics",
+    "code released",
+    "scale",
+    "generalizes"
+   ],
+   "score": 21.90848501887865,
+   "classic": true,
+   "citations": 90,
+   "year": 2025,
+   "summary": {
+    "tldr": "A fine-tuned pathology foundation model (EAGLE) predicts EGFR mutation status from routine H&E lung adenocarcinoma slides and was validated in a prospective silent trial, reducing rapid PCR tests by up to 43% while matching current clinical performance.",
+    "background": "EGFR testing guides first-line TKI therapy in lung adenocarcinoma, but rapid PCR tests miss 5-10% of mutations, consume scarce biopsy tissue, and NGS takes 2-3 weeks. A computational biomarker from H&E slides could be fast, cheap, and tissue-preserving, but prior models had limited validation and no real-world deployment.",
+    "approach": "They built EAGLE (EGFR AI Genomic Lung Evaluation): a 1.1B-parameter ViT-g encoder initialized from Prov-GigaPath, a gated multiple-instance-learning attention aggregator, and a linear classifier trained end-to-end on 5,174 MSKCC slides (ground truth = MSK-IMPACT NGS). Training used 24 H100 GPUs for ~9 hours; inference takes ~68 s per slide on a single RTX 3090. Validation used 1,742 internal slides plus external cohorts (MSHS n=294 across three scanners, Sahlgrenska n=95, TU Munich n=76, TCGA n=519), and deployment was tested in a 4-month prospective silent trial at MSKCC (197 primary samples).",
+    "findings": [
+     "Internal validation AUC was 0.847 overall (0.90 on primary, 0.75 on metastatic samples); external AUC was 0.870 across 1,484 slides, with per-cohort AUCs of 0.772-0.884.",
+     "The silent trial on primary samples achieved AUC 0.890, consistent with retrospective performance.",
+     "An AI-assisted screening workflow (EAGLE thresholds deciding when to skip the rapid Idylla test) cut rapid tests by 18-43% at three operating points, matching or exceeding Idylla's NPV (0.963-0.971) and PPV (0.984-1.0) in the silent trial.",
+     "EAGLE results were available in a median 44 min versus ~48 h for Idylla and ~18 days for MSK-IMPACT.",
+     "Attention-map analysis showed false positives often had biologically related kinase alterations (e.g., ERBB2 exon 20 insertions), and false negatives were mostly samples with minimal tumor tissue or unusual morphology."
+    ],
+    "why": "This is one of the first demonstrations of a computational pathology biomarker reaching clinical-grade performance in a live prospective setting, with cross-institution and multi-scanner generalization attributed to fine-tuning a foundation model rather than training a CNN from scratch. For multiomics researchers, it shows foundation-model features transfer to mutation prediction from H&E alone, and that an assistive (screening, not replacement) deployment strategy with calibrated thresholds is a viable path to clinical translation.",
+    "limitations": "Performance drops substantially on metastatic samples (AUC ~0.75), so deployment is currently restricted to primary specimens, and the model predicts probability of EGFR mutation without distinguishing which variant—NGS confirmation is still required. Evidence of impact on actual treatment decisions and patient outcomes awaits a prospective interventional trial.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 53240
+   }
+  }
+ ],
+ "candidates": 274
+}
