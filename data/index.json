@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-17",
+   "title": "In-context learning predicts clinical endpoints from bulk transcriptomes across diseases and platforms",
+   "venue": "arXiv",
+   "key": "https://arxiv.org/abs/2611.18774v1",
+   "also": [
+    "10.64898/2026.11.14.766251",
+    "https://arxiv.org/abs/2611.20986v1",
+    "10.64898/2026.11.14.766416"
+   ]
+  },
+  {
    "date": "2026-11-16",
    "title": "Genome-wide prediction of disease variant effects with a deep protein language model",
    "venue": "Nature Genetics",
