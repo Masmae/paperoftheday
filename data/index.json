@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-18",
+   "title": "GenVinci reconstructs 3D molecular tissue scenes from histology to map senescence across aging and disease",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.11.17.767412",
+   "also": [
+    "10.64898/2026.11.11.765857",
+    "10.64898/2026.11.12.766050",
+    "10.64898/2026.08.01.742217"
+   ]
+  },
+  {
    "date": "2026-11-17",
    "title": "In-context learning predicts clinical endpoints from bulk transcriptomes across diseases and platforms",
    "venue": "arXiv",

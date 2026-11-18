@@ -1,0 +1,193 @@
+{
+ "date": "2026-11-18",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "GenVinci reconstructs 3D molecular tissue scenes from histology to map senescence across aging and disease",
+  "authors": [
+   "Chen, X.",
+   "Comiter, C.",
+   "Huang, H.",
+   "Wu, Y.",
+   "Su, Y.-L.",
+   "Zhou, J.",
+   "Monticolo, F.",
+   "Condouret, M.",
+   "Sapantzi, S.",
+   "Qi, J.",
+   "Li, X.",
+   "Cao, Y."
+  ],
+  "authorCount": 33,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-18",
+  "doi": "10.64898/2026.11.17.767412",
+  "url": "https://doi.org/10.64898/2026.11.17.767412",
+  "abstract": "Spatial omics has generated measurements at unprecedented scale, yet computational approaches remain largely confined to individual modalities and 2D representations. Here we assemble ImageOmicsNet-300M, a corpus of 300 million single-cell and spatial transcriptomic profiles, including 24.9 million H&E-predicted virtual spatial transcriptomics profiles, and 4,623 H&E sections. Of these H&E sections, we generated 1,782 from aging mouse organs and serially sectioned human skin spanning five decades, with matched spatial transcriptomics and snRNA-seq. Building on this resource, we develop GenVinci, a multimodal tissue foundation model that reconstructs 3D tissue scenes from routine 2D histology. GenVinci predicts spatial gene expression from H&E with zero-shot generalization and maps senescence-associated states across 85.8 million cells, revealing cell-type-specific patterns and disease-associated remodeling. Integration with human genetics implicates suprabasal keratinocytes in atopic dermatitis and keratinocyte carcinomas, linked to higher and lower p16 and p21 expression, respectively. These findings establish GenVinci as a framework mapping senescence in 3D across scales.",
+  "reasons": [
+   "foundation model",
+   "zero-shot",
+   "single-cell",
+   "transcriptomics",
+   "spatial omics",
+   "RNA-seq"
+  ],
+  "score": 22,
+  "tldr": "The authors built a 300M-cell spatial/single-cell corpus and a multimodal foundation model that predicts 3D spatial gene expression from H&E histology, using it to map senescence states across 85.8 million cells and link suprabasal keratinocytes to atopic dermatitis and keratinocyte carcinoma.",
+  "why": "GenVinci combines a massive 300M-profile multimodal resource with a genuinely new capability—reconstructing 3D molecular tissue scenes from routine H&E—with zero-shot generalization and large-scale experimental validation (aging mouse organs, serially sectioned human skin with matched spatial omics). It advances spatial transcriptomics beyond 2D, single-modality analysis and delivers new biology (cell-type-specific senescence mapping, genetic links to skin disease). This is AlphaFold-level ambition for tissue-scale molecular mapping.",
+  "summary": {
+   "tldr": "GenVinci is a multimodal transcriptomics foundation model trained on ~300M profiles (ImageOmicsNet-300M) that predicts spatial gene expression from H&E with zero-shot generalization, reconstructs 3D tissue scenes from serial sections, and maps senescence across 85.8M cells.",
+   "background": "Spatial omics is costly and limited to 2D sections, while H&E histology is abundant but lacks molecular measurements. Existing histology-to-transcriptome predictors are trained on small datasets and existing transcriptomic foundation models lack spatial/morphological grounding, so they generalize poorly across tissues and platforms.",
+   "approach": "They assembled ImageOmicsNet-300M: 300.2M profiles (275.3M measured scRNA/spatial, including 58.7M SenNet profiles, plus 24.9M virtual spatial profiles) from 4,623 H&E sections, spanning 2 species, 82 tissues, 55 transcriptomic technologies, and 1,420 cell types. GenVinci is pretrained on 211M profiles with context-aware multi-view masking and three objectives (masked gene prediction, masked expression prediction, expression reconstruction). A representation-alignment variant, GenVinci-2DST (built on H-optimus-1 image features and 6.3M paired image–transcriptome profiles), predicts expression from H&E; GenVinci-3DST segments, registers, and predicts expression across 1,719 serial 10-µm human skin sections from 9 female donors aged 20–71 to build 3D tissue scenes.",
+   "findings": [
+    "GenVinci beats Geneformer, scGPT, Nicheformer, and scGPT-spatial on cell-type annotation (e.g., STARmap accuracy 0.851 vs 0.808), spatial domain identification (DLPFC ARI up to 0.43), and batch integration (AvgBIO 0.47 vs 0.42 for scGPT-spatial).",
+    "Zero-shot H&E-to-expression (GenVinci-2DST) outperforms retrained baselines (HEST PCC 0.35/0.33/0.22 vs GenVinci 0.45/0.42/0.33 on top-50 HVGs/HEGs/all genes) across five cancer types and two platforms.",
+    "A weakly supervised senescence classifier (seeded on p16/p21, masked at input) scored 85.8M cells across 70 organs and 141 diseases; vascular and keratinocyte populations had the highest baseline senescence (BV-SMC 33.3%), and disease effects were bidirectional and cell-type-specific (e.g., BPH +16.8%, ovarian serous tumor −28.0%).",
+    "The derived 100-gene SenNet-100 signature splits into a TNFα/NF-κB stress module and a cytoskeletal–adhesion module, and tracked p21 more closely than SenMayo in tissue (Spearman ρ = 0.696 vs 0.653-style comparisons; in vivo AUROC 0.696 vs 0.653 for SenMayo).",
+    "In the 3D skin atlas, the T-cell fraction rose from 1.3–6.8% (≤40y) to 13.3–26.5% (≥51y; ρ=0.76, P=0.018), predicted profiles matched matched STARmap (cell-type composition PCC 0.79, top-50 HVGs Spearman ρ=0.32), and gsMap-style GWAS integration localized AD/psoriasis genetic risk to suprabasal keratinocytes and immune-disease risk to T cells."
+   ],
+   "why": "For someone working on AI for transcriptomics/multiomics, this is a large-scale attempt to unify transcriptomic foundation models with histology and spatial coordinates, and the ImageOmicsNet-300M resource plus the SenNet-100 senescence signature are directly reusable. It shows representation-alignment (GenVinci embeddings as supervision space rather than direct regression) as a concrete recipe for zero-shot H&E-to-transcriptome transfer.",
+   "limitations": "Virtual expression is only modestly accurate at single-gene level (bin-level PCC 0.05–0.08; mean top-50 HVG PCCs 0.11–0.16 on STARmap validation), and age/disease trends (e.g., one young and one old animal per organ, single donors per age, exploratory cell-type senescence shifts) need independent validation; the preprint is not peer-reviewed.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 216840
+  }
+ },
+ "also": [
+  {
+   "title": "AlphaGenome 2 predicts regulatory activity and variant effects across cell states",
+   "authors": [
+    "Gayoso, A.",
+    "Mottram, A.",
+    "Karollus, A.",
+    "Novati, G.",
+    "Drotar, P.",
+    "Reid, J.",
+    "Meng-Papaxanthos, L.",
+    "Kosiorek, A.",
+    "Arvaniti, E.",
+    "Dutordoir, V.",
+    "De, S.",
+    "Ward, T."
+   ],
+   "authorCount": 24,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-17",
+   "doi": "10.64898/2026.11.11.765857",
+   "url": "https://doi.org/10.64898/2026.11.11.765857",
+   "abstract": "Most genetic variants associated with human traits and diseases lie in non-coding DNA, where they can alter gene regulation in specific cell types and states. Single-cell atlases chart these states across tissues and development, but rarely profile enough donors to associate variants with expression directly. Deep learning models could bridge this gap by predicting variant effects from DNA sequence, yet they poorly distinguish related cell states and require fine-tuning for new datasets. Here we present AlphaGenome 2 (AG2), which substantially advances cell-type-specific prediction of regulatory activity and variant effects for gene expression and chromatin accessibility. Trained on organism-wide human and mouse single-cell atlases and bulk functional genomics data, AG2 takes as input a 1-Mb DNA sequence and a condition specifying a target tissue, cell type, or cell state. Conditioning enables AG2 to impute unmeasured epigenomic tracks and predict multimodal variant effects across cell types. Inferring this condition directly from gene expression extends AG2 to unseen datasets and cell states without fine-tuning. AG2 outperforms fine-tuned AlphaGenome 1 and specialized models trained on target datasets, doubling recall of causal single-cell eQTLs at 90% precision. AG2 also achieves state-of-the-art enhancer-gene linking and can pinpoint causal variants at complex trait loci. Across hundreds of human cell types, we generated an atlas of enhancer-gene links and scores for 7 million common variants. As single-cell profiling expands across development, tissues, and disease cohorts, AG2 provides a blueprint for turning observational atlases into variant effect maps.",
+   "reasons": [
+    "deep learning",
+    "single-cell",
+    "epigenomics",
+    "cell atlas",
+    "genomics"
+   ],
+   "score": 14,
+   "summary": {
+    "tldr": "AlphaGenome 2 (AG2) is a condition-conditioned sequence-to-function model from Google DeepMind that predicts cell-type-specific gene expression, chromatin tracks, and variant effects from 1-Mb DNA sequence, generalizing to unseen single-cell datasets via expression conditioning.",
+    "background": "Most GWAS variants are non-coding and act in specific cell types or states, but single-cell atlases profile too few donors to map QTLs directly, so deep sequence models are needed to predict variant effects per cell type. Prior sequence-to-function models (AlphaGenome 1, Borzoi) are trained mostly on bulk data, poorly distinguish closely related cell states, and require fine-tuning on new datasets.",
+    "approach": "AG2 takes a 1-Mb sequence plus a condition embedding (tissue, cell type, or cell state) and a species tag, modulating the U-Net/transformer backbone from the earliest layers. It was trained in four stages (pre-training, condition refinement, distillation of 8 teachers into 1 student, post-training) on bulk functional genomics plus 3977 human/mouse scRNA/scATAC pseudobulk tracks (36 studies), cell-type-resolved CpG methylation (185 conditions), and post-training on 107 million human scRNA-seq profiles (68 tissues) via an scVI-style expression autoencoder whose embeddings map into the model's condition space, enabling zero-shot conditioning on new scRNA-seq cohorts. Outputs include 1-bp tracks (ATAC, methylation, CAGE, splicing), 128-bp ChIP/TF tracks, contact maps, scalar gene expression, and gradient-based enhancer-gene (E2G) scores.",
+    "findings": [
+     "AG2 doubles recall of causal single-cell eQTLs at 90% precision versus fine-tuned AG1 (TenK10K: 30% vs 16%, AUPRC 0.76 vs 0.72; IBDverse sign AUC 0.86 vs 0.81), and improves GTEx eQTL causality recall (26% vs 17%) and sign prediction (AUC 0.85 vs 0.83).",
+     "On cell-type-specific expression it explains a median 34% of within-tissue cross-cell-type variance vs 23% for AG1-sc, and on GTEx cross-tissue LFCs r=0.71 vs 0.61 for AG1.",
+     "Expression conditioning generalizes zero-shot to unseen cohorts without fine-tuning, outperforming cohort-trained models: on a Parkinson's multiome dataset (190 donors) it beat CREsted on caQTL sign prediction (AUC 0.892 vs 0.850) and reached ~2.4x recall of Scooby at matched sign accuracy (41% vs 17%).",
+     "E2G linking reaches AUPRC 0.78 on the ENCODE-rE2G CRISPRi benchmark (vs AG1 0.73, Borzoi ensemble 0.61, ENCODE-rE2G 0.57), with its advantage growing with distance (0.62 vs 0.48 at 100-2500 kb), and 0.68 on a primary astrocyte CRISPRi screen.",
+     "It imputes unmeasured epigenomic assays (e.g., H3K27ac across PBMCs from scRNA/scATAC alone, AUPRC 0.89-0.98, better than observed cell-line ChIP-seq or scATAC alone) and produced released atlases of E2G links across 640 conditions and variant scores for ~7 million common variants across 510 conditions.",
+     "Case studies show it resolves opposing cell-type effects (IL20RA rs62420789 via GRHL2/ZEB1 motif disruption), joint accessibility/expression effects (rs8052244/FBXO31), and correctly prioritizes beta-cell-specific HK1 effects in congenital hyperinsulinism."
+    ],
+    "why": "For anyone working on transcriptomics/multiomics foundation models, AG2 demonstrates that early-layer biological conditioning plus large-scale single-cell training is what actually delivers cell-type specificity and better distal QTL/E2G prediction, not just more data. The expression-conditioning design—deriving conditions from a frozen autoencoder over 107M cells—provides a practical recipe for adapting sequence models to arbitrary new scRNA-seq cohorts without retraining, and the released E2G/variant atlases are directly usable resources.",
+    "limitations": "Imputation of TF binding in conditions where the factor is not expressed may yield false positives, and performance drops for variants outside accessible chromatin. The full text is truncated, so details on training compute, architecture size, and some benchmarks (e.g., fine-mapping at complex trait loci) are not fully verifiable from the excerpt, and the preprint is not peer reviewed.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 384849
+   }
+  },
+  {
+   "title": "An apicomplexan-specific foundation model improves prediction of regulatory genomic signals in Plasmodium falciparum",
+   "authors": [
+    "Brown, A. S.",
+    "Yang, J.",
+    "Llinas, M.",
+    "Mahony, S."
+   ],
+   "authorCount": 4,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-16",
+   "doi": "10.64898/2026.11.12.766050",
+   "url": "https://doi.org/10.64898/2026.11.12.766050",
+   "abstract": "Genomic foundation models learn transferable sequence representations through self-supervision, yet their practical value is contested. In data-rich mammalian genomes, task-specific models trained from scratch can match or exceed pretrained models on many regulatory prediction tasks. Whether self-supervised pretraining provides an advantage in small, data-sparse genomes has not been directly tested. We address this in the compact, 23Mbp, A/T-rich genome of the malaria parasite, Plasmodium falciparum. We trained a Genomic Pretrained Network (GPN) via masked-nucleotide reconstruction on 455 genome assemblies spanning 76 apicomplexan species. We then fine-tuned the model to predict a variety of epigenomic features in a held-out chromosome, including transcription factor binding sites, chromatin-accessibility, histone modifications, and 10 chromatin states. Pretraining followed by fine tuning improved prediction of most features, with most of the benefit concentrated on datasets with relatively little labeled data (fewer than 3,000 training examples). In contrast, a human-pretrained model transferred poorly, indicating that phylogenetically relevant pretraining, not foundation-model status alone, drives beneficial performance. Self-supervised pretraining on clade-specific assemblies is thus a practical route to data-efficient regulatory modeling in small genomes where training data is scarce.",
+   "reasons": [
+    "foundation model",
+    "representation learning",
+    "epigenomics",
+    "genomics",
+    "scale"
+   ],
+   "score": 15,
+   "summary": {
+    "tldr": "Pretraining a GPN masked-nucleotide model on 455 apicomplexan genomes improves prediction of regulatory features in P. falciparum, with gains concentrated on low-data tasks.",
+    "background": "Genomic foundation models often fail to beat task-specific models trained from scratch in data-rich settings like human, so their practical value is contested. Small, A/T-rich genomes like P. falciparum (23 Mbp, 80.6% AT, <100 known TFs) have scarce labeled epigenomic data, making it unclear whether pretraining helps there.",
+    "approach": "The authors trained the CNN-based Genomic Pretrained Network (GPN) via masked-nucleotide reconstruction on all 455 NCBI apicomplexan assemblies (76 species), testing 250k vs 2M training iterations, plus annotation-guided variants (51 assemblies with TSS/exon regions). They withheld P. falciparum chromosome 14 for testing (removing homologous training sequence via Minimap2) and fine-tuned (with LPFT: linear probe then fine-tune at reduced core learning rate) to classify TF binding sites (14 ApiAP2 TFs plus MORC and PfHP1, 198–10,310 ChIP-seq peaks), four ATAC-seq timepoints, histone ChIP-seq, and 10 ChromHMM chromatin states, comparing against randomly initialized models, a shuffled-genome control, and human-pretrained DNABERT.",
+    "findings": [
+     "Whole-genome pretraining on 455 assemblies beat annotation-guided pretraining and shuffled controls: the 2M-step model assigned ≥0.9 probability to the correct base for ~30% of test chromosome 14 bases (18% for 250k steps), vs only 6% for human-pretrained DNABERT, which scored near the shuffled baseline (median ~0.37).",
+     "The fine-tuning strategy matters most in low data: for PfAP2-I (198 peaks), standard end-to-end fine-tuning hurt (AUPRC 0.12, 0.06 below no-pretraining), while LPFT helped most (AUPRC 0.23, +0.05); for PfHP1 (2,931 peaks) all strategies performed similarly (0.65–0.67 vs 0.45 without pretraining).",
+     "Across 16 DNA-binding factors, pretraining gave a median AUPRC gain of 0.09 (0.11 for factors with <3,000 peaks), with largest gains for PfAP2-P (+0.31, 979 peaks) and PfHP1 (+0.22, 2,931 peaks), but near-zero gains for the three factors with >3,000 peaks.",
+     "ATAC-seq accessibility showed consistent pretraining gains (median +0.13 across four timepoints), histone ChIP-seq smaller gains (median +0.03), and chromatin states small gains (median +0.04) except the HP1-marked state 7 (+0.15); H3K18me1 was unpredictable from sequence (AUPRC ~0.1).",
+     "Truncating the 25-layer model showed pretraining benefits are largely captured by the first 8 layers for low-data tasks (e.g., PfHP1 AUPRC 0.61 at 8 layers vs 0.67 at full depth), while for data-rich tasks (PfAP2-G2, PfAP2-G5) depth and pretraining were nearly irrelevant (AUPRC 0.79–0.89 at just 2 layers)."
+    ],
+    "why": "The paper directly tests the contested premise of genomic foundation models in a data-scarce setting and shows their value is conditional on label scarcity plus phylogenetic proximity of pretraining data, not model scale. For researchers in transcriptomics/multiomics working on non-model organisms, clade-specific self-supervised pretraining on genome assemblies alone is a practical route to better regulatory prediction when labeled data are limited.",
+    "limitations": "The gains are organism- and task-specific—zero or negative for data-rich factors and for sequence-unpredictable marks like H3K18me1—and evaluation is limited to a single P. falciparum chromosome with results not yet peer-reviewed. Whether the approach generalizes to other small genomes or to expression/regulatory tasks beyond epigenomic classification remains open.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 115537
+   }
+  },
+  {
+   "title": "Evaluating the ability of spatial transcriptomics foundation models to learn multi-scale spatial variation",
+   "authors": [
+    "Handa, D.",
+    "Martin-Linares, C.",
+    "Stein-O'Brien, G.",
+    "Ling, J.",
+    "Chitra, U."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-16",
+   "doi": "10.64898/2026.08.01.742217",
+   "url": "https://doi.org/10.64898/2026.08.01.742217",
+   "abstract": "Spatial gene expression results from the superposition of multiple sources of variation in gene expression across different spatial scales, including local microenvironment-associated variation and global spatial gradients. Spatial foundation models (SFMs) are large-scale machine learning models trained on cohorts of spatial transcriptomics (ST) data that, in principle, learn the different sources of spatial variation in gene expression. However, the embeddings learned by SFMs are difficult to interpret, and it remains unclear whether they fully capture such spatial variation. Here, we develop SAFFRON, a sparse autoencoder (SAE)-based framework for interpreting and evaluating SFMs. SAFFRON uses a Matryoshka SAE to decompose dense SFM embeddings into sparse, human-interpretable features and evaluates whether these features correlate with known sources of spatial variation. Using SAFFRON, we systematically benchmark the ability of several recent SFMs to identify local and global spatial variation in gene expression. We find that only two SFMs learn global spatial gradients more accurately than naive, non-foundation model baselines; further investigating one such SFM, SAFFRON reveals that these gradients are concentrated in a small subset of sparse, human-interpretable SAE features. On the other hand, no SFM learns local patterns (A{beta} plaque microenvironment-associated patterns) more accurately than such baselines. Our findings suggest that current SFMs do not systematically learn multi-scale spatial variation in gene expression. Code: SAFFRON is available at https://github.com/chitra-lab/SAFFRON.",
+   "reasons": [
+    "foundation model",
+    "AI",
+    "transcriptomics",
+    "spatial omics",
+    "code released",
+    "scale"
+   ],
+   "score": 19,
+   "summary": {
+    "tldr": "The paper introduces SAFFRON, a Matryoshka sparse-autoencoder framework for interpreting spatial transcriptomics foundation model (SFM) embeddings, and shows that most current SFMs fail to capture multi-scale spatial variation better than naive baselines.",
+    "background": "Spatial gene expression varies at multiple scales — continuous 1-D gradients (e.g., cortical depth, tumor-stroma axes) and local microenvironments (e.g., around Aβ plaques) — and SFMs are supposed to learn these despite severe data sparsity in ST technologies. Existing SFM evaluations only test spatial domain clustering, and their dense embeddings are black boxes, so it is unknown whether they encode these subtler patterns.",
+    "approach": "SAFFRON decomposes SFM embeddings with a Matryoshka SAE (BatchTopK activation) into sparse, interpretable features, then measures the maximum Spearman correlation between SAE features and reference spatial variation measures; for correlated models it uses orthogonal matching pursuit to find minimal feature sets reconstructing the variation. They benchmark 6 foundation models (4 SFMs: Novae in TFS/FT/ZS variants, scGPT-Spatial, Nicheformer, SpatialFusion in RNA/H&E/Both/FT variants; plus single-cell FMs Geneformer and scGPT) against naive PCA and SAE-on-gene-expression baselines, across 8 ST datasets (Visium, VisiumHD, MERFISH, Xenium, STARmap) spanning ~3.9k to ~2M observations, including 6 datasets with 1-D spatial gradients (colorectal tumor, kidney, cortex x2, GI tract, colon) and 2 Alzheimer's brain datasets with Aβ plaque microenvironments, using GASTON-derived or author-provided 1-D axes and three plaque metrics (DAM score, microglial density within 100µm, plaque distance).",
+    "findings": [
+     "Only Novae and SpatialFusion beat the naive gene-expression baselines at recovering 1-D spatial gradients: Novae TFS reached median |ρ| = 0.75 (fine-tuned 0.68) vs. 0.38 for the gene SAE baseline; SpatialFusion-RNA gave 0.59.",
+     "For Novae TFS, just M = 2 SAE features reconstruct the colorectal tumor-stroma axis with R² > 0.8, and zero-shot Novae reconstructs it with all 256 features (R² = 0.89); scGPT-Spatial and Nicheformer performed at baseline level.",
+     "No SFM beat PCA or gene-expression SAE baselines on the local plaque-associated metrics: for the DAM score, PCA achieved median |ρ| = 0.59 and gene SAE 0.58, exceeding all SFMs (Geneformer, a non-spatial FM, was even better than the spatial FMs).",
+     "All methods showed weak correlation with local microglial density (median |ρ| = 0.16–0.27), and for plaque distance only Novae fine-tuned slightly exceeded baselines (|ρ| = 0.33 vs. 0.23–0.25).",
+     "An SAE architecture ablation on the STARmap dataset selected Matryoshka + BatchTopK (L1 and KL penalties yielded up to 83–92% dead latents)."
+    ],
+    "why": "For anyone using or building spatial/single-cell foundation models, this is a sobering negative result: pretraining does not automatically buy you encoding of biologically meaningful spatial variation, and interpretability tools like SAEs can directly audit which models do or don't. It also shows that cheap matrix-factorization baselines remain competitive and should be mandatory comparisons in SFM evaluations.",
+    "limitations": "Gradient references (GASTON axes) are themselves derived from gene expression, potentially favoring expression-based methods (partially mitigated with a morphology-only MorphoGAM coordinate for one dataset); the study covers 6 models and 8 datasets, so conclusions may not generalize to future SFMs, and the authors themselves recommend redesigning SFM architectures and pretraining objectives rather than claiming an exhaustive evaluation.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 74510
+   }
+  }
+ ],
+ "candidates": 388
+}
