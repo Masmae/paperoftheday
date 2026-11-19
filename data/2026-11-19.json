@@ -1,0 +1,175 @@
+{
+ "date": "2026-11-19",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Horizontal Flow Matching for Single-Cell Spatiotemporal Dynamics",
+  "authors": [
+   "Zihan Wang",
+   "Jianzhe Li",
+   "Zhenyi Zhang",
+   "Peijie Zhou"
+  ],
+  "authorCount": 4,
+  "venue": "arXiv",
+  "preprint": true,
+  "date": "2026-11-18",
+  "doi": null,
+  "url": "https://arxiv.org/abs/2611.24764v1",
+  "abstract": "Learning the spatiotemporal dynamics of cells from spatial transcriptomics requires connecting snapshots of different cells acquired in different coordinate frames. A rotation or translation of a section can appear as cell movement and distort the inferred correspondence. We introduce horizontal flow matching, which learns changes in tissue organization, molecular state, and cell abundance up to shared rigid motion. The dynamics follow a continuity--reaction equation whose action assigns no cost to shared rigid motion, and the resulting horizontal projector removes this component from spatial prediction errors during learning and from predicted velocities during generation. An equivalent endpoint problem jointly estimates correspondence and relative pose in Wasserstein--Fisher--Rao geometry and yields analytic paths whose velocity and growth serve as regression targets. Regressing these targets recovers the horizontal dynamics under ideal population conditions. Our model, HORIZON, uses an equivariant transformer to predict velocity and growth from the current tissue, so that a tissue can be generated continuously from a single initial snapshot. On a simulated tissue observed in perturbed coordinate frames, alignment improves reconstruction and projection reduces rigid drift. On four spatial transcriptomics time courses, HORIZON reconstructs tissue geometry, gene expression, and cell abundance more accurately than existing spatial and unbalanced trajectory methods, and interpolates held-out developmental stages.",
+  "reasons": [
+   "transformer",
+   "generative model",
+   "single-cell",
+   "transcriptomics",
+   "spatial omics",
+   "perturbation"
+  ],
+  "score": 16,
+  "tldr": "They develop horizontal flow matching that learns tissue-level molecular and abundance dynamics independent of shared rigid motion, and their model HORIZON reconstructs spatial transcriptomics time courses and interpolates held-out developmental stages more accurately than existing trajectory methods.",
+  "why": "HORIZON introduces a genuinely new capability—inferring spatiotemporal tissue dynamics from spatial transcriptomics snapshots while explicitly removing rotation/translation artifacts—an issue every spatial-omics trajectory method quietly suffers from. The continuity-reaction formulation with equivariant transformers is conceptually fresh, broadly reusable across tissues and platforms, and directly relevant to how the field will model tissue development and disease progression from slide data.",
+  "summary": {
+   "tldr": "The paper introduces HORIZON, a flow-matching model that learns continuous spatiotemporal tissue dynamics from spatial transcriptomics snapshots while factoring out unknown rigid rotations/translations between sections.",
+   "background": "Spatial transcriptomics destroys samples, so time courses are snapshots of different cells, each recorded in an independent coordinate frame; rotation or translation of a section can masquerade as cell movement and corrupt inferred dynamics. Existing trajectory methods (WFR-FM, stVCR, STORIES, NicheFlow) do not consistently separate tissue deformation from frame motion, and pre-alignment does not prevent rigid drift during generation.",
+   "approach": "They formulate tissue dynamics as a continuity–reaction equation in Wasserstein–Fisher–Rao geometry where shared rigid motion (translation + rotation, SE(d)) costs nothing, yielding a closed-form 'horizontal projector' that removes the best-fitting rigid field from spatial velocities in both training loss and generation. The dynamic quotient problem is proven equivalent to joint endpoint alignment and correspondence (qOET), giving closed-form WFR bridge targets (velocity and growth) that need no ODE solves; an equivariant transformer (HORIZON) predicts spatial velocity, molecular velocity, and growth from the current tissue, enabling generation from a single initial snapshot.",
+   "findings": [
+    "On a simulated tissue with hidden severe frame perturbations, HORIZON's direct spatial SW rises only from 0.111 to 0.115 versus more than a fivefold increase for WFR-FM, and qOET alignment alone lowers quotient spatial SW from 0.113 (no alignment/projection) to 0.039.",
+    "On four real time courses (axolotol brain, chicken heart, Drosophila embryo sections, zebrafish embryogenesis; 3,550–46,209 cells, 4–5 snapshots each, 32 PCs), HORIZON beats WFR-FM and stVCR on all seven metrics and all datasets; e.g., on axolotl joint SW is 0.063 vs 1.441 (WFR-FM) and 1.040 (stVCR), with mass RE below 0.51% everywhere.",
+    "Ablations show alignment drives the shape gain, while the horizontal projector prevents rigid drift: without it at generation, trajectories rotate up to 16.5° and direct spatial SW grows up to 6.8-fold; removing the growth field raises mass RE from 0.02% to 9.3% in simulation.",
+    "HORIZON interpolates held-out developmental stages across all 11 holdout folds, outperforming stVCR on nearly every metric.",
+    "Fits take 12–20 minutes on one GPU, 2.6–11.4x faster than stVCR and 20–30x faster than NicheFlow."
+   ],
+   "why": "For researchers in AI for transcriptomics/multiomics, this gives a principled way to learn coupled spatial, molecular, and population-growth dynamics from unpaired spatial sections with theoretical guarantees (population-level recovery of horizontal WFR geodesics), addressing the frame ambiguity unique to spatial data. It is directly comparable to the unbalanced-OT/flow-matching toolkits (WFR-FM, stVCR, STORIES) many labs use for trajectory inference.",
+   "limitations": "Genuinely rigid tissue motion is indistinguishable from frame change and cannot be recovered; the model is fit per time course with no cross-specimen generalization, pose search is nonconvex (weakly identified for small round sections), and both coupling and attention scale quadratically in cell count.",
+   "source": "arXiv full text",
+   "model": "glm-5.3-flash",
+   "chars": 162979
+  }
+ },
+ "also": [
+  {
+   "title": "TabBioMed: A Large-Scale Benchmark for Biomedical Tabular Learning",
+   "authors": [
+    "Pau Mateo-Bernadó",
+    "Saivenkata Nagavyjayanthi Polapragada",
+    "David Bonet",
+    "Pol Arbiol Rakuljic",
+    "Laia Mogas Pladevall",
+    "Marçal Comajoan Cara",
+    "Jesus Gonzalez-Ferrer",
+    "Jordi Abante",
+    "Daniel Mas Montserrat",
+    "David Haussler",
+    "Alexander G. Ioannidis"
+   ],
+   "authorCount": 11,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-18",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.23779v1",
+   "abstract": "Recent advances in machine learning have accelerated biomedical prediction, but evaluation on structured biomedical data remains fragmented, especially for datasets with high dimensionality, large sample size, missingness, and class imbalance. We introduce TabBioMed, a large-scale benchmark of 94 curated public biomedical tabular datasets spanning electronic health records, drug discovery, genomics, transcriptomics, proteomics, metabolomics, single-cell omics, and systems biology. TabBioMed unifies these datasets through a standardized, dataset-aware preprocessing and evaluation framework, enabling reproducible comparison across classification, regression, and multi-target tasks. We benchmark 23 models across classical baselines, gradient-boosted trees, neural tabular architectures, and tabular foundation models. Foundation models deliver the strongest family-level predictive performance. However, their gains are regime-dependent: tree-based models and tuned multilayer perceptrons remain highly competitive, often dominating under inference-time or training-cost constraints. Overall, TabBioMed shows that biomedical tabular learning is strongly context-dependent, with optimal model choice depending on data regime, task type, and computational budget. We release TabBioMed with curated datasets and splits, preprocessing code, baselines, and results, providing a reproducible benchmark for practical model selection and future methods development in biomedical machine learning, available at https://github.com/AI-sandbox/TabBioMed.",
+   "reasons": [
+    "foundation model",
+    "AI",
+    "single-cell",
+    "transcriptomics",
+    "proteomics",
+    "genomics"
+   ],
+   "score": 21,
+   "summary": {
+    "tldr": "TabBioMed is a new benchmark of 94 curated public biomedical tabular datasets spanning EHR, genomics, transcriptomics, proteomics, metabolomics, drug discovery, single-cell, and systems biology, used to compare 23 models across classical baselines, gradient-boosted trees, neural tabular architectures, and tabular foundation models under a standardized preprocessing and evaluation protocol.",
+    "background": "Biomedical tabular prediction has been evaluated only with fragmented, domain-specific or general-purpose benchmarks that poorly capture biomedical challenges like high dimensionality, missingness, class imbalance, and varying sample sizes. Existing comparisons (e.g., TabArena, TabZilla, MLOmics, MoleculeNet) either include biomedical data only incidentally or cover a single domain, so conclusions about which models work best may not transfer to clinical and omics settings.",
+    "approach": "The authors curated 94 datasets across eight biomedical domains (max 39,969 features, max 226,342 samples), with dataset-aware splits (5-fold CV for small datasets, group/scaffold-aware fixed splits for larger ones). They benchmarked 23 models: linear/SVM baselines, tree ensembles (XGBoost, LightGBM, CatBoost, RandomForest, xRFM), neural models (MLP, RealMLP, TabM), and foundation models (TabPFNv2.5, RealTabPFNv2.5, TabICLv2, TabDPT, iLTM, HyperFast, TabPFN-Wide), with wall-clock-capped HPO (2h per CV fold, 6h per search). The main benchmark took ~5,334 cumulative GPU-hours; they report ranks, normalized scores, Elo ratings, Pareto frontiers for cost vs. accuracy, and significance tests (Friedman + Wilcoxon-Holm).",
+    "findings": [
+     "Foundation models are the strongest family overall, appearing in the top-5 on 88 of 94 datasets vs. 57 for tree methods, 48 for neural, and 41 for classical baselines.",
+     "Individually, TabDPT has the highest mean normalized score (0.865), TabICLv2 the best mean rank (8.011), and RealTabPFNv2.5/TabPFNv2.5 the highest tuned Elo ratings; TabM (neural) is close behind (0.861, third-best rank).",
+     "Tree-based models remain highly competitive and cheap: CatBoost scored 0.823 with ~0.046s inference per 1k rows (vs. ~30-76s for top foundation models), and Wilcoxon-Holm tests show no significant differences among the top-10 models.",
+     "Performance is regime-dependent: RealTabPFNv2.5 leads the high-dimensional/low-sample regime, TabICLv2 the low-sample/low-feature regimes, iLTM the large-sample/high-feature regime, and classical baselines become more competitive at high feature-to-sample ratios (Spearman ρ=+0.435).",
+     "On the Pareto frontier, default LightGBM and RealTabPFNv2.5 offer the best training-cost trade-offs, while tuned LightGBM, CatBoost, and TabM offer the best inference-latency trade-offs; adding external PCA to foundation models helps most for TabICLv2 on the 36 high-dimensional datasets (>2,000 features)."
+    ],
+    "why": "For someone working on transcriptomics and multiomics prediction, this benchmark directly answers which off-the-shelf tabular models to baseline against on omics data (including METABRIC, CPTAC, single-cell datasets) without necessarily paying foundation-model inference costs. It provides a reproducible, standardized comparison showing that no single model dominates and that tree models and tuned MLPs often match foundation models at a fraction of the cost.",
+    "limitations": "Results are conditional on the supplied tabular featurizations and do not compare specialized featurization or modality-specific models; some foundation-model evaluations failed on large/high-dimensional datasets (mitigated via imputation and complete-case checks), and public datasets may not reflect real clinical deployment, so strong benchmark scores do not imply clinical readiness.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 237896
+   }
+  },
+  {
+   "title": "Benchmarking DNA foundation models for zero-shot variant effect prediction shows the importance of context, training, and architecture.",
+   "authors": [
+    "Alfisi",
+    "Ciapi",
+    "Baragli",
+    "Magi"
+   ],
+   "authorCount": 4,
+   "venue": "Genome Biol",
+   "preprint": false,
+   "date": "2026-11-12",
+   "doi": "10.1186/s13059-026-04238-0",
+   "url": "https://doi.org/10.1186/s13059-026-04238-0",
+   "abstract": "In this study, we systematically evaluate the performance of several DNA foundation models (NT, DNABERT, HyenaDNA and Evo 2) in predicting the functional impact of genetic variants using Zero-shot scoring, a method that does not require task-specific fine-tuning. We assess the models' sensitivity to sequence alterations introduced by Single Nucleotide Variants (SNVs), comparing their ability to capture both local and extended contextual effects. Using pathogenic, benign, and uncertain SNVs from ClinVar, we show that large multi-species NT models outperform other architectures in detecting functional consequences, not only at the SNV site but also in adjacent regions. These models exhibit superior discriminative power across variant categories, especially when aggregating Zero-shot scores over multiple surrounding tokens. Conversely, models trained solely on human sequences or relying on a next-token prediction objective, such as DNABERT, HyenaDNA, and Evo 2, exhibit limited contextual awareness and a reduced ability to differentiate variant effects. Our findings highlight the critical importance of model size, training objective, and training data diversity in shaping model performance. Furthermore, we discuss current limitations in modeling long-range dependencies in genomic sequences and suggest that innovations in transformer architectures, such as sparse attention or memory-augmented models, may provide viable paths toward scalable, genome-wide variant effect prediction.",
+   "reasons": [
+    "foundation model",
+    "transformer",
+    "zero-shot",
+    "genomics",
+    "scale",
+    "generalizes"
+   ],
+   "score": 20,
+   "summary": {
+    "tldr": "A benchmark of DNA foundation models (Nucleotide Transformer, DNABERT, HyenaDNA, Evo 2) for zero-shot variant effect prediction shows that large multi-species, MLM-trained transformer models like NT clearly outperform NTP-trained and human-only models, especially when scores are aggregated over neighboring tokens.",
+    "background": "Predicting whether a single-nucleotide variant is functionally important (and distinguishing pathogenic from benign variants) is a core genomics problem, and DNA foundation models now offer zero-shot scoring without task-specific fine-tuning. It is hard because variants' effects extend beyond the mutated base into surrounding sequence context, and existing tools mostly ignore how models capture that broader functional architecture.",
+    "approach": "They benchmarked eleven models (seven NT variants from 100M to 2.5B parameters, DNABERT 110M, two HyenaDNA models, and Evo 2 7B) using zero-shot scores computed from embeddings (cosine, Manhattan, Euclidean) and output probability distributions (Hellinger, Jensen-Shannon, cross-entropy) between reference and mutant sequences. They used ~320,000 ClinVar SNVs (156,060 benign, 65,865 pathogenic, ~100,000 uncertain) across eight functional classes (nonsense, splicing, stop, missense, synonymous, intronic, 3'UTR, 5'UTR), extracted as 6 kb reference/mutant sequence pairs from GRCh38 (shorter for DNABERT/HyenaDNA-1). They scored each token, evaluated discrimination with normalized Wilcoxon U-statistics between variant classes, and introduced a Cumulative Context Score (CCS-N) summing scores over the central plus N nearest tokens (N up to 10).",
+    "findings": [
+     "Large multi-species NT models (NT_2.5B, NT_500M) showed the strongest variant-class discrimination in embedding space, with effects propagating over adjacent tokens proportional to functional impact (stop/splice/nonsense > missense/synonymous/intronic/UTR).",
+     "Central-token zero-shot scores alone could not separate pathogenic from benign variants (no model exceeded U > 0.6, except NT models on synonymous variants at U > 0.7).",
+     "Aggregating scores over 3-4 neighboring tokens (CCS-N) substantially improved discrimination: NT_500M reached U = 0.7-0.8 for splicing, stop, and 3'UTR variants and 0.8-0.9 for synonymous and intronic variants in embedding space.",
+     "Evo 2 (7B, multi-species, NTP) placed its maximum score downstream of the variant rather than at the central token, so central-token scores failed, but CCS-N in embedding space recovered high- vs low-impact discrimination.",
+     "NTP-trained models (HyenaDNA, Evo 2) only detected variant effects in succeeding tokens (bidirectional context is missing), and human-only models (DNABERT, NT_HR, NT_1G) performed poorly overall; MLM training, multispecies data, and self-attention were the key success factors."
+    ],
+    "why": "For someone building multimodal or sequence-based models, this clarifies which pretraining choices (MLM vs NTP, multispecies vs human-only, model scale) actually yield representations useful for variant interpretation, a common downstream task. The CCS-N trick (contextual score aggregation) is a simple, transferable method for extracting more signal from foundation model embeddings.",
+    "limitations": "NT models are limited to 6 kb contexts, far below typical gene or regulatory distances, so truly genome-wide long-range prediction requires architectures the authors only discuss speculatively (sparse attention, memory-augmented transformers). Discrimination between pathogenic and benign variants remains modest overall, and DNABERT2 could not be evaluated due to tokenization incompatibilities.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 66742
+   }
+  },
+  {
+   "title": "Multiscale multimodal integration of spatial omics through a deep generative model with CORAL.",
+   "authors": [
+    "He",
+    "Bieniosek",
+    "Zhou",
+    "Song",
+    "Chidester",
+    "Wu",
+    "Boen",
+    "Wang",
+    "Kaseb",
+    "Sharma",
+    "Trevino",
+    "Zou"
+   ],
+   "authorCount": 12,
+   "venue": "Nat Genet",
+   "preprint": false,
+   "date": "2026-11-06",
+   "doi": "10.1038/s41588-026-02821-6",
+   "url": "https://doi.org/10.1038/s41588-026-02821-6",
+   "abstract": "Spatial omics enable the in situ characterization of tissue architecture by measuring molecular modalities. However, integrating these datasets remains challenging due to differences in spatial resolution, cross-modal alignment and molecular coverage. Here we show that Cross-scale spatial Omics Registration and Analysis via graph Learning (CORAL), a probabilistic deep generative model, leverages graph attention to integrate diverse spatial transcriptomic, proteomic, metabolomic and epigenomic data across spatial scales. CORAL jointly models high-resolution datasets with limited molecular coverage and low-resolution genome-wide datasets, generating unified representations with broad molecular coverage and high spatial resolution. Across synthetic and experimental datasets from diverse tissues and platforms, CORAL accurately identifies spatial domains, predicts high-resolution molecular profiles, detects spatially variable genes and infers cell-cell interactions. Applied to spatial transcriptomic and proteomic data from hepatocellular carcinoma patients before and after immunotherapy, CORAL identified organized immune-cell subsets and signaling pathways associated with therapeutic resistance. These results demonstrate CORAL's broad applicability for resolving tissue organization and clinically relevant multicellular interactions.",
+   "reasons": [
+    "generative model",
+    "transcriptomics",
+    "spatial omics",
+    "epigenomics",
+    "proteomics",
+    "genomics"
+   ],
+   "score": 16
+  }
+ ],
+ "candidates": 397
+}
