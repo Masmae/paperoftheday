@@ -1,0 +1,213 @@
+{
+ "date": "2026-11-20",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Nucleotide Transformer: building and evaluating robust foundation models for human genomics",
+  "authors": [
+   "Hugo Dalla-Torre",
+   "Liam Gonzalez",
+   "Javier Mendoza‐Revilla",
+   "Nicolás López Carranza",
+   "Adam Grzywaczewski",
+   "Francesco Oteri",
+   "Christian Dallago",
+   "Evan Trop",
+   "Bernardo P. de Almeida",
+   "Hassan Sirelkhatim",
+   "Guillaume Richard",
+   "Marcin J. Skwark"
+  ],
+  "authorCount": 15,
+  "venue": "Nature Methods",
+  "preprint": false,
+  "date": "2024-11-28",
+  "doi": "10.1038/s41592-024-02523-z",
+  "url": "https://doi.org/10.1038/s41592-024-02523-z",
+  "abstract": "The prediction of molecular phenotypes from DNA sequences remains a longstanding challenge in genomics, often driven by limited annotated data and the inability to transfer learnings between tasks. Here, we present an extensive study of foundation models pre-trained on DNA sequences, named Nucleotide Transformer, ranging from 50 million up to 2.5 billion parameters and integrating information from 3,202 human genomes and 850 genomes from diverse species. These transformer models yield context-specific representations of nucleotide sequences, which allow for accurate predictions even in low-data settings. We show that the developed models can be fine-tuned at low cost to solve a variety of genomics applications. Despite no supervision, the models learned to focus attention on key genomic elements and can be used to improve the prioritization of genetic variants. The training and application of foundational models in genomics provides a widely applicable approach for accurate molecular phenotype prediction from DNA sequence. Nucleotide Transformer is a series of genomics foundation models of different parameter sizes and training datasets that can be applied to various downstream tasks by fine-tuning.",
+  "reasons": [
+   "foundation model",
+   "transformer",
+   "genomics",
+   "scale"
+  ],
+  "score": 19,
+  "classic": true,
+  "citations": 1054,
+  "year": 2024,
+  "tldr": "They pre-trained a family of transformer foundation models on thousands of human and diverse species genomes, showing the learned representations enable accurate, cheap-to-fine-tune molecular phenotype and variant-effect prediction across many genomics tasks.",
+  "why": "The Nucleotide Transformer is a landmark genomics foundation-model effort: 2.5B-parameter DNA models trained across 3,202+ genomes, rigorously evaluated across many low-data tasks in Nature Methods. It changes how genomic sequence analysis is done by making transfer learning the default, and the models are open and reusable.",
+  "summary": {
+   "tldr": "The Nucleotide Transformer (NT) is a family of BERT-style DNA foundation models (50M–2.5B parameters) pre-trained on masked language modeling over 6-mer tokens from human and multispecies genomes that, when fine-tuned cheaply, match or beat specialized supervised models on genomics prediction tasks.",
+   "background": "Predicting molecular phenotypes (splicing, enhancer activity, histone marks, variant effects) from DNA sequence is a core genomics problem, but supervised deep learning models must be trained from scratch per task and struggle with limited labeled data. Prior DNA language models had short context windows or were not systematically benchmarked against strong supervised baselines.",
+   "approach": "The authors pre-trained encoder-only transformers with masked language modeling (6-mer tokens, 6-kb context) on three datasets: the human reference genome (3.2B nucleotides), 3,202 phased 1000 Genomes haplotypes (20.5 trillion nucleotides, 125M variants), and 850 genomes across species. They built four NT-v1 models (500M–2.5B parameters, the largest trained on 128 GPUs for 28 days) and four smaller NT-v2 models (50M–500M, 12-kb context, rotary embeddings/swiGLU, up to 1 trillion training tokens), then evaluated them on 18 curated tasks (GENCODE splice sites, EPD promoters, ENCODE histone marks/enhancers) via layer-wise probing (~760,000 downstream models) and parameter-efficient fine-tuning (IA3, ~0.1% of parameters), comparing against DNABERT-2, HyenaDNA, Enformer, and supervised BPNet, DeepSEA, SpliceAI, and DeepSTARR.",
+   "findings": [
+    "Fine-tuned NT models matched or exceeded BPNet baselines on all 18 tasks (matched 6, surpassed 12), and probing alone matched or beat BPNet on 13 of 18.",
+    "The Multispecies 2.5B model was the best overall foundation model, beating HyenaDNA-32kb on all 18 tasks, and trained on diverse species outperformed human-only training on most human tasks.",
+    "Against specialized supervised models, Multispecies 2.5B came within ~1% AUC of DeepSEA on 919 chromatin profiles, matched SpliceAI-10k on splice site prediction (top-k accuracy 95%, PR-AUC 0.98), and was within a few percent of DeepSTARR on Drosophila enhancer activity.",
+    "Zero-shot scores from embeddings (cosine similarity) predicted variant severity and classified ClinVar pathogenic variants with AUC ~0.80, eQTLs and meQTLs ~0.7–0.75.",
+    "The NT-v2 250M model reached the best benchmark MCC (0.769) with 10× fewer parameters than 2.5B, and the NT-v2 500M model beat SpliceAI with 12-kb context (top-k accuracy 96%).",
+    "Unsupervised analysis showed attention heads concentrated on promoters, enhancers, exons, TF-binding sites, and splice motifs, and embeddings separated genomic elements (probing accuracy >0.78)."
+   ],
+   "why": "For someone building transcriptomics/multiomics models, this paper establishes that generic DNA sequence embeddings transfer across tasks and that multispecies pre-training beats human-only data, offering a reusable sequence encoder for regulatory and variant tasks without per-task architectures. The public benchmark (Hugging Face leaderboard) and cheap IA3 fine-tuning (<15 min on one GPU) make these models practical starting points for sequence-to-function or sequence-to-expression pipelines.",
+   "limitations": "Context windows (6–12 kb) are far shorter than needed for distal gene regulation (Enformer uses 200 kb), and standard transformers scale quadratically with sequence length. The 18-task benchmark uses modest-sized datasets, and some supervised baselines still win on individual tasks like enhancer prediction.",
+   "source": "open-access full text",
+   "model": "glm-5.3-flash",
+   "chars": 89610
+  }
+ },
+ "also": [
+  {
+   "title": "Spatially informed clustering, integration, and deconvolution of spatial transcriptomics with GraphST",
+   "authors": [
+    "Yahui Long",
+    "Kok Siong Ang",
+    "Mengwei Li",
+    "Kian Long Kelvin Chong",
+    "Raman Sethi",
+    "Chengwei Zhong",
+    "Hang Xu",
+    "Zhiwei Ong",
+    "Karishma Sachaphibulkij",
+    "Ao Chen",
+    "Li Zeng",
+    "Huazhu Fu"
+   ],
+   "authorCount": 16,
+   "venue": "Nature Communications",
+   "preprint": false,
+   "date": "2023-03-01",
+   "doi": "10.1038/s41467-023-36796-3",
+   "url": "https://doi.org/10.1038/s41467-023-36796-3",
+   "abstract": "Abstract Advances in spatial transcriptomics technologies have enabled the gene expression profiling of tissues while retaining its spatial context. Effective exploitation of this data combination requires spatially informed analysis tools to perform three key tasks, spatial clustering, multi-sample integration, and cell type deconvolution. Here, we present GraphST, a novel graph self-supervised contrastive learning method that incorporates spatial location information and gene expression profiles to accomplish all three tasks in a streamlined process while outperforming existing methods in each task. GraphST combines graph neural networks with self-supervised contrastive learning to learn informative and discriminative spot representations by minimizing the embedding distance between spatially adjacent spots and vice versa. With GraphST, we achieved 10% higher clustering accuracy on multiple datasets than competing methods, and better delineated the fine-grained structures in tissues such as the brain and embryo. Moreover, GraphST is the only method that can jointly analyze multiple tissue slices in both vertical and horizontal integration while correcting for batch effects. Lastly, compared to other methods, GraphST’s cell type deconvolution achieved higher accuracy on simulated data and better captured spatial niches such as the germinal centers of the lymph node in experimentally acquired data. We further showed that GraphST can recover the immune cell distribution in different regions of breast tumor tissue and reveal spatial niches with exhausted tumor infiltrating T cells. Through our examples, we demonstrated that GraphST is widely applicable to a broad range of tissue types and technology platforms. In summary, GraphST is a streamlined, user friendly and computationally efficient tool for characterizing tissue complexity and gaining biological insights into the spatial organization within tissues.",
+   "reasons": [
+    "deep learning",
+    "graph neural network",
+    "representation learning",
+    "transcriptomics",
+    "spatial omics"
+   ],
+   "score": 21.6988388275938,
+   "classic": true,
+   "citations": 707,
+   "year": 2023,
+   "summary": {
+    "tldr": "GraphST is a graph self-supervised contrastive learning method for spatial transcriptomics that performs spatial clustering, multi-slice batch integration, and scRNA-seq-to-ST cell-type deconvolution, outperforming prior tools on all three tasks.",
+    "background": "Spatial transcriptomics (ST) measures gene expression while retaining spatial coordinates, but the popular 10x Visium platform has 55 µm spots containing multiple cells, and larger tissues require multiple slices that introduce batch effects. Existing tools handle only one task, mostly ignore spatial information, or (like Harmony/scVI) do batch correction without spatial context.",
+    "approach": "GraphST builds a k-nearest-neighbor graph from spot coordinates (k=3), encodes the top 3000 HVGs with a GCN, and refines spot embeddings via augmentation-based contrastive learning that pulls each spot's embedding toward its local neighborhood summary and away from a corrupted version (gene expressions shuffled across spots), jointly optimized with a self-reconstruction loss. For multi-slice integration, slices are aligned and a shared graph enables implicit batch correction via cross-slice feature smoothing. For deconvolution, an autoencoder learns cell representations from scRNA-seq, and an augmentation-free contrastive objective trains a cell-to-spot mapping matrix M aligning projected cells to spot embeddings. Implemented with a single shared framework; validated on 10x Visium, Slide-seqV2, and Stereo-seq data.",
+    "findings": [
+     "On the 12-slice human DLPFC 10x Visium dataset, GraphST achieved the highest median ARI of 0.60 (STAGATE close second; others <0.53), and on slice 151673 scored ARI 0.64 vs 0.40–0.58 for SpaGCN, BayesSpace, SpaceFlow, conST, STAGATE and 0.29 for Seurat.",
+     "On Stereo-seq mouse olfactory bulb and Slide-seqV2 hippocampus, GraphST resolved fine structures (granule cell layer, RMS, CA3/dentate gyrus, medial vs lateral habenula) that Seurat and STAGATE missed; on E9.5/E14.5 Stereo-seq mouse embryos (up to ~93k spots, ~18.5k genes), it recovered organs and substructures (e.g., atrium vs ventricle, epidermis) better than STAGATE and the original annotation.",
+     "For multi-slice integration of two mouse breast cancer 10x Visium serial sections, GraphST achieved iLISI 1.846 vs 1.566 (Harmony), 1.568 (scVI), 1.233 (STAGATE), with better cross-slice cluster alignment; horizontal integration of mouse brain anterior/posterior slices recovered hippocampal horns missed by STAGATE and SpaGCN.",
+     "In deconvolution benchmarks on seqFISH+ and STARmap simulated data, GraphST beat cell2location on PCC, SSIM, and JSD (slightly worse RMSE); on human lymph node 10x Visium (73,260-cell reference, 34 cell types), it mapped germinal-center B cell subsets with higher AUC and odds ratios than cell2location.",
+     "Applied to human breast cancer 10x Visium (3798 spots), GraphST mapped DISCO atlas cells and showed intraductal carcinoma regions enriched for exhausted T cells (LAG3, CTLA4, TIGIT, HAVCR2, PDCD1, CXCL13); the largest dataset (~100k spots) ran in ~30 min on an RTX A6000 GPU."
+    ],
+    "why": "GraphST unifies the three core ST analysis tasks—clustering, integration, and deconvolution—in one spatially aware framework, replacing pipelines that mix spatially naive tools. For multiomics researchers, its scRNA-seq-to-ST projection provides a reusable recipe for spatially informed cross-modality integration, and its benchmark numbers set a baseline newer methods (e.g., later transformer-based ST tools) must beat.",
+    "limitations": "Clustering benchmarks use annotations that are themselves clustering-derived or manually curated, so ground truth is imperfect, and the ARI gap over STAGATE is modest (0.60 vs ~0.53–0.58 median). Validation is limited to sequencing-based platforms (10x Visium, Slide-seqV2, Stereo-seq); image-based platforms like MERFISH and CosMx were not tested, and deconvolution depends on the quality and completeness of the reference scRNA-seq atlas.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 93716
+   }
+  },
+  {
+   "title": "Self-supervised learning on millions of primary RNA sequences from 72 vertebrates improves sequence-based RNA splicing prediction",
+   "authors": [
+    "Ken Chen",
+    "Yue Zhou",
+    "Maolin Ding",
+    "Yu Wang",
+    "Zhixiang Ren",
+    "Yuedong Yang"
+   ],
+   "authorCount": 6,
+   "venue": "Briefings in Bioinformatics",
+   "preprint": false,
+   "date": "2024-03-27",
+   "doi": "10.1093/bib/bbae163",
+   "url": "https://doi.org/10.1093/bib/bbae163",
+   "abstract": "Language models pretrained by self-supervised learning (SSL) have been widely utilized to study protein sequences, while few models were developed for genomic sequences and were limited to single species. Due to the lack of genomes from different species, these models cannot effectively leverage evolutionary information. In this study, we have developed SpliceBERT, a language model pretrained on primary ribonucleic acids (RNA) sequences from 72 vertebrates by masked language modeling, and applied it to sequence-based modeling of RNA splicing. Pretraining SpliceBERT on diverse species enables effective identification of evolutionarily conserved elements. Meanwhile, the learned hidden states and attention weights can characterize the biological properties of splice sites. As a result, SpliceBERT was shown effective on several downstream tasks: zero-shot prediction of variant effects on splicing, prediction of branchpoints in humans, and cross-species prediction of splice sites. Our study highlighted the importance of pretraining genomic language models on a diverse range of species and suggested that SSL is a promising approach to enhance our understanding of the regulatory logic underlying genomic sequences.",
+   "reasons": [
+    "language model",
+    "representation learning",
+    "zero-shot",
+    "genomics",
+    "scale",
+    "generalizes"
+   ],
+   "score": 19.9912703891951,
+   "classic": true,
+   "citations": 99,
+   "year": 2024,
+   "summary": {
+    "tldr": "SpliceBERT is a BERT-style RNA language model pretrained by masked language modeling on ~2 million primary RNA sequences (65 billion nucleotides) from 72 vertebrates that improves splice site and branchpoint prediction and enables zero-shot splicing variant effect prediction.",
+    "background": "Existing genomic language models like DNABERT and LOGO were pretrained only on the human genome, so they cannot leverage evolutionary information, which is known to encode key determinants of RNA splicing. Branchpoints are especially hard to model because, unlike splice sites, they are difficult to identify from RNA-seq data, leaving few high-confidence labeled examples.",
+    "approach": "They pretrained SpliceBERT, a 6-layer Transformer (~19.4M parameters, 512 hidden size, 16 heads, max input 1024 nt, single-nucleotide tokenization), via BERT-style masked language modeling (15% masking) on over 2 million primary RNA transcripts extracted from UCSC genomes and annotations of 72 vertebrates, taking ~7 days on 8 V100 GPUs plus 3 days on 4 GPUs. They also built an identical human-only control model, SpliceBERT-human, to isolate the effect of multi-species pretraining. The model was evaluated via nucleotide embeddings, attention analysis, a zero-shot KL-divergence variant-effect score, and finetuning on branchpoint and splice site prediction tasks.",
+    "findings": [
+     "Embedding-based logistic regression distinguishes conserved (phastCons>0.8) from non-conserved nucleotide sites with AP=0.353 versus 0.255 for SpliceBERT-human and 0.067 for one-hot encoding, showing multi-species MLM captures evolutionary conservation without MSA.",
+     "Splice site embeddings cluster better with SpliceBERT (NMI 0.31 for both GT and AG) than with SpliceBERT-human (0.18/0.08), DNABERT (0.05/0.02), or one-hot encoding (0.08/0.06).",
+     "Attention weights between donor-acceptor pairs from the same intron are significantly higher than unpaired or random pairs (Cohen's d 0.83–1.04), with peaks in layers 3–5 up to 16x background, matching the intron-centric logic of splicing.",
+     "A zero-shot KL-context score (summed KL divergence within ±100 nt of a variant) outperforms SpliceBERT-human, DNABERT, phastCons, phyloP, and distance-to-splice-site baselines for classifying splice-disrupting variants on Vex-seq and MFASS datasets.",
+     "Finetuned on Mercer's dataset (55,739 high-confidence BPs vs 921,518 non-BPs) under 10-fold nested CV, SpliceBERT reaches AP=0.745, beating SpliceBERT-human by 2.1%, LaBranchoR by 1.8%, and Branchpointer by 12.7%; without pretraining AP drops to 0.661. On cross-species splice site prediction (Spliceator test sets: zebrafish, fly, worm, Arabidopsis), it exceeds SpliceBERT-human and DNABERT by 1.6% and 2.1% average F1."
+    ],
+    "why": "For a transcriptomics/multiomics researcher, this shows that cross-species self-supervised pretraining is a cheap way to inject evolutionary signal into sequence models without MSA, and that pretrained embeddings/attention can be reused for splicing-related tasks even with modest model size (19M params). The zero-shot KL-based variant scoring is directly relevant to interpreting eQTL/sQTL and disease variants affecting splicing in bulk or single-cell RNA-seq pipelines.",
+    "limitations": "The model is small (19.4M params), limited to 1024 nt context (excluding SpliceAI-10k-style long-range inputs), and pretrained only on vertebrates with a tissue-agnostic objective; MLM accuracy remains modest (balanced ACC 0.45–0.65), and gains over human-only baselines, while consistent, are modest (roughly 1–4%).",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 44955
+   }
+  },
+  {
+   "title": "A graph neural network model to estimate cell-wise metabolic flux using single-cell RNA-seq data",
+   "authors": [
+    "Norah Alghamdi",
+    "Wennan Chang",
+    "Pengtao Dang",
+    "Xiaoyu Lu",
+    "Changlin Wan",
+    "Silpa Gampala",
+    "Zhi Huang",
+    "Jiashi Wang",
+    "Qin Ma",
+    "Yong Zang",
+    "Melissa L. Fishel",
+    "Sha Cao"
+   ],
+   "authorCount": 13,
+   "venue": "Genome Research",
+   "preprint": false,
+   "date": "2021-07-22",
+   "doi": "10.1101/gr.271205.120",
+   "url": "https://doi.org/10.1101/gr.271205.120",
+   "abstract": "The metabolic heterogeneity and metabolic interplay between cells are known as significant contributors to disease treatment resistance. However, with the lack of a mature high-throughput single-cell metabolomics technology, we are yet to establish systematic understanding of the intra-tissue metabolic heterogeneity and cooperative mechanisms. To mitigate this knowledge gap, we developed a novel computational method, namely, single-cell flux estimation analysis (scFEA), to infer the cell-wise fluxome from single-cell RNA-sequencing (scRNA-seq) data. scFEA is empowered by a systematically reconstructed human metabolic map as a factor graph, a novel probabilistic model to leverage the flux balance constraints on scRNA-seq data, and a novel graph neural network-based optimization solver. The intricate information cascade from transcriptome to metabolome was captured using multilayer neural networks to capitulate the nonlinear dependency between enzymatic gene expressions and reaction rates. We experimentally validated scFEA by generating an scRNA-seq data set with matched metabolomics data on cells of perturbed oxygen and genetic conditions. Application of scFEA on this data set showed the consistency between predicted flux and the observed variation of metabolite abundance in the matched metabolomics data. We also applied scFEA on five publicly available scRNA-seq and spatial transcriptomics data sets and identified context- and cell group-specific metabolic variations. The cell-wise fluxome predicted by scFEA empowers a series of downstream analyses including identification of metabolic modules or cell groups that share common metabolic variations, sensitivity evaluation of enzymes with regards to their impact on the whole metabolic flux, and inference of cell-tissue and cell-cell metabolic communications.",
+   "reasons": [
+    "deep learning",
+    "graph neural network",
+    "single-cell",
+    "transcriptomics",
+    "spatial omics",
+    "perturbation"
+   ],
+   "score": 22.962885257004608,
+   "classic": true,
+   "citations": 303,
+   "year": 2021,
+   "summary": {
+    "tldr": "scFEA is a graph neural network-based method that infers cell-wise metabolic flux from scRNA-seq data by modeling flux balance over a reduced human metabolic factor graph.",
+    "background": "Single-cell metabolomics technology is immature, so metabolic heterogeneity between cells in tissues (important in cancer drug resistance) cannot be measured directly. Prior FBA-based methods (scFBA, Compass) operate on cell groups, use a small portion of the metabolic network, and rely on strict steady-state assumptions that are questionable in diseases like cancer.",
+    "approach": "They curated a human metabolic map from KEGG plus the transporter classification database (862 genes, 390 enzymes, 1880 reactions, 1219 metabolites) and reduced it to a factor graph of 169 metabolic modules, 22 supermodule classes, and 128 metabolites (66 intermediate substrates), after excluding 273 cofactors. Each module's flux is modeled as a nonlinear function (2-4 layer fully connected network) of the catalyzing genes' expressions, and a GNN-style optimization minimizes a loss combining flux balance at intermediate metabolites across all cells, non-negative flux, coherence between flux and supermodule gene expression, and a flux scale term, solved with belief-propagation-inspired regional updates. Outputs include cell-wise flux, metabolic stress (flux imbalance), module/cell clusters, and gene perturbation sensitivity analyses.",
+    "findings": [
+     "On a newly generated matched dataset (162 pancreatic cancer Pa03c cells, APEX1 knockdown vs control x hypoxia/normoxia, Smart-seq2; bulk metabolomics of 14 metabolites), scFEA-predicted flux changes correlated with observed metabolite changes at Pearson r=0.86 (P=0.006), while raw gene expression change gave r=-0.03 (ns) and ssGSEA gave r=0.42 (ns).",
+     "Predicted metabolic stress (metabolite imbalance) correlated with observed metabolomic differences at r=0.75 (P=0.004); 6 of 7 predicted high-impact enzymes were in the RLEdb rate-limiting enzyme database (P=0.0005).",
+     "On an independent matched dataset (PV-ADSC adipose stem cells, GSE132581, 85 cells), predicted flux increases in glycolysis (P<1.56e-6) and lactate production (P=0.002) in more-differentiated cells matched the published metabolomics.",
+     "On synthetic data (1000 cells, 169 modules), scFEA recovered the true flux with sample-wise correlation >=0.0620 (P=0.05) for >99.6% of cells; flux predictions stayed correlated (>0.74 module-wise) under simulated dropout up to 85% zero rate.",
+     "Applied to melanoma (GSE72056), head and neck cancer (GSE103322), ROSMAP brain snRNA-seq, and a breast cancer spatial transcriptomics dataset, scFEA recovered the Warburg effect (lactate production ~52.5% of glycolysis flux in head and neck cancer cells) and distinct cell-group-specific metabolic states."
+    ],
+    "why": "For multiomics researchers, scFEA is a practical bridge from transcriptome to inferred cell-level metabolome, enabling metabolic stress scoring, cell-cell metabolic communication inference, and flux-based cell clustering from standard scRNA-seq inputs (human or mouse). It directly outperformed naive gene-expression and ssGSEA baselines against matched bulk metabolomics, a rare quantitative validation in this space.",
+    "limitations": "Fluxes are relative and unscaled (comparable across cells or modules, not absolute rates), the method assumes transcript levels proxy enzyme/flux changes, and flux balance is enforced only across cells in a sample rather than per cell. Validation relies on bulk (not single-cell) matched metabolomics and on consistency arguments rather than direct flux measurements.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 87962
+   }
+  }
+ ],
+ "candidates": 379
+}

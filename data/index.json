@@ -1,6 +1,18 @@
 {
  "days": [
   {
+   "date": "2026-11-20",
+   "title": "Nucleotide Transformer: building and evaluating robust foundation models for human genomics",
+   "venue": "Nature Methods",
+   "key": "10.1038/s41592-024-02523-z",
+   "also": [
+    "10.1038/s41467-023-36796-3",
+    "10.1093/bib/bbae163",
+    "10.1101/gr.271205.120"
+   ],
+   "classic": true
+  },
+  {
    "date": "2026-11-19",
    "title": "Horizontal Flow Matching for Single-Cell Spatiotemporal Dynamics",
    "venue": "arXiv",
