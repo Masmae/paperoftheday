@@ -1,0 +1,183 @@
+{
+ "date": "2026-11-21",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "scUNVEIL: Learning scRNA-seq Cell Embeddings Through Measurement Enrichment",
+  "authors": [
+   "Honzik, T.",
+   "Kuhajda, L.",
+   "Houdova, L.",
+   "Georgiev, D."
+  ],
+  "authorCount": 4,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-18",
+  "doi": "10.64898/2026.11.17.767296",
+  "url": "https://doi.org/10.64898/2026.11.17.767296",
+  "abstract": "Large-scale pretraining can improve scRNA-seq representations through measurement enrichment: estimating what the same measurement would reveal at greater UMI depth under the same measurement process. We introduce scUNVEIL, a self-supervised model trained through next-UMI prediction. We show that the Bayes-optimal next-UMI predictor is the posterior mean of the transcriptome composition that arbitrarily deep sequencing would reveal. Because UMI identities are exchangeable conditional on transcriptome composition, scUNVEIL operates directly on count vectors using a residual multilayer perceptron, without attention over gene tokens. The measurement-enriched transcriptome composition is predicted from a single low-dimensional hidden state, which therefore serves naturally as the cell embedding. The same model provides both reusable cell representations and measurement-enriched gene-expression estimates. scUNVEIL was pretrained without labels or auxiliary metadata on approximately 92 million human cells spanning diverse tissues. Under linear evaluation on fine-grained cell-type annotation, its zero-shot representations achieved the best performance among the evaluated methods, while providing over 1000-fold faster inference than the strongest evaluated transformer-based foundation model and matching that model's predictive performance using 88% fewer input UMIs per cell. Further evaluations show that these representations improve prediction of tumor reactivity, mitochondrial membrane potential, cell morphology, and lineage-associated treatment outcomes.",
+  "reasons": [
+   "foundation model",
+   "transformer",
+   "representation learning",
+   "zero-shot",
+   "transcriptomics",
+   "RNA-seq"
+  ],
+  "score": 21,
+  "tldr": "Trained a next-UMI self-supervised model on ~92M human cells to learn 'measurement-enriched' transcriptome embeddings, achieving best zero-shot cell-type annotation with 1000x faster inference and fewer input UMIs than the strongest transformer foundation model.",
+  "why": "scUNVEIL introduces a genuinely new idea for scRNA-seq representation learning—predicting what deeper sequencing would reveal—implemented as a simple, fast model trained on ~92M cells that beats transformer foundation models at a fraction of the cost. It scores highest on novelty, generality, and direct relevance to single-cell transcriptomics, with strong down-stream evidence (cell typing, tumor reactivity, morphology). Runner-up [9] (FcGPT) is a landmark antibody-engineering result but is more specialized than broadly reusable for the daily transcriptomics audience.",
+  "summary": {
+   "tldr": "scUNVEIL is a self-supervised MLP that learns cell embeddings by next-UMI prediction (estimating the transcriptome composition that arbitrarily deep sequencing would reveal), pretrained on ~92M human cells, and beats transformer-based single-cell foundation models on zero-shot cell-type annotation while being >1000x faster at inference.",
+   "background": "Transformer-based scRNA-seq foundation models (scGPT, scFoundation, Geneformer, UCE) are expensive to train and run, yet independent evaluations have found them matched or beaten by simple baselines on cell-type annotation. It is unclear what pretraining objective actually produces transferable cell representations, since gene-token attention may be unnecessary for bag-of-UMIs data.",
+   "approach": "scUNVEIL trains via next-UMI prediction: for each cell, observed UMIs are randomly split into input and held-out sets, and the model predicts the gene-identity distribution of the held-out UMIs. The Bayes-optimal predictor equals the posterior mean of the 'measurement-enriched' composition (what deeper sequencing would show under the same measurement process). Because UMI identities are exchangeable, each cell is a single 60,000-gene count vector processed by a residual MLP (embedding dim 2048, 16 residual blocks, tied linear decoder) with no attention; a single low-dimensional bottleneck state serves as the cell embedding. Pretraining used ~92M human cells from the CELLxGENE Census (no labels or metadata), 640k steps, batch size 1,000, ~7 epochs; training took ~70 hours on one RTX A4000 (theoretical ~3 H100-hours).",
+   "findings": [
+    "On the Hao et al. 2021 PBMC reference (161,764 cells, 8 donors, 58 subtypes, held out of pretraining), frozen scUNVEIL embeddings under linear evaluation reached 80.6±2.1% macro F1 and 91.6% overall accuracy, beating scVI fitted on the benchmark (by 8.7 F1) and the best zero-shot foundation model scFoundation (70.1 F1, improved by 10.5).",
+    "Inference on the full benchmark took 1:41 on one CPU versus 82:47 for scFoundation, 20:13 for scGPT, and 128:58 for UCE (>1000x faster than the strongest transformer).",
+    "With reduced input depth, scUNVEIL matched scFoundation using ~88% fewer input UMIs and matched full-depth raw RNA using ~94% fewer.",
+    "A linear (zero-block) ablation reached 76.8 F1, beating all non-scUNVEIL methods and showing the gain comes mostly from the objective; 2048-component PCA on the same corpus reached only 69.1.",
+    "On supplementary phenotyping tasks, embeddings predicted tumor-reactive T cells (AUROC 0.883 vs 0.749 PCA at 10% retention) and TMRE mitochondrial potential (0.910 vs 0.887 at full depth) well, with more selective gains for morphology and treatment lineage recovery; measurement-enriched expression of 50 markers also gave 78.8 F1 vs 70.1 for MAGIC."
+   ],
+   "why": "For anyone building multiomics or transcriptomics pipelines, scUNVEIL shows that a cheap, CPU-deployable count-vector MLP with a statistically grounded pretraining objective can outperform expensive gene-token transformers, and its outputs double as measurement-enriched expression (imputation) estimates. It also suggests a practical angle: pretrained enrichment may let you sequence cells much more shallowly (~10% of the depth) while retaining downstream predictive power.",
+   "limitations": "The model enriches the measured composition under the same measurement process — it does not remove batch effects or recover unobservable biology, and predicted expression is meant for hypothesis generation, not confirmatory DE. Supplementary tasks were hand-picked after screening, gains over PCA are task-dependent (narrow or reversed for morphology and lineage recovery), and only a handful of foundation models were compared.",
+   "source": "bioRxiv full text",
+   "model": "glm-5.3-flash",
+   "chars": 45842
+  }
+ },
+ "also": [
+  {
+   "title": "Generative design of antibody Fc interactions by deep mutational learning",
+   "authors": [
+    "Irvine, E. B.",
+    "Stamkopoulos, E.",
+    "Bikias, T.",
+    "Kaempf, J.",
+    "Frei, L.",
+    "Schuermann, N.",
+    "Thaqi, A.",
+    "Schmid, H.",
+    "Coukos, D.",
+    "Yang, H.",
+    "Nedeva, N.",
+    "Pauli, R."
+   ],
+   "authorCount": 20,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-20",
+   "doi": "10.1101/2025.10.10.681689",
+   "url": "https://doi.org/10.1101/2025.10.10.681689",
+   "abstract": "Antibodies have transformed modern medicine. Their remarkable therapeutic success stems from the fact that they do two things at once. The variable (Fab) domain recognizes a target, while the constant (Fc) domain determines how that recognition event is acted on by the immune system. The Fc carries out these instructions by interacting with a complex network of Fc-receptors expressed across diverse immune cells. Yet the ability to rewrite these instructions remains limited, as Fc-receptors bind overlapping surfaces on the Fc, making it difficult to engineer antibodies with precise patterns of receptor engagement. Here we introduce a new paradigm for Fc engineering, combining high-throughput experimental screening with deep learning to design antibodies with programmable patterns of Fc-receptor engagement. We constructed a library of more than 400 million Fc-variants and screened it against eight Fc-receptors by yeast display and deep sequencing, generating a high-resolution map linking Fc sequence to patterns of receptor recognition. Using these data, we developed FcGPT, a generative protein language model that designs millions of synthetic Fc-variants with user-defined Fc-receptor binding profiles. Experimental testing of 2,000 designs across 19 objectives yielded Fc-variants matching prescribed profiles of binding and non-binding across all eight receptors, including synthetic profiles not represented in nature. Success rates ranged from 5% to 100% among successful design tasks, including variants that selectively engage Fc{gamma}R3A while avoiding Fc{gamma}R3B (and vice versa), despite their >95% sequence identity. This work extends protein design from creating binders to individual targets to programming precise patterns of molecular recognition across entire families of receptors, offering a new way to engineer interactions between proteins and the immune system.",
+   "reasons": [
+    "language model",
+    "deep learning",
+    "generative model",
+    "proteins",
+    "new method"
+   ],
+   "score": 15,
+   "summary": {
+    "tldr": "Researchers combined deep mutational scanning of the antibody Fc domain with a conditional GPT-style protein language model (FcGPT) to design Fc variants with user-specified binding patterns across eight Fc receptors.",
+    "background": "Therapeutic antibody Fc domains must engage a network of Fc-gamma receptors and FcRn, but these receptors bind overlapping surfaces on the Fc, so traditional engineering cannot independently tune binding to multiple receptors at once. Programming a full 'binding profile' across homologous receptors (>95% sequence identity for some pairs) is therefore an unsolved multi-objective design problem.",
+    "approach": "They built a yeast-display aglycosylated IgG1 Fc scaffold (299A-IYG), did deep mutational scanning of all 232 Fc residues, then designed and screened a combinatorial library of ~4x10^8 Fc variants against eight receptors (FcγR1, FcγR2A-H/R, FcγR2B, FcγR3A-F/V, FcγR3B, FcRn) with FACS and deep sequencing, yielding 1.47M unique labeled sequences. An MLP on one-hot sequences predicted receptor binding (avg MCC 0.937, exact match 0.972). They then built FcGPT, a 10M-parameter GPT-J-style conditional transformer pre-trained on the Fc dataset with eight binding-profile control tokens, and fine-tuned it via GRPO reinforcement learning (LoRA adapters) using the classifiers as reward verifiers, plus a separate specificity foundation model as an orthogonal verifier.",
+    "findings": [
+     "The binding MLP achieved MCC >0.88 for all eight receptors and a 0.972 exact-match rate across receptors on held-out data.",
+     "FcGPT-RLXF generated sequences predicted to satisfy 18/19 target binding profiles, versus poor performance from the pre-trained model without RL.",
+     "Experimental testing of 2,000 designs across 19 objectives succeeded for 12/19 profiles, with exact-match accuracies from 5% to 100% (e.g., 100% for FcγR1-selective, 85% for Fc-silenced).",
+     "The model achieved bidirectional selectivity between FcγR3A and FcγR3B (>95% identical receptors): 39 variants selective for FcγR3A and 5 for FcγR3B, plus 24 FcγR2B-selective variants.",
+     "Predicted and experimentally observed design accuracy correlated strongly (r = 0.859), letting the model anticipate which profiles are hard before testing."
+    ],
+    "why": "This reframes protein design from single-target binder creation to programming patterns of recognition across whole receptor families, with experimental success rates comparable to leading single-target tools like BindCraft despite eight simultaneous objectives. For readers of sequence-function modeling, it is a concrete example of DMS data + supervised classifiers as reward models + RL-fine-tuned conditional generation, and the pipeline (yeast display screens feeding a small domain-specific PLM) transfers naturally to other receptor-family engineering problems.",
+    "limitations": "Models may not generalize to mutations at positions not represented in the library (only ~10^8 of a 10^62 sequence space was sampled), and the hardest objectives—FcγR2A/2B selectivity—failed or performed poorly. Binding was measured in a yeast-display, aglycosylated scaffold, so therapeutic relevance in mammalian glyco contexts remains to be shown.",
+    "source": "bioRxiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 122247
+   }
+  },
+  {
+   "title": "GenNA: Conditional generation of nucleotide sequences guided by natural language annotations.",
+   "authors": [
+    "Shen",
+    "Cao",
+    "Wu",
+    "Chen",
+    "Feng",
+    "Chen"
+   ],
+   "authorCount": 6,
+   "venue": "Sci Adv",
+   "preprint": false,
+   "date": "2026-11-19",
+   "doi": "10.1126/sciadv.aej1481",
+   "url": "https://doi.org/10.1126/sciadv.aej1481",
+   "abstract": "Deciphering the mapping between biomolecular sequences and complex biological functions is a central challenge in genomics. While existing generative nucleotide models capture sequence distributions, they lack explicit access to gene-associated biological semantics, limiting semantics-guided design. Here, we present GenNA, a generative nucleotide foundation model guided by natural language annotations. Pretrained on a multimodal nucleotide-text corpus spanning 2221 eukaryotic species (&#x223c;416 billion characters), GenNA internalizes relationships between sequence syntax and functional semantics within a unified autoregressive framework. Without explicit rule-based supervision, GenNA yields distinguishable perplexity responses to sequence-annotation mismatches, mutational variants, and species-label perturbations. Furthermore, across diverse generation tasks, GenNA produces statistically plausible nucleotide sequences consistent with target semantics, structural constraints, and species contexts. Overall, GenNA provides a versatile framework for controllable nucleotide generation, establishing a practical route to integrate functional descriptions with sequence design.",
+   "reasons": [
+    "foundation model",
+    "generative model",
+    "perturbation",
+    "genomics",
+    "scale"
+   ],
+   "score": 17,
+   "summary": {
+    "tldr": "GenNA is a ~3.6B-parameter decoder-only Transformer trained from scratch on paired nucleotide sequences and natural-language annotations that enables language-guided conditional generation of DNA/RNA sequences.",
+    "background": "Generative nucleotide models (GenSLMs, Evo2, GENERator) model sequence distributions but are conditioned only on sequence context or structured labels, not on the rich biological semantics of genes. Using flexible natural-language functional annotations as the primary conditioning signal for nucleotide generation remains underexplored.",
+    "approach": "The authors pretrained GenNA (Qwen3-style architecture: 36 layers, hidden size 2560, RoPE, SwiGLU, grouped-query attention) from scratch with a causal language-modeling objective on a cross-modal BPE vocabulary (6000 tokens). The corpus came from NCBI RefSeq eukaryotic GenBank records: 2221 species, ~24.7M packed samples, ~416 billion characters of gene-region DNA/RNA plus natural-language product/note annotations and XML-style structural tags. Prompts combine modality, species, gene name, functional annotation, and structural tags before the sequence; a 0.36B version is also released.",
+    "findings": [
+     "Sequence-annotation mismatch dramatically raises perplexity: median PPL jumped from 6.68 (matched) to 331.24 (mismatched) across 9 genes, a ~61-fold median increase (permutation P = 2.76e-6), and attention analysis showed prompt tokens receive ~0.67 median attention ratio during CDS generation.",
+     "Zero-shot mutational scanning of 100 protein-coding genes showed stratified ΔPPL by mutation class: synonymous 0.076, missense 0.291, nonsense 1.732, stop-loss 1.558, frameshift deletions 5.411.",
+     "Species-label swapping induces distance-dependent PPL increases (e.g., ppap2d RNA: PPL 47.8 native vs 138.8 with Arabidopsis label; matched median PPL 79.21 vs 216.51 mismatched across 10 species, P = 2.76e-7), and ΔPPL-based clustering roughly recapitulates phylogeny.",
+     "In a recovery benchmark on 3000 non-RefSeq human GenBank records (2000 mRNA, 1000 DNA; generate next 200 nt given 10-200 nt prefixes), full-annotation GenNA beat Evo2-7B and GENERator-v2 at short prefixes (RNA identity 0.465 vs 0.440 vs 0.433 at 10 nt; 0.487 vs 0.453 at 50 nt) but Evo2 caught up at 200 nt.",
+     "Controlled generation of 30,500 tRNAs over 61 anticodons scored well with tRNAscan-SE (including spontaneous wobble pairing and type II length patterns), rRNAs matched Rfam Infernal bit-score distributions, and generated histone CDSs recapitulated family physicochemical profiles validated by ProGen2 PPL."
+    ],
+    "why": "For someone working on transcriptomics/multiomics AI, this shows that pairing sequence data with natural-language functional annotations—of the kind abundant in GenBank/RefSeq metadata—adds a complementary conditioning channel that matters most when sequence context is limited, relevant to multi-modal omics foundation models. It demonstrates that annotation conditioning plus species context can steer generation toward functional classes (tRNAs, rRNAs, histones) without task-specific fine-tuning.",
+    "limitations": "All validation is computational (PPL proxies, covariance-model scores, physicochemical distributions); no wet-lab confirmation, and generation shows distribution sharpening (over-concentration on typical samples, underrepresenting tail diversity). The 6000-token BPE vocabulary and 4096-token context limit single-nucleotide resolution and long-range regulatory modeling, and the annotation benefit is modest (e.g., +0.013 to +0.061 identity on RNA).",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 71791
+   }
+  },
+  {
+   "title": "Learning spatial cellular state through 3D reconstruction of the cell",
+   "authors": [
+    "Lee, Y. J.",
+    "Anad, K.",
+    "Min, S.",
+    "Lugo-Martinez, J."
+   ],
+   "authorCount": 4,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-18",
+   "doi": "10.64898/2026.11.09.765489",
+   "url": "https://doi.org/10.64898/2026.11.09.765489",
+   "abstract": "Subcellular-resolution spatial transcriptomics localizes individual RNA transcripts within cells with high-precision. Existing methods for identifying spatially organized cell populations rely on cellular niches defined by neighboring cells, leaving open whether such populations can be identified from individual-cell representations alone. Moreover, representations that jointly capture transcript identity and three-dimensional (3D) spatial organization have not been systematically learned or biologically evaluated. Here we present a representation learning framework that models each cell as a gene-annotated point cloud of transcripts and trains a rotation-equivariant neural network to reconstruct 3D cell shape, yielding spatially informed transcript embeddings. We further aggregate these embeddings into a cell-state representation that summarizes transcript-level spatial patterns. Our framework outperforms existing point-cloud-based 3D reconstruction methods on cell-shape reconstruction. In MERFISH human uterine cancer, combining the learned embeddings with gene expression improved prediction of CD45RO protein intensity over both gene expression alone and niche-based embeddings. Applied to MERFISH human liver cancer and Xenium human lung datasets, our framework identified distinct spatial patterns between cell populations, including spatially organized subpopulations marked by disease-associated gene expression and patterns associated with pathological tissue structures. Together, these results show that learning transcript representations through 3D cell reconstruction provides a novel approach to capture cell-state heterogeneity and biologically relevant spatial organization in subcellular spatial transcriptomics.",
+   "reasons": [
+    "deep learning",
+    "representation learning",
+    "transcriptomics",
+    "spatial omics"
+   ],
+   "score": 14,
+   "summary": {
+    "tldr": "SpaCState learns cell representations from subcellular spatial transcriptomics by training a rotation-equivariant neural network to reconstruct 3D cell shape from gene-annotated transcript point clouds, yielding spatially informed cell-state scores that identify spatially organized cell populations without using neighboring-cell information.",
+    "background": "Subcellular spatial transcriptomics (MERFISH, Xenium) records the 3D coordinates and gene identity of every transcript, but standard pipelines collapse transcripts into cell-by-gene counts, discarding their spatial organization; existing spatial analyses rely on cellular niches defined by neighboring cells. Learning representations from raw transcript point clouds is hard because predicting gene identity from gene identity is trivial and cell shape/orientation varies across cells.",
+    "approach": "They represent each cell as a 3D point cloud of transcripts and train an e3nn-based rotation-equivariant network with a self-supervised objective: reconstruct the 3D cell (or nucleus) voxel occupancy (BCE + Dice loss) from the transcript embeddings, with a grid decoder predicting per-voxel occupancy. From the learned transcript embeddings they compute 'Genestate' (pairwise embedding distances among transcripts of the same gene) aggregated into a cell-level 'Spatialstate' vector/score. Cell segmentation in 3D was done with Cellpose3.",
+    "findings": [
+     "3D reconstruction from transcript point clouds beat established computer-vision point-cloud methods (ConvONet, Implicit Autoencoder) on cell (MERFISH liver cancer) and nucleus (Xenium breast cancer) reconstruction, evaluated by voxel IoU on 64^3 grids.",
+     "On MERSCOPE FFPE human uterine cancer (500-gene panel, CD45 antibody co-staining), SpaCState embeddings combined with gene expression improved prediction of CD45RO protein intensity in lymphocytes (test n=5,983; train n=17,946; Ridge regression, Pearson r and R^2) over gene expression alone and over niche-based embeddings (NicheScope, CellCharter, BANKSY).",
+     "On MERFISH human liver cancer (2 replicates, 500-gene panel), high-Spatialstate macrophages formed rims around necrotic regions with elevated SPP1 (plus confirmed TREM2), matching prior niche-based findings; Spatialstate also flagged T cells with likely transcript-splitting (misassigned) transcripts.",
+     "On Xenium IPF lung (16 IPF + 10 control samples), high-Spatialstate fibroblasts were enriched in pathologist-annotated fibrotic foci (one-sided sign tests per sample), and SPP1+ and FABP4+ macrophages had distinct Spatialstate values from other macrophages.",
+     "Histograms of Spatialstate (transcript count vs. state value) revealed spatial clusters, e.g., multiciliated cells in four IPF samples."
+    ],
+    "why": "For someone working on multiomics/transcriptomics representations, this is a demonstration that per-cell geometric representations from transcript point clouds carry molecular signal beyond expression counts, validated against an independent protein measurement. It offers an alternative to niche-based spatial embeddings that could complement expression-based foundation models.",
+    "limitations": "Reconstruction targets come from Cellpose3 segmentations (nucleus-only staining for Xenium), so embedding quality depends on segmentation; Spatialstate thresholds and histogram patterns are currently chosen by visual inspection, and interpreting l>0 equivariant features remains an open problem. Numbers in the abstract are qualitative; exact IoU and R^2 values are in supplementary tables.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 37532
+   }
+  }
+ ],
+ "candidates": 341
+}

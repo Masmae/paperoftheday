@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-21",
+   "title": "scUNVEIL: Learning scRNA-seq Cell Embeddings Through Measurement Enrichment",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.11.17.767296",
+   "also": [
+    "10.1101/2025.10.10.681689",
+    "10.1126/sciadv.aej1481",
+    "10.64898/2026.11.09.765489"
+   ]
+  },
+  {
    "date": "2026-11-20",
    "title": "Nucleotide Transformer: building and evaluating robust foundation models for human genomics",
    "venue": "Nature Methods",
