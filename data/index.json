@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-22",
+   "title": "Mapping Gene-by-Environment Interactions via the Plasma Exposome at Cell-Type Resolution",
+   "venue": "medRxiv",
+   "key": "10.64898/2026.11.16.26368215",
+   "also": [
+    "10.64898/2026.11.17.767145",
+    "10.64898/2026.11.15.766798",
+    "https://arxiv.org/abs/2611.18846v1"
+   ]
+  },
+  {
    "date": "2026-11-21",
    "title": "scUNVEIL: Learning scRNA-seq Cell Embeddings Through Measurement Enrichment",
    "venue": "bioRxiv",

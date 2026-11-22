@@ -1,0 +1,183 @@
+{
+ "date": "2026-11-22",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "Mapping Gene-by-Environment Interactions via the Plasma Exposome at Cell-Type Resolution",
+  "authors": [
+   "Krupkin, H.",
+   "Huynh, M. A.",
+   "Nachun, D.",
+   "Durda, P.",
+   "Yongmei, L.",
+   "Taylor, K. D.",
+   "Gerszten, R. E.",
+   "Clish, C. B.",
+   "Aguet, F.",
+   "Ardlie, K.",
+   "Johnson, W. C.",
+   "Rich, S. S."
+  ],
+  "authorCount": 14,
+  "venue": "medRxiv",
+  "preprint": true,
+  "date": "2026-11-18",
+  "doi": "10.64898/2026.11.16.26368215",
+  "url": "https://doi.org/10.64898/2026.11.16.26368215",
+  "abstract": "Gene-by-environment (GxE) interactions inform where genetics and environment converge to impact human health and disease. However, systematically mapping GxE interactions has been challenging due to the diversity of testable exposures and a lack of scalable approaches to measure the environments cells experience in vivo. Here, we identified modules of correlated plasma metabolites and proteins and used them as quantitative proxies for environmental exposures experienced by circulating leukocytes. We demonstrated that these proxies are associated with environmentally modifiable clinical traits such as diet and infection and support broad mapping of geneby environment (GxE) interactions affecting gene expression and CpG methylation in leukocytes. We identified significant interactions for 95.2% of tested genes and 5.9% of tested methylation sites. These GxE interactions showed specificity to exposures and cell type. Colocalization analysis further provided links between interactions and complex trait and disease loci. Finally, we expanded GxE interaction mapping to unexplored cell types using a zero-shot transfer model to predict GxE interactions in held-out cell types, demonstrating how plasma metabolomics and proteomics can enhance the discovery of GxE interactions across the body. Altogether, this work provides a systematic multi-omic framework to study how gene regulation is shaped by both the genome and the molecular environments cells experience in vivo.",
+  "reasons": [
+   "zero-shot",
+   "multiomics",
+   "proteomics",
+   "genomics",
+   "generalizes"
+  ],
+  "score": 14,
+  "tldr": "They use WGCNA-derived plasma metabolite/protein modules as quantitative environmental proxies to map gene-by-environment (G×E) interactions on cell-type-resolved gene expression and methylation in 541 MESA participants, finding pervasive G×E effects (95.2% of genes, 5.9% of CpG sites) and demonstrating zero-shot prediction of interactions in held-out cell types with XGBoost.",
+  "why": "For multiomics researchers, this provides a scalable unsupervised framework turning plasma metabolomics/proteomics into quantitative exposure covariates for QTL interaction mapping, bypassing the need to pre-specify environments. The zero-shot transfer result (lift 2-3x) is a proof of concept that interaction patterns are learnable and can be extended to unprofiled cell types, relevant to anyone building predictive models across omic layers and cell types.",
+  "summary": {
+   "tldr": "They use WGCNA-derived plasma metabolite/protein modules as quantitative environmental proxies to map gene-by-environment (G×E) interactions on cell-type-resolved gene expression and methylation in 541 MESA participants, finding pervasive G×E effects (95.2% of genes, 5.9% of CpG sites) and demonstrating zero-shot prediction of interactions in held-out cell types with XGBoost.",
+   "background": "G×E interaction mapping is important for understanding how environment modifies genetic regulation, but is hard because it requires pre-defined exposures, ~4x sample size relative to main effects, and scalable in-vivo environmental measurements; prior studies were limited to few cell types and few environments (e.g., 249 individuals, 1 cell type, 4 environments for eGenes).",
+   "approach": "Using the MESA multi-omic pilot (N=541 with complete data at two exams, plasma metabolomics of 6,052 peaks and proteomics of 1,317 proteins, plus RNA-seq and methylation), they applied WGCNA to plasma omics to define 52 metabolic and 18 proteomic 'Molecular Exposure Modules' (MEMs). They deconvolved bulk leukocyte expression (TCA) and methylation into 6 cell types and ran tensorQTL G×E interaction scans (cis-eQTL 1 Mb, meQTL 5 kb, MAF>0.05, p<1e-5) against all MEMs. They colocalized G×E loci (coloc.abf, PP.H4>0.5) against curated GWAS and built a leave-one-cell-type-out XGBoost model predicting G×E interactions in unseen cell types from expression, MEM features, and interaction patterns elsewhere.",
+   "findings": [
+    "MEMs capture real environmental signals: they correlate with lipid traits, BMI, IL-6, and CRP, with metabolic MEMs explaining on average 51% of within-module variance and 37.1% of metabolome-wide variance.",
+    "G×E interactions are pervasive: 15,953/16,750 genes (95.2%) and 9,472/159,161 CpG sites (5.9%) show significant G×E effects, exceeding prior reports (32.2% of genes, 3.2% of CpGs) likely due to larger scale (541 vs 249/149 individuals, 6 vs 1 cell type, 70 vs 4 environments).",
+    "G×E hits show cell-type and exposure specificity, with methylation interactions more cell-type specific than expression; B cells had the most G×E hits per context, suggesting they are the most environmentally responsive cell type.",
+    "The strongest predictor of G×E discovery is the number of main-effect hits, followed by cell type; module network topology features explain little variance.",
+    "Colocalization with GWAS was extensive (median 68.8% of molecular phenotype-GWAS pairs involved G×E interactions), including examples like MCAM in CD8+ T cells with a metabolic-inflammatory MEM colocalizing with rheumatoid arthritis, and AEBP1 with a cholesterol MEM.",
+    "The zero-shot XGBoost transfer model predicted G×E interactions in held-out cell types with lift of 2.11-3.3 (expression) and 2.3-3.4 (methylation) over random, with gene responsiveness rank the top SHAP feature."
+   ],
+   "why": "For multiomics researchers, this provides a scalable unsupervised framework turning plasma metabolomics/proteomics into quantitative exposure covariates for QTL interaction mapping, bypassing the need to pre-specify environments. The zero-shot transfer result (lift 2-3x) is a proof of concept that interaction patterns are learnable and can be extended to unprofiled cell types, relevant to anyone building predictive models across omic layers and cell types.",
+   "limitations": "N=541 remains modest for G×E power; the design is cross-sectional, observational (no causality), limited to abundant leukocytes via deconvolution, and MEM-based environmental proxies may themselves be partly heritable; colocalization was conservative and restricted to 18 metabolic MEMs.",
+   "source": "bioRxiv full text",
+   "model": "glm-5.3-flash",
+   "chars": 44403
+  }
+ },
+ "also": [
+  {
+   "title": "DRAFT: graph-recurrent learning of dynamic gene regulatory networks along single-cell multi-omics trajectories",
+   "authors": [
+    "Zhang, Z.",
+    "Santhi Sekhar, P.",
+    "van Nierop y Sanchez, P.",
+    "Lohmann, I.",
+    "Velten, B."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-18",
+   "doi": "10.64898/2026.11.17.767145",
+   "url": "https://doi.org/10.64898/2026.11.17.767145",
+   "abstract": "Single-cell multi-omics data offer an opportunity to resolve how gene regulatory networks (GRNs) are rewired during cell-fate transitions, but most existing methods infer static snapshots, ignore temporal dependencies or assume linear regulation. Here we present DRAFT, a deep learning framework that combines graph attention with recurrent temporal memory to infer dynamic GRNs from time-resolved single-cell multi-omics data. On simulated data, DRAFT outperforms existing methods in accuracy and temporal smoothness. In mouse cellular reprogramming and Drosophila adult spermatogenesis, it recovers interactions supported by independent ChIP-seq, perturbation and Hi-C data, together with known stage-specific regulators. By inferring regulatory activity from dynamic network structure rather than expression alone, DRAFT identifies regulators whose activity precedes their transcriptional peak, including the candidate early germline regulator Mondo. Germline-specific Mondo knockdown alters germline stem cell number and expression of the predicted targets kuz and mamo. DRAFT also enables nonlinear alignment of co-developing lineages and reveals stage-specific cell-cell communication.",
+   "reasons": [
+    "deep learning",
+    "single-cell",
+    "multiomics",
+    "perturbation",
+    "gene regulation"
+   ],
+   "score": 14,
+   "summary": {
+    "tldr": "DRAFT is a graph-attention + GRU deep learning framework that infers stage-specific dynamic gene regulatory networks (eGRNs) from single-cell RNA+ATAC trajectories, recovering known regulators and predicting timing-offset regulators validated by knockdown.",
+    "background": "Most GRN inference methods (SCENIC+, Dictys, scMTNI, CellOracle, scDoRI) produce static snapshots, assume linear regulation, or handle time only via smoothing, whereas GRNs are rewired during cell-fate transitions. Inferring dynamic networks from single-cell multi-omics requires jointly handling temporal dependencies between stages, temporal smoothness, and nonlinear TF–RE–target regulation.",
+    "approach": "DRAFT builds a static prior graph (TF–RE edges from motif enrichment, RE–TG edges from genomic proximity; TF–TG-only for unpaired data), then uses graph attention networks to integrate stage-specific expression/accessibility node features and a gated recurrent unit to propagate information along linear or branching trajectories. Edge strength is cosine similarity of learned node embeddings; Gaussian kernel interpolation gives continuous networks, plus edge clustering (k-means) and LDA gene topics for interpretation. It supports paired and unpaired multiome data.",
+    "findings": [
+     "On simulated 5-stage trajectories (50 TFs, 150 TGs, 200 cells/stage, scMultiSim), DRAFT reached mean AUROC 0.710 vs scMTNI 0.561, Dictys 0.533, SCENIC+ 0.528, scDoRI 0.517, and higher temporal smoothness (0.612 vs 0.100–0.515); gains depended on modular prior structure (random priors: only 0.550 vs 0.499–0.534).",
+     "On mouse MEF reprogramming (unpaired scRNA GSE108222 + scATAC GSE208620, 7 clusters, successful vs unsuccessful branches), DRAFT achieved the best AUROC 0.653 / AUPR 0.100 on the perturbation benchmark and recovered known branch TFs (Foxs1, Fosl1, Egr1 at start; Esrrb, Klf5, Zscan10 at end).",
+     "On paired Drosophila testis multiome (10,335 nuclei, GSE277132), DRAFT ranked Hi-C-supported RE–TG pairs at AUROC 0.59 (spermatogonia) and 0.57 (spermatocytes) vs 0.49/0.47 for SCENIC+, and recovered known regulators (Dref, ovo, esg, foxo, cnc, EcR/usp, ken, dsx).",
+     "DRAFT predicted a Mondo role in early germline that precedes its RNA peak (1° Sc); germline Mondo RNAi increased hub-contacting germ cells (P = 8.3×10⁻⁵, n=11 vs 14 testes) and altered predicted targets kuz (decreased, P = 1.09×10⁻⁴) and mamo (increased, P = 6.3×10⁻³).",
+     "DTW alignment of germline and somatic network dynamics mapped the eya expression switch within the expected window (0.2 stages before vs 1.5 after by linear alignment), and receptor network centrality gave time-resolved ligand–receptor scoring, assigning 18/21 literature soma-to-germline pairs early (AUROC 0.85) vs CellChat 0.41, LIANA+ 0.78."
+    ],
+    "why": "For anyone building multiomics trajectory models, DRAFT shows that explicitly encoding temporal memory (GRU) plus nonlinear graph attention yields smoother, more accurate dynamic GRNs than static or smoothing-based baselines, and that network-centrality timing can flag regulators invisible in expression-only analyses. The Mondo validation is a concrete example of a model-derived hypothesis tested experimentally, and the DTW-on-networks alignment is a reusable trick for co-developing lineage communication analysis.",
+    "limitations": "DRAFT is trained to reconstruct the prior graph, so prior quality (motif + genomic distance) caps performance, and inferred edges are unsigned, co-occurrence-based rather than causal. It only handles linear/tree trajectories with discrete integer stage labels, uses only RNA+ATAC, and the additional 22 timing-offset TF predictions remain unvalidated.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 72051
+   }
+  },
+  {
+   "title": "HyperGenie: A method for predicting enzymatic gene essentiality using hypergraph neural networks and genome-scale metabolic models",
+   "authors": [
+    "Ioannou, P.",
+    "Duta, I.",
+    "Verma, S.",
+    "Cicuta, P.",
+    "Lio, P.",
+    "Angione, C."
+   ],
+   "authorCount": 6,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-17",
+   "doi": "10.64898/2026.11.15.766798",
+   "url": "https://doi.org/10.64898/2026.11.15.766798",
+   "abstract": "Identifying essential genes in bacteria is crucial for drug discovery and synthetic biology. Genome-scale metabolic models (GEMs) evaluated via flux balance analysis remain standard, yet they rely on the often-invalid premise that mutant strains optimize for maximum growth. Recent machine learning approaches circumvent this limitation using random forests or graph neural networks on mass flow graphs (MFGs). However, data-driven tools like random forests discard network topology, while graph-based tools like MFGs decompose multi-component biochemical reactions into pairwise interactions, misrepresenting complex stoichiometry and limiting interpretability. Furthermore, existing methods remain largely uncharacterised in data-scarce regimes and cross-environmental conditions. Here, we introduce HyperGenie, a framework that integrates genome-scale metabolic models with directed hypergraph neural networks by representing metabolites as nodes and reactions as hyperedges. Operating directly on wild-type flux features, HyperGenie eliminates post-knockout optimality assumptions, achieves a 13% PR-AUC improvement over prior objective-dependent methods, and matches computationally demanding, state-of-the-art flux-sampling baselines. Using HyperGenie to guide targeted growth curve assays, we identified latent essentiality misannotations across three genes in the benchmark iML1515 dataset, which we then reconciled and validated experimentally via PCR. In data-scarce regimes, HyperGenie retained robust predictive performance (> 90% PR-AUC) when trained on as little as 40% of the data. To isolate the value of hypergraph message passing, we benchmarked HyperGenie against an independent-reaction multilayer perceptron (MLPGenie) across diverse nutrient environments and uptake rates, where HyperGenie's hypergraph inductive bias yielded consistent accuracy gains (> 2% in glucose; > 4% across six alternative carbon sources). Notably, HyperGenie exhibits robust zero-shot cross-nutrient generalization, accurately forecasting gain-of-essentiality phenotypes on novel carbon sources, though loss-of-essentiality remains challenging. Finally, coupling hypergraph representations with SHAP attribution provides actionable mechanistic insights into metabolic rewiring, establishing a data-efficient, interpretable platform for discovering novel antibiotic targets.",
+   "reasons": [
+    "deep learning",
+    "graph neural network",
+    "AI",
+    "zero-shot",
+    "genomics",
+    "drug discovery"
+   ],
+   "score": 16,
+   "summary": {
+    "tldr": "HyperGenie is a directed hypergraph neural network that predicts bacterial gene essentiality from wild-type flux features (FBA/pFBA/FVA) on the iML1515 E. coli metabolic model, beating prior ML baselines and experimentally correcting three misannotated genes.",
+    "background": "Predicting essential genes in bacteria matters for antibiotic discovery, but standard flux balance analysis (FBA) on genome-scale metabolic models assumes knockout strains still optimize for maximal growth, which is often invalid. Prior ML fixes either discard network topology (random forests on flux samples) or flatten multi-reactant biochemistry into pairwise reaction graphs, hurting accuracy and interpretability.",
+    "approach": "HyperGenie represents the E. coli iML1515 GEM (2,712 reactions, 1,877 metabolites, 1,516 genes) as a directed hypergraph: metabolites are nodes, reactions are hyperedges carrying stoichiometry, and message passing runs opposite to biochemical flux so upstream reactions learn downstream demand. It uses an AllDeepSets-based hypergraph layer trained on 254 reaction labels (193 essential/61 non-essential) from wild-type FBA/pFBA/FVA features in aerobic glucose M9, mapping reaction predictions to genes via GPR rules. A no-topology MLP baseline (MLPGenie) on identical features isolates the value of hypergraph message passing; evaluation uses 50 runs of 5-fold CV, plus 16 carbon sources and uptake rates of 10/20/40 mmol gDW-1 h-1.",
+    "findings": [
+     "HyperGenie beats prior objective-dependent ML methods (FlowGAT, Random Forest) by over 12-13% PR-AUC on glucose and matches the state-of-the-art flux-sampling method FCL on overlapping gene subsets (accuracy/F1 comparable).",
+     "A hypergraph ablation shows consistent accuracy gains over MLPGenie: >2% on glucose, >4% on several alternative carbon sources (acetate, pyruvate, oxoglutarate, ribose), and >10% on xylose.",
+     "Both models are sample-efficient, retaining >90% PR-AUC when trained on only 20-40% of data, though HyperGenie degrades faster below 50% due to its larger parameter count.",
+     "Discrepancy analysis plus growth-curve assays (with PCR confirmation) revealed three essentiality misannotations in iML1515: panB, bioF, and bioH are actually essential in unsupplemented glucose M9.",
+     "A glucose-trained model zero-shot generalizes to other carbon sources, predicting gain-of-essentiality genes well (e.g., acnB in acetate, xylB in xylose) but failing on loss-of-essentiality cases, and underperforms on low-molecular-weight C2-C3 substrates unless uptake rates are raised."
+    ],
+    "why": "For anyone doing AI on metabolic/multiomics networks, this shows hypergraph representations natively capture multi-substrate stoichiometry that pairwise GNNs miss, while wild-type flux features sidestep knockout-optimality assumptions. It also demonstrates ML as a data-curation tool: model-disagreement flags were experimentally validated against a standard reference dataset.",
+    "limitations": "The method only covers genes with one-to-one or one-to-many GPR mappings on a single organism (E. coli), uses semi-supervised training with noisy pFBA-derived labels, and cannot reliably predict loss-of-essentiality in cross-nutrient transfer; interpretability relies on SHAP with claims about flux-direction mechanisms not fully validated.",
+    "source": "bioRxiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 83252
+   }
+  },
+  {
+   "title": "Multi-Assay Antibody Developability Prediction with Shared Structure-Language Representations",
+   "authors": [
+    "Daria B. Kokh"
+   ],
+   "authorCount": 1,
+   "venue": "arXiv",
+   "preprint": true,
+   "date": "2026-11-13",
+   "doi": null,
+   "url": "https://arxiv.org/abs/2611.18846v1",
+   "abstract": "Early assessment of antibody developability is critical in drug discovery, but computational approaches remain limited by the scarcity of experimental data. We explore two strategies for working within that limit. First, we designed per-residue physicochemical descriptors encoding the local structural environment, including new terms such as directional charge asymmetry and screened electrostatic potential. These feed a convolutional network, combined with protein language model (PLM) embeddings in a two-stream architecture: the two are encoded and predicted independently and merged only at the prediction stage. Second, a shared trunk with per-assay heads passes information between related assays. Both are implemented in the Multi-Assay Developability Model (MADM) and evaluated on eight assays: HIC, heparin affinity (HAC), AC-SINS, and polyspecificity ELISA against BVP, dsDNA, insulin, ovalbumin and soluble membrane proteins (SMP), with labels from 29 open sources. Structural descriptors match or exceed PLM embeddings (AbLang2, ESM2) on several assays; combining the streams gives a small but consistent gain in accuracy and reduces seed-to-seed variance. Multi-assay training raises Spearman rho for ovalbumin and SMP by about 0.1, where assays correlate and share sequence space. Under cluster-split cross-validation the strongest results are for HAC, ovalbumin, insulin, SMP and HIC (rho = 0.70-0.82); AC-SINS, BVP and dsDNA are weaker (0.50-0.55). In these three, sequence clusters largely coincide with data source, so a held-out fold measures transfer to differently calibrated measurements as well as to new sequences. On the 80-antibody GDPa3 hold-out, performance falls by rho around 0.1 for all but SMP (0.22). Transfer to the VHH panel of Ginkgo GDPa5 gives comparable results, and scFv validation against binary SMP labels yields F1 = 0.89, AUC = 0.95.",
+   "reasons": [
+    "language model",
+    "proteins",
+    "drug discovery",
+    "code released",
+    "generalizes"
+   ],
+   "score": 16,
+   "summary": {
+    "tldr": "The paper introduces MADM, a two-stream (per-residue structural descriptors + frozen protein language model embeddings) multi-task neural model that predicts eight antibody developability assays from pooled open data, showing modest gains from multi-assay training but a persistent drop on fully held-out panels.",
+    "background": "Antibody developability (hydrophobicity, self-association, polyspecificity) must be predicted computationally because assays are low-throughput and costly, yet supervised models are limited by small, heterogeneous experimental datasets. Existing models often generalize poorly: performance typically collapses by Δρ ≈ 0.2-0.3 when moving from cross-validation to external hold-out sets, partly because training data come from different labs with different calibrations.",
+    "approach": "They assembled labels for eight assays (HIC, HAC, AC-SINS, and ELISA polyspecificity against BVP, dsDNA, insulin, ovalbumin, SMP) from 29 open sources (e.g., 771 HIC and 620 AC-SINS measurements), rescaling across sources using anchor antibodies measured in more than one lab. Each antibody gets 31 per-residue structure-derived descriptors (66 channels, IMGT-aligned, from ABodyBuilder2-predicted structures), including new terms like directional charge asymmetry and screened electrostatic potential, fed to a masked CNN. This structural stream and a frozen PLM stream (AbLang2-paired or ESM2-650M) are encoded independently and merged only at prediction (late fusion with a learned per-assay weight), and a multi-task version shares both encoders across assays with per-assay heads and uncertainty-weighted auxiliary losses.",
+    "findings": [
+     "Structural descriptors alone match or beat PLM embeddings on several assays; under cluster-split CV the multi-task model reaches ρ = 0.70-0.82 for HAC, ovalbumin, insulin, SMP and HIC, but only 0.50-0.55 for AC-SINS, BVP and dsDNA, where sequence clusters largely coincide with data source (NMI > 0.5) so cluster CV partially measures inter-source calibration rather than generalization.",
+     "Multi-task training helps only where assays correlate and share sequences: ovalbumin and SMP improve by ~0.1 ρ (they share 309 sequences and correlate at ρ = 0.75), while HIC slightly degrades (-0.03) because its best auxiliary covers <8% of the training set.",
+     "On the 80-antibody GDPa3 hold-out (all sequence singletons, no close training neighbors), performance drops ~0.1 ρ for most assays (HIC 0.65, HAC 0.69, ovalbumin 0.67, AC-SINS 0.43, SMP 0.40, with SMP losing Δρ = 0.22), and no assay exceeds ρ = 0.7.",
+     "Transfer to VHH panels (GDPa5, Gordon et al.) retains or improves HIC/HAC performance (HAC 0.83 vs 0.84 for Moller & Ritter) but is notably weaker for polyreactivity (AC-SINS 0.38 vs 0.65; ovalbumin 0.12 vs 0.42).",
+     "On a 3,065-sequence scFv sample from Chen et al., the SMP model achieves F1 = 0.89, MCC = 0.75, AUC = 0.95 for binary polyreactivity classification despite being trained on only 382 quantitative IgG measurements, and classification AUC stays 0.80-0.97 for nearly all assays under cluster CV."
+    ],
+    "why": "For researchers in AI for transcriptomics/multiomics this is a useful case study in small-label supervised learning: late fusion of interpretable physics-based features with PLM embeddings, per-residue (not aggregated) representations, and multi-task transfer across related labels are strategies directly analogous to multiomic assays. It also shows concretely how source heterogeneity and cluster-source confounding inflate apparent generalization, a pitfall relevant to any pooled multi-dataset training corpus.",
+    "limitations": "Absolute regression accuracy is modest and drops substantially on diverse hold-out panels (no assay exceeds ρ = 0.7 on GDPa3); for several weak assays cluster CV conflates sequence novelty with cross-lab calibration differences, and labels cannot be rescaled everywhere, so inter-source noise (e.g., AC-SINS inter-source ρ = 0.68) caps achievable performance.",
+    "source": "arXiv full text (PDF)",
+    "model": "glm-5.3-flash",
+    "chars": 82688
+   }
+  }
+ ],
+ "candidates": 337
+}
