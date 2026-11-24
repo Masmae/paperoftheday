@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-24",
+   "title": "More Genes, Faster Inference: Efficient Large-Panel Spatial Transcriptomics Prediction from Histology",
+   "venue": "arXiv",
+   "key": "https://arxiv.org/abs/2611.17899v1",
+   "also": [
+    "10.64898/2026.11.20.768136",
+    "10.64898/2026.11.20.768033",
+    "10.1101/2024.11.22.624797"
+   ]
+  },
+  {
    "date": "2026-11-22",
    "title": "Mapping Gene-by-Environment Interactions via the Plasma Exposome at Cell-Type Resolution",
    "venue": "medRxiv",

@@ -1,0 +1,136 @@
+{
+ "date": "2026-11-24",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "More Genes, Faster Inference: Efficient Large-Panel Spatial Transcriptomics Prediction from Histology",
+  "authors": [
+   "Songming Zhang",
+   "Yuxiao Luo",
+   "Shifu Luo",
+   "Siran Chen",
+   "Shuquan Su",
+   "Jinyan Li"
+  ],
+  "authorCount": 6,
+  "venue": "arXiv",
+  "preprint": true,
+  "date": "2026-11-13",
+  "doi": null,
+  "url": "https://arxiv.org/abs/2611.17899v1",
+  "abstract": "Spatial transcriptomics (ST) prediction from histology aims to infer spatially resolved gene expression profiles directly from tissue images. This is a challenging problem that is currently often addressed with complicated model architectures, additional inputs, and complicated training procedures, while remaining limited to fixed, small gene panels. This raises a natural question: Is there an efficient method for large-panel ST prediction? Here, we present GeneFlow, a simpler yet effective framework for large-scale spatial gene expression prediction that unifies flow-matching generative modeling with structured multimodal fusion. Specifically, GeneFlow first encodes both histological morphology and cross-gene interactions in spatial spots through histology and gene tokenizers. The model directly predicts spatial gene expression, rather than an intermediate velocity field, while being trained with a velocity-based flow-matching objective. We show that, even without relying on heavy generative pipelines, GeneFlow achieves state-of-the-art performance across multiple ST benchmarks, with up to 56.8% gains in 1,000-gene prediction. Extensive experiments further show that GeneFlow produces biologically meaningful spot profiles while reducing computational cost by orders of magnitude, thereby improving efficiency and scalability, particularly in clinical settings. We believe GeneFlow provides an opportunity for leveraging widely available histology images for downstream biological discovery. Code is available at: https://github.com/ZZhangsm/GeneFlow",
+  "reasons": [
+   "generative model",
+   "transcriptomics",
+   "spatial omics",
+   "code released",
+   "scale"
+  ],
+  "score": 16,
+  "tldr": "GeneFlow is an endpoint-parameterized flow-matching model with a ZINB prior and gene tokenization that predicts large panels (~1000 genes) of spatial gene expression from H&E histology patches, achieving SOTA accuracy with very low compute.",
+  "why": "For anyone building histology-to-omics models, this shows a lightweight generative design (flow matching + structured gene tokens + biologically appropriate ZINB prior) can outperform heavier diffusion/multi-branch architectures while scaling to 1000+ genes and running orders of magnitude faster — relevant to virtual cell / ST imputation pipelines and clinical deployment. It also usefully challenges the field's reliance on MSE/MAE-style evaluation.",
+  "summary": {
+   "tldr": "GeneFlow is an endpoint-parameterized flow-matching model with a ZINB prior and gene tokenization that predicts large panels (~1000 genes) of spatial gene expression from H&E histology patches, achieving SOTA accuracy with very low compute.",
+   "background": "Spatial transcriptomics (ST) prediction from histology infers spot-level gene expression from H&E images, but existing methods use complex multi-stage pipelines, model genes mostly independently, and are limited to small panels (~200 genes), while clinical use needs 1000+ genes. Sparse, overdispersed, zero-inflated expression data also makes generative modeling off-manifold and error-prone.",
+   "approach": "GeneFlow tokenizes each spot's gene expression vector into a compact set of latent gene tokens (linear projection + type embedding) and conditions a 12-block DiT transformer on frozen pretrained pathology embeddings (UNI and CONCH, 224×224 patches, no explicit spatial coordinates). It uses an endpoint-parameterized flow-matching scheme: the network directly predicts the clean expression endpoint, but the loss is the standard velocity-space objective (velocity computed from the predicted endpoint), which the authors argue anchors predictions to the data manifold. The flow starts from a zero-inflated negative binomial (ZINB) prior instead of Gaussian, plus tricks like parameter-free RMSNorm, ReLU² activations, and QK-norm; 2–5 sampling steps suffice at inference.",
+   "findings": [
+    "Evaluated on four HEST-1k Visium datasets (kidney, HER2ST, PRAD prostate cancer, mouse brain) with slide-level holdout, against StNet, EGN, BLEEP, TRIPLEX, Stem, and STFlow.",
+    "GeneFlow wins all PCC-k metrics; e.g., PCC-1000 of 0.3159 (kidney, +64.3% over best baseline), 0.6738 (HER2ST), 0.4307 (PRAD, +10.2%), 0.2882 (mouse brain).",
+    "It is far cheaper: 7.3M params, 0.31 GFLOPs, 0.61 s/sample vs. Stem's 35M/42.79 GFLOPs/554 s and STFlow's 53.35 GFLOPs.",
+    "Ablations show both gene tokenizer and both pathology encoders matter (dropping UNI or CONCH collapses PCC-1000 to 0.04–0.06), and endpoint-x-prediction with velocity loss beats velocity- or x-loss variants.",
+    "ZINB prior beats Gaussian (PCC-1000 0.2739 vs 0.2625) and Zero (0.1763); the model scales to 3000 DEGs without sharp degradation.",
+    "The authors show MSE/MAE correlate only weakly with PCC (r ≈ -0.13/-0.11), arguing distance metrics are poor evaluation signals for this task."
+   ],
+   "why": "For anyone building histology-to-omics models, this shows a lightweight generative design (flow matching + structured gene tokens + biologically appropriate ZINB prior) can outperform heavier diffusion/multi-branch architectures while scaling to 1000+ genes and running orders of magnitude faster — relevant to virtual cell / ST imputation pipelines and clinical deployment. It also usefully challenges the field's reliance on MSE/MAE-style evaluation.",
+   "limitations": "Performance depends on frozen pretrained pathology encoders (UNI/CONCH), gains on some datasets are modest (mouse brain PCC-1000 only +1.9%, HER2ST +2.7%), and no external biological knowledge or new modalities are incorporated, limiting generalization where paired data is scarce. Only one held-out slide per dataset is used for testing.",
+   "source": "arXiv full text",
+   "model": "glm-5.3-flash",
+   "chars": 66313
+  }
+ },
+ "also": [
+  {
+   "title": "Population-level learning of non-additive effects enables accurate and efficient prediction of combinatorial perturbation responses",
+   "authors": [
+    "An, s.",
+    "Gong, Q.",
+    "Cao, K."
+   ],
+   "authorCount": 3,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-23",
+   "doi": "10.64898/2026.11.20.768136",
+   "url": "https://doi.org/10.64898/2026.11.20.768136",
+   "abstract": "Combinatorial perturbations are widely used to study genetic interactions and to develop drug combinations, but the number of possible combinations grows quadratically with the number of perturbations, and only a small fraction can be measured in a screen experiment. Despite their growing sophistication, deep-learning and foundation models often fail to outperform a simple additive baseline based on measured single-perturbation responses. This suggests a simpler approach that builds on these measurements and directly learns deviations from additivity at the population level. We therefore developed GAIN, a lightweight model that implements these principles by predicting the pseudobulk response to a combination as the sum of its two single-perturbation responses and a learned interaction term. Across three single-cell datasets of genetic and drug combinations, GAIN corrected deviations from additivity and outperformed the additive model and cell-level methods across generalization settings and metrics, while training 3- to 64-fold faster. Applied to a combinatorial CRISPR screen of leukemia differentiation regulators, GAIN revealed synergy between key regulators of the differentiation block and genes that restrain differentiation but have little effect alone. It also revealed dampening by the histone chaperone FACT, which supports the induction of differentiation genes. These results establish population-level modeling of the deviation from additivity as a simple, accurate and scalable approach to predicting combination responses.",
+   "reasons": [
+    "foundation model",
+    "single-cell",
+    "perturbation",
+    "CRISPR",
+    "scale",
+    "generalizes"
+   ],
+   "score": 20
+  },
+  {
+   "title": "A2Holo: Dual-Stream Flow Matching of 3D Structure and a Protein Language Model for Conformational Transition Prediction",
+   "authors": [
+    "Kim, D.",
+    "Kim, H.",
+    "Sim, J.",
+    "Kim, M.",
+    "Jang, M.",
+    "Lee, J."
+   ],
+   "authorCount": 6,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-23",
+   "doi": "10.64898/2026.11.20.768033",
+   "url": "https://doi.org/10.64898/2026.11.20.768033",
+   "abstract": "Modelling a ligand-bound holo conformation from a ligand-free apo conformation is essential in structure-based drug discovery. We present A2Holo, which casts apo-to-holo prediction as flow matching between two experimental structures rather than generation from noise. It transplants the dual-stream joint attention of in-context image generation to residue-aligned protein language model embeddings and structure. Without ligand conditioning or stochastic sampling, A2Holo's single deterministic trajectory reaches a median C RMSD of 0.809 [A] on the D3PM benchmark, the lowest among existing methods. Its TM-score exceeds even the best of 10 samples from every stochastic baseline on at least 144 of 150 pairs. Beyond performance, we directly measure the transplanted multimodal mechanism itself. Because sequence and structure are residue-aligned, its joint attention can be measured at residue resolution and tested for reproducibility across independently trained model variants. Within the structure stream, the attention a residue receives recovers moving residues better than the attention it emits, and this asymmetry is learned. A2Holo demonstrates a successful multimodal transplant from in-context image generation to protein conformational change, with strong deterministic apo-to-holo prediction. It also provides a quantitative account of how that mechanism organises residue-aligned sequence and structure around the residues that move.",
+   "reasons": [
+    "language model",
+    "generative model",
+    "zero-shot",
+    "proteins",
+    "drug discovery"
+   ],
+   "score": 16
+  },
+  {
+   "title": "Mapping whole-tissue spatial multi-omics at single-cell resolution with STEP",
+   "authors": [
+    "Hu, Z.",
+    "Zhu, Z.",
+    "Cai, L.",
+    "Zhan, Y.",
+    "Yan, X.",
+    "Wang, Z.",
+    "Chen, J.",
+    "Sun, B.",
+    "Jiang, S.",
+    "Du, S.",
+    "Wang, H.",
+    "Li, X."
+   ],
+   "authorCount": 18,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-20",
+   "doi": "10.1101/2024.11.22.624797",
+   "url": "https://doi.org/10.1101/2024.11.22.624797",
+   "abstract": "Spatial omics technologies have revolutionized our ability to map transcriptomic, proteomic, or metabolomic profiles within tissue contexts. However, existing spatial multi-omics approaches emphasize clustering or domain identification from measured profiles, while a general framework for whole-slice mapping in measured and unmeasured areas at single-cell resolution across additional omics layers remains lacking. Here we introduce STEP, a computational framework that integrates probabilistic inference with deep learning for flexible integration of histology, spatially resolved transcriptomics (SRT), single-cell, and/or multi-omics data. We validated STEP's advantages across diverse applications. Furthermore, STEP enables tri-modal integration of Xenium, CITE-seq, and imaging mass cytometry to map transcriptome-wide gene expression and protein profiles from a small gene panel. Through quadra-modal integration of SRT, histology, single-nucleus RNA sequencing, and inCITE-seq, STEP reconstructs a 3D multi-omics brain cell atlas from six low-resolution SRT sections. Collectively, STEP provides a cost-effective tool for exploring spatial biology by integrating diverse, complementary modalities.",
+   "reasons": [
+    "deep learning",
+    "single-cell",
+    "transcriptomics",
+    "multiomics",
+    "spatial omics",
+    "proteomics"
+   ],
+   "score": 14
+  }
+ ],
+ "candidates": 355
+}
