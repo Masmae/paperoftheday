@@ -1,0 +1,193 @@
+{
+ "date": "2026-11-25",
+ "pickedBy": "glm-5.3-flash",
+ "paper": {
+  "title": "CellBench: task-dependent performance and generalization limits of single-cell foundation models",
+  "authors": [
+   "Xu, Y.",
+   "Li, Y.",
+   "Yuan, Y.",
+   "Xia, Q.",
+   "Tao, H.",
+   "Hu, F.",
+   "Zang, Z."
+  ],
+  "authorCount": 7,
+  "venue": "bioRxiv",
+  "preprint": true,
+  "date": "2026-11-23",
+  "doi": "10.64898/2026.04.01.714123",
+  "url": "https://doi.org/10.64898/2026.04.01.714123",
+  "abstract": "Single-cell foundation models (scFMs) are increasingly used for transcriptomic analysis, yet it remains unclear what biological information their embeddings preserve and when they outperform dataset-fitted methods. Here, we present CellBench, a unified benchmark of frozen scFM representations across tissues, species, and genetic perturbation screens. We find that different models capture distinct aspects of cellular biology, while classical baselines remain competitive across tasks. Human-pretrained representations transfer to supervised mouse analyses, but under a shared decoder they fail to improve genome-wide absolute error over predicting no change for unseen perturbation targets. Neither model size nor reported pretraining data volume reliably predicts performance. Excluding cohorts with sample or donor identifier matches to pretraining records substantially reduces annotation advantages without changing model rankings appreciably. Together, these findings show that the value of scFM representations depends on the biological task and the strength of the evidence supporting their performance.",
+  "reasons": [
+   "foundation model",
+   "single-cell",
+   "transcriptomics",
+   "perturbation",
+   "genomics",
+   "scale"
+  ],
+  "score": 20,
+  "tldr": "Built a unified benchmark of frozen single-cell foundation model embeddings across tissues, species, and genetic screens, finding classical baselines often competitive, performance not predicted by model size, and annotation advantages partly explained by pretraining data leakage.",
+  "why": "CellBench is a rigorous, timely benchmark that critically tests single-cell foundation models across tissues, species, and perturbation screens, exposing limits (e.g., weak perturbation generalization, pretraining-data leakage effects) that reshape how the field evaluates these models. It directly informs the researcher's daily toolkit choices and challenges hype with strong classical baselines. The alternatives are mostly incremental tools, older landmark works already well-known, or reviews.",
+  "summary": {
+   "tldr": "CellBench benchmarks 13 frozen single-cell foundation models against PCA/UMAP/scVI on 12 human/mouse tissue cohorts and 4 Perturb-seq screens, finding task-dependent performance, competitive classical baselines, no benefit for unseen perturbation prediction, and no reliable scaling effect.",
+   "background": "Dozens of single-cell foundation models (scFMs) are now used as frozen feature extractors, but it is unclear what biological information their embeddings preserve and when they beat dataset-fitted methods like PCA and scVI. Prior benchmarks reached conflicting conclusions, and possible pretraining/evaluation data overlap plus undisclosed provenance make reported advantages hard to trust.",
+   "approach": "The authors built CellBench, a unified evaluation of 13 released checkpoints (scFoundation, scGPT, UCE, Geneformer, CellPLM, TranscriptFormer, CellFM, GeneCompass, Nicheformer, LangCell, scPRINT2, scLong, Tabula; 13.2M–1006.1M parameters) plus PCA, UMAP, and scVI fit only on training splits. Tasks: unsupervised clustering, native batch assessment, supervised cell-type annotation, and HVG expression reconstruction across 12 cohorts (4 healthy human organs, 4 diseases, 4 Tabula Muris Senis mouse organs) with donor-level splits, plus perturbation prediction on Norman, Adamson, and Replogle K562/RPE1 Perturb-seq using a shared residual decoder compared against a zero-change baseline. Audits covered linear probes for rare classes and continuous programs, scale correlations, cross-species transfer, and pretraining-data provenance.",
+   "findings": [
+    "No model wins across tasks; e.g., PCA on training-split HVGs reached the highest 12-cohort clustering NMI (0.706 vs UCE 0.701) and dominated HVG reconstruction (overall mean rank 1.10 vs scVI 3.32, scFoundation 3.49), with per-cell Pearson r 0.8151 vs ~0.716 for scFoundation/scVI.",
+    "scFoundation led annotation in all three panels (mean ranks 2.854/2.156/1.979) but beat PCA by only 0.0074 overall accuracy (0.8816 vs 0.8742); the bigger gains were in rare (<1%) cell types, where scFoundation, TranscriptFormer, and UCE hit linear-probe F1 of ~0.726–0.735 vs PCA 0.536 and scVI 0.471.",
+    "Human-pretrained models transfer well to mouse supervised tasks (scFoundation: mouse annotation rank 1.979), but dataset-fitted PCA still led mouse clustering (2.500 vs UCE 3.188).",
+    "For unseen perturbation targets (Adamson, Replogle K562/RPE1), none of the 16 methods beat the zero-change baseline on genome-wide MAE (skill −1.4408 to −0.3496); even on held-out Norman two-gene combinations, only 3 of 48 runs had positive MAE skill.",
+    "Parameter count (13.2M–1006.1M) and pretraining corpus size correlate weakly with performance (Spearman −0.121 to −0.242 for mean rank); e.g., scLong at 1006.1M ranked 14.89 in annotation while 50.8M scGPT ranked 5.70, and excluding cohorts with donor/sample identifier matches to pretraining data sharply reduced annotation advantages without changing model rankings.",
+    "Cross-metric correlations show donor mixing (iLISI) anti-correlates with annotation macro-F1 (−0.796) and gene-wise reconstruction (−0.778), suggesting high batch mixing can reflect loss of biological structure."
+   ],
+   "why": "For anyone using frozen scFM embeddings in transcriptomics pipelines, this shows that checkpoint rankings are task-specific and that classical baselines (PCA, scVI) remain competitive except for rare-cell-type information, where pretrained models genuinely help. It also warns that perturbation-prediction claims and benchmark gains may reflect pretraining data leakage or weak baselines, so evaluations should use zero-change controls, rare-type metrics, and provenance audits.",
+   "limitations": "Perturbation evaluation used a target-uninformed residual decoder with untrained condition vectors (no GO or protein-language priors), so the negative unseen-perturbation result may understate what perturbation-aware decoders could achieve. Data provenance is incompletely documented by most model developers, so the leakage analysis is best-effort, and results are specific to frozen representations rather than fine-tuned models.",
+   "source": "bioRxiv full text (PDF)",
+   "model": "glm-5.3-flash",
+   "chars": 119750
+  }
+ },
+ "also": [
+  {
+   "title": "Caduceus: Bi-Directional Equivariant Long-Range DNA Sequence Modeling",
+   "authors": [
+    "Yair Schiff",
+    "Chia-Hsiang Kao",
+    "Aaron Gokaslan",
+    "Tri Dao",
+    "Albert Gu",
+    "Volodymyr Kuleshov"
+   ],
+   "authorCount": 6,
+   "venue": "PubMed",
+   "preprint": false,
+   "date": "2024-03-05",
+   "doi": "10.48550/arxiv.2403.03234",
+   "url": "https://doi.org/10.48550/arxiv.2403.03234",
+   "abstract": "Large-scale sequence modeling has sparked rapid advances that now extend into biology and genomics. However, modeling genomic sequences introduces challenges such as the need to model long-range token interactions, the effects of upstream and downstream regions of the genome, and the reverse complementarity (RC) of DNA Here, we propose an architecture motivated by these challenges that builds off the long-range Mamba block, and extends it to a BiMamba component that supports bi-directionality, and to a MambaDNA block that additionally supports RC equivariance. We use MambaDNA as the basis of Caduceus, the first family of RC equivariant bi-directional long-range DNA language models, and we introduce pre-training and fine-tuning strategies that yield Caduceus DNA foundation models. Caduceus outperforms previous long-range models on downstream benchmarks; on a challenging long-range variant effect prediction task, Caduceus exceeds the performance of 10 x larger models that do not leverage bi-directionality or equivariance. Code to reproduce our experiments is available here.",
+   "reasons": [
+    "foundation model",
+    "language model",
+    "genomics",
+    "scale"
+   ],
+   "score": 19.06295783408451,
+   "classic": true,
+   "citations": 340,
+   "year": 2024,
+   "summary": {
+    "tldr": "Caduceus is a bi-directional, reverse-complement (RC) equivariant DNA language model built on Mamba state-space blocks that matches or beats much larger Transformer and Hyena-based DNA models on regulatory-genomics benchmarks, especially long-range variant effect prediction.",
+    "background": "DNA language models must handle long-range dependencies (regulatory elements up to 100k+ bp from a gene), bidirectional context, and the fact that a sequence and its reverse complement are biologically equivalent, which Transformers handle poorly due to quadratic attention cost and single-strand training. Prior long-range models like HyenaDNA were uni-directional and not RC-aware, so they underuse two important inductive biases.",
+    "approach": "The authors extend the Mamba selective state-space block in two ways: BiMamba, which processes a sequence forward and reversed with shared projection weights (near-zero parameter overhead), and MambaDNA, which wraps BiMamba to run on both the sequence and its reverse complement with shared parameters, yielding provable RC equivariance. They build two model variants: Caduceus-PS (fully RC-equivariant, trained with BERT-style masked language modeling, no RC augmentation needed) and Caduceus-Ph (bi-directional Mamba with RC data augmentation at pre-training and post-hoc conjoining—averaging predictions on the sequence and its RC—at downstream inference). Models (~1.9M parameters, character-level tokenization, context lengths up to 131k bp) are pre-trained on the human reference genome and fine-tuned for downstream tasks.",
+    "findings": [
+     "On the Genomics Benchmarks suite (8 regulatory element classification tasks, 5-fold CV), Caduceus-Ph wins on essentially all tasks, e.g., 0.793 vs 0.780 (HyenaDNA) on Mouse Enhancers and 0.900 vs 0.862 on Human Enhancer Ensembl.",
+     "On 18 Nucleotide Transformer tasks (histone marks, regulatory and splice annotation, 10-fold CV), ~2M-parameter Caduceus models beat the 500M-parameter Nucleotide Transformer v2 and 117M DNABERT-2 on 8 of 18 tasks, though NT-v2 remains best on splice-site annotation.",
+     "On long-range variant effect prediction (SNP effects on gene expression, from the Enformer dataset, SVM on embeddings, AUCROC), Caduceus-PS consistently outperforms HyenaDNA and NT-v2, and at SNP-to-TSS distances >100k bp even exceeds the supervised Enformer baseline.",
+     "Ablations show RC equivariance and bidirectionality each improve pre-training MLM loss, and Mamba outperforms Hyena at comparable sizes for next-token pre-training.",
+     "Caduceus matches or beats models up to 10x larger that lack bidirectionality and RC equivariance on the long-range VEP task."
+    ],
+    "why": "For someone working on transcriptomics/multiomics foundation models, this shows that domain-specific symmetries (RC equivariance) and bidirectional context can substitute for raw parameter count in DNA sequence modeling, and that sub-2M-parameter Mamba models with 131k-bp context are a compute-efficient alternative to large Transformers. The MambaDNA block is a drop-in component usable in supervised or self-supervised multiomics architectures.",
+    "limitations": "Evaluation is limited to human-genome tasks and classification-style benchmarks; the VEP evaluation uses embeddings fed to a simple SVM rather than end-to-end fine-tuning, and splice-site tasks still favor larger Transformer models. Scaling to much larger parameter counts and non-human or multi-species pre-training is untested.",
+    "source": "arXiv full text",
+    "model": "glm-5.3-flash",
+    "chars": 77908
+   }
+  },
+  {
+   "title": "SPACEL: deep learning-based characterization of spatial transcriptome architectures",
+   "authors": [
+    "Hao Xu",
+    "Shuyan Wang",
+    "Minghao Fang",
+    "Songwen Luo",
+    "Chunpeng Chen",
+    "Siyuan Wan",
+    "Rirui Wang",
+    "Meifang Tang",
+    "Tian Xue",
+    "Bin Li",
+    "Jun Lin",
+    "Kun Qu"
+   ],
+   "authorCount": 12,
+   "venue": "Nature Communications",
+   "preprint": false,
+   "date": "2023-11-22",
+   "doi": "10.1038/s41467-023-43220-3",
+   "url": "https://doi.org/10.1038/s41467-023-43220-3",
+   "abstract": "Spatial transcriptomics (ST) technologies detect mRNA expression in single cells/spots while preserving their two-dimensional (2D) spatial coordinates, allowing researchers to study the spatial distribution of the transcriptome in tissues; however, joint analysis of multiple ST slices and aligning them to construct a three-dimensional (3D) stack of the tissue still remain a challenge. Here, we introduce spatial architecture characterization by deep learning (SPACEL) for ST data analysis. SPACEL comprises three modules: Spoint embeds a multiple-layer perceptron with a probabilistic model to deconvolute cell type composition for each spot in a single ST slice; Splane employs a graph convolutional network approach and an adversarial learning algorithm to identify spatial domains that are transcriptomically and spatially coherent across multiple ST slices; and Scube automatically transforms the spatial coordinate systems of consecutive slices and stacks them together to construct a 3D architecture of the tissue. Comparisons against 19 state-of-the-art methods using both simulated and real ST datasets from various tissues and ST technologies demonstrate that SPACEL outperforms the others for cell type deconvolution, for spatial domain identification, and for 3D alignment, thus showcasing SPACEL as a valuable integrated toolkit for ST data processing and analysis.",
+   "reasons": [
+    "deep learning",
+    "single-cell",
+    "transcriptomics",
+    "spatial omics"
+   ],
+   "score": 18.4027942486409,
+   "classic": true,
+   "citations": 159,
+   "year": 2023,
+   "summary": {
+    "tldr": "SPACEL is a three-module deep-learning toolkit for spatial transcriptomics that performs cell type deconvolution (Spoint), cross-slice spatial domain identification (Splane), and 3D tissue reconstruction (Scube), outperforming ~19 existing methods on 32 simulated and 11 real datasets.",
+    "background": "Spatial transcriptomics captures transcriptome-wide expression while preserving 2D tissue coordinates, but seq-based platforms (10X Visium, Stereo-seq) lack single-cell resolution, requiring deconvolution of spot-level cell type compositions. Joint analysis of multiple slices, removal of batch effects, and stacking of consecutive 2D slices into accurate 3D architectures remain unsolved, as existing tools like PASTE and STAligner handle only fully overlapping slices or rely on user-defined landmark domains.",
+    "approach": "SPACEL comprises three modules: (1) Spoint, an MLP with a VAE and a probabilistic model that trains on pseudo-spots simulated from scRNA-seq references (mean ~10 cells per spot) to deconvolve cell type proportions per spot; (2) Splane, a graph convolutional network that takes cell type compositions (not raw expression) as input and uses adversarial learning to remove batch effects, then K-means clustering to find spatial domains coherent across multiple slices; (3) Scube, which builds mutual nearest-neighbor graphs between adjacent slices based on Splane domains, uses differential evolution optimization to find translation/rotation transforms (handling partially overlapped slices via a penalty term), and stacks slices into a 3D model, plus a Gaussian process regression layer for continuous 3D expression imputation.",
+    "findings": [
+     "Spoint achieved the best deconvolution across 32 benchmark simulated datasets, with accuracy score 0.93 versus 0.24–0.82 for competitors (Cell2location, RCTD, STRIDE, Tangram, etc.); on real 10X Visium DLPFC data it reached average AS 0.60 across 56 cell types in 12 slices versus 0.30–0.48 for others.",
+     "Splane reached average JI/median ARI of 0.61/0.61 on the 12-slice DLPFC dataset with shifting distance of ~50 µm, versus JI/ARI 0.41–0.56/0.36–0.54 and SD 75–548 µm for STAligner, PRECAST, STACI, STAGATE, SpaGCN, BayesSpace, and stLearn; joint analysis clearly beat single-slice analysis (SD 50 vs 262 µm).",
+     "On 11 breast cancer 10X Visium slices from three batches, Splane identified ten domains (tumor, intermediate, immune); tumor domains showed chr1q/8q gains and chr1p losses via inferCNV, and immune domains were enriched for H&E-marked spots (up to 44%) and CD3+ IF spots (up to 72%).",
+     "Scube outperformed PASTE and STAligner on 3D alignment: on simulated 10-slice STARmap data with 25% cropping, SSIM/PCC were 0.96/0.97 versus 0.72/0.75 (PASTE); on real 33-slice MERFISH mouse motor cortex data, SSIM/PCC were 0.71/0.76 versus 0.61/0.65 (STAligner) and 0.57/0.61 (PASTE).",
+     "In an integrated test on 75 consecutive Spatial Transcriptomics mouse brain slices, Splane reached JI/ARI 0.42/0.56 (best of multi-slice tools) and Scube achieved SSIM/PCC 0.83/0.85."
+    ],
+    "why": "This is a practical end-to-end pipeline for multi-slice spatial transcriptomics, and its core design choice—feeding deconvolved cell type compositions rather than raw gene expression into a domain-identification GCN with adversarial batch correction—is validated as more robust across slices. For researchers working on transcriptomics/multiomics foundation or integration models, it provides both a useful benchmarking baseline and evidence that cell-type-level representations are stronger features for spatial alignment than raw expression.",
+    "limitations": "Splane depends on prior deconvolution (Spoint) for seq-based data, adding a dependency on reference scRNA-seq quality; Scube only supports rigid (translation/rotation), not nonlinear, alignment, and the whole model must be retrained from scratch when new slices are added, limiting scalability.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 162507
+   }
+  },
+  {
+   "title": "Opportunities for Artificial Intelligence in Advancing Precision Medicine",
+   "authors": [
+    "Fabian V. Filipp"
+   ],
+   "authorCount": 1,
+   "venue": "Current Genetic Medicine Reports",
+   "preprint": false,
+   "date": "2019-12-01",
+   "doi": "10.1007/s40142-019-00177-4",
+   "url": "https://doi.org/10.1007/s40142-019-00177-4",
+   "abstract": "PURPOSE OF REVIEW: We critically evaluate the future potential of machine learning (ML), deep learning (DL), and artificial intelligence (AI) in precision medicine. The goal of this work is to show progress in ML in digital health, to exemplify future needs and trends, and to identify any essential prerequisites of AI and ML for precision health. RECENT FINDINGS: High-throughput technologies are delivering growing volumes of biomedical data, such as large-scale genome-wide sequencing assays; libraries of medical images; or drug perturbation screens of healthy, developing, and diseased tissue. Multi-omics data in biomedicine is deep and complex, offering an opportunity for data-driven insights and automated disease classification. Learning from these data will open our understanding and definition of healthy baselines and disease signatures. State-of-the-art applications of deep neural networks include digital image recognition, single-cell clustering, and virtual drug screens, demonstrating breadths and power of ML in biomedicine. SUMMARY: Significantly, AI and systems biology have embraced big data challenges and may enable novel biotechnology-derived therapies to facilitate the implementation of precision medicine approaches.",
+   "reasons": [
+    "deep learning",
+    "AI",
+    "single-cell",
+    "multiomics",
+    "perturbation",
+    "genomics"
+   ],
+   "score": 21.05876755537042,
+   "classic": true,
+   "citations": 107,
+   "year": 2019,
+   "summary": {
+    "tldr": "A 2019 review surveying how ML/DL methods (CNNs for digital pathology and skin lesion classification, elastic net for epigenomics, Louvain clustering for scRNA-Seq, and ML-based drug screening) are being applied across precision medicine, with emphasis on multi-omics integration.",
+    "background": "Precision medicine needs biomarkers that predict patient-specific treatment responses, but single genes or proteins poorly capture the complex signaling and transcriptional cross-talk between healthy, diseased, stromal, and immune cells. High-throughput technologies generate deep, heterogeneous multi-omics and clinical data that classical bioinformatics struggles to integrate, and drug R&D output has been declining despite growing investment.",
+    "approach": "This is a narrative review, not a new method; it synthesizes state-of-the-art applications of ML/DL across six domains: digital pathology, clinical EHR/text mining, multi-omics integration (drug response prediction), epigenomic network analysis, single-cell and spatial transcriptomics, and chemical informatics/virtual drug screening. It cites specific exemplar studies and outlines prerequisites (training set size, data heterogeneity handling, transfer learning) for AI in precision health.",
+    "findings": [
+     "A deep convolutional neural network trained on >100,000 clinical skin disease images classified skin lesions at performance comparable to pathology quality standards, with transferable mobile-phone deployment for early cancer detection.",
+     "Drug response prediction models trained on multi-omics data (somatic copy number alterations, exome mutations, methylomes, transcriptomes) from ~1000 cancer cell lines achieved top performance by integrating multiple profiling data types with regression scoring.",
+     "In single-cell transcriptomics, Louvain community detection is highlighted as robust for clustering high-dimensional scRNA-Seq matrices, supporting resources like the Human Cell Atlas and perturbation-response prediction.",
+     "Elastic net (ridge+lasso hybrid) handles ultra-high-dimensional epigenomic regression, enabling methylation-based biomarkers and aging clocks from metabolic/epigenomic data.",
+     "Chemical informatics AI now supports virtual screens over billions of molecules, and image-based drug fingerprints enable biological activity prediction beyond the original target of a compound screen."
+    ],
+    "why": "For a transcriptomics/multi-omics AI researcher, this paper is a useful historical snapshot (pre-LLM, ~2019) of how DL penetrated pathology, single-cell, and drug response prediction, framing multi-omics integration as the core precision medicine challenge. It contextualizes where current foundational methods—cell-line drug response models, scRNA-Seq clustering, spatial transcriptomics decoding—came from and what training-data scale was considered sufficient at the time.",
+    "limitations": "As a narrative review, it provides no benchmarks or head-to-head comparisons of methods, and the cited numbers are loose (e.g., '1000 cell lines', '>100,000 images'). The authors flag persistent problems—training set size, confounders, overfitting, lack of mechanistic interpretability of deep networks—that remain open questions.",
+    "source": "open-access full text",
+    "model": "glm-5.3-flash",
+    "chars": 12116
+   }
+  }
+ ],
+ "candidates": 381
+}

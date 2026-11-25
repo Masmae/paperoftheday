@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-25",
+   "title": "CellBench: task-dependent performance and generalization limits of single-cell foundation models",
+   "venue": "bioRxiv",
+   "key": "10.64898/2026.04.01.714123",
+   "also": [
+    "10.48550/arxiv.2403.03234",
+    "10.1038/s41467-023-43220-3",
+    "10.1007/s40142-019-00177-4"
+   ]
+  },
+  {
    "date": "2026-11-24",
    "title": "More Genes, Faster Inference: Efficient Large-Panel Spatial Transcriptomics Prediction from Histology",
    "venue": "arXiv",
