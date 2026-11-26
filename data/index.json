@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-26",
+   "title": "scPriorDiff: Bridging Single-Cell Modalities through Biological Network Prior-Guided Latent Diffusion.",
+   "venue": "Bioinformatics",
+   "key": "10.1093/bioinformatics/btag865",
+   "also": [
+    "10.1186/s12864-019-6285-x",
+    "10.1038/s41592-021-01264-7",
+    "10.64898/2026.11.25.769099"
+   ]
+  },
+  {
    "date": "2026-11-25",
    "title": "CellBench: task-dependent performance and generalization limits of single-cell foundation models",
    "venue": "bioRxiv",
