@@ -1,0 +1,124 @@
+{
+ "date": "2026-11-27",
+ "pickedBy": "score",
+ "paper": {
+  "title": "Spatial transcriptomics prediction from histology jointly through Transformer and graph neural networks",
+  "authors": [
+   "Yuansong Zeng",
+   "Zhuoyi Wei",
+   "Weijiang Yu",
+   "Rui Yin",
+   "Yuchen Yuan",
+   "Bingling Li",
+   "Zhonghui Tang",
+   "Yutong Lu",
+   "Yuedong Yang"
+  ],
+  "authorCount": 9,
+  "venue": "Briefings in Bioinformatics",
+  "preprint": false,
+  "date": "2022-07-17",
+  "doi": "10.1093/bib/bbac297",
+  "url": "https://doi.org/10.1093/bib/bbac297",
+  "abstract": "The rapid development of spatial transcriptomics allows the measurement of RNA abundance at a high spatial resolution, making it possible to simultaneously profile gene expression, spatial locations of cells or spots, and the corresponding hematoxylin and eosin-stained histology images. It turns promising to predict gene expression from histology images that are relatively easy and cheap to obtain. For this purpose, several methods are devised, but they have not fully captured the internal relations of the 2D vision features or spatial dependency between spots. Here, we developed Hist2ST, a deep learning-based model to predict RNA-seq expression from histology images. Around each sequenced spot, the corresponding histology image is cropped into an image patch and fed into a convolutional module to extract 2D vision features. Meanwhile, the spatial relations with the whole image and neighbored patches are captured through Transformer and graph neural network modules, respectively. These learned features are then used to predict the gene expression by following the zero-inflated negative binomial distribution. To alleviate the impact by the small spatial transcriptomics data, a self-distillation mechanism is employed for efficient learning of the model. By comprehensive tests on cancer and normal datasets, Hist2ST was shown to outperform existing methods in terms of both gene expression prediction and spatial region identification. Further pathway analyses indicated that our model could reserve biological information. Thus, Hist2ST enables generating spatial transcriptomics data from histology images for elucidating molecular signatures of tissues.",
+  "reasons": [
+   "transformer",
+   "deep learning",
+   "graph neural network",
+   "transcriptomics",
+   "spatial omics",
+   "RNA-seq"
+  ],
+  "score": 22.96859967869357,
+  "classic": true,
+  "citations": 305,
+  "year": 2022,
+  "tldr": null,
+  "why": null,
+  "summary": null
+ },
+ "also": [
+  {
+   "title": "Artificial intelligence in multi-omics data integration: Advancing precision medicine, biomarker discovery and genomic-driven disease interventions",
+   "authors": [
+    "Hassan Ali"
+   ],
+   "authorCount": 1,
+   "venue": "International Journal of Science and Research Archive",
+   "preprint": false,
+   "date": "2023-02-28",
+   "doi": "10.30574/ijsra.2023.8.1.0189",
+   "url": "https://doi.org/10.30574/ijsra.2023.8.1.0189",
+   "abstract": "The integration of multi-omics data—encompassing genomics, transcriptomics, proteomics, and metabolomics—has revolutionized biomedical research, offering unprecedented insights into disease mechanisms and therapeutic interventions. However, the complexity and volume of multi-omics datasets present significant analytical challenges that traditional computational methods struggle to address. Artificial Intelligence (AI), particularly deep learning and neural networks, has emerged as a powerful tool to overcome these limitations by enabling advanced data integration, biomarker discovery, and personalized treatment strategies. This paper explores the role of AI-driven multi-omics data integration in enhancing disease prediction, early diagnosis, and precision medicine. By leveraging AI models such as deep neural networks (DNNs), convolutional neural networks (CNNs), and transformers, researchers can analyze complex biological interactions, identify patterns indicative of disease onset, and stratify patient populations for tailored treatment approaches. Additionally, AI-powered feature selection methods facilitate the identification of disease-specific biomarkers across multiple omics layers, paving the way for more effective targeted therapies. Moreover, AI plays a crucial role in pharmacogenomics by predicting individualized drug responses, optimizing dosage regimens, and minimizing adverse drug reactions. Machine learning algorithms, including reinforcement learning and generative models, enable real-time modeling of drug-gene interactions, leading to safer and more efficacious therapeutic interventions. Despite the transformative potential of AI in multi-omics data analysis, challenges such as data standardization, model interpretability, and ethical considerations must be addressed to ensure reliability and clinical applicability. This paper provides a comprehensive review of AI-driven multi-omics research, highlighting current advancements, challenges, and future directions in precision medicine.",
+   "reasons": [
+    "transformer",
+    "deep learning",
+    "generative model",
+    "AI",
+    "transcriptomics",
+    "multiomics"
+   ],
+   "score": 23.602059991327963,
+   "classic": true,
+   "citations": 200,
+   "year": 2023
+  },
+  {
+   "title": "Conditional out-of-distribution generation for unpaired data using transfer VAE",
+   "authors": [
+    "Mohammad Lotfollahi",
+    "Mohsen Naghipourfar",
+    "Fabian Joachim Theis",
+    "F Alexander Wolf"
+   ],
+   "authorCount": 4,
+   "venue": "Bioinformatics",
+   "preprint": false,
+   "date": "2020-12-01",
+   "doi": "10.1093/bioinformatics/btaa800",
+   "url": "https://doi.org/10.1093/bioinformatics/btaa800",
+   "abstract": "MOTIVATION: While generative models have shown great success in sampling high-dimensional samples conditional on low-dimensional descriptors (stroke thickness in MNIST, hair color in CelebA, speaker identity in WaveNet), their generation out-of-distribution poses fundamental problems due to the difficulty of learning compact joint distribution across conditions. The canonical example of the conditional variational autoencoder (CVAE), for instance, does not explicitly relate conditions during training and, hence, has no explicit incentive of learning such a compact representation. RESULTS: We overcome the limitation of the CVAE by matching distributions across conditions using maximum mean discrepancy in the decoder layer that follows the bottleneck. This introduces a strong regularization both for reconstructing samples within the same condition and for transforming samples across conditions, resulting in much improved generalization. As this amount to solving a style-transfer problem, we refer to the model as transfer VAE (trVAE). Benchmarking trVAE on high-dimensional image and single-cell RNA-seq, we demonstrate higher robustness and higher accuracy than existing approaches. We also show qualitatively improved predictions by tackling previously problematic minority classes and multiple conditions in the context of cellular perturbation response to treatment and disease based on high-dimensional single-cell gene expression data. For generic tasks, we improve Pearson correlations of high-dimensional estimated means and variances with their ground truths from 0.89 to 0.97 and 0.75 to 0.87, respectively. We further demonstrate that trVAE learns cell-type-specific responses after perturbation and improves the prediction of most cell-type-specific genes by 65%. AVAILABILITY AND IMPLEMENTATION: The trVAE implementation is available via github.com/theislab/trvae. The results of this article can be reproduced via github.com/theislab/trvae_reproducibility.",
+   "reasons": [
+    "generative model",
+    "single-cell",
+    "perturbation",
+    "RNA-seq",
+    "code released",
+    "generalizes"
+   ],
+   "score": 21.375041441672927,
+   "classic": true,
+   "citations": 154,
+   "year": 2020
+  },
+  {
+   "title": "ProteinBERT: a universal deep-learning model of protein sequence and function",
+   "authors": [
+    "Nadav Brandes",
+    "Dan Ofer",
+    "Yam Peleg",
+    "Nadav Rappoport",
+    "Michal Linial"
+   ],
+   "authorCount": 5,
+   "venue": "Bioinformatics",
+   "preprint": false,
+   "date": "2022-02-10",
+   "doi": "10.1093/bioinformatics/btac020",
+   "url": "https://doi.org/10.1093/bioinformatics/btac020",
+   "abstract": "SUMMARY: Self-supervised deep language modeling has shown unprecedented success across natural language tasks, and has recently been repurposed to biological sequences. However, existing models and pretraining methods are designed and optimized for text analysis. We introduce ProteinBERT, a deep language model specifically designed for proteins. Our pretraining scheme combines language modeling with a novel task of Gene Ontology (GO) annotation prediction. We introduce novel architectural elements that make the model highly efficient and flexible to long sequences. The architecture of ProteinBERT consists of both local and global representations, allowing end-to-end processing of these types of inputs and outputs. ProteinBERT obtains near state-of-the-art performance, and sometimes exceeds it, on multiple benchmarks covering diverse protein properties (including protein structure, post-translational modifications and biophysical attributes), despite using a far smaller and faster model than competing deep-learning methods. Overall, ProteinBERT provides an efficient framework for rapidly training protein predictors, even with limited labeled data. AVAILABILITY AND IMPLEMENTATION: Code and pretrained model weights are available at https://github.com/nadavbra/protein_bert. SUPPLEMENTARY INFORMATION: Supplementary data are available at Bioinformatics online.",
+   "reasons": [
+    "language model",
+    "representation learning",
+    "proteins",
+    "code released",
+    "new method"
+   ],
+   "score": 21,
+   "classic": true,
+   "citations": 1288,
+   "year": 2022
+  }
+ ],
+ "candidates": 332
+}

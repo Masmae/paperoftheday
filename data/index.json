@@ -1,6 +1,18 @@
 {
  "days": [
   {
+   "date": "2026-11-27",
+   "title": "Spatial transcriptomics prediction from histology jointly through Transformer and graph neural networks",
+   "venue": "Briefings in Bioinformatics",
+   "key": "10.1093/bib/bbac297",
+   "also": [
+    "10.30574/ijsra.2023.8.1.0189",
+    "10.1093/bioinformatics/btaa800",
+    "10.1093/bioinformatics/btac020"
+   ],
+   "classic": true
+  },
+  {
    "date": "2026-11-26",
    "title": "scPriorDiff: Bridging Single-Cell Modalities through Biological Network Prior-Guided Latent Diffusion.",
    "venue": "Bioinformatics",
