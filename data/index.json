@@ -1,6 +1,17 @@
 {
  "days": [
   {
+   "date": "2026-11-28",
+   "title": "Mechanism-grounded RNA velocity: from kinetic models to deep learning and foundation models.",
+   "venue": "Nat Methods",
+   "key": "10.1038/s41592-026-03387-1",
+   "also": [
+    "10.64898/2026.11.21.768275",
+    "10.1038/s41467-026-78646-y",
+    "10.64898/2026.11.26.769524"
+   ]
+  },
+  {
    "date": "2026-11-27",
    "title": "Spatial transcriptomics prediction from histology jointly through Transformer and graph neural networks",
    "venue": "Briefings in Bioinformatics",

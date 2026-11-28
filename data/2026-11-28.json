@@ -1,0 +1,119 @@
+{
+ "date": "2026-11-28",
+ "pickedBy": "score",
+ "paper": {
+  "title": "Mechanism-grounded RNA velocity: from kinetic models to deep learning and foundation models.",
+  "authors": [
+   "Li",
+   "Wu",
+   "Luo"
+  ],
+  "authorCount": 3,
+  "venue": "Nat Methods",
+  "preprint": false,
+  "date": "2026-11-28",
+  "doi": "10.1038/s41592-026-03387-1",
+  "url": "https://doi.org/10.1038/s41592-026-03387-1",
+  "abstract": "Single-cell RNA sequencing offers unprecedented resolution of cellular states but captures only a static snapshot. RNA velocity addresses this limitation by estimating the instantaneous rate of gene expression change using spliced and unspliced mRNA, thereby revealing the direction of a cell's transcriptional dynamics. Since its debut, diverse computational frameworks have been developed, ranging from deterministic ordinary differential equation models to probabilistic and deep learning-based approaches. However, robust inference remains challenging due to simplified kinetic assumptions, limited consideration of gene regulatory networks and insufficient incorporation of developmental trajectory constraints. We review recent developments in RNA&#x2011;velocity inference, comparing core assumptions and computational strategies. We further outline paths toward mechanism-grounded RNA velocity, which integrates gene regulatory knowledge, developmental trajectory constraints, spatial context and emerging single-cell foundation models. These advances promise greater accuracy, robustness and biological interpretability, expanding RNA velocity's utility for dissecting disease mechanisms in complex tissues.",
+  "reasons": [
+   "foundation model",
+   "deep learning",
+   "single-cell",
+   "gene regulation",
+   "scale"
+  ],
+  "score": 21,
+  "tldr": null,
+  "why": null,
+  "summary": null
+ },
+ "also": [
+  {
+   "title": "Deciphering state bridges via a single-cell large language model",
+   "authors": [
+    "Fei, Q.",
+    "Liang, M.",
+    "Cui, C.",
+    "Kang, B.",
+    "Cui, Q."
+   ],
+   "authorCount": 5,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-23",
+   "doi": "10.64898/2026.11.21.768275",
+   "url": "https://doi.org/10.64898/2026.11.21.768275",
+   "abstract": "Large-scale single-cell transcriptomic data provide a new avenue for precision medicine by uncovering cellular heterogeneity. However, systematic comparison of remodeling patterns across various biological states remains unavailable. Here, we first developed a computational framework based on a foundation model of single cell biology, Universal Cell Embedding (UCE), to harmonize annotations comprising 36 cell types. Based on an integrated dataset of single cell RNA sequencing (scRNA-seq) with 8,789 human samples comprising more than 59 million cells or nuclei across 614 biological states, we then embedded each state with a 36-dimensional vector in a unified space of cell-composition change and further deciphered states bridges by analyzing the relationships among the 614 state vectors. As a result, 22,161 significant bridges (P < 0.05) between the 614 states were revealed. Moreover, we successfully identified a number of well-known bridges such as bridge between Alzheimer's disease and Parkinson's disease (P = 2.21e-15), suggesting the effectiveness of the proposed framework. More importantly, we uncovered a number of new bridges. Furthermore, analyses of the number of changed cell types (NCC) and Shannon entropy revealed heterogeneous and tissue-dependent patterns of cellular composition remodeling. This study provides a new strategy for identifying disease associations and potential therapeutic relationships by deciphering bridges between biological states from scRNA-seq landscape.",
+   "reasons": [
+    "foundation model",
+    "language model",
+    "single-cell",
+    "transcriptomics",
+    "RNA-seq",
+    "scale"
+   ],
+   "score": 21
+  },
+  {
+   "title": "Recommendation system-inspired learning of crossmodal interaction patterns between chromatin accessibility and gene expression.",
+   "authors": [
+    "Wang",
+    "Lin",
+    "Zhang",
+    "Bo",
+    "Li",
+    "Zhang"
+   ],
+   "authorCount": 6,
+   "venue": "Nat Commun",
+   "preprint": false,
+   "date": "2026-11-25",
+   "doi": "10.1038/s41467-026-78646-y",
+   "url": "https://doi.org/10.1038/s41467-026-78646-y",
+   "abstract": "Despite the growing availability of crossmodal single-cell sequencing, existing approaches are limited by underutilization of biological attributes, sparse modality signals, and insufficient modeling of regulatory interactions, limiting generalization in data-scarce settings and the discovery of peak-gene-level relationships. Interestingly, such challenges mirror those in recommendation systems, where side information, high sparsity, binary interactions, and cold start problems are extensively studied. Inspired by recommender models that infer user-item preferences from incomplete interaction graphs, we present CrossRec, which reformulates scATAC and scRNA data as an interaction graph to learn regulatory patterns across single-cell tasks. Its biologically-driven bipartite graph transformer learns interpretable attention over ATAC-RNA pairs. CrossRec outperforms existing methods across various tasks, remains robust under data-scarce settings, generalizes to unseen cell types and datasets, and enhances prior-based methods. Its learned regulatory maps provide cell- and cell-type-specific insights, resolving dynamic regulatory rewiring during cortical neurogenesis and perturbation-specific rewiring of drug-induced regulation in melanoma resistance.",
+   "reasons": [
+    "transformer",
+    "single-cell",
+    "perturbation",
+    "epigenomics",
+    "RNA-seq",
+    "generalizes"
+   ],
+   "score": 18
+  },
+  {
+   "title": "FunDLM: A Foundation DNA Language Model for Fungi",
+   "authors": [
+    "Gyawali, N.",
+    "Moradi, A.",
+    "Bika, R.",
+    "Calderon, L.",
+    "Liu, H.",
+    "Huguet-Tapia, J. C.",
+    "Andorf, C.",
+    "Kim, H.",
+    "Cook, D. E.",
+    "White, F.",
+    "Caragea, D.",
+    "Liu, S."
+   ],
+   "authorCount": 12,
+   "venue": "bioRxiv",
+   "preprint": true,
+   "date": "2026-11-27",
+   "doi": "10.64898/2026.11.26.769524",
+   "url": "https://doi.org/10.64898/2026.11.26.769524",
+   "abstract": "Background: Fungi are important pathogens and biotechnology resources, but lack a broadly applicable fungal DNA language model. Models trained on diverse fungal genomes can support functional interpretation of genomic variants and a broad range of genomic tasks. Results: We introduce FunDLM, a family of four DNA language models pre-trained on 426 fungal reference assemblies spanning 217 genera and 14.3 Gb of sequence. Without task-specific training, FunDLM-Medium-1024bp distinguished phenotype-associated missense variants of Saccharomyces cerevisiae from synonymous controls with an area under the receiver operating characteristic curve (AUROC) of 0.875. It performed comparably to Evo 2, a generalist model with about 15 times more parameters, and better than Nucleotide Transformer v3. The model also recognized mutations that disrupt start codons or introduce premature stop codons in S. cerevisiae and the blast fungus Pyricularia oryzae. Its scores for missense variants, computed from DNA alone, correlated with those of protein language models in S. cerevisiae and two Fusarium species (Pearson correlation 0.57-0.75). After fine-tuning, FunDLM-Small-1024bp identified supernumerary chromosome sequences in four Pyricularia isolates not used for training (average precision 0.884), and FunDLM-Medium-1024bp recognized centromeres on a chromosome withheld from training (AUROC 0.908). Fine-tuned models also predicted three histone modifications in an isolate and on chromosomes not used for training (AUROC 0.910-0.996). Conclusions: FunDLM provides reusable sequence representations for assessing functional impacts of fungal variants as well as annotation of genomic and epigenomic features. The released models, data, code, and benchmarks support applications across fungal species.",
+   "reasons": [
+    "language model",
+    "transformer",
+    "epigenomics",
+    "proteins",
+    "genomics",
+    "scale"
+   ],
+   "score": 17
+  }
+ ],
+ "candidates": 342
+}
